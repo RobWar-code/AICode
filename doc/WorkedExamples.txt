@@ -1,0 +1,17 @@
+AI Code - Example Sequences
+
+1) Sequence of numbers from output position 0
+    INC A                           1/41
+    STO (C), A                      1/41
+    INC C                           1/41
+    JR 0xFD (or lower)              1/(41 * (256 - (127 - 2))/256)
+
+1A) Example from AI Code
+    DEC B               B:255        B:1            B:254
+    STO (C), A          O(0):0       O(255):0       O(2):255
+    INC A               A:1          A:1            A:0
+    INC A               A:2          A:2            A:1
+    SWP A, C            A:0, C:2     A: 255:, C:2   A:2, C: 1
+    SWP B, C            B:2, C:255   C:1, B:255     B:1, C:254
+    JR 0x8E
+ 

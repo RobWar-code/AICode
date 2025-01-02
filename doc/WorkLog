@@ -1,0 +1,170 @@
+Work Log
+Contents
+    Jobs Due
+    Jobs Done
+
+Jobs Due
+
+    Include a self-breed method that uses a copy of the final memspace
+
+    Update the instruction set in the README
+    
+    Trace operation
+        Close the trace window from the main window
+
+        Include a close option on the trace window
+
+    Apply redundant pairs to monoclonal instruction insert/replace?
+
+    Do estimating for probabilities with samples etc.
+        Allow for multiple ways to solve the same issue
+
+    Consider why the system gets trapped in solutions so soon.
+
+    Save/Load Procedures
+        Hook Electron upto MySql
+
+    Overcome "cheating" in which the entity simply places the test/result byte into the output block
+        This might be overcome by making the tests sufficiently numerically steep?
+        Threshold minimum of steps?
+        Include the input argument(s) adjacent to the output result in the output data.
+        See weeding below
+
+    Weeding - removing sub-standard items from the best set
+
+    Continue the analysis
+
+Jobs Done
+    29/12/2024
+    
+    * Every 1000 cycles restart the lowest half of the bestSets
+
+    * Checkout the interbreed operation
+    
+    * Add a R S registers to get the result of scores of output bytes
+        * Do analysis of this in README
+        * Do the ruleset functions etc.
+        * Add the LD A, R and LD A, S instructions to the instruction set
+        * Do the ruleset tests
+
+    * Add rules using the op a b approach for +-*
+        * Update the initial parameters
+        * Write the op code rules
+        * Write the byte test rules
+        * Write the test scripts
+
+    26/12/2024
+    * Add additional instructions to load and save the B, C registers
+
+    * Increase the number of best set to 24 
+    
+    * Decrease the number of entities per best set to 40
+
+    * Write-up the procedures and layout for the trace program option
+
+    * Problem with valuesOut
+        * Add a LD A, IMM instruction
+        * Write code insert operation to test the instructions
+
+    * On-display step through code
+
+    * Code the trace operation
+
+        * Do the transmission to the trace object
+
+        * Do the main trace object
+
+        * Do the trace step event
+
+        * Include borders around data
+
+        * Consider smaller instruction list divs
+
+        * Register display on one line
+
+
+    * Adjust the stack pointer to the end of the memory area
+
+    * Include score history
+
+    * Show the first pass params block as well as the second
+        * Arrange the params and outputs one above the other
+        
+    * List the input parameters in blocks of eight as for the outputs
+
+    * Check that ADD A, B overflows
+
+    * Allow for register memory addressing
+
+    13/12/2024
+    * Entity Display Selector not working
+
+    * Figure how to prevent processing continuing another lap after halt clicked
+
+    * Include Elapsed time on main screen
+
+    * Display of cross-breed column incorrect
+
+    * Allow for more random creations
+
+    * Extend the test output fields to 8 bytes
+
+    * Check scoring of initial params
+
+    * Display the values out for each pass of the entity execution
+
+    09/12/2024
+    
+    * Add a mainLoop that selects from a choice of best sets for processing.
+        * Define the best sets in the MainControl
+        * Adjust the code to deal with the chosen best set
+        Add a facility to select the best set on the main screen
+
+    * Include and display counters for the breed types
+
+    * Include the CASM instruction for the call to label.
+        * Adjust the length of SM to 2 (1 data label byte)
+
+    07/12/2024
+    
+    * Arrange the input parameters and output block into separate blocks of
+    256 bytes.
+        * Adjust the instruction set to accommodate the new arrangement.
+        
+    * Allow for fixed length block interbreeding
+
+    06/12/2024
+    * Give the entities two or more sets of parameters for the same problem type
+        * Entity Processing
+        * Entity Display
+        * Scoring
+
+    03/12/2024
+
+    * Document Test Scripts in ReadMe
+
+    * Define the Instruction Set class
+        Consider how the CFAR operation will be implemented
+        Consider how the return data from CFAR should be handled
+
+    * Define the minimum code to implement entities and execute them with a timer
+        This delivers about 2500 entity evaluations per second
+
+    * An undefined code sometimes gets in the memSpace - resolve.
+    
+    * Display entity - include score.
+        * Repeating entry?
+
+    * Add entities to best set - needs testing
+
+    * Display entity from best set
+
+    * Define the initial rulesets
+
+    * Define the breeding procedures
+        * Random Generation
+        * Monoclonal
+            Need triggering point in entity?
+        * Interbreed
+
+    * Allow for a fixed input parameter set to cover for multiple tests in the initial run

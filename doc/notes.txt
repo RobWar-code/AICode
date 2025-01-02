@@ -1,0 +1,16 @@
+Memory	          Read	        LD A, [MEM]
+                  Write	        ST [MEM], A
+                  Clear	        CLR [MEM]
+                  Swap	        SWP A, B
+Operations        Arithmetic    ADD A, B
+                  Logic         AND A, B
+                  Branching     JRZ 8bit Rel Address
+                  Long Jump     JLRZ 16bit Rel Address
+                  Carry Jump    JRC  8bit Rel Address
+                  Long Carry    JRLC 16bit Rel Address 
+                  Data Movement PUSH A
+                  Comparison	CMP A, B
+Meta-Transactions Call          CALL 8bit Address
+                  Call Stored   CALL 32bit Address
+                  Return        RET
+Set Flags	      Implicit in arithmetic/logic

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <title>Entity Program Trace</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col text-center">
+            <h2>Entity Program Trace</h2>
+          </div>
+        </div>
+        <div id="entityDescription">
+          <div id="entityDetails">
+            <h2 class="text-center">Entity Description</h2>
+            <div class="row">
+              <div class="col-sm-4">
+                <p class="entityPara"><span>Best Set Num: </span><span id="bestSetNum"></span></p>
+              </div>
+              <div class="col-sm-4">
+                <p class="entityPara"><span>Best Set Entity Num: </span><span id="bestSetEntityNum"></span></p>
+              </div>
+              <div class="col-sm-4">
+                <p class="entityPara"><span>Entity Id: </span><span id="entityId"></span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col text-center">
+              <p>Initial Params</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center" id="initialParams0">
+              <div id="initialParamsList0">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center" id="initialParams1">
+              <div id="initialParamsList1">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <span>Previous Registers: </span>
+              <span>A: </span><span id="prevRegA"></span>
+              <span>B: </span><span id="prevRegB"></span>
+              <span>C: </span><span id="prevRegC"></span>
+              <span>R: </span><span id="prevRegR"></span>
+              <span>S: </span><span id="prevRegS"></span>
+              <span>ZF: </span><span id="prevRegZF"></span>
+              <span>CF: </span><span id="prevRegCF"></span>
+              <span>SP: </span><span id="prevRegSP"></span>
+              <span>IP: </span><span id="prevRegIP"></span>
+              <span>IC: </span><span id="prevRegIC"></span>
+            </div>
+            <div class="col-sm-6">
+              <span>Current Registers: </span>  
+              <span>A: </span><span id="regA"></span>
+              <span>B: </span><span id="regB"></span>
+              <span>C: </span><span id="regC"></span>
+              <span>R: </span><span id="regR"></span>
+              <span>S: </span><span id="regS"></span>
+              <span>ZF: </span><span id="regZF"></span>
+              <span>CF: </span><span id="regCF"></span>
+              <span>SP: </span><span id="regSP"></span>
+              <span>IP: </span><span id="regIP"></span>
+              <span>IC: </span><span id="regIC"></span>
+            </div>
+          </div>
+    
+          <div class="row">
+            <div class="col-sm-6 text-center">
+              <p>Inputs</p>
+            </div>
+            <div class="col-sm-6 text-center">
+              <p>Outputs</p>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 dataList" id="params">
+              <div id="paramsList">
+              </div>
+            </div>
+            <div class="col-sm-6 dataList" id="outputValues">
+              <div id="outputValuesList">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col text-center">
+              <span>Options: </span><button class="textButton" id="stepButton">Next Step</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 text-center">
+              <h2>Initial Code</h2>
+            </div>
+            <div class="col-sm-6 text-center">
+              <h2>Final Code</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 codeList" id="initialCode">
+              <ul id="initialCodeList">
+              </ul>
+            </div>
+            <div class="col-sm-6 codeList" id="currentCode">
+              <ul id="currentCodeList">
+              </ul>
+            </div>
+          </div>
+        </div> <!-- Entity Description -->
+      </div> <!-- Container -->
+  
+    <script src="lib/bootstrap/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="traceRenderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Binary Hex Negative
+
+-1  FF
+-2  FE
+-3  FD
+-4  FC
+-5  FB
+-6  FA
+-7  F9
+-8  F8
+-9  F7
+-10 F6
+-11 F5
+-12 F4
+-13 F3
+-14 F2
+-15 F1
+-16 F0
+-17 EF
+-18 EE
+-19 ED
+-20 EC
+-21 EB
+-22 EA

@@ -1,0 +1,100 @@
+25/12/2024
+Introduced a set of new instructions for the B and C registers.
+Changed the number of best sets to 24 with just 40 entities in
+each to overcome traps a bit better.
+Increased the maximum instruction execution count to 2000 from 1000
+to see whether the increased diversity would help.
+
+Introduce a TSTO instruction which returns a 0-255 score in the A reg
+for the last output value.
+
+Consider introducing a rule for the adding together of adjacent
+parameter inputs.
+
+Consider including key words/symbols in the input data with examples,
+ie: + a b, - a b, * a b, / a b
+ 
+Meanwhile consider better strategies for code grouping.
+
+13/12/2024
+Tried increasing the number of best sets from 4 to 8. No particular
+gain, progress slower, set back to 4.
+
+Fixed problem with the instruction set (missing break; statements).
+
+Ran an overnight run of about 48,000,000 trials. Little progress.
+Try including memory transfers using register relative addressing.
+This increases the size of the instruction set, so need to rework
+the calculations accordingly.
+
+Included the instructions ST A, (C) etc, for indexed addressing.
+Initial gains large, but there appears to be a problem with breeding
+methods, as gains are extremely slow after about 5 or 10 minutes.
+
+11/12/2024
+Multiple best sets included. Separated input output memory into
+separate blocks of 256 bytes and included the relevant instructions
+in the instruction set.
+
+Achieved a 100% trial in 9 hours (20,000,000 trials), but it is rarely 
+repeatable.
+
+A great deal seems to depend on the initial selections, so will extend
+the period of random generation per best set to several cycles.
+
+07/12/2024
+Having included the placing the outputs and parameters in
+separate memory chunks and allowing for fixed block interbreeding
+the scores to about 50% of the max in 45 minutes.
+
+The next trial is to have separate best sets that interbreed with
+each other periodically.
+
+06/12/2024
+The alternate input parameters approach improves matters only
+slightly, the primary issue is that local optima are identified
+by the system by simply placing (random) numbers in the output
+rather than by the use of probabilities. This is because the
+output sample sizes are small (4) so the chances of the random
+numbers being on target can be higher than that of sequencers.
+
+To overcome this, we can separate the parameter and output blocks
+into separate chunks of 256 bytes and use different instructions
+to access each.
+
+04/12/2024
+Having run the procedure for 5 hours (about 45,000,000 trials) a 
+mediocre result was attained mostly consisting of random insertion
+of numbers in the output fields.
+
+Since the aim is to provide general operative functions, we need a
+procedure to encourage this.
+
+So let's try alternating the input parameters and using the same
+rule set. The scoring can be done for each parameters set.
+
+31/11/2024
+
+Having managed to get as far as sequences of numbers in the top scoring position,
+I decided to see if I could get more variant results by dividing up the ruleset
+examinations of the output values into sections. The initial results are not
+particularly promising although I may be able to compensate with counter-prevailing
+rulesets (particularly a negative score for values of output left the same).
+
+An option to consider is multiple best sets to overcome the problem of the
+system getting trapped in probability dips arising from initial choices.
+
+We may be able to distinguish in our trials between current selection scenarios
+and those arising from ruleset weightings. The issue is to try to limit the
+range of possible trial parameters.
+
+At the present time the system is sticking with values still set to zero
+in the output areas, let us try the rule that something is better than
+nothing. If this rule is weighted at 100, it emerges as the prevalent
+and produces a series on the output. What is more, variety is maintained
+amongst the best set.
+
+So if we now try upping the rating for multiply by two slightly, we maintain
+the instability.
+
+So we juggle the weights accordingly.

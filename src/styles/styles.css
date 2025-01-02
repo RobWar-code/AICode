@@ -1,0 +1,106 @@
+/* General Styles */
+body {
+    font-size: 12px;
+}
+
+.heading {
+    margin: 0, auto;
+}
+
+.textButton {
+    margin-top: 3px;
+    padding: 3px;
+    background-color: #00c000;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+li {
+    list-style: none;
+}
+
+/* Modals */
+.genModal {
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    font-size: 13px;
+}
+
+.genModalForm {
+    position: relative;
+    width: 75%;
+    background-color: #f0e0f0;
+    z-index: 10;
+    margin-top: 10px;
+    margin-left: 5px;
+    padding-top: 3px;
+    padding-left: 3px;
+    padding-bottom: 5px;
+    border: 1px solid #604060;
+    border-radius: 8px;
+}
+/* Main Page */
+#statusDiv {
+    display: none;
+}
+
+#statusPara {
+    color: red;
+    font-style: italic;
+}
+
+/* Entity Description */
+#entityDescription {
+    display: block;
+}
+
+.dataList {
+    height: 140px;
+    overflow: auto;
+    border: solid black 1px;
+}
+
+.codeList {
+    height: 250px;
+    overflow: auto;
+    border: solid black 1px;
+    font-size: 11px;
+    list-style-type: none;
+}
+
+/* Score List */
+#scoreListBackground {
+    display: "none";
+}
+
+#scoreListDiv {
+    height: 350px;
+    overflow: auto;
+}
+
+.scoreListRule {
+    width: 200px;
+}
+
+.scoreListScore {
+    width: 200px;
+}
+
+/* Score History */
+#scoreHistoryBackground {
+    display: none;
+}
+
+/* Test Elements */
+.testList {
+    height: 450px;
+    overflow: auto
+}
