@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+# Application
+src/database/dbConn.js

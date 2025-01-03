@@ -102,6 +102,42 @@ const testRuleSets = {
             }
         ]
         return testScript;
+    },
+
+    testMatchCASM: function() {
+        let memSpace = getScriptMemSpace1(this.instructionSet);
+        console.log("memSpace[0]", memSpace[0]);
+        let score = rulesets.matchCASM(this.instructionSet, memSpace);
+        console.log("matchCASM score:", score);
+
+        function getScriptMemSpace1(instructionSet) {
+            testScript = [
+                {
+                    ins: "SM",
+                    data: [0]
+                },
+                {
+                    ins: "SM",
+                    data: [1]
+                },
+                {
+                    ins: "LD A, (C)"
+                },
+                {
+                    ins: "CASM",
+                    data: [0]
+                },
+                {
+                    ins: "CASM",
+                    data: [1]
+                }
+            ];
+
+            // Compile the code
+            let memSpace = new Array(256).fill(0);
+            instructionSet.compileTestCode(testScript, memSpace);
+            return memSpace;
+        }
     }
 }
 
@@ -314,13 +350,14 @@ const testByteRules = {
         console.log("score", resultObj.totalScore, "significance", resultObj.totalSignificance);
     }
 }
+console.log("Got Here");
 /*
 testRuleSets.testCountInsOccurrences();
 testRuleSets.testCountInsDistribution();
 testRuleSets.testValuesOutFromInitialParams();
 */
+testRuleSets.testMatchCASM();
 
-console.log("Got Here");
 // testByteRules.valuesOutFromInitialParams();
 // testByteRules.valuesOutMatchInitialParams();
 // testByteRules.valuesOutDifferent();
@@ -329,4 +366,4 @@ console.log("Got Here");
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
 // testByteRules.multiplyParams();
-testByteRules.divideParams();
+// testByteRules.divideParams();

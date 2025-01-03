@@ -4,8 +4,19 @@ Contents
     Jobs Done
 
 Jobs Due
+    Include save scorelist for an entity?
 
-    Include a self-breed method that uses a copy of the final memspace
+    Use git to update the windows system (rulesets.js)
+
+    * Do the git update for the new rule and send to the other computer
+
+    * Include a rule to score matching CASM instructions
+
+    * Port to the windows laptop
+
+    * Include auto-save and database tidy
+
+    * Include a self-breed method that uses a copy of the final memspace
 
     Update the instruction set in the README
     
