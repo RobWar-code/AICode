@@ -2,6 +2,7 @@ const path = require('node:path');
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
+const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class MainControl {
@@ -43,7 +44,10 @@ class MainControl {
         this.bestSets[this.bestSetNum] = bestEntitySet;
         this.updateScoreHistory();
         ++this.bestSetNum;
-        if (this.bestSetNum >= this.numBestSets) this.bestSetNum = 0;
+        if (this.bestSetNum >= this.numBestSets) {
+            this.bestSetNum = 0;
+            dbTransactions.saveSession(this.mainWindow, this);
+        }
         if (this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
             this.numBestSets * Math.floor(this.lapCounter / (4 * this.restartLap))) === 0) {
             this.restartSets();

@@ -29,11 +29,14 @@ const dbTransactions = {
         // Save the entities
         let resultOK = await this.saveEntities(program, sessionId, dbConnection);
 
+        await this.deleteOtherRecords(dbConnection, sessionId);
+
         await dbConnection.end();
 
         if (resultOK) {
             mainWindow.webContents.send("saveDone", 0);
         }
+
         
     },
 
@@ -98,6 +101,27 @@ const dbTransactions = {
             str += padding;
         }
         return str;
+    },
+
+    async deleteOtherRecords(dbConnection, sessionId) {
+
+        // Delete Entities
+        try {
+            const sql = 'DELETE FROM entity WHERE session_id != ?';
+            const [results] = await dbConnection.execute(sql, [sessionId]);
+            console.log("Deleted old entities");
+        } catch (err) {
+            console.error('Error during DELETE entities operation:', err.message);
+        }
+
+        // Delete Sessions
+        try {
+            const sql = 'DELETE FROM session WHERE id != ?';
+            const [results] = await dbConnection.execute(sql, [sessionId]);
+            console.log("Deleted old sessions");
+        } catch (err) {
+            console.error('Error during DELETE sessions operation:', err.message);
+        }
     },
 
     async loadSession(mainWindow, program) {
