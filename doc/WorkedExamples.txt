@@ -1,10 +1,16 @@
-AI Code - Example Sequences
+Worked Examples and Strategies
+
+Contents
+    AI Code - Example Sequences
+    Toward Stepped Pathways
+
+<h1>AI Code - Example Sequences
 
 1) Sequence of numbers from output position 0
-    INC A                           1/41
-    STO (C), A                      1/41
-    INC C                           1/41
-    JR 0xFD (or lower)              1/(41 * (256 - (127 - 2))/256)
+    INC A                           1/56
+    STO (C), A                      1/56
+    INC C                           1/56
+    JR 0xFD (or lower)              1/(56 * (256 - (127 - 2)))
 
 1A) Example from AI Code
     DEC B               B:255        B:1            B:254
@@ -15,3 +21,29 @@ AI Code - Example Sequences
     SWP B, C            B:2, C:255   C:1, B:255     B:1, C:254
     JR 0x8E
  
+<h1>Toward Stepped Pathways
+Having tested the app as at 05/12/2025 - we find that code
+entities plateau with a score of about 1/3 of the maximum
+using a mixture of random number and series transfers to
+output, but also a degree of reading from the input.
+
+These scores were achieved after about 80 million trials
+and scoring progress was very slow indeed at this point.
+
+The most likely account for this is that further improvement
+would require very low probability events in the breed/mutate
+cycle.
+
+Here, we consider stepped pathways, in which no progressive
+step has a probability lower than a certain threshold.
+
+So let us consider some sequences.
+
+Firstly consider
+
+LDI A, (C) // LD A from the input buffer
+STO (C), A // ST A in the output buffer
+INC C 
+JR 0xFC // Jump relative back to start
+
+Using the rule sets, this scores on valuesSet, outputFromInitialParams, outputMatchesInitialParams

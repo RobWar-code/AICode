@@ -4,9 +4,20 @@ Contents
     Jobs Done
 
 Jobs Due
+
+    Test Program / Seeding
+        * Do the analysis for test scripting and seeding in the README.
+        Make the necessary modifications to index.html
+        Write the seedPrograms.js object
+
+        Figure out the necessary procedures for git pull on the windows system
+
+    Remove the existing testScript functions and hooks from entity.js
+    Remove the existing testScript function hooks from instructionSet
+
     Include save scorelist for an entity?
 
-    Use git to update the windows system (rulesets.js)
+    * Use git to update the windows system (rulesets.js)
 
     * Do the git update for the new rule and send to the other computer
 

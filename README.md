@@ -146,13 +146,16 @@ the code interpretation begins at byte 0.
 All data is handled in bytes, with the exception of the long jump
 (16 bits) and the stored routine call (32 bits).
 
-The input parameter area is the final 16 bytes of the block
-address: 240 - 255.
+The code block consists of 256 bytes and has appropriate
+LD and ST operations.
 
-The output parameter area is the 16 bytes preceding the input
-address: 255 - 16 = 224 to 239
+The input parameter block consists of 256 bytes and has appropriate
+LDI and STI instructions.
 
-The stack begins at address 223 and extends back toward the start.
+The output parameter block consists of 256 bytes and has appropriate
+LDO and STO instructions
+
+The stack begins at address 225 and extends back toward the start.
 
 Both of these areas are set to zeroes to begin with, apart
 from the values required as inputs.
@@ -167,26 +170,66 @@ LD A, S instructions
 
 Instructions
 
-| Memory	        | Read	          | LD A,(MEM) MEM is a byte address     |
-|                   | Write	          | ST (MEM), A                          |
-|                   | Clear	          | CLR (MEM)                            |
-|                   | Swap	          | SWP A, B                             |
-|                   | Data Movement   | PUSH A                               |
-|                   |                 | POP A                                |
-| Operations        | Arithmetic      | ADD A, B                             |
-|                   |                 | SUB A, B                             |
-|                   | Logic           | AND A, B                             |
-|                   | Comparison	  | CMP A, B                             |
-|                   | Branching       | JR 8bit Rel Address                  |
-|                   | Branching       | JRZ 8bit Rel Address                 |
-|                   | Long Jump       | JRLZ 16bit Rel Address               |
-|                   | Carry Jump      | JRC  8bit Rel Address                |
-|                   | Long Carry      | JRLC 16bit Rel Address               | 
-| Meta-Transactions | Call            | CALL 8bit Address                    |
-|                   | Call Stored     | CFAR 32bit Address                   |
-|                   | Return          | RET                                  |
-|                   |                 | RETF Return from far procedure       |
-|                   | Section Marker  | SM - No op, for breeding 5 bytes     | 
+| ------------------ | ------------------ | --------------------------------------- |
+| Memory	         | Read Code Area     | LD A, (MEM) // MEM is a byte address    |
+|                    |                    | LD A, (C)  // Read from location (C)    |
+|                    |                    | LD A, IMM  // IMM is the following byte |
+|                    |                    | LD B, (MEM)                             |
+|                    |                    | LD B, IMM                               |
+|                    |                    | LD C, (MEM)                             |
+|                    |                    | LD C, IMM                               |
+|                    | Read Input Area    | LDI A, (MEM)                            |
+|                    |                    | LDI A, (C)                              |
+|                    | Read Output Area   | LDO A, (MEM)                            |
+|                    |                    | LDO A, (C)                              |
+|                    | ------------------ | --------------------------------------- |
+|                    | Write Code Area	  | ST (MEM), A                             |
+|                    |                    | ST (C), A                               |
+|                    |                    | ST (MEM), B                             |
+|                    |                    | ST (MEM), C                             |
+|                    | Write Input Area   | STI (MEM), A                            |
+|                    |                    | STI (C), A                              |
+|                    | Write Output Area  | STO (MEM), A                            |
+|                    |                    | STO (C), A                              |
+|                    | Clear	          | CLR (MEM)                               |
+| ------------------ | ------------------ | --------------------------------------- |                
+| Register Transfers | Reg/Reg            | SWP A, B                                |
+|                    |                    | SWP A, C                                |
+|                    |                    | SWP B, C                                |
+|                    | Stack              | PUSH A                                  |
+|                    |                    | POP A                                   |
+|                    |                    | PUSH B                                  |
+|                    |                    | POP B                                   |
+|                    |                    | PUSH C                                  |
+|                    |                    | POP C                                   |
+|                    | Stack Control      | INC SP                                  |
+|                    |                    | DEC SP                                  |
+| ------------------ | ------------------ | --------------------------------------- |
+| Operations         | Arithmetic         | INC A                                   |
+|                    |                    | DEC A                                   |
+|                    |                    | INC B                                   |
+|                    |                    | DEC B                                   |
+|                    |                    | INC C                                   |
+|                    |                    | DEC C                                   |
+|                    |                    | ADD A, B                                |
+|                    |                    | SUB A, B                                |
+|                    | Logic              | AND A, B                                |
+|                    |                    | OR A, B                                 |
+|                    |                    | NOT A                                   |   
+|                    | Comparison	      | CMP A, B                                |
+| ------------------ | ------------------ | --------------------------------------- |
+| Branching          |                    | JR  // 8bit Rel Address                 |
+|                    |                    | JRZ // 8bit Rel Address                 |
+|                    | Long Jump          | JRLZ // 16bit Rel Address               |
+|                    | Carry Jump         | JRC // 8bit Rel Address                 |
+|                    | Long Carry         | JRLC  // 16bit Rel Address              | 
+| Sub-Routines       | Call               | CALL // 8bit Address                    |
+|                    | Call Stored        | CFAR // 32bit Address                   |
+|                    | Call Label         | CASM // call to matching 1 byte label   |
+|                    | Return             | RET                                     |
+|                    |                    | RETF Return from far procedure or exit  |
+| Labels             | Section Marker     | SM // no effect, label, 1 data byte     | 
+
 Set Flags - Implicit in arithmetic/logic
 
 #### Instruction Test Sequences
@@ -308,15 +351,15 @@ entity set and any library entities.
 #### User Interface
 The user interface uses the Bootstrap object to provide columnar layout.
 
-The user interface should provide a list of the top 20 scoring
-programs (identifier) and their scores and cycle and system time in 
-which they appeared. It should be possible to inspect the code block 
-for any one of these or of the others from the set of best
-entities.
+The user interface provides the score of the best member of each
+best set derived from the current cycle of processing. In addition,
+a historical list of the best scores of each best set can be displayed.
 
 The user interface should also provide facilities to download code 
-sequences as text strings (hex + instruction) and to insert
-code sequences (seeding, genetic manipulation).
+sequences as text strings (instruction + data bytes) and to insert
+code sequences (seeding, genetic manipulation). See Seeding Programs 
+below.
+
 
 The current elapsed time and number of cycles should also be 
 displayed.
@@ -397,6 +440,59 @@ Once this data is received by the Trace object, it is added to the fixed data an
 to the traceRenderer event handler, which then transfers control to the src/display/traceDisplay
 object for processing into HTML.
 
+##### Seeding Programs
+
+Seed programs are provided in the object src/processes/seedScripts.js
+and have the object structure:
+
+```js
+    [
+        {
+            name: "",
+            description: "",
+            program: [
+                {
+                    addr: n, // Optional (0 to 255)
+                    ins: "", // Mnemonic instruction, ie: LD A, (MEM)
+                    data: [] // Byte values (0 to 255)
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+```
+
+Two options pertain to seed scripts, Load and Insert.
+The Insert Seed option is only made available once the seed
+program has been run.
+
+###### Load Seed Option 
+
+Clicking this option causes a modal to be displayed allowing the
+user to select and run a seed program from a drop-down list.
+
+When a seed program is selected, the mainControl server program is halted,
+and the function executeSeed() is run. This runs the seed program in
+the same way as other entity programs are run, with the main window display
+updated in the same way, except that the entity details section is replaced
+by the seed program details. The register, parameter, output and code sections
+are the same as for the general processing. The best set program lookup is not 
+available in this mode.
+
+Note that the Trace option is also available for the seed program and
+operates in the same way.
+
+Once the seed program has been executed, the option to insert it into
+a best set appears on the main window (Insert Seed).
+
+###### Insert Seed Operation
+
+When selected this option presents a modal requesting which best set to
+use (0 to 23). Once selected the best set chosen is cleared and the
+seed details are inserted as the first entry for that best set and
+normal processing is resumed from that best set number. The display
+is reset to general mode.
 
 ## Test Scripts
 

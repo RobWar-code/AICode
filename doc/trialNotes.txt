@@ -1,3 +1,12 @@
+05/01/2025
+All of the changes suggested were made, but the app still
+plateaus at a score of about 1/3 of the maximum, presumably
+because optima found at this level, do not provide a reasonably
+high probability of finding an improvement. So we move back
+to analysis to see what improvements might be made.
+
+see WorkedExamples.txt
+
 25/12/2024
 Introduced a set of new instructions for the B and C registers.
 Changed the number of best sets to 24 with just 40 entities in

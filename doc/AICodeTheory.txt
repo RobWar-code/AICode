@@ -6,19 +6,24 @@ Contents
     Example Code Combinations
 
 <h1>Background
-The goal of this theoretical framework is to develop a system capable of generating computer functions that are comparable to human-designed functions, particularly in domains such as mathematics, logic, and comparative operations.
+The goal of this theoretical framework is to develop a system capable of generating computer functions that 
+are comparable to human-designed functions, particularly in domains such as mathematics, logic, and comparative operations.
 
 This approach draws inspiration from two key domains:
 
 Genetic Evolution: 
 Leveraging the natural utility of probability theory in arranging codons and genes within genetic sequences.
 Assembler-Type Programming: Utilizing the structure and behavior of low-level computer languages and their instructions.
-The fundamental principle of genetic evolution is that probabilistic processes drive the arrangement of genetic sequences to produce useful and adaptive results. By analogy, we hypothesize that strings of assembler instructions can display similar behaviors when subjected to:
+The fundamental principle of genetic evolution is that probabilistic processes drive the arrangement of genetic 
+sequences to produce useful and adaptive results. By analogy, we hypothesize that strings of assembler instructions 
+can display similar behaviors when subjected to:
 
 Random Manipulations: 
 Introducing variability akin to mutations.
 Rules with Weighted Scoring: Simulating natural selection by guiding the retention of more "fit" solutions.
-This approach effectively searches for desirable examples within a vast probability space. By integrating probabilistic analysis, we aim to produce solutions that meet defined criteria within reasonable spans of time, bridging randomness with utility.
+This approach effectively searches for desirable examples within a vast probability space. By integrating 
+probabilistic analysis, we aim to produce solutions that meet defined criteria within reasonable spans of time, 
+bridging randomness with utility.
 
 <h1>Timings and Probabilities
 Generated program evaluation time for:
@@ -32,8 +37,8 @@ requiring 2.213 * 10^8 seconds per program. Clearly this is far too long
 to be useful for generating optima outright.
 
 So we have to reduce the scale of probability by reducing the number
-of instructions to be selected. Let us say we can apply the monte carlo method to scoring sets of four instructions, these take an average of
-23 seconds each. So we should establish the rulesets to look for such
+of instructions to be selected. Let us say we can apply the monte carlo method to scoring sets of four instructions, 
+these take an average of 23 seconds each. So we should establish the rulesets to look for such
 combinations. If these combinations then combine to form others we
 might find a heuristic learning generation pattern.
 

@@ -605,7 +605,8 @@ class Entity {
         let showDataLen = 7;
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
-            memObj = this.instructionSet.execute(this.memSpace, this.initialParams, this.params, this.valuesOut, test, showDataStart, showDataLen, this.testScript);
+            memObj = this.instructionSet.execute(this.memSpace, this.initialParams, this.params, this.valuesOut, 
+                test, showDataStart, showDataLen, this.testScript);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
                 let c = this.memSpace[i];
