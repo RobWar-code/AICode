@@ -602,6 +602,10 @@ class Entity {
         // Registers
         displayData.registers = this.registers;
 
+        // Score list
+        displayData.scoreList = this.scoreList;
+        displayData.score = Math.floor(this.score * 10000)/10000;
+
         // Details
         displayData.seedName = seedProgram.name;
         displayData.seedDescription = seedProgram.description;

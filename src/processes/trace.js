@@ -13,7 +13,13 @@ const trace = {
     start(traceWindow, program) {
         this.traceWindow = traceWindow;
         // Fetch the displayed entity
-        const traceEntity = program.bestSets[this.bestSetNum][this.bestSetEntityNum];
+        let traceEntity = null;
+        if (program.seedEntity === null) {
+            traceEntity = program.bestSets[this.bestSetNum][this.bestSetEntityNum];
+        }
+        else {
+            traceEntity = program.seedEntity;
+        }
         let memSpace = traceEntity.initialMemSpace;
         let entityNumber = traceEntity.entityNumber;
         let instructionSet = new InstructionSet();

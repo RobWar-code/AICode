@@ -36,12 +36,10 @@ ipcRenderer.on("displayHistory", (event, data) => {
 });
 
 ipcRenderer.on("displaySeedSelector", (event, nameList) => {
-    console.log("Got to event displaySeedSelector");
     seedDisplay.displaySelector(nameList);
 });
 
 ipcRenderer.on("seedDisplayResults", (event, data) => {
-    console.log("Got to event displaySeedResults", data.seedName);
     seedDisplay.displaySeedResults(data);
 });
 
@@ -106,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("haltProcessButton").innerText = "Halt Process";
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
+            entityDisplay.redoMainEntityDisplay();
             ipcRenderer.send("activateMainProcess", 0);
         }
         processingCancelled = !processingCancelled;
@@ -137,8 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cancel the ongoing processing
         clearTimeout(processTimeout);
         processingCancelled = true;
-        console.log("got seed option", seedOption);
-        console.log("before loadAndExecuteSeed");
+        // Start the seed program
         ipcRenderer.send("loadAndExecuteSeed", seedOption);
     });
 

@@ -21,6 +21,7 @@ class MainControl {
         this.scoreHistoryMaxLen = 8;
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
+        this.seedEntity = null;
         this.lapCounter = 0;
         this.restartLap = 120;
         this.restartProportion = 0.5;
@@ -220,6 +221,7 @@ class MainControl {
         let asRandom = false;
         let seeded = false;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, memSpace);
+        this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);

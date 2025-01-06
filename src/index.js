@@ -158,10 +158,8 @@ ipcMain.on("fetchSeedList", () => {
 });
 
 ipcMain.on("loadAndExecuteSeed", (event, seedProgramNumber) => {
-  console.log("Got to loadAndExecuteSeed", seedProgramNumber);
   let seedProgram = seedPrograms.programs[seedProgramNumber];
   let seedDisplayData = program.loadAndExecuteSeed(seedProgram);
-  console.log("loadAndExecuteSeed event:", seedDisplayData.seedName);
   mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
 });
 

@@ -161,6 +161,23 @@ const entityDisplay = {
         html += "</ul>";
         document.getElementById('scoreListDiv').innerHTML = html;
         document.getElementById('totalScore').innerText = data.score;
+    },
+
+    redoMainEntityDisplay() {
+        // Redisplay the best entity selector
+        document.getElementById("bestEntitySelectorDiv").style.display = "block";
+        // Redisplay the entity process details
+        document.getElementById("entityDetails").style.display = "block";
+        // Hide the seed divs
+        document.getElementById("seedSelectionDiv").style.display = "none";
+        document.getElementById("seedDetails").style.display = "none";
+        // Re-display the option buttons
+        document.getElementById("scoreHistoryButton").style.display = "inline";
+        document.getElementById("haltProcessButton").innerText = "Resume Process";
+        document.getElementById("loadSeedButton").style.display = "inline";
+        document.getElementById("saveButton").style.display = "inline";
+        document.getElementById("loadButton").style.display = "inline";
+
     }
 }
 

@@ -20,6 +20,9 @@ const seedDisplay = {
     },
 
     displaySeedResults(displayData) {
+        // Record the data
+        entityDisplay.currentData = displayData;
+        
         // Display the seed program details
         displaySeedProgramDetails(displayData);
         // Display the program details

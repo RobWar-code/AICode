@@ -9,10 +9,13 @@ Jobs Due
         * Do the analysis for test scripting and seeding in the README.
         * Make the necessary modifications to index.html
         * Write the seedPrograms.js object
-        Do score list
-        Do Trace interface connection
+        * Do score list
+        * Do Trace interface connection
+        * On restart processing, rebuild the best set entity display
+        Do the insert seed into best set operation
 
         Figure out the necessary procedures for git pull on the windows system
+            Re-copy the src directory.
 
     Remove the existing testScript functions and hooks from entity.js
     Remove the existing testScript function hooks from instructionSet
