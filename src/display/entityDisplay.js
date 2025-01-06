@@ -7,8 +7,8 @@ const entityDisplay = {
         displayEntityDetails(data);
         this.displayEntityCode(data.data, 0);
         this.displayEntityCode(data.data, 1);
-        displayEntityRegisters(data);
-        displayDataValues(data, data.data, 1);
+        this.displayEntityRegisters(data);
+        this.displayDataValues(data, data.data, 1);
         return;
 
         function displayEntityDetails(data) {
@@ -31,43 +31,44 @@ const entityDisplay = {
             document.getElementById("crossSetCount").innerText = data.crossSetCount;
         }
 
-        function displayEntityRegisters(data) {
-            this.document.getElementById("regA").innerText = data.registers.A;
-            this.document.getElementById("regB").innerText = data.registers.B;
-            this.document.getElementById("regC").innerText = data.registers.C;
-            this.document.getElementById("regCF").innerText = data.registers.CF;
-            this.document.getElementById("regZF").innerText = data.registers.ZF;
-            this.document.getElementById("regSP").innerText = data.registers.SP;
-            this.document.getElementById("regIP").innerText = data.registers.IP;
-            this.document.getElementById("regIC").innerText = data.registers.IC;
-        }
+    },
 
-        function displayDataValues(data, dataBlock, index) {
-            let initialParams = data.initialParamsList;
-            let dataIn = dataBlock[index].inputParams;
-            let dataOut = dataBlock[index].oldValuesOut;
-            for (let i = 0; i < initialParams.length; i++) {
-                let paramsDiv = "initialParams" + i;
-                let paramsList = "initialParamsList" + i;
-                listParams(paramsDiv, paramsList, initialParams[i]);
+    displayEntityRegisters(data) {
+        document.getElementById("regA").innerText = data.registers.A;
+        document.getElementById("regB").innerText = data.registers.B;
+        document.getElementById("regC").innerText = data.registers.C;
+        document.getElementById("regCF").innerText = data.registers.CF;
+        document.getElementById("regZF").innerText = data.registers.ZF;
+        document.getElementById("regSP").innerText = data.registers.SP;
+        document.getElementById("regIP").innerText = data.registers.IP;
+        document.getElementById("regIC").innerText = data.registers.IC;
+    },
+
+    displayDataValues(data, dataBlock, index) {
+        let initialParams = data.initialParamsList;
+        let dataIn = dataBlock[index].inputParams;
+        let dataOut = dataBlock[index].oldValuesOut;
+        for (let i = 0; i < initialParams.length; i++) {
+            let paramsDiv = "initialParams" + i;
+            let paramsList = "initialParamsList" + i;
+            listParams(paramsDiv, paramsList, initialParams[i]);
+        }
+        // Parameter blocks
+        for (let i = 0; i < 2; i++) {
+            let num = (i + 1);
+            let divId = "inputParams" + num;
+            let listId = "inputParamsList" + num;
+            if (data.params.length > 0) {
+                listDataBlocks(divId, listId, data.params[i]);
             }
-            // Parameter blocks
-            for (let i = 0; i < 2; i++) {
-                let num = (i + 1);
-                let divId = "inputParams" + num;
-                let listId = "inputParamsList" + num;
-                if (data.params.length > 0) {
-                    listDataBlocks(divId, listId, data.params[i]);
-                }
-            }
-            // Output Blocks
-            for (let i = 0; i < 2; i++) {
-                let num = i + 1;
-                let divId = "outputValues" + num;
-                let listId = "outputValuesList" + num;
-                if (data.valuesOut.length > 0) {
-                    listDataBlocks(divId, listId, data.valuesOut[i]);
-                }
+        }
+        // Output Blocks
+        for (let i = 0; i < 2; i++) {
+            let num = i + 1;
+            let divId = "outputValues" + num;
+            let listId = "outputValuesList" + num;
+            if (data.valuesOut.length > 0) {
+                listDataBlocks(divId, listId, data.valuesOut[i]);
             }
         }
 
@@ -83,7 +84,7 @@ const entityDisplay = {
             html += "</div>";
             document.getElementById(paramsDiv).innerHTML = html;
         } 
-
+    
         function listDataBlocks(paramsDiv, paramsList, values) {
             document.getElementById(paramsList).remove();
             let html = `<div id="${paramsList}">`;

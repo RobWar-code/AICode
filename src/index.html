@@ -36,7 +36,7 @@
 
     <!-- Entity Description -->
     <div class="container-fluid" style="width: 90%">
-      <div class="row">
+      <div class="row" id="bestEntitySelectorDiv">
         <div class="col">
           <form id="bestEntitySelector">
             <label for="bestSetNumInput">Best Set Num:</label>
@@ -59,12 +59,47 @@
           <button class="textButton" id="scoreHistoryButton">Score History</button>
           <button class="textButton" id="haltProcessButton">Start Process</button>
           <button class="textButton" id="traceButton">Trace</button>
+          <button class="textButton" id="loadSeedButton">Load Seed</button>
           <button class="textButton" id="saveButton">Save</button>
           <button class="textButton" id="loadButton">Load</button>
           <button class="textButton" id="testMonoclonalButton">Test Monoclonal</button>
         </div>
       </div>
+      <!-- Seed Selection -->
+      <div class="row" id="seedSelectionDiv">
+        <div class="col">
+          <form id="seedSelectorForm">
+            <label for="seedSelector">Select Seed Program: </label>
+            <select id="seedSelector" name="seedSelector"></select>
+            <button type="submit" class="textButton">Submit</button>
+          </form>
+        </div>
+      </div>
       <div id="entityDescription">
+        <!-- Seed Program Details -->
+        <div id="seedDetails">
+          <h2 class="text-center">Seed Program</h2>
+          <div class="row">
+            <div class="col">
+              <p>Seed Program Name: <span id="seedName"></span></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p>Seed Description: <span id="seedDescription"></span></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center">
+              <form id="insertSeedForm">
+                <label for="bestSetNumInput">Best Set Num: </label>
+                <input type="text" id="bestSetNumInput" name="bestSetNumInput">
+                <button type="submit" class="textButton">Insert</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <div id="entityDetails">
           <h2 class="text-center">Entity Description</h2>
           <div class="row">

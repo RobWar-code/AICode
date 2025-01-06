@@ -76,9 +76,18 @@ li {
     list-style-type: none;
 }
 
+/* Seed Selection */
+#seedSelectionDiv {
+    display: none;
+}
+
+#seedDetails {
+    display: none;
+}
+
 /* Score List */
 #scoreListBackground {
-    display: "none";
+    display: none;
 }
 
 #scoreListDiv {

@@ -580,6 +580,36 @@ class Entity {
 
     }
 
+    getSeedDisplayData(seedProgram) {
+        let displayData = {};
+        // Code, parameters and memory output
+        let dataSection = [];
+        for (let i = 0; i < 2; i++) {
+            if (i === 0) {
+                dataSection.push(this.getMemData(0, this.initialMemSpace));
+            }
+            else {
+                dataSection.push(this.getMemData(1, this.memSpace));
+            }
+        }
+        displayData.data = dataSection;
+
+        displayData.params = this.oldParams;
+        displayData.valuesOut = this.oldValuesOut;
+
+        displayData.initialParamsList = this.initialParamsList;
+
+        // Registers
+        displayData.registers = this.registers;
+
+        // Details
+        displayData.seedName = seedProgram.name;
+        displayData.seedDescription = seedProgram.description;
+
+        return displayData;
+
+    }
+
     doScore(bestSetHighScore, bestSetLowScore) {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, this.initialMemSpace, 
             this.initialParams, this.params, this.valuesOut, this.registers.IC, this.instructionSet.highestIP);

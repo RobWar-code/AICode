@@ -7,8 +7,10 @@ Jobs Due
 
     Test Program / Seeding
         * Do the analysis for test scripting and seeding in the README.
-        Make the necessary modifications to index.html
-        Write the seedPrograms.js object
+        * Make the necessary modifications to index.html
+        * Write the seedPrograms.js object
+        Do score list
+        Do Trace interface connection
 
         Figure out the necessary procedures for git pull on the windows system
 

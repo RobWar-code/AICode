@@ -211,6 +211,21 @@ class MainControl {
         return bestEntitySet;
     }
 
+    loadAndExecuteSeed(seedProgram) {
+        let insSet = new InstructionSet();
+        // Compile the seed program
+        let memSpace = new Array(256).fill(0);
+        insSet.compileTestCode(seedProgram.program, memSpace);
+        // Create the test entity
+        let asRandom = false;
+        let seeded = false;
+        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, memSpace);
+        let memObj = entity.execute(0, 0);
+        // Get the display details
+        let seedDisplayData = entity.getSeedDisplayData(seedProgram);
+        return seedDisplayData;
+    }
+
     addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, score) {
         let hasAcceptableScore = true;
         let scorePosition = 0;

@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
+const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
 const dbTransactions = require(path.join(__dirname, './database/dbTransactions'));
 
 const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
@@ -68,7 +69,7 @@ const createWindow = () => {
       traceWindow.focus();
     }
   });
-  
+
   ipcMain.on('openTestMonoclonal', () => {
     if (!testWindow) {
         testWindow = new BrowserWindow({
@@ -149,6 +150,19 @@ ipcMain.on("traceStep", (data) => {
 
 ipcMain.on("fetchDisplayHistory", () => {
   mainWindow.webContents.send("displayHistory", program.scoreHistory);
+});
+
+ipcMain.on("fetchSeedList", () => {
+  let nameList = seedPrograms.getSeedList();
+  mainWindow.webContents.send("displaySeedSelector", nameList);
+});
+
+ipcMain.on("loadAndExecuteSeed", (event, seedProgramNumber) => {
+  console.log("Got to loadAndExecuteSeed", seedProgramNumber);
+  let seedProgram = seedPrograms.programs[seedProgramNumber];
+  let seedDisplayData = program.loadAndExecuteSeed(seedProgram);
+  console.log("loadAndExecuteSeed event:", seedDisplayData.seedName);
+  mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
 });
 
 ipcMain.on("saveSession", () => {

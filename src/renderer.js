@@ -1,8 +1,9 @@
 const {ipcRenderer, ipcMain} = require("electron");
 const path = require('node:path');
 const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"));
-const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'))
-const testObj = require(path.join(__dirname, '/processes/testObj.js'))
+const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
+const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
+const testObj = require(path.join(__dirname, '/processes/testObj.js'));
 /*
 document.getElementById("button01").addEventListener("click", () => {
     document.getElementById("report").innerText = "Clicked";
@@ -34,6 +35,16 @@ ipcRenderer.on("displayHistory", (event, data) => {
     scoreHistory.displayHistory(data);
 });
 
+ipcRenderer.on("displaySeedSelector", (event, nameList) => {
+    console.log("Got to event displaySeedSelector");
+    seedDisplay.displaySelector(nameList);
+});
+
+ipcRenderer.on("seedDisplayResults", (event, data) => {
+    console.log("Got to event displaySeedResults", data.seedName);
+    seedDisplay.displaySeedResults(data);
+});
+
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "SAVE DONE";
@@ -52,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
     const haltProcessButton = document.getElementById('haltProcessButton');
     const traceButton = document.getElementById('traceButton');
+    const loadSeedButton = document.getElementById('loadSeedButton');
+    const seedSelectorForm = document.getElementById('seedSelectorForm');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const testMonoclonalButton = document.getElementById('testMonoclonalButton');
@@ -111,6 +124,22 @@ document.addEventListener('DOMContentLoaded', () => {
             traceButton.innerText = "Trace";
             traceActive = false;
         }
+    });
+
+    loadSeedButton.addEventListener('click', (event) => {
+        // Fetch list of seed programs etc.
+        ipcRenderer.send("fetchSeedList", 0);
+    });
+
+    seedSelectorForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let seedOption = document.getElementById("seedSelector").value;
+        // Cancel the ongoing processing
+        clearTimeout(processTimeout);
+        processingCancelled = true;
+        console.log("got seed option", seedOption);
+        console.log("before loadAndExecuteSeed");
+        ipcRenderer.send("loadAndExecuteSeed", seedOption);
     });
 
     saveButton.addEventListener('click', (event) => {
