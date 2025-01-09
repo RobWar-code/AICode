@@ -34,79 +34,79 @@ const rulesets = {
         this.scoreList.push(scoreItem3);
         this.byteFunction.push(null);
 
-        let scoreItem4 = {rule: "Values Out Set (0:8)", ruleNum: 4, score: 0, max: 4, 
-            outBlockStart: 0, outBlockLen: 123 
-        };
+        let scoreItem4 = {rule: "Params Preserved", ruleNum: 4, score: 0, max: 3};
         this.scoreList.push(scoreItem4);
-        this.byteFunction.push(this.byteValuesOutSet);
-
-        let scoreItem5 = {rule: "Values Out From Initial Params (0:8, 32:39)", ruleNum: 5, score: 0, max: 6, 
-            outBlockStart: 32, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
-        };
-        this.scoreList.push(scoreItem5);
-        this.byteFunction.push(this.byteValuesOutFromInitialParams);
-
-        let scoreItem6 = {rule:"Values Out Match Initial Params (0:8, 40:47)", ruleNum: 6, score: 0, max: 12,
-            outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
-        };
-        this.scoreList.push(scoreItem6);
-        this.byteFunction.push(this.byteValuesOutMatch);
-
-        let scoreItem7 = {rule: "Params Preserved", ruleNum: 7, score: 0, max: 3};
-        this.scoreList.push(scoreItem7);
         this.byteFunction.push(null);
 
-        let scoreItem8 = {rule: "Values Out Different (8:15)", ruleNum: 8, score: 0, max: 2,
-            outBlockStart: 8, outBlockLen: 8
+        let scoreItem5 = {rule: "Values Out Set (0:111)", ruleNum: 5, score: 0, max: 4, 
+            outBlockStart: 0, outBlockLen: 112 
         };
-        this.scoreList.push(scoreItem8);
+        this.scoreList.push(scoreItem5);
+        this.byteFunction.push(this.byteValuesOutSet);
+
+        let scoreItem6 = {rule: "Values Out Different (0:8)", ruleNum: 6, score: 0, max: 2,
+            outBlockStart: 0, outBlockLen: 8
+        };
+        this.scoreList.push(scoreItem6);
         this.byteFunction.push(this.byteValuesOutDifferent);
 
-        let scoreItem9 = {rule: "Values Out Series (16:23)", ruleNum: 9, score: 0, max: 4,
-            outBlockStart: 16, outBlockLen: 8
+        let scoreItem7 = {rule: "Values Out Series (8:15)", ruleNum: 7, score: 0, max: 4,
+            outBlockStart: 8, outBlockLen: 8
         };
-        this.scoreList.push(scoreItem9);
+        this.scoreList.push(scoreItem7);
         this.byteFunction.push(this.byteValuesOutSeries);
 
-        let scoreItem10 = {rule: "Values Out From Params (0:7, 24:31)", ruleNum: 10, score: 0, max: 6,
-            outBlockStart: 24, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+        let scoreItem8 = {rule: "Values Out From Params (0:7, 16:23)", ruleNum: 8, score: 0, max: 6,
+            outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
-        this.scoreList.push(scoreItem10);
+        this.scoreList.push(scoreItem8);
         this.byteFunction.push(this.byteValuesOutFromParams);
 
-        let scoreItem11 = {rule: "Params Plus Three (0:7, 48:55)", ruleNum: 11, score: 0, max: 20, 
-            outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+        let scoreItem9 = {rule: "Values Out From Initial Params (0:8, 24:31)", ruleNum: 9, score: 0, max: 6, 
+            outBlockStart: 24, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+        };
+        this.scoreList.push(scoreItem9);
+        this.byteFunction.push(this.byteValuesOutFromInitialParams);
+
+        let scoreItem10 = {rule:"Values Out Match Initial Params (0:8, 32:39)", ruleNum: 10, score: 0, max: 12,
+            outBlockStart: 32, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+        };
+        this.scoreList.push(scoreItem10);
+        this.byteFunction.push(this.byteValuesOutMatch);
+
+        let scoreItem11 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 11, score: 0, max: 20, 
+            outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem11);
         this.byteFunction.push(this.byteParamsPlusThree);
 
-        let scoreItem12 = {rule: "Params Minus Three (0:7, 56:63)", ruleNum: 12, score: 0, max: 20, 
-            outBlockStart: 56, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+        let scoreItem12 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 12, score: 0, max: 20, 
+            outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem12);
         this.byteFunction.push(this.byteParamsMinusThree);
 
-        let scoreItem13 = {rule: "Params Times Two (0:7, 64:71)", ruleNum: 13, score: 0, max: 18,
-            outBlockStart: 64, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
+        let scoreItem13 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 13, score: 0, max: 18,
+            outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
         this.scoreList.push(scoreItem13);
         this.byteFunction.push(this.byteParamsTimesTwo);
 
-        let scoreItem14 = {rule: "Multiply Initial Params By Each Other (0:9, 72:79)", ruleNum: 14, 
-            score: 0, max: 24, outBlockStart: 72, outBlockLen:5, 
+        let scoreItem14 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 14, 
+            score: 0, max: 24, outBlockStart: 64, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
         this.scoreList.push(scoreItem14);
         this.byteFunction.push(this.byteMultiplyParams);
 
-        let scoreItem15 = {rule: "Divide Block of Inputs(1:6, 10:16, 80:85)", ruleNum: 15, 
-            score: 0, max: 24, outBlockStart: 80, outBlockLen:6, inBlockStart: 1, 
+        let scoreItem15 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 15, 
+            score: 0, max: 24, outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
         this.scoreList.push(scoreItem15);
         this.byteFunction.push(this.byteDivideParams);
 
-        let scoreItem16 = {rule: "Use op to Convert Params (16:87, 88:111)", ruleNum:16,
+        let scoreItem16 = {rule: "Use op to Convert Params (16:87, 80:103)", ruleNum:16,
             score: 0, max: 30, outBlockStart: 80, outBlockLen: 24,
             inBlockStart: 16, inBlockLen: 72
         }
@@ -170,13 +170,40 @@ const rulesets = {
         totalScore += score;
 
         item = 4;
+        score = this.scoreList[item].max * this.initialParamsPreserved(initialParams, paramsIn);
+        this.scoreList[item].score += score;
+        totalScore += score;
+
+        item = 5;
         score = this.scoreList[item].max * this.valuesOutSet(valuesOut, this.scoreList[item].outBlockStart,
             this.scoreList[item].outBlockLen
         );
         this.scoreList[item].score += score;
         totalScore += score;
 
-        item = 5;
+        item = 6;
+        score = this.scoreList[item].max * this.valuesOutDifferent(valuesOut,
+            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
+        );
+        this.scoreList[item].score += score;
+        totalScore += score;
+
+        item = 7;
+        score = this.scoreList[item].max * this.valuesOutSeries(valuesOut,
+            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
+        );
+        this.scoreList[item].score += score;
+        totalScore += score;
+
+        item = 8;
+        score = this.scoreList[item].max * this.valuesOutFromParams(paramsIn, valuesOut,
+            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+        );
+        this.scoreList[item].score += score;
+        totalScore += score;
+
+        item = 9;
         score = this.scoreList[item].max * this.valuesOutFromInitialParams(initialParams, valuesOut,
             this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
             this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
@@ -184,35 +211,8 @@ const rulesets = {
         this.scoreList[item].score += score;
         totalScore += score;
 
-        item = 6;
-        score = this.scoreList[item].max * this.valuesOutMatchInitialParams(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
-
-        item = 7;
-        score = this.scoreList[item].max * this.initialParamsPreserved(initialParams, paramsIn);
-        this.scoreList[item].score += score;
-        totalScore += score;
-
-        item = 8;
-        score = this.scoreList[item].max * this.valuesOutDifferent(valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
-
-        item = 9;
-        score = this.scoreList[item].max * this.valuesOutSeries(valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
-
         item = 10;
-        score = this.scoreList[item].max * this.valuesOutFromParams(paramsIn, valuesOut,
+        score = this.scoreList[item].max * this.valuesOutMatchInitialParams(initialParams, valuesOut,
             this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
             this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
         );

@@ -154,7 +154,7 @@ const entityDisplay = {
         // Prepare the new list
         let html = "<ul id='scoreList'>"
         for (let scoreItem of data.scoreList) {
-            html += `<li><span class="scoreListRule" style="display: inline-block; width: 200px">${scoreItem.rule}</span>&emsp;`;
+            html += `<li><span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>&emsp;`;
             html += `<span class="scoreListScore" style="display: inline-block; width: 200px">${scoreItem.score}</span>`;
             html += `<span class="scoreListMax">${scoreItem.max}</span></li>`;
         }
