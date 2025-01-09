@@ -1,8 +1,44 @@
 Worked Examples and Strategies
 
 Contents
+    Ruleset Strategies
+        valuesSet
+        valuesOutMatchInputParams
+
     AI Code - Example Sequences
     Toward Stepped Pathways
+
+<h1>Ruleset Strategies
+
+<h2>General Approaches
+    Step 1) Put values in the output
+    Step 2) Put a series in the output
+    Step 3) Put a set of different values in the output
+    Step 4) Read the input and place in the output
+    Step 5) Read the input and modify in a simple way (eg: +3)
+    Step 5a) input -2
+    Step 5b) input *2
+    Step 5c) input /2
+
+<h2>valuesSet
+    Since the primary aim is to produce out, the first rule
+    is valuesSet this checks each byte of the output to see
+    if a non-zero value has been set. The score is a factor
+    of 1 per byte set over the tested range.
+
+    A typical sequence of entity code required to get the 
+    maximum for this rule would be:
+
+    INC A
+    STO (C), A
+    INC C
+    JR [0xFD]
+
+<h2>valuesOutMatchInputParams
+    This is tested for in a specific block of 8 bytes and
+    specific set of input parameters, so not only must the
+    operating entity discover the necessary output, but also
+    the specific inputs.
 
 <h1>AI Code - Example Sequences
 

@@ -62,8 +62,12 @@ li {
     display: block;
 }
 
+.entityPara {
+    margin-bottom: 1px;
+    margin-top: 1px;
+}
 .dataList {
-    height: 140px;
+    height: 200px;
     overflow: auto;
     border: solid black 1px;
 }
@@ -106,6 +110,11 @@ li {
 /* Score History */
 #scoreHistoryBackground {
     display: none;
+}
+
+#scoreHistoryDiv {
+    height: 450px;
+    overflow: auto;
 }
 
 /* Test Elements */

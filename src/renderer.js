@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const traceButton = document.getElementById('traceButton');
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
+    const insertSeedForm = document.getElementById('insertSeedForm');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const testMonoclonalButton = document.getElementById('testMonoclonalButton');
@@ -138,6 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
         processingCancelled = true;
         // Start the seed program
         ipcRenderer.send("loadAndExecuteSeed", seedOption);
+    });
+
+    insertSeedForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let seedSetNum = document.getElementById("seedSetNumInput").value;
+        ipcRenderer.send("insertSeed", seedSetNum);
     });
 
     saveButton.addEventListener('click', (event) => {

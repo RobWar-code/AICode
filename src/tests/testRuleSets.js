@@ -25,12 +25,12 @@ const testRuleSets = {
     },
 
     testValuesOutFromInitialParams: function() {
-        let initialParams = [0, 1, 2, 3];
-        let valuesOut = [3, 1, 0, 2];
+        let initialParams = [0, 1, 2, 3, 7, 8, 9, 10, 11, 12];
+        let valuesOut = [1,12,1,12,1,12,1,12];
         let outBlockStart = 0;
-        let outBlockLen = 4;
+        let outBlockLen = 8;
         let inBlockStart = 0;
-        let inBlockLen = 4;
+        let inBlockLen = 8;
         let score = rulesets.valuesOutFromInitialParams(initialParams, valuesOut, outBlockStart, outBlockLen,
             inBlockStart, inBlockLen
         )
@@ -351,12 +351,11 @@ const testByteRules = {
     }
 }
 console.log("Got Here");
-/*
-testRuleSets.testCountInsOccurrences();
-testRuleSets.testCountInsDistribution();
+
+// testRuleSets.testCountInsOccurrences();
+// testRuleSets.testCountInsDistribution();
 testRuleSets.testValuesOutFromInitialParams();
-*/
-testRuleSets.testMatchCASM();
+//testRuleSets.testMatchCASM();
 
 // testByteRules.valuesOutFromInitialParams();
 // testByteRules.valuesOutMatchInitialParams();

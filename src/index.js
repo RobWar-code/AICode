@@ -163,6 +163,10 @@ ipcMain.on("loadAndExecuteSeed", (event, seedProgramNumber) => {
   mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
 });
 
+ipcMain.on("insertSeed", (event, seedSetNum) => {
+  program.insertSeed(seedSetNum);
+});
+
 ipcMain.on("saveSession", () => {
   dbTransactions.saveSession(mainWindow, program);
 });

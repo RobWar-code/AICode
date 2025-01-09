@@ -173,7 +173,6 @@ const entityDisplay = {
         document.getElementById("seedDetails").style.display = "none";
         // Re-display the option buttons
         document.getElementById("scoreHistoryButton").style.display = "inline";
-        document.getElementById("haltProcessButton").innerText = "Resume Process";
         document.getElementById("loadSeedButton").style.display = "inline";
         document.getElementById("saveButton").style.display = "inline";
         document.getElementById("loadButton").style.display = "inline";

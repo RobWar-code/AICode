@@ -4,15 +4,12 @@ Contents
     Jobs Done
 
 Jobs Due
+    Regionalise interset breeding
+    
+    Work-on and modify the rulesets
+        Use consistent i/o data blocks
 
-    Test Program / Seeding
-        * Do the analysis for test scripting and seeding in the README.
-        * Make the necessary modifications to index.html
-        * Write the seedPrograms.js object
-        * Do score list
-        * Do Trace interface connection
-        * On restart processing, rebuild the best set entity display
-        Do the insert seed into best set operation
+    Prove the insert seed operation
 
         Figure out the necessary procedures for git pull on the windows system
             Re-copy the src directory.
@@ -22,17 +19,6 @@ Jobs Due
 
     Include save scorelist for an entity?
 
-    * Use git to update the windows system (rulesets.js)
-
-    * Do the git update for the new rule and send to the other computer
-
-    * Include a rule to score matching CASM instructions
-
-    * Port to the windows laptop
-
-    * Include auto-save and database tidy
-
-    * Include a self-breed method that uses a copy of the final memspace
 
     Update the instruction set in the README
     
@@ -62,6 +48,32 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    09/01/2025
+
+    * Adjust rule set
+        * Add param minus three
+
+    * Test Program / Seeding
+        * Do the analysis for test scripting and seeding in the README.
+        * Make the necessary modifications to index.html
+        * Write the seedPrograms.js object
+        * Do score list
+        * Do Trace interface connection
+        * On restart processing, rebuild the best set entity display
+        * Do the insert seed into best set operation
+
+    * Use git to update the windows system (rulesets.js)
+
+    * Do the git update for the new rule and send to the other computer
+
+    * Include a rule to score matching CASM instructions
+
+    * Port to the windows laptop
+
+    * Include auto-save and database tidy
+
+    * Include a self-breed method that uses a copy of the final memspace
+
     29/12/2024
     
     * Every 1000 cycles restart the lowest half of the bestSets

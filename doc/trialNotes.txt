@@ -1,3 +1,25 @@
+09/01/2025
+
+Rulesets rearranged and added params -3. Increased number
+of best sets to 32. 
+
+Score still tends to settle at 1/3 or just below, scatterings
+of random numbers and series.
+
+Suggestions for work:
+
+Localised interset breeding.
+
+Paginated long range memory.
+    256 byte pages referenced by 
+        LDF A, (DC)
+        LDF A, (MEM)
+        STF (DC), A 
+        STF (MEM), A 
+        CFAR
+        CFSM
+        Additional reg D for 16 bit addresses
+
 05/01/2025
 All of the changes suggested were made, but the app still
 plateaus at a score of about 1/3 of the maximum, presumably

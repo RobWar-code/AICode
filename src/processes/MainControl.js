@@ -11,7 +11,7 @@ class MainControl {
         this.bestEntitySetMax = 40;
         this.bestEntitySetCount = 0;
         this.bestEntitySet = [];
-        this.numBestSets = 24;
+        this.numBestSets = 32;
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
@@ -21,6 +21,7 @@ class MainControl {
         this.scoreHistoryMaxLen = 8;
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
+        this.crossSetRange = 9;
         this.seedEntity = null;
         this.lapCounter = 0;
         this.restartLap = 120;
@@ -129,17 +130,13 @@ class MainControl {
                         let p1Entity = bestEntitySet[p1];
                         let p2Entity;
                         // Check for a mate from an alternative set
-                        if (this.cycleCounter > 0 && this.cycleCounter % 16 === 0) {
-                            let a = [];
-                            for (let k = 0; k < this.numBestSets; k++) {
-                                if (this.bestSets[k].length >= this.bestEntitySetMax && k != bestSetNum) {
-                                    a.push(k);
-                                }
-                            }
-                            if (a.length > 0) {
-                                let set = a[Math.floor(Math.random() * a.length)];
-                                let p2 = Math.floor(Math.random() * this.bestSets[set].length);
-                                p2Entity = this.bestSets[set][p2];
+                        if (Math.random() < 0.1) {
+                            let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
+                            let b = bestSetNum + r;
+                            if (this.bestSets[b].length != 0) {
+                                let e = Math.floor(Math.random() * this.bestSets[b].length);
+                                p2Entity = this.bestSets[b][e];
+                                ++this.crossSetCount;
                                 gotCrossMate = true;
                             }
                         }
@@ -212,6 +209,25 @@ class MainControl {
         return bestEntitySet;
     }
 
+    chooseBestSetMate(crossSetRange, bestSetNum, numBestSets) {
+        let n = crossSetRange; // range of selection
+        let d = Math.floor(n/2);
+        if (bestSetNum < d) {
+            n = n - (d - bestSetNum);
+            d = bestSetNum;
+        }
+        else if (bestSetNum >= numBestSets - d) {
+            n = n - ((d + 1) - (numBestSets - bestSetNum));
+        }
+        let r = Math.floor(Math.random() * n) - d;
+        if (r === 0) {
+            if (bestSetNum - 1 < 0) r = 1;
+            else if (bestSetNum + 1 >= numBestSets) r = -1;
+            else r = (Math.floor(Math.random() * 2) * 2) - 1; 
+        }
+        return r;
+    }
+
     loadAndExecuteSeed(seedProgram) {
         let insSet = new InstructionSet();
         // Compile the seed program
@@ -226,6 +242,14 @@ class MainControl {
         // Get the display details
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
         return seedDisplayData;
+    }
+
+    insertSeed(seedSetNum) {
+        if (seedSetNum < 0 || this.numBestSets <= seedSetNum) return;
+        this.seedEntity.breedMethod = "Seeded";
+        let a = [];
+        a.push(this.seedEntity);
+        this.bestSets[seedSetNum] = a;
     }
 
     addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, score) {
