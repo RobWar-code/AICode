@@ -12,6 +12,7 @@ const rulesets = {
     byteFunction: [],
     totalScore: 0,
     maxScore: 0,
+    diffScore: 0,
 
     initialise() {
 
@@ -113,11 +114,16 @@ const rulesets = {
         this.scoreList.push(scoreItem16);
         this.byteFunction.push(this.byteParamOperations);
 
+        this.diffScore = 17;
+        let scoreItem17 = {rule: "Difference Between Outputs", ruleNum: 17, score: 0, max: 60};
+        this.scoreList.push(scoreItem17);
+        this.byteFunction.push(null);
+
         let maxScore = 0;
         for (let scoreItem of this.scoreList) {
             maxScore += scoreItem.max;
         }
-        this.maxScore = maxScore * 2;
+        this.maxScore = maxScore * 2 - this.scoreList[this.diffScore].max;
 
     },
 
@@ -278,6 +284,29 @@ const rulesets = {
         }
         return {score: totalScore, scoreList: this.scoreList};
 
+    },
+
+    scoreOutputDiff(outputs) {
+        let count = 0;
+        let l = outputs.length;
+        for (let i = 0; i < outputs[0].length; i++) {
+            let v = outputs[0][i];
+            for (let j = 1; j < l; j++) {
+                if (i < outputs[j].length) {
+                    if (v != outputs[j][i]) {
+                        ++count;
+                        break;
+                    }
+                }
+            }
+        }
+        let opt = outputs[0].length;
+        let max = opt;
+        let min = 0;
+        let score = this.doScore(opt, count, max, min);
+        score = score * this.scoreList[this.diffScore].max;
+        this.scoreList[this.diffScore].score = score;
+        return score;
     },
 
     insDistribution: function (instructionSet, memSpace, codeLen) {

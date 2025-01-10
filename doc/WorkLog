@@ -4,10 +4,12 @@ Contents
     Jobs Done
 
 Jobs Due
-    Regionalise interset breeding
+    Score the difference between the outputs from the execution runs
+
+    * Regionalise interset breeding
     
-    Work-on and modify the rulesets
-        Use consistent i/o data blocks
+    * Work-on and modify the rulesets
+        * Use consistent i/o data blocks
 
     Prove the insert seed operation
 
@@ -18,7 +20,6 @@ Jobs Due
     Remove the existing testScript function hooks from instructionSet
 
     Include save scorelist for an entity?
-
 
     Update the instruction set in the README
     

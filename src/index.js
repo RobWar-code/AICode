@@ -129,6 +129,10 @@ ipcMain.on("buttonClicked", () => {
 ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   let bestSetNum = bestSetObj.bestSetNum;
   let bestSetEntityNum = bestSetObj.bestSetEntityNum;
+  if (bestSetNum < 0 || program.numBestSets <= bestSetNum || bestSetEntityNum < 0 || 
+    program.bestEntitySetMax <= bestSetEntityNum) {
+    return;
+  }
   trace.bestSetNum = bestSetNum;
   trace.bestSetEntityNum = bestSetEntityNum;
   if (bestSetEntityNum >= program.bestSets[bestSetNum].length || bestSetNum >= program.numBestSets) return;

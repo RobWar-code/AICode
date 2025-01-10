@@ -289,7 +289,7 @@ class Entity {
     breed(entityNumber, mateEntity, cycleCounter) {
         let newEntity = null;
 
-        if (cycleCounter < this.interbreedCycle || Math.random() < 0.6) {
+        if (cycleCounter < this.interbreedCycle || Math.random() < 0.7) {
             newEntity = this.monoclonalBreed(entityNumber, cycleCounter);
             newEntity.breedMethod = "Monoclonal";
         }
@@ -655,6 +655,9 @@ class Entity {
                 this.registers.IC, this.instructionSet.highestIP);
             this.score += scoreObj.score;
         }
+        // Score the difference between the outputs of the passes
+        this.score += rulesets.scoreOutputDiff(this.oldValuesOut);
+
         if (typeof(memObj.A) != "number") memObj.A = 0;
         if (typeof(memObj.B) != "number") memObj.B = 0;
         this.registers.A = memObj.A;
