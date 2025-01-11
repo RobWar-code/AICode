@@ -58,6 +58,7 @@ const createWindow = () => {
       traceWindow.loadFile(path.join(__dirname, 'trace.html'));
 
       traceWindow.on('closed', () => {
+          mainWindow.webContents.send("traceWindowClosed", 0);
           traceWindow = null;
       });
 
@@ -140,7 +141,7 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   let entity = program.bestSets[bestSetNum][bestSetEntityNum];
   entity.display(mainWindow, bestSetNum, program.elapsedTime, program.entityNumber, program.randomCount, 
     program.monoclonalCount, program.interbreedCount, program.interbreed2Count, program.selfBreedCount, 
-    program.crossSetCount, program.cycleCounter);
+    program.crossSetCount, program.cycleCounter, program.numRounds);
 });
 
 ipcMain.on("activateMainProcess", () => {

@@ -618,7 +618,7 @@ class InstructionSet {
         ];
     }
 
-    execute(memSpace, initialParams, params, valuesOut, test, showDataStart, showDataLen, testScript) {
+    execute(memSpace, initialParams, params, valuesOut, roundNum, test, showDataStart, showDataLen, testScript) {
         let IC = 0;
         let IP = 0;
         let highestIP = 0;
@@ -634,7 +634,7 @@ class InstructionSet {
         this.callStack = [];
         let gotRet = false;
         while (IC <= this.maxIC && IP <= this.maxIP && !gotRet) {
-            let regObj = this.executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut);
+            let regObj = this.executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut, roundNum);
             A = regObj.registers.A;
             B = regObj.registers.B;
             C = regObj.registers.C;
@@ -657,7 +657,7 @@ class InstructionSet {
         return {A:A, B:B, C:C, ZF: ZF, CF: CF, SP: SP, IP:IP, highestIP: highestIP, IC:IC, memSpace: memSpace};
     }
 
-    executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut) {
+    executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut, roundNum) {
         let ins = memSpace[IP];
         // Debug
         if (isNaN(ins) || typeof ins === 'undefined') {
@@ -758,7 +758,7 @@ class InstructionSet {
                     pointer = memSpace[IP];
                     valuesOut[pointer] = A;
                     // Get byte score
-                    resultObj = rulesets.getOutputByteScore(A, pointer, initialParams, params, valuesOut);
+                    resultObj = rulesets.getOutputByteScore(A, pointer, initialParams, params, valuesOut, roundNum);
                     R = resultObj.totalScore;
                     S = resultObj.totalSignificance;
                     if (isNaN(R) || isNaN(S) || typeof R === 'undefined' || typeof S === 'undefined') {
@@ -782,7 +782,7 @@ class InstructionSet {
                     // STO (C), A
                     valuesOut[C] = A;
                     // Get byte score
-                    resultObj = rulesets.getOutputByteScore(A, C, initialParams, params, valuesOut);
+                    resultObj = rulesets.getOutputByteScore(A, C, initialParams, params, valuesOut, roundNum);
                     R = resultObj.totalScore;
                     S = resultObj.totalSignificance;
                     if (isNaN(R) || isNaN(S) || typeof R === 'undefined' || typeof S === 'undefined') {

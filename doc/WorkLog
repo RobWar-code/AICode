@@ -4,7 +4,25 @@ Contents
     Jobs Done
 
 Jobs Due
-    Score the difference between the outputs from the execution runs
+    Update Windows System
+        Recreate tables on windows system
+
+    * Introduce rules one at a time from number of rounds
+        Problem with same score each round? breed?
+
+    * On main display show number of rounds
+
+    * Load with execute to adjust scores to the prevailing environment
+    
+    * Indicate actual number of cross-set breeds
+
+    * Adjust height of code display on main window - make scrollable
+
+    * Reduce the line spacing of titles on the main display
+
+    * Reset the trace button when the trace window is closed
+
+    * Score the difference between the outputs from the execution runs
 
     * Regionalise interset breeding
     

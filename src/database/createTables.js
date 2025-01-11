@@ -15,6 +15,7 @@ async function createTables() {
     sql = "CREATE TABLE session (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "cycle_counter INT,";
+    sql += "num_rounds INT,"
     sql += "elapsed_time INT,";
     sql += "entity_number INT";
     sql += ")";
@@ -31,6 +32,7 @@ async function createTables() {
     sql += "birth_time BIGINT,";
     sql += "birth_date_time VARCHAR(256),";
     sql += "birth_cycle INT,";
+    sql += "round_num INT,";
     sql += "breed_method CHAR(64),";
     sql += "score FLOAT, ";
     sql += "initial_params_1 VARCHAR(256),";

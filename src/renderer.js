@@ -53,6 +53,10 @@ ipcRenderer.on("loadDone", (event, data) => {
     document.getElementById("statusPara").innerText = "LOAD DONE";
 });
 
+ipcRenderer.on("traceWindowClosed", (event, data) => {
+    document.getElementById("traceButton").innerText = "Trace";
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const bestEntitySelector = document.getElementById('bestEntitySelector');
     const scoreListDismiss = document.getElementById('scoreListDismiss');

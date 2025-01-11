@@ -12,7 +12,7 @@ class Entity {
      * 
      * Create, execute or breed a similar entity
      */
-    constructor(entityNumber, instructionSet, asRandom, seeded, currentCycle, memSpace) {
+    constructor(entityNumber, instructionSet, asRandom, seeded, currentCycle, roundNum, memSpace) {
         this.entityNumber = entityNumber;
         this.bestSetEntityNum = -1;
         // Segments
@@ -68,7 +68,9 @@ class Entity {
         this.birthTime = Date.now();
         this.birthDateTime = `${now.toDateString()} ${now.toTimeString()}`;
         this.birthCycle = currentCycle;
+        this.roundNum = roundNum;
         this.breedMethod = "Random";
+        this.crossSetBreed = false;
 
         // Test Data
         this.testScript = this.getTestScript();
@@ -286,8 +288,9 @@ class Entity {
         }
     }
 
-    breed(entityNumber, mateEntity, cycleCounter) {
+    breed(entityNumber, mateEntity, crossSet, cycleCounter) {
         let newEntity = null;
+        this.crossSetBreed = false;
 
         if (cycleCounter < this.interbreedCycle || Math.random() < 0.7) {
             newEntity = this.monoclonalBreed(entityNumber, cycleCounter);
@@ -297,10 +300,12 @@ class Entity {
             if (Math.random() < 0.4) {
                 newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter);
                 newEntity.breedMethod = "Interbreed";
+                if (crossSet) this.crossSetBreed = true;
             }
             else if (Math.random() < 0.8) {
                 newEntity = this.interbreed2(mateEntity, entityNumber, cycleCounter);
                 newEntity.breedMethod = "Interbreed2";
+                if (crossSet) this.crossSetBreed = true;
             }
             else {
                 // Self-breed
@@ -531,7 +536,7 @@ class Entity {
     }
 
     display(mainWindow, bestSetNum, elapsedTime, numTrials, randomCount, monoclonalCount, interbreedCount, 
-        interbreed2Count, selfBreedCount, crossSetCount, currentCycle) {
+        interbreed2Count, selfBreedCount, crossSetCount, currentCycle, numRounds) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -559,6 +564,7 @@ class Entity {
         displayData.bestSetEntityNum = this.bestSetEntityNum;
         displayData.numTrials = numTrials;
         displayData.currentCycle = currentCycle;
+        displayData.numRounds = numRounds;
         displayData.birthCycle = this.birthCycle;
         displayData.entityNumber = this.entityNumber;
         displayData.creationTime = this.birthDateTime;
@@ -615,8 +621,10 @@ class Entity {
     }
 
     doScore(bestSetHighScore, bestSetLowScore) {
-        let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, this.initialMemSpace, 
-            this.initialParams, this.params, this.valuesOut, this.registers.IC, this.instructionSet.highestIP);
+        let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
+            this.instructionSet, this.initialMemSpace, 
+            this.initialParams, this.params, this.valuesOut, this.registers.IC, 
+            this.instructionSet.highestIP, this.roundNum);
         this.score = scoreObj.score;
         this.scoreList = scoreObj.scoreList;
         return score;
@@ -640,7 +648,7 @@ class Entity {
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(this.memSpace, this.initialParams, this.params, this.valuesOut, 
-                test, showDataStart, showDataLen, this.testScript);
+                this.roundNum, test, showDataStart, showDataLen, this.testScript);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
                 let c = this.memSpace[i];
@@ -652,7 +660,7 @@ class Entity {
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
                 this.initialMemSpace, this.initialParams, this.params, this.valuesOut, 
-                this.registers.IC, this.instructionSet.highestIP);
+                this.registers.IC, this.instructionSet.highestIP, this.roundNum);
             this.score += scoreObj.score;
         }
         // Score the difference between the outputs of the passes
@@ -689,7 +697,8 @@ class Entity {
         let {A, B, C, R, S, CF, ZF, SP, IP, IC} = this.registers;
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
-        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, this.initialParams, this.params, this.valuesOut);
+        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, 
+            this.initialParams, this.params, this.valuesOut, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.ICMax) {

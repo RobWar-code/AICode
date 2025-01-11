@@ -2,7 +2,7 @@ const seedPrograms = {
     programs: [
         {
             name: "inputLoop",
-            description: "A seed program the reads the input parameters and passes them to the output",
+            description: "A seed program that reads the input parameters and passes them to the output",
             program: [
                 {
                     ins: "LDI A, (C)"

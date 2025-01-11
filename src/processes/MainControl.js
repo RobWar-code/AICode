@@ -27,6 +27,7 @@ class MainControl {
         this.restartLap = 120;
         this.restartProportion = 0.5;
         this.cycleCounter = 0;
+        this.numRounds = 0;
         this.entityNumber = 0;
         this.monoclonalCount = 0;
         this.interbreedCount = 0;
@@ -48,6 +49,7 @@ class MainControl {
         ++this.bestSetNum;
         if (this.bestSetNum >= this.numBestSets) {
             this.bestSetNum = 0;
+            ++this.numRounds;
             dbTransactions.saveSession(this.mainWindow, this);
         }
         if (this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
@@ -136,7 +138,6 @@ class MainControl {
                             if (this.bestSets[b].length != 0) {
                                 let e = Math.floor(Math.random() * this.bestSets[b].length);
                                 p2Entity = this.bestSets[b][e];
-                                ++this.crossSetCount;
                                 gotCrossMate = true;
                             }
                         }
@@ -149,15 +150,16 @@ class MainControl {
                             }
                             p2Entity = bestEntitySet[p2];
                         }
-                        entity = p1Entity.breed(this.entityNumber, p2Entity, this.cycleCounter);
+                        entity = p1Entity.breed(this.entityNumber, p2Entity, gotCrossMate, this.cycleCounter);
                     }
                     else {
                         let seeded = false;
                         // Seeding on first pass.
                         // if (cycle === 0 && i === 0 && j === 0) seeded = true;
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, memSpace, this.mainWindow);
+                            this.cycleCounter, this.numRounds, memSpace, this.mainWindow);
                     }
+                    // Update breed method tallies
                     switch (entity.breedMethod) {
                         case "Monoclonal" :
                             ++this.monoclonalCount;
@@ -177,6 +179,8 @@ class MainControl {
                             ++this.randomCount;
                             break;
                     }
+                    if (entity.crossSetBreed) ++this.crossSetCount;
+
                     let bestSetHighScore, bestSetLowScore;
                     if (this.bestEntitySet.length < 2) {
                         bestSetHighScore = 0;
@@ -205,7 +209,8 @@ class MainControl {
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
         bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, this.randomCount, this.monoclonalCount,
-            this.interbreedCount, this.interbreed2Count, this.selfBreedCount, this.crossSetCount, this.cycleCounter);
+            this.interbreedCount, this.interbreed2Count, this.selfBreedCount, this.crossSetCount, 
+            this.cycleCounter, this.numRounds);
         return bestEntitySet;
     }
 
@@ -236,7 +241,7 @@ class MainControl {
         // Create the test entity
         let asRandom = false;
         let seeded = false;
-        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, memSpace);
+        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, this.numRounds, memSpace);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
@@ -354,6 +359,7 @@ class MainControl {
     loadRestart(session, entities) {
         // Set session details
         this.cycleCounter = session.cycle_counter;
+        this.numRounds = session.num_rounds;
         this.previousElapsedTime = session.elapsed_time;
         this.startTime = Date.now();
         this.entityNumber = session.entity_number;
@@ -370,13 +376,12 @@ class MainControl {
             let initialMemSpace = this.stringToIntArray(e.initial_mem_space);
             let asRandom = false;
             let seeded = false;
-            let entity = new Entity(e.entity_number, insSet, asRandom, seeded, e.birth_cycle, initialMemSpace);
+            let entity = new Entity(e.entity_number, insSet, asRandom, seeded, e.birth_cycle, 
+                this.numRounds, initialMemSpace);
+            let memObj = entity.execute(0, 0);
             entity.birthTime = e.birth_time;
             entity.birthDateTime = e.birth_date_time;
             entity.breedMethod = e.breed_method;
-            entity.score = e.score;
-            entity.initialParamsList[0] = initialParams1;
-            entity.initialParamsList[1] = initialParams2;
             entity.bestSetEntityNum = 0;
             let set = [entity]
             this.bestSets[bestSetNum] = set;

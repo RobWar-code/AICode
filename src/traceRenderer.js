@@ -9,3 +9,5 @@ document.addEventListener('DOMContentLoaded', () => {
         window.electronAPI.sendMessage('traceStep', 0);
     });
 });
+
+

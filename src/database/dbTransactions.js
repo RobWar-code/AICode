@@ -16,8 +16,8 @@ const dbTransactions = {
 
         // Insert the program session details
         try {
-            let sql = "INSERT INTO session (cycle_counter, elapsed_time, entity_number) VALUES (?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [program.cycleCounter, elapsedTime, program.entityNumber]);
+            let sql = "INSERT INTO session (cycle_counter, num_rounds, elapsed_time, entity_number) VALUES (?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, elapsedTime, program.entityNumber]);
             console.log ("session saved");
             sessionId = results.insertId;
         }
@@ -50,6 +50,7 @@ const dbTransactions = {
                 let birthTime = entity.birthTime;
                 let birthDateTime = entity.birthDateTime;
                 let birthCycle = entity.birthCycle;
+                let roundNum = entity.roundNum;
                 let breedMethod = entity.breedMethod;
                 let score = entity.score;
                 let initialParams1 = this.intArrayToString(entity.initialParamsList[0], 256);
@@ -60,12 +61,12 @@ const dbTransactions = {
                 try {
                     let sql = "INSERT INTO entity (";
                     sql += "session_id, best_set_num, entity_number, birth_time, birth_date_time, birth_cycle, ";
-                    sql += "breed_method, score, "
+                    sql += "round_num, breed_method, score, "
                     sql += "initial_params_1, initial_params_2, initial_mem_space) ";
-                    sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     const [results] = await dbConnection.execute(sql, [
                         sessionId, i, entityNum, birthTime, birthDateTime, birthCycle,
-                        breedMethod, score,
+                        roundNum, breedMethod, score,
                         initialParams1, initialParams2, initialMemSpace
                     ]);
                     ++count;

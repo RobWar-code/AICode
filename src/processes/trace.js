@@ -27,7 +27,8 @@ const trace = {
         let seeded = false;
         let currentCycle = program.cycleCounter;
         // Create the trace entity
-        this.entity = new Entity(entityNumber, instructionSet, asRandom, seeded, currentCycle, memSpace);
+        let roundNum = traceEntity.roundNum;
+        this.entity = new Entity(entityNumber, instructionSet, asRandom, seeded, currentCycle, roundNum, memSpace);
         // Save the fixed data
         this.fixedData = {};
         this.fixedData.entityNumber = this.entity.entityNumber;

@@ -19,103 +19,105 @@ const rulesets = {
         this.scoreList = [];
         this.byteFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleNum: 0, score: 0, max: 6};
+        let scoreItem0 = {rule: "Instruction Distribution", ruleNum: 0, score: 0, max: 4, startRoundNum: 0};
         this.scoreList.push(scoreItem0);
         this.byteFunction.push(null);
 
-        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, score: 0, max: 10};
+        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, score: 0, max: 4, startRoundNum: 0};
         this.scoreList.push(scoreItem1);
         this.byteFunction.push(null);
 
-        let scoreItem2 = {rule: "Instruction Counter", ruleNum: 2, score: 0, max: 1};
+        let scoreItem2 = {rule: "Instruction Counter", ruleNum: 2, score: 0, max: 1, startRoundNum: 0};
         this.scoreList.push(scoreItem2);
         this.byteFunction.push(null);
 
-        let scoreItem3 = {rule: "Highest IP", ruleNum: 3, score: 0, max: 1};
+        let scoreItem3 = {rule: "Highest IP", ruleNum: 3, score: 0, max: 1, startRoundNum: 0};
         this.scoreList.push(scoreItem3);
         this.byteFunction.push(null);
 
-        let scoreItem4 = {rule: "Params Preserved", ruleNum: 4, score: 0, max: 3};
+        let scoreItem4 = {rule: "Params Preserved", ruleNum: 4, score: 0, max: 3, startRoundNum: 0};
         this.scoreList.push(scoreItem4);
         this.byteFunction.push(null);
 
-        let scoreItem5 = {rule: "Values Out Set (0:111)", ruleNum: 5, score: 0, max: 4, 
+        let scoreItem5 = {rule: "Values Out Set (0:111)", ruleNum: 5, score: 0, max: 4, startRoundNum: 0, 
             outBlockStart: 0, outBlockLen: 112 
         };
         this.scoreList.push(scoreItem5);
         this.byteFunction.push(this.byteValuesOutSet);
 
-        let scoreItem6 = {rule: "Values Out Different (0:8)", ruleNum: 6, score: 0, max: 2,
+        let scoreItem6 = {rule: "Values Out Different (0:8)", ruleNum: 6, score: 0, max: 2, startRoundNum: 0,
             outBlockStart: 0, outBlockLen: 8
         };
         this.scoreList.push(scoreItem6);
         this.byteFunction.push(this.byteValuesOutDifferent);
 
-        let scoreItem7 = {rule: "Values Out Series (8:15)", ruleNum: 7, score: 0, max: 4,
+        let scoreItem7 = {rule: "Values Out Series (8:15)", ruleNum: 7, score: 0, max: 4, startRoundNum: 0,
             outBlockStart: 8, outBlockLen: 8
         };
         this.scoreList.push(scoreItem7);
         this.byteFunction.push(this.byteValuesOutSeries);
 
-        let scoreItem8 = {rule: "Values Out From Params (0:7, 16:23)", ruleNum: 8, score: 0, max: 6,
+        let scoreItem8 = {rule: "Values Out From Params (0:7, 16:23)", ruleNum: 8, score: 0, max: 6, startRoundNum: 5,
             outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem8);
         this.byteFunction.push(this.byteValuesOutFromParams);
 
         let scoreItem9 = {rule: "Values Out From Initial Params (0:8, 24:31)", ruleNum: 9, score: 0, max: 6, 
+            startRoundNum: 10,
             outBlockStart: 24, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem9);
         this.byteFunction.push(this.byteValuesOutFromInitialParams);
 
         let scoreItem10 = {rule:"Values Out Match Initial Params (0:8, 32:39)", ruleNum: 10, score: 0, max: 12,
+            startRoundNum: 15,
             outBlockStart: 32, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem10);
         this.byteFunction.push(this.byteValuesOutMatch);
 
-        let scoreItem11 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 11, score: 0, max: 20, 
+        let scoreItem11 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 11, score: 0, max: 20, startRoundNum: 20, 
             outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem11);
         this.byteFunction.push(this.byteParamsPlusThree);
 
-        let scoreItem12 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 12, score: 0, max: 20, 
+        let scoreItem12 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 12, score: 0, max: 20, startRoundNum: 30,
             outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem12);
         this.byteFunction.push(this.byteParamsMinusThree);
 
-        let scoreItem13 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 13, score: 0, max: 18,
+        let scoreItem13 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 13, score: 0, max: 18, startRoundNum: 40,
             outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
         this.scoreList.push(scoreItem13);
         this.byteFunction.push(this.byteParamsTimesTwo);
 
         let scoreItem14 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 14, 
-            score: 0, max: 24, outBlockStart: 64, outBlockLen:5, 
+            score: 0, max: 24, startRoundNum: 50, outBlockStart: 64, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
         this.scoreList.push(scoreItem14);
         this.byteFunction.push(this.byteMultiplyParams);
 
         let scoreItem15 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 15, 
-            score: 0, max: 24, outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
+            score: 0, max: 24, startRoundNum: 60, outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
         this.scoreList.push(scoreItem15);
         this.byteFunction.push(this.byteDivideParams);
 
         let scoreItem16 = {rule: "Use op to Convert Params (16:87, 80:103)", ruleNum:16,
-            score: 0, max: 30, outBlockStart: 80, outBlockLen: 24,
+            score: 0, max: 30, startRoundNum: 70, outBlockStart: 80, outBlockLen: 24,
             inBlockStart: 16, inBlockLen: 72
         }
         this.scoreList.push(scoreItem16);
         this.byteFunction.push(this.byteParamOperations);
 
         this.diffScore = 17;
-        let scoreItem17 = {rule: "Difference Between Outputs", ruleNum: 17, score: 0, max: 60};
+        let scoreItem17 = {rule: "Difference Between Outputs", ruleNum: 17, score: 0, max: 20, startRoundNum: 0};
         this.scoreList.push(scoreItem17);
         this.byteFunction.push(null);
 
@@ -127,20 +129,22 @@ const rulesets = {
 
     },
 
-    getOutputByteScore(value, address, initialParams, params, outputValues) {
+    getOutputByteScore(value, address, initialParams, params, outputValues, roundNum) {
         let totalScore = 0;
         let totalSignificance = 0;
         // For each rule applicable to the address
         let index = 0;
         for (let rule of this.scoreList) {
             if (this.byteFunction[index] != null) {
-                if (address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
-                    let score = this.byteFunction[index](rule, value, address, initialParams, params, outputValues);
-                    if (isNaN(score)) {
-                        console.log("Invalid byte score", score, index);
+                if (rule.startRoundNum <= roundNum) {
+                    if (address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
+                        let score = this.byteFunction[index](rule, value, address, initialParams, params, outputValues);
+                        if (isNaN(score)) {
+                            console.log("Invalid byte score", score, index);
+                        }
+                        totalScore += score;
+                        totalSignificance += rule.max;
                     }
-                    totalScore += score;
-                    totalSignificance += rule.max;
                 }
             }
             ++index;
@@ -150,130 +154,164 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        initialParams, paramsIn, valuesOut, IC, highestIP) {
+        initialParams, paramsIn, valuesOut, IC, highestIP, roundNum) {
         let totalScore = 0;
         let max;
         let score;
 
         let item = 0;
-        score = this.scoreList[item].max * this.insDistribution(instructionSet, memSpace, memSpace.length);
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.insDistribution(instructionSet, memSpace, memSpace.length);
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 1;
-        score = this.scoreList[item].max * this.matchCASM(instructionSet, memSpace);
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.matchCASM(instructionSet, memSpace);
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 2;
-        score = this.scoreList[item].max * this.instructionCount(IC);
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.instructionCount(IC);
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 3;
-        score = this.scoreList[item].max * this.highestIPScore(highestIP, memSpace.length);
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.highestIPScore(highestIP, memSpace.length);
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 4;
-        score = this.scoreList[item].max * this.initialParamsPreserved(initialParams, paramsIn);
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.initialParamsPreserved(initialParams, paramsIn);
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 5;
-        score = this.scoreList[item].max * this.valuesOutSet(valuesOut, this.scoreList[item].outBlockStart,
-            this.scoreList[item].outBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutSet(valuesOut, this.scoreList[item].outBlockStart,
+                this.scoreList[item].outBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 6;
-        score = this.scoreList[item].max * this.valuesOutDifferent(valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutDifferent(valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 7;
-        score = this.scoreList[item].max * this.valuesOutSeries(valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutSeries(valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 8;
-        score = this.scoreList[item].max * this.valuesOutFromParams(paramsIn, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutFromParams(paramsIn, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 9;
-        score = this.scoreList[item].max * this.valuesOutFromInitialParams(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutFromInitialParams(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 10;
-        score = this.scoreList[item].max * this.valuesOutMatchInitialParams(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.valuesOutMatchInitialParams(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 11;
-        score = this.scoreList[item].max * this.paramsPlusThree(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.paramsPlusThree(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 12;
-        score = this.scoreList[item].max * this.paramsMinusThree(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.paramsMinusThree(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 13;
-        score = this.scoreList[item].max * this.paramsTimesTwo(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.paramsTimesTwo(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 14;
-        score = this.scoreList[item].max * this.multiplyInitialParamsByEachother(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.multiplyInitialParamsByEachother(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 15;
-        score = this.scoreList[item].max * this.divideByParams(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen, this.scoreList[item].inBlockStart2
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.divideByParams(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen, this.scoreList[item].inBlockStart2
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
         item = 16;
-        score = this.scoreList[item].max * this.paramOperations(initialParams, valuesOut,
-            this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
-            this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
-        );
-        this.scoreList[item].score += score;
-        totalScore += score;
+        if (roundNum >= this.scoreList[item].startRoundNum) {
+            score = this.scoreList[item].max * this.paramOperations(initialParams, valuesOut,
+                this.scoreList[item].outBlockStart, this.scoreList[item].outBlockLen,
+                this.scoreList[item].inBlockStart, this.scoreList[item].inBlockLen
+            );
+            this.scoreList[item].score += score;
+            totalScore += score;
+        }
 
-        this.totalScore = score;
+        this.totalScore = totalScore;
 
         // Check for originality
         if (bestSetHighScore > 0) {

@@ -2,6 +2,10 @@ Worked Examples and Strategies
 
 Contents
     Ruleset Strategies
+        General Approaches
+        Possible Future Approaches
+            Staged Introduction of Rules
+            Allow What Evolves and Pick the Useful
         valuesSet
         valuesOutMatchInputParams
 
@@ -19,6 +23,44 @@ Contents
     Step 5a) input -2
     Step 5b) input *2
     Step 5c) input /2
+    Step 6) Cued inputs with parameters, ie + 5 6, * 2 7
+
+    In practice even after 20,000,000 or so trials, the system
+    devolves to distributing arrangements of random numbers and 
+    series in a scatter through the output area. Although the 
+    introduction of breeding ranges and a output difference test
+    for each execution cycle has improved the rate of change.
+    There is a marked absence of systematic manipulation of the
+    inputs. This might be improved by balancing the input 
+    instruction distribution in favour of LDI operations. Even
+    direct transfer of inputs to the output fails when tied to
+    a non-zero based output block.
+
+<h2>Possible Future Approaches
+
+<h3>Staged Introduction of Rules
+    This would involve stepping through the rules after specific
+    numbers of cycles. This may encourage more concentration on 
+    specific solutions and help to establish the IPO habit.
+
+    However code patterns may well degrade to random scatter as
+    new rules are introduced.
+
+<h3>Allow What Evolves and Pick the Useful
+    This approach modifies the user demands of the system, to
+    one of producing interesting or useful code fragments and
+    sections over an open-ended period of time.
+
+    This approach would allow the opportunistic addition of rules
+    to favour certain patterns of output, so that after a medium
+    period of time, certain interesting effects would begin to
+    arise.
+
+    In this case the addition of rules to the system over time 
+    should be allowed for.
+
+    This may well require substantial development to facilitate 
+    user intervention and observation.
 
 <h2>valuesSet
     Since the primary aim is to produce out, the first rule
