@@ -145,7 +145,6 @@ const entityDisplay = {
     },
 
     displayScoreList() {
-        console.log("Got here");
         let data = this.currentData;
         // Clear the old list
         document.getElementById('scoreList').remove();
@@ -154,7 +153,9 @@ const entityDisplay = {
         // Prepare the new list
         let html = "<ul id='scoreList'>"
         for (let scoreItem of data.scoreList) {
-            html += `<li><span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>&emsp;`;
+            html += "<li>";
+            html += `<span class="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
+            html += `<span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
             html += `<span class="scoreListScore" style="display: inline-block; width: 200px">${scoreItem.score}</span>`;
             html += `<span class="scoreListMax">${scoreItem.max}</span></li>`;
         }

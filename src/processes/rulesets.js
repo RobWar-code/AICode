@@ -57,7 +57,7 @@ const rulesets = {
         this.scoreList.push(scoreItem7);
         this.byteFunction.push(this.byteValuesOutSeries);
 
-        let scoreItem8 = {rule: "Values Out From Params (0:7, 16:23)", ruleNum: 8, score: 0, max: 6, startRoundNum: 5,
+        let scoreItem8 = {rule: "Values Out From Params (0:7, 16:23)", ruleNum: 8, score: 0, max: 6, startRoundNum: 3,
             outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem8);

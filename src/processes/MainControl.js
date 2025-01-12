@@ -150,7 +150,8 @@ class MainControl {
                             }
                             p2Entity = bestEntitySet[p2];
                         }
-                        entity = p1Entity.breed(this.entityNumber, p2Entity, gotCrossMate, this.cycleCounter);
+                        entity = p1Entity.breed(this.entityNumber, p2Entity, gotCrossMate, 
+                            this.cycleCounter, this.numRounds);
                     }
                     else {
                         let seeded = false;

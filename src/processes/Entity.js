@@ -288,22 +288,22 @@ class Entity {
         }
     }
 
-    breed(entityNumber, mateEntity, crossSet, cycleCounter) {
+    breed(entityNumber, mateEntity, crossSet, cycleCounter, roundNum) {
         let newEntity = null;
         this.crossSetBreed = false;
 
         if (cycleCounter < this.interbreedCycle || Math.random() < 0.7) {
-            newEntity = this.monoclonalBreed(entityNumber, cycleCounter);
+            newEntity = this.monoclonalBreed(entityNumber, cycleCounter, roundNum);
             newEntity.breedMethod = "Monoclonal";
         }
         else {
             if (Math.random() < 0.4) {
-                newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter);
+                newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed";
                 if (crossSet) this.crossSetBreed = true;
             }
             else if (Math.random() < 0.8) {
-                newEntity = this.interbreed2(mateEntity, entityNumber, cycleCounter);
+                newEntity = this.interbreed2(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed2";
                 if (crossSet) this.crossSetBreed = true;
             }
@@ -312,7 +312,7 @@ class Entity {
                 let asRandom = false;
                 let seeded = false;
                 newEntity = new Entity(this.entityNumber, this.instructionSet, asRandom, seeded, 
-                    cycleCounter, this.memSpace);
+                    cycleCounter, roundNum, this.memSpace);
                 newEntity.breedMethod = "Self-breed";
             }
             // Compare with old entity
@@ -331,7 +331,7 @@ class Entity {
         return (newEntity);
     }
 
-    monoclonalBreed(entityNumber, cycleCounter) {
+    monoclonalBreed(entityNumber, cycleCounter, roundNum) {
         let codeHitChance;
         if (cycleCounter % 3 === 0) {
             codeHitChance = 0.05;
@@ -422,12 +422,12 @@ class Entity {
 
         let asRandom = false;
         let seeded = false;
-        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, newCodeSegment);
+        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCodeSegment);
 
         return entity;
     }
 
-    interbreed(mate, entityNumber, cycleCounter) {
+    interbreed(mate, entityNumber, cycleCounter, roundNum) {
         // Get the block marker instruction
         let markerCode = this.instructionSet.getInsCode("SM").code;
         let memSpace1 = this.initialMemSpace;
@@ -473,11 +473,11 @@ class Entity {
         }
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, newMemSpace);
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newMemSpace);
         return newEntity;
     }
 
-    interbreed2(mate, entityNumber, cycleCounter) {
+    interbreed2(mate, entityNumber, cycleCounter, roundNum) {
         // Fixed length blocks
         let insBlockLen = 12;
         let newProgram = [];
@@ -512,7 +512,7 @@ class Entity {
 
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, newProgram);
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newProgram);
         return newEntity;
     }
 

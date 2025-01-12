@@ -103,6 +103,29 @@ li {
     overflow: auto;
 }
 
+#scoreTitles {
+    margin-left: 20px;
+}
+
+#scoreStartRound {
+    display: inline-block;
+    width: 50px;
+}
+
+#scoreRule {
+    display: inline-block;
+    width: 300px;
+}
+
+#score {
+    display: inline-block;
+    width: 200px;
+}
+
+#scoreMax {
+    display: inline-block;
+}
+
 .scoreListRule {
     width: 200px;
 }
