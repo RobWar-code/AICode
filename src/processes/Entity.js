@@ -293,8 +293,14 @@ class Entity {
         this.crossSetBreed = false;
 
         if (cycleCounter < this.interbreedCycle || Math.random() < 0.7) {
-            newEntity = this.monoclonalBreed(entityNumber, cycleCounter, roundNum);
-            newEntity.breedMethod = "Monoclonal";
+            if (Math.random() < 0.5) {
+                newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
+                newEntity.breedMethod = "MonoclonalIns";
+            }
+            else {
+                newEntity = this.monoclonalByteBreed(entityNumber, cycleCounter, roundNum);
+                newEntity.breedMethod = "MonoclonalByte";
+            }
         }
         else {
             if (Math.random() < 0.4) {
@@ -324,14 +330,14 @@ class Entity {
                 }
             }
             if (!different) {
-                newEntity = this.monoclonalBreed(entityNumber, cycleCounter);
+                newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Monoclonal";
             }
         }
         return (newEntity);
     }
 
-    monoclonalBreed(entityNumber, cycleCounter, roundNum) {
+    monoclonalInsBreed(entityNumber, cycleCounter, roundNum) {
         let codeHitChance;
         if (cycleCounter % 3 === 0) {
             codeHitChance = 0.05;
@@ -424,6 +430,49 @@ class Entity {
         let seeded = false;
         let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCodeSegment);
 
+        return entity;
+    }
+
+    monoclonalByteBreed(entityNumber, cycleCounter, roundNum) {
+        let newCode = [];
+        let oldCode = this.initialMemSpace;
+        // Determine whether high or low probability of change
+        let changeChance = 0.1;
+        if (Math.random() < 0.2) changeChance = 0.3;
+        for (let v of oldCode) {
+            // Determine whether change occurs
+            if (Math.random() < changeChance) {
+                let c = Math.random();
+                if (c < 0.4) {
+                    // Replace
+                    let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
+                    newCode.push(n);
+                }
+                else if (c < 0.65) {
+                    // Insert
+                    let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
+                    newCode.push(n);
+                    newCode.push(v);
+                }
+                else {
+                    // Delete
+                    // Do nothing
+                }
+            }
+            else {
+                // No change
+                newCode.push(v);
+            }
+        }
+        if (newCode.length > this.memLength) {
+            newCode = newCode.slice(0, this.memLength);
+        }
+        else if (newCode.length < this.memLength) {
+            newCode = newCode.concat(new Array(this.memLength - newCode.length).fill(0));
+        }
+        let asRandom = false;
+        let seeded = false;
+        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCode);
         return entity;
     }
 
@@ -535,7 +584,8 @@ class Entity {
         return {pointer: p, block: insBlock};
     }
 
-    display(mainWindow, bestSetNum, elapsedTime, numTrials, randomCount, monoclonalCount, interbreedCount, 
+    display(mainWindow, bestSetNum, elapsedTime, numTrials, randomCount, monoclonalInsCount, 
+        monoclonalByteCount, interbreedCount, 
         interbreed2Count, selfBreedCount, crossSetCount, currentCycle, numRounds) {
         let displayData = {};
         // Code, parameters and memory output
@@ -573,7 +623,8 @@ class Entity {
         displayData.maxScore = rulesets.maxScore;
         displayData.elapsedTime = Math.floor(elapsedTime * 10000)/10000;
         displayData.randomCount = randomCount;
-        displayData.monoclonalCount = monoclonalCount;
+        displayData.monoclonalInsCount = monoclonalInsCount;
+        displayData.monoclonalByteCount = monoclonalByteCount;
         displayData.interbreedCount = interbreedCount;
         displayData.interbreed2Count = interbreed2Count;
         displayData.selfBreedCount = selfBreedCount;

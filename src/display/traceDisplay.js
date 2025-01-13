@@ -118,7 +118,7 @@ const traceDisplay = {
 
     doCodeScroll(stepLine, numIns) {
         const divElem = document.getElementById('currentCode');
-        const lineHeight = 15;
+        const lineHeight = 17;
         const lineClearance = 8;
         const divHeightPx = divElem.style.height;
         const divHeight = parseInt(divHeightPx.substring(0, divHeightPx.length - 2));

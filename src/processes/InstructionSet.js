@@ -1032,7 +1032,7 @@ class InstructionSet {
                     A += B;
                     if (A > 255) {
                         CF = 1;
-                        A = A % 256;
+                        A = A & 255;
                     }
                     else {
                         CF = 0;
@@ -1047,8 +1047,7 @@ class InstructionSet {
                         CF = 1;
                         ZF = 0;
                         // Allow for representations of negative numbers
-                        A = Math.abs(A);
-                        A = (~A + 1) & 255;
+                        A = A & 255;
                     }
                     else if (A === 0) {
                         ZF = 1;

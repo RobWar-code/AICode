@@ -25,11 +25,12 @@ class MainControl {
         this.seedEntity = null;
         this.lapCounter = 0;
         this.restartLap = 120;
-        this.restartProportion = 0.5;
+        this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
         this.entityNumber = 0;
-        this.monoclonalCount = 0;
+        this.monoclonalInsCount = 0;
+        this.monoclonalByteCount = 0;
         this.interbreedCount = 0;
         this.interbreed2Count = 0;
         this.selfBreedCount = 0;
@@ -162,8 +163,11 @@ class MainControl {
                     }
                     // Update breed method tallies
                     switch (entity.breedMethod) {
-                        case "Monoclonal" :
-                            ++this.monoclonalCount;
+                        case "MonoclonalIns" :
+                            ++this.monoclonalInsCount;
+                            break;
+                        case "MonoclonalByte" :
+                            ++this.monoclonalByteCount;
                             break;
                         case "Interbreed" :
                             ++this.interbreedCount;
@@ -209,7 +213,8 @@ class MainControl {
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, this.randomCount, this.monoclonalCount,
+        bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, this.randomCount, 
+            this.monoclonalInsCount, this.monoclonalByteCount,
             this.interbreedCount, this.interbreed2Count, this.selfBreedCount, this.crossSetCount, 
             this.cycleCounter, this.numRounds);
         return bestEntitySet;

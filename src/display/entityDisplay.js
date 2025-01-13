@@ -24,7 +24,8 @@ const entityDisplay = {
             document.getElementById("elapsedTime").innerText = data.elapsedTime;
             document.getElementById("breedMethod").innerText = data.breedMethod;
             document.getElementById("randomCount").innerText = data.randomCount;
-            document.getElementById("monoclonalCount").innerText = data.monoclonalCount;
+            document.getElementById("monoclonalInsCount").innerText = data.monoclonalInsCount;
+            document.getElementById("monoclonalByteCount").innerText = data.monoclonalByteCount;
             document.getElementById("interbreedCount").innerText = data.interbreedCount;
             document.getElementById("interbreed2Count").innerText = data.interbreed2Count;
             document.getElementById("selfBreedCount").innerText = data.selfBreedCount;
@@ -153,11 +154,17 @@ const entityDisplay = {
         // Prepare the new list
         let html = "<ul id='scoreList'>"
         for (let scoreItem of data.scoreList) {
+            let outBlockStart = "";
+            if ("outBlockStart" in scoreItem) {
+                outBlockStart = scoreItem.outBlockStart;
+            }
             html += "<li>";
             html += `<span class="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
+            html += `<span class="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
             html += `<span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
             html += `<span class="scoreListScore" style="display: inline-block; width: 200px">${scoreItem.score}</span>`;
-            html += `<span class="scoreListMax">${scoreItem.max}</span></li>`;
+            html += `<span class="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += "</li>";
         }
         html += "</ul>";
         document.getElementById('scoreListDiv').innerHTML = html;
