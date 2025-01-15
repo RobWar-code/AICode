@@ -45,27 +45,27 @@ const rulesets = {
         this.scoreList.push(scoreItem5);
         this.byteFunction.push(this.byteValuesOutSet);
 
-        let scoreItem6 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 6, score: 0, max: 2, startRoundNum: 2,
+        let scoreItem6 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 6, score: 0, max: 4, startRoundNum: 2,
             outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem6);
         this.byteFunction.push(this.byteValuesOutFromParams);
 
-        let scoreItem7 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 7, score: 0, max: 8, 
+        let scoreItem7 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 7, score: 0, max: 4, 
             startRoundNum: 5,
             outBlockStart: 8, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem7);
         this.byteFunction.push(this.byteValuesOutFromInitialParams);
 
-        let scoreItem8 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 8, score: 0, max: 12,
+        let scoreItem8 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 8, score: 0, max: 4,
             startRoundNum: 10,
             outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem8);
         this.byteFunction.push(this.byteValuesOutMatch);
 
-        let scoreItem9 = {rule: "Values Out Different (24:31)", ruleNum: 9, score: 0, max: 2, startRoundNum: 15,
+        let scoreItem9 = {rule: "Values Out Different (24:31)", ruleNum: 9, score: 0, max: 4, startRoundNum: 15,
             outBlockStart: 24, outBlockLen: 8
         };
         this.scoreList.push(scoreItem9);
@@ -77,47 +77,47 @@ const rulesets = {
         this.scoreList.push(scoreItem10);
         this.byteFunction.push(this.byteValuesOutSeries);
 
-        let scoreItem11 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 11, score: 0, max: 20, startRoundNum: 22, 
+        let scoreItem11 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 11, score: 0, max: 4, startRoundNum: 22, 
             outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem11);
         this.byteFunction.push(this.byteParamsPlusThree);
 
-        let scoreItem12 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 12, score: 0, max: 20, startRoundNum: 30,
+        let scoreItem12 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 12, score: 0, max: 4, startRoundNum: 30,
             outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem12);
         this.byteFunction.push(this.byteParamsMinusThree);
 
-        let scoreItem13 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 13, score: 0, max: 18, startRoundNum: 40,
+        let scoreItem13 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 13, score: 0, max: 4, startRoundNum: 40,
             outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
         this.scoreList.push(scoreItem13);
         this.byteFunction.push(this.byteParamsTimesTwo);
 
         let scoreItem14 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 14, 
-            score: 0, max: 24, startRoundNum: 50, outBlockStart: 64, outBlockLen:5, 
+            score: 0, max: 4, startRoundNum: 50, outBlockStart: 64, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
         this.scoreList.push(scoreItem14);
         this.byteFunction.push(this.byteMultiplyParams);
 
         let scoreItem15 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 15, 
-            score: 0, max: 24, startRoundNum: 60, outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
+            score: 0, max: 4, startRoundNum: 60, outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
         this.scoreList.push(scoreItem15);
         this.byteFunction.push(this.byteDivideParams);
 
-        let scoreItem16 = {rule: "Use op to Convert Params (16:87, 80:103)", ruleNum:16,
-            score: 0, max: 30, startRoundNum: 70, outBlockStart: 80, outBlockLen: 24,
-            inBlockStart: 16, inBlockLen: 72
+        let scoreItem16 = {rule: "Use op to Convert Params (16:114, 80:111)", ruleNum:16,
+            score: 0, max: 16, startRoundNum: 70, outBlockStart: 80, outBlockLen: 32,
+            inBlockStart: 16, inBlockLen: 96
         }
         this.scoreList.push(scoreItem16);
         this.byteFunction.push(this.byteParamOperations);
 
         this.diffScore = 17;
-        let scoreItem17 = {rule: "Difference Between Outputs", ruleNum: 17, score: 0, max: 8, startRoundNum: 0};
+        let scoreItem17 = {rule: "Difference Between Outputs", ruleNum: 17, score: 0, max: 4, startRoundNum: 0};
         this.scoreList.push(scoreItem17);
         this.byteFunction.push(null);
 
@@ -710,44 +710,21 @@ const rulesets = {
     valuesOutFromInitialParams(initialParams, valuesOut, outBlockStart, outBlockLen, inBlockStart, inBlockLen) {
         let initSlice = initialParams.slice(inBlockStart, inBlockStart + inBlockLen);
         let outSlice = valuesOut.slice(outBlockStart, outBlockStart + outBlockLen);
-        // Create a unique list of the input
-        initSlice.sort();
-        let inList = [];
-        let inCount = [];
-        let oldVal;
-        for (let i = 0; i < initSlice.length; i++) {
-            let val = initSlice[i];
-            if (i > 0) {
-                if (oldVal != val) {
-                    inList.push(val);
-                    inCount.push(1);
-                }
-                else {
-                    ++inCount[inCount.length - 1];
-                }
-            }
-            else {
-                inList.push(val);
-                inCount.push(1);
-            }
-            oldVal = val;
-        }
-
-        let itemCount = new Array(inList.length).fill(0);
+        let inFlags = new Array(inBlockLen).fill(false);
         let count = 0;
-        for (let val of outSlice) {
-            let p = inList.indexOf(val);
-            if (p != -1) ++itemCount[p];
-        }
-        let index = 0;
-        for (let c of itemCount) {
-            if (c >= inCount[index]) count += inCount[index];
-            else if (c > 0) {
-                count += c;
+        for (let v of outSlice) {
+            for (let i = 0; i < inBlockLen; i++) {
+                let c = initSlice[i];
+                if (c === v) {
+                    if (!inFlags[i]) {
+                        inFlags[i] = true;
+                        ++count;
+                        break;
+                    }
+                }
             }
-            ++index;
         }
-        let max = inBlockLen;
+        let max = outBlockLen;
         let min = 0;
         let opt = max;
         let score = this.doScore(opt, count, max, min);
@@ -905,10 +882,67 @@ const rulesets = {
         let inAddr = inBlockStart;
         let count = 0;
         for (let i = 0; i < outBlockLen; i++) {
-            let v = valuesOut[outAddr + i];
             let op = initialParams[inAddr + i * 3];
-            let a = initialParams[inAddr + i * 3 + 1];
-            let b = initialParams[inAddr + i * 3 + 2];
+            if (op === 61) {
+                let p = initialParams[inAddr + i * 3 + 1];
+                let q = initialParams[inAddr + i * 3 + 2];
+                let v = valuesOut[p];
+                if (v === q) ++count;
+            }
+            else {
+                let v = valuesOut[outAddr + i];
+                let a = initialParams[inAddr + i * 3 + 1];
+                let b = initialParams[inAddr + i * 3 + 2];
+                let r;
+                switch (op) {
+                    case 43: // +
+                        r = a + b;
+                        break;
+                    case 45: // -
+                        r = a - b;
+                        break;
+                    case 42: // *
+                        r = a * b;
+                        break;
+                    default: 
+                        console.log("op error in paramOperations rule at:", i, op, inAddr);
+                        r = 0;
+                }
+                if (r < 0 || r > 255) r = Math.abs(r & 255);
+                if (r === v) ++count;
+            }
+        }
+        let opt = outBlockLen;
+        let max = opt;
+        let min = 0;
+        let score = this.doScore(opt, count, max, min);
+        return score;
+    },
+
+    byteParamOperations(rule, value, address, initialParams, params, outputValues) {
+        let numCommandTypes = 4;
+        let score = 0;
+        let offset = address - rule.outBlockStart;
+        if (offset < 8) {
+            // = a b rule
+            // Find the corresponding parameter command
+            let found = false;
+            for (let i = 0; i < rule.inBlockLen / numCommandTypes; i += 3) {
+                let a = initialParams[rule.inBlockStart + i + 1];
+                if (a === address) {
+                    if (value === initialParams[rule.inBlockStart + i + 2]) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (found) score = 64;
+        }
+        else {
+            let inAddr = rule.inBlockStart;
+            let op = initialParams[inAddr + offset * 3];
+            let a = initialParams[inAddr + offset * 3 + 1];
+            let b = initialParams[inAddr + offset * 3 + 2];
             let r;
             switch (op) {
                 case 43: // +
@@ -921,42 +955,12 @@ const rulesets = {
                     r = a * b;
                     break;
                 default: 
-                    console.log("op error in paramOperations rule at:", i, op, inAddr);
+                    console.log("op error in paramOperations rule at:", i);
                     r = 0;
             }
             if (r < 0 || r > 255) r = Math.abs(r & 255);
-            if (r === v) ++count;
+            score = Math.floor((255 - Math.abs(value - r)) / 3);
         }
-        let opt = outBlockLen;
-        let max = opt;
-        let min = 0;
-        let score = this.doScore(opt, count, max, min);
-        return score;
-    },
-
-    byteParamOperations(rule, value, address, initialParams, params, outputValues) {
-        let offset = address - rule.outBlockStart;
-        let inAddr = rule.inBlockStart;
-        let op = initialParams[inAddr + offset * 3];
-        let a = initialParams[inAddr + offset * 3 + 1];
-        let b = initialParams[inAddr + offset * 3 + 2];
-        let r;
-        switch (op) {
-            case 43: // +
-                r = a + b;
-                break;
-            case 45: // -
-                r = a - b;
-                break;
-            case 42: // *
-                r = a * b;
-                break;
-            default: 
-                console.log("op error in paramOperations rule at:", i);
-                r = 0;
-        }
-        if (r < 0 || r > 255) r = Math.abs(r & 255);
-        let score = Math.floor((255 - Math.abs(value - r)) / 3);
         return score;
     },
 

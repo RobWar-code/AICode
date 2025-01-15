@@ -33,6 +33,7 @@ class MainControl {
         this.monoclonalByteCount = 0;
         this.interbreedCount = 0;
         this.interbreed2Count = 0;
+        this.interbreedFlaggedCount = 0;
         this.selfBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
@@ -177,6 +178,10 @@ class MainControl {
                             ++this.interbreed2Count;
                             if (gotCrossMate) ++this.crossSetCount;
                             break;
+                        case "InterbreedFlagged" :
+                            ++this.interbreedFlaggedCount;
+                            if (gotCrossMate) ++this.crossSetCount;
+                            break;
                         case "Self-breed" :
                             ++this.selfBreedCount;
                             break;
@@ -215,7 +220,8 @@ class MainControl {
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
         bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, this.randomCount, 
             this.monoclonalInsCount, this.monoclonalByteCount,
-            this.interbreedCount, this.interbreed2Count, this.selfBreedCount, this.crossSetCount, 
+            this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+            this.selfBreedCount, this.crossSetCount, 
             this.cycleCounter, this.numRounds);
         return bestEntitySet;
     }
@@ -247,7 +253,8 @@ class MainControl {
         // Create the test entity
         let asRandom = false;
         let seeded = false;
-        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, this.numRounds, memSpace);
+        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
+            this.numRounds, memSpace, this.mainWindow);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
@@ -389,7 +396,7 @@ class MainControl {
             entity.birthDateTime = e.birth_date_time;
             entity.breedMethod = e.breed_method;
             entity.bestSetEntityNum = 0;
-            let set = [entity]
+            let set = [entity];
             this.bestSets[bestSetNum] = set;
         }
         console.log("Entities Loaded");

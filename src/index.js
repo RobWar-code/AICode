@@ -140,7 +140,8 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   // Get the actual entity num
   let entity = program.bestSets[bestSetNum][bestSetEntityNum];
   entity.display(mainWindow, bestSetNum, program.elapsedTime, program.entityNumber, program.randomCount, 
-    program.monoclonalCount, program.interbreedCount, program.interbreed2Count, program.selfBreedCount, 
+    program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
+    program.interbreed2Count, program.interbreedFlaggedCount, program.selfBreedCount, 
     program.crossSetCount, program.cycleCounter, program.numRounds);
 });
 

@@ -618,7 +618,7 @@ class InstructionSet {
         ];
     }
 
-    execute(memSpace, initialParams, params, valuesOut, roundNum, test, showDataStart, showDataLen, testScript) {
+    execute(memSpace, codeFlags, initialParams, params, valuesOut, roundNum, test, showDataStart, showDataLen, testScript) {
         let IC = 0;
         let IP = 0;
         let highestIP = 0;
@@ -634,7 +634,8 @@ class InstructionSet {
         this.callStack = [];
         let gotRet = false;
         while (IC <= this.maxIC && IP <= this.maxIP && !gotRet) {
-            let regObj = this.executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut, roundNum);
+            let regObj = this.executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, codeFlags, 
+                initialParams, params, valuesOut, roundNum);
             A = regObj.registers.A;
             B = regObj.registers.B;
             C = regObj.registers.C;
@@ -657,17 +658,18 @@ class InstructionSet {
         return {A:A, B:B, C:C, ZF: ZF, CF: CF, SP: SP, IP:IP, highestIP: highestIP, IC:IC, memSpace: memSpace};
     }
 
-    executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, initialParams, params, valuesOut, roundNum) {
+    executeIns(A, B, C, R, S, CF, ZF, SP, IP, memSpace, codeFlags, initialParams, params, valuesOut, roundNum) {
         let ins = memSpace[IP];
         // Debug
         if (isNaN(ins) || typeof ins === 'undefined') {
-            console.log("ExecuteIns - Invalid code:", ins);
+            console.log("ExecuteIns - Invalid code:", ins, IP);
             ins = 0;
         }
         else if (ins < 0 || ins > 255) {
             console.log("ExecuteIns - code out of range", ins);
             ins = 0;
         }
+        if (codeFlags[IP] < 256) ++codeFlags[IP];
         let validIns = true;
         let RETF = false;
         if (ins < this.numIns) {

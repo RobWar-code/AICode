@@ -6,6 +6,7 @@ Contents
         Possible Future Approaches
             Staged Introduction of Rules
             Allow What Evolves and Pick the Useful
+            Selecting Marked Sections
         valuesSet
         valuesOutMatchInputParams
 
@@ -16,14 +17,14 @@ Contents
 
 <h2>General Approaches
     Step 1) Put values in the output
-    Step 2) Put a series in the output
-    Step 3) Put a set of different values in the output
-    Step 4) Read the input and place in the output
-    Step 5) Read the input and modify in a simple way (eg: +3)
-    Step 5a) input -2
-    Step 5b) input *2
-    Step 5c) input /2
-    Step 6) Cued inputs with parameters, ie + 5 6, * 2 7
+    Step 2) Read the input and place in the output
+    Step 3) Read the input and put a value at the specified memory location
+    Step 4) Put a series in the output
+    Step 6) Read the input and modify in a simple way (eg: +3)
+    Step 6a) input -3
+    Step 6b) input *2
+    Step 6c) input /2
+    Step 7) Cued inputs with parameters, ie = 100(addr) 10, + 5 6, * 2 7
 
     In practice even after 20,000,000 or so trials, the system
     devolves to distributing arrangements of random numbers and 
@@ -36,6 +37,13 @@ Contents
     direct transfer of inputs to the output fails when tied to
     a non-zero based output block.
 
+<h3>Considerations for rule scoring
+    On the one hand more valuable or lower pobability/higher complexity
+    outputs should score more. However, this means that correct, lower
+    scoring results may be overwritten by chance byte values having been
+    set in the output. A possible solution to this is to add a bonus for
+    a complete solution and to keep score weightings relatively flat.
+
 <h2>Possible Future Approaches
 
 <h3>Staged Introduction of Rules
@@ -45,6 +53,10 @@ Contents
 
     However code patterns may well degrade to random scatter as
     new rules are introduced.
+
+    This approach was added, without significant improvement.
+    Although a trial is now underway which shows some promise
+    with the stages extended somewhat.
 
 <h3>Allow What Evolves and Pick the Useful
     This approach modifies the user demands of the system, to
@@ -61,6 +73,21 @@ Contents
 
     This may well require substantial development to facilitate 
     user intervention and observation.
+
+<h3>Selecting Marked Sections
+
+    A possible approach to heirarchical selection of code is
+    to pick-out code sections that are actually used by the
+    entity. As the instructions run, the code can be flagged
+    at the instruction positions. Subsequently, the marked
+    blocks can be extracted and combined to make a new entity.
+
+    The main difficulty with this approach is deciding how best
+    to combine and make use of the sections. One possibility
+    is to wrap them in SM, RET instructions and call them
+    from the head of the code. Another is simply to cross-breed
+    with the flagged blocks and rely on mutations to merge
+    the code together.
 
 <h2>valuesSet
     Since the primary aim is to produce out, the first rule

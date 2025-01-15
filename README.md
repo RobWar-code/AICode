@@ -548,3 +548,6 @@ session into memory, clears down the best sets, creates an entity for each datab
 entity loaded and includes the initial params and initial_mem_space for that entity. 
 Inserting each of these entities into their own best set.
 
+## Installation Notes
+On Windows, the mysql server program file is found at
+    "c:\Program Files\MySQL\MySql Server 8.0\bin"

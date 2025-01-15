@@ -28,6 +28,7 @@ const entityDisplay = {
             document.getElementById("monoclonalByteCount").innerText = data.monoclonalByteCount;
             document.getElementById("interbreedCount").innerText = data.interbreedCount;
             document.getElementById("interbreed2Count").innerText = data.interbreed2Count;
+            document.getElementById("interbreedFlaggedCount").innerText = data.interbreedFlaggedCount;
             document.getElementById("selfBreedCount").innerText = data.selfBreedCount;
             document.getElementById("crossSetCount").innerText = data.crossSetCount;
         }

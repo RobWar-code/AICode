@@ -148,6 +148,19 @@ document.addEventListener('DOMContentLoaded', () => {
     insertSeedForm.addEventListener("submit", (event) => {
         event.preventDefault();
         let seedSetNum = document.getElementById("seedSetNumInput").value;
+        let valid = false;
+        if (!isNaN(seedSetNum)) {
+            if (seedSetNum > 0 && 31 >= seedSetNum) {
+                document.getElementById('statusDiv').style.display = "block";
+                document.getElementById('statusPara').innerText = "Seed Inserted";
+                valid = true;
+            }
+        }
+        if (!valid) {
+            document.getElementById('statusDiv').style.display = "block";
+            document.getElementById('statusPara').innerText = "Invalid seed set number";
+            return;
+        }
         ipcRenderer.send("insertSeed", seedSetNum);
     });
 

@@ -34,8 +34,9 @@ const testRuleSets = {
         let score = rulesets.valuesOutFromInitialParams(initialParams, valuesOut, outBlockStart, outBlockLen,
             inBlockStart, inBlockLen
         )
-        console.log("score, expect 1:", score);
+        console.log("score, expect 0.125:", score);
 
+        outBlockLen = 4;
         valuesOut = [3, 1, 1, 2];
         score = rulesets.valuesOutFromInitialParams(initialParams, valuesOut, outBlockStart, outBlockLen,
             inBlockStart, inBlockLen

@@ -4,8 +4,51 @@ Contents
     Jobs Done
 
 Jobs Due
-    Update Windows System
-        Recreate tables on windows system
+    Bear in mind the current setting for numRounds im mainControl
+
+    Add InterbreedFlagged - for flagged code segment interchange
+
+    * Add the = a b rule in the rule set
+
+    * Flatten the scoring 
+
+    * Prove the insert seed operation
+
+    Remove the existing testScript functions and hooks from entity.js
+    Remove the existing testScript function hooks from instructionSet
+
+    Include save scorelist for an entity?
+
+    Trace operation
+        Close the trace window from the main window
+
+        Include a close option on the trace window
+
+    Apply redundant pairs to monoclonal instruction insert/replace?
+
+    Do estimating for probabilities with samples etc.
+        Allow for multiple ways to solve the same issue
+
+    Consider why the system gets trapped in solutions so soon.
+
+    Overcome "cheating" in which the entity simply places the test/result byte into the output block
+        This might be overcome by making the tests sufficiently numerically steep?
+        Threshold minimum of steps?
+        Include the input argument(s) adjacent to the output result in the output data.
+        See weeding below
+
+    Weeding - removing sub-standard items from the best set
+
+    Continue the analysis
+
+Jobs Done
+
+    13/01/2025
+
+    * Introduce byte level mutatiaons for monoclonal breeding
+
+    * Update Windows System
+        * Recreate tables on windows system
 
     * Introduce rules one at a time from number of rounds
         Problem with same score each round? breed? entity repeated?
@@ -29,44 +72,11 @@ Jobs Due
     * Work-on and modify the rulesets
         * Use consistent i/o data blocks
 
-    Prove the insert seed operation
-
-        Figure out the necessary procedures for git pull on the windows system
-            Re-copy the src directory.
-
-    Remove the existing testScript functions and hooks from entity.js
-    Remove the existing testScript function hooks from instructionSet
-
-    Include save scorelist for an entity?
-
-    Update the instruction set in the README
+    * Update the instruction set in the README
     
-    Trace operation
-        Close the trace window from the main window
+    * Figure out the necessary procedures for git pull on the windows system
+       * Re-copy the src directory.
 
-        Include a close option on the trace window
-
-    Apply redundant pairs to monoclonal instruction insert/replace?
-
-    Do estimating for probabilities with samples etc.
-        Allow for multiple ways to solve the same issue
-
-    Consider why the system gets trapped in solutions so soon.
-
-    Save/Load Procedures
-        Hook Electron upto MySql
-
-    Overcome "cheating" in which the entity simply places the test/result byte into the output block
-        This might be overcome by making the tests sufficiently numerically steep?
-        Threshold minimum of steps?
-        Include the input argument(s) adjacent to the output result in the output data.
-        See weeding below
-
-    Weeding - removing sub-standard items from the best set
-
-    Continue the analysis
-
-Jobs Done
     09/01/2025
 
     * Adjust rule set
@@ -92,6 +102,9 @@ Jobs Done
     * Include auto-save and database tidy
 
     * Include a self-breed method that uses a copy of the final memspace
+
+    * Save/Load Procedures
+        Hook Electron upto MySql
 
     29/12/2024
     

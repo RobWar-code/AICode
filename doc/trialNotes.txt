@@ -1,3 +1,18 @@
+13/01/2025
+Introduced staged rules
+
+Introduced byte level mutations for monoclonal breeding as well as
+instruction level.
+
+Run to test byte level mutation underway. Staged rules made no appreciable
+improvement over earlier attempts in a 10 hour, 16 million trial run.
+
+The difficulty in the development of the entities remains the issue of
+restricted probability pathways and the sheer fact of very low probabilities
+of useful code arising.
+
+Next stage, further the development of seed code/templates.
+
 09/01/2025
 
 Rulesets rearranged and added params -3. Increased number

@@ -27,11 +27,13 @@ class Entity {
         this.valuesOutMax = 256;
         this.initialParamsList = [
             [0,1,2,3,11,15,13,7,8,10,12,32,64,100,128,255,
+                61,82,5,61,85,3,61,80,4,61,86,7,61,81,12,61,84,20,61,87,95,61,83,100, // = a b
                 43,3,2,43,4,5,43,12,13,43,9,11,43,10,10,43,15,8,43,100,50,43,75,72, // +
                 45,9,4,45,10,2,45,100,22,45,85,13,45,3,4,45,19,2,45,201,105,45,222,37, // -
                 42,3,4,42,5,7,42,9,10,42,12,12,42,8,15,42,20,9,42,7,7,42,11,7 // *
             ],
             [3,6,9,12,15,18,21,0,1,2,30,40,50,100,150,255,
+                61,81,5,61,84,3,61,82,4,61,86,7,61,83,12,61,85,20,61,80,95,61,87,100, // = a b
                 43,5,2,43,10,5,43,22,13,43,19,11,43,17,10,43,18,8,43,109,50,43,77,72, // +
                 45,19,4,45,17,2,45,107,22,45,87,13,45,3,5,45,21,2,45,209,105,45,217,37, // -
                 42,3,5,42,5,9,42,9,11,42,13,13,42,9,15,42,20,3,42,7,8,42,12,7 // *
@@ -45,6 +47,7 @@ class Entity {
         this.initialParamsListIndex = 0;
         this.initialParams = this.initialParamsList[0];
         this.initialMemSpace = new Array(this.memLength).fill(0);
+        this.codeFlags = new Array(this.memLength).fill(0);
         this.executionCount = 0;
         this.numExecutions = 2;
         this.memSpace = new Array(this.memLength).fill(0);
@@ -303,14 +306,19 @@ class Entity {
             }
         }
         else {
-            if (Math.random() < 0.4) {
+            if (Math.random() < 0.25) {
                 newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed";
                 if (crossSet) this.crossSetBreed = true;
             }
-            else if (Math.random() < 0.8) {
+            else if (Math.random() < 0.5) {
                 newEntity = this.interbreed2(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed2";
+                if (crossSet) this.crossSetBreed = true;
+            }
+            else if (Math.random() < 0.75) {
+                newEntity = this.interbreedFlagged(mateEntity, entityNumber, cycleCounter, roundNum);
+                newEntity.breedMethod = "InterbreedFlagged";
                 if (crossSet) this.crossSetBreed = true;
             }
             else {
@@ -565,6 +573,129 @@ class Entity {
         return newEntity;
     }
 
+    interbreedFlagged(mate, entityNumber, cycleCounter, roundNum) {
+        let done = false;
+        let count = 0;
+        let m = [];
+        m.push(this.initialMemSpace);
+        m.push(mate.initialMemSpace);
+        let f = [];
+        f.push(this.codeFlags);
+        f.push(mate.codeFlags);
+        let p = [];
+        p.push(0);
+        p.push(0);
+        let gotBlock = [];
+        gotBlock.push(false);
+        gotBlock.push(false);
+        let memSpace = [];
+        let source = Math.floor(Math.random() * 2);
+        let startSource = source;
+        while (!done) {
+            // Search for flagged code block
+            if (p[source] < m[source].length) {
+                let codeBlockObj = this.getFlaggedCode(m[source], p[source], f[source]);
+                let l = codeBlockObj.length;
+                if (l > 0) {
+                    let block = codeBlockObj.block;
+                    if (l + memSpace.length > this.memLength) {
+                        block = block.slice(0, this.memLength - memSpace.length);
+                    }
+                    // join on the code block
+                    memSpace = memSpace.concat(block);
+                    ++count;
+                    gotBlock[source] = true;
+                    if (memSpace.length >= this.memLength) {
+                        done = true;
+                        break;
+                    }
+                    p[source] = codeBlockObj.nextPointer;
+                }
+                else {
+                    // If a block was not taken from the previous mate
+                    if (!gotBlock[(source + 1) % 2]) {
+                        // Use the rest of the code for the memSpace
+                        let block = m[source].slice(p[source], m[source].length);
+                        let l = block.length;
+                        if (l + memSpace.length > this.memLength) {
+                            block = block.slice(0, this.memLength - block.length);
+                        }
+                        memSpace = memSpace.concat(block);
+                        done = true;
+                        break;
+                    }
+                }
+            }
+            else {
+                if (p[(source + 1) % 2] >= m[(source + 1) % 2].length) {
+                    done = true;
+                    break;
+                }
+            }
+            source = (source + 1) % 2;
+            gotBlock[source] = false;
+        }
+        // If the memSpace is short, pad it
+        if (memSpace.length < this.memLength) {
+            let d = this.memLength - memSpace.length;
+            for (let i = 0; i < d; i++) {
+                memSpace.push(Math.floor(Math.random() * (this.dataMaxValue + 1)));
+            }
+        }
+        else if (memSpace.length > this.memLength) {
+            memSpace = memSpace.slice(0, this.memLength);
+        }
+        this.qualityControlIns("interbreedFlagged", memSpace);
+
+        // Create the new entity
+        let asRandom = false;
+        let seeded = false;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, memSpace);
+        return newEntity;
+    }
+
+    getFlaggedCode(mem, start, flags) {
+        let maxBlockSize = 64;
+        let minBlockSize = 3;
+        let block = [];
+        let done = false;
+        let p = start;
+        let c = 0;
+        while (!done) {
+            let v = mem[p];
+            let insItem = this.instructionSet.getInsDetails(v);
+            let insLen = insItem.insLen;
+            if (flags[p] > 0) {
+                ++c;
+                for (let i = 0; i < insLen; i++) {
+                    if ((p + i) < this.memLength) { 
+                        block.push(mem[p + i]);
+                    }
+                };
+                if (c >= maxBlockSize) {
+                    done = true;
+                    break;
+                }
+            }
+            else {
+                if (c < minBlockSize) {
+                    c = 0;
+                    block = [];
+                }
+                if (c >= minBlockSize) {
+                    done = true;
+                    break;
+                }
+            }
+            p += insLen;
+            if (p >= mem.length) {
+                done = true;
+                break;
+            }
+        }
+        return {block: block, length: c, nextPointer: p};
+    }
+
     getInsBlock(insBlockLen, memSpace, pointer) {
         let insBlock = [];
         let count = 0;
@@ -586,7 +717,7 @@ class Entity {
 
     display(mainWindow, bestSetNum, elapsedTime, numTrials, randomCount, monoclonalInsCount, 
         monoclonalByteCount, interbreedCount, 
-        interbreed2Count, selfBreedCount, crossSetCount, currentCycle, numRounds) {
+        interbreed2Count, interbreedFlaggedCount, selfBreedCount, crossSetCount, currentCycle, numRounds) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -627,6 +758,7 @@ class Entity {
         displayData.monoclonalByteCount = monoclonalByteCount;
         displayData.interbreedCount = interbreedCount;
         displayData.interbreed2Count = interbreed2Count;
+        displayData.interbreedFlaggedCount = interbreedFlaggedCount;
         displayData.selfBreedCount = selfBreedCount;
         displayData.crossSetCount = crossSetCount;
         displayData.scoreList = this.scoreList;
@@ -698,7 +830,8 @@ class Entity {
         let showDataLen = 7;
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
-            memObj = this.instructionSet.execute(this.memSpace, this.initialParams, this.params, this.valuesOut, 
+            memObj = this.instructionSet.execute(this.memSpace, this.codeFlags, this.initialParams, 
+                this.params, this.valuesOut, 
                 this.roundNum, test, showDataStart, showDataLen, this.testScript);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
@@ -749,7 +882,7 @@ class Entity {
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
         let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, 
-            this.initialParams, this.params, this.valuesOut, this.roundNum);
+            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.ICMax) {
