@@ -1,3 +1,20 @@
+16/01/2025
+Introduced breeding from sections of code marked as used.
+
+Flattened the scoring
+
+Checked out simple seeding
+
+Trial still produces scores of between a third and a half
+after 20 million trials.
+
+It is possible that seeding combined with the flagged
+blocks interbreeding will improve matters. This is to
+be the next trial. Accelerates development for a little
+while, but soon hits the same plateau.
+
+Reduce the the scores for the output only rules.
+
 13/01/2025
 Introduced staged rules
 

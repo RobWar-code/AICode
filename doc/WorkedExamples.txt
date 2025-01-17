@@ -1,6 +1,7 @@
 Worked Examples and Strategies
 
 Contents
+    Problem Space Background
     Ruleset Strategies
         General Approaches
         Possible Future Approaches
@@ -13,6 +14,43 @@ Contents
     AI Code - Example Sequences
     Toward Stepped Pathways
 
+<h1>Problem Space Background
+    Using the instruction set to date, we can consider the solution to
+    the first three rules. When written by hand, this requires about 57
+    bytes of code, arranged in a particular order. Since there are
+    currently 56 possible instructions, the raw probability of this code
+    56 ^ 57, an astronomical number. Even if we retain an instruction at
+    each pass for this solution, we would have
+        S = (x ^ (n + 1) - 1) / (x - 1)
+        S = ((56 ^ 58) - 1) / 55
+
+    Nevertheless, out of this probability space, "solutions" emerge. The
+    wider we make our problem space (number of rules in ruleset), the greater 
+    the chances of forms of "hit".
+
+    If solutions typically consume 60 bytes, then the storage space of
+    256 bytes provides for only 4 optimal solutions. This also explains
+    why the system tends to go for scattered numbers and series rather
+    than focusing on specific solutions. In effect, we are evolving an optimal
+    number scattering solution, rather than specific solutions, although 
+    specific solutions may arise incidentally.
+
+    So, turning the issue on its head, we can allow the entities to explore
+    the problem space(s) and seek to optimise the delivery times and incidence
+    of "useful" solutions.
+
+    Within this framework, we have to allow for the fact that only one or
+    two specific solutions are likely to arise, along with the general solution
+    in the 256 byte space. We can solve this in two ways. Either by extending
+    the size of the memory space for each entity (which further widens the 
+    probability space) or by expanding the number of entities so that they form
+    separate territories, which may specialise in different problems.
+
+    We note that number scattering is likely to be a very different solution
+    to specific solutions, other than in the deployment of loops for series.
+    
+
+    
 <h1>Ruleset Strategies
 
 <h2>General Approaches
@@ -88,6 +126,9 @@ Contents
     from the head of the code. Another is simply to cross-breed
     with the flagged blocks and rely on mutations to merge
     the code together.
+
+    This approach set-up and current trial seems to produce
+    some improvements.
 
 <h2>valuesSet
     Since the primary aim is to produce out, the first rule

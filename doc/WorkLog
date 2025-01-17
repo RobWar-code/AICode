@@ -4,9 +4,16 @@ Contents
     Jobs Done
 
 Jobs Due
-    Bear in mind the current setting for numRounds im mainControl
+    * Round off the scores in the score list
 
-    Add InterbreedFlagged - for flagged code segment interchange
+    Use an exponential scoring system to encourage specialisation
+
+    * Modify the rulesets to pass the rule list object to the functions
+    in a loop
+
+    * Bear in mind the current setting for numRounds im mainControl
+
+    * Add InterbreedFlagged - for flagged code segment interchange
 
     * Add the = a b rule in the rule set
 

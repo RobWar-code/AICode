@@ -21,7 +21,7 @@ class MainControl {
         this.scoreHistoryMaxLen = 8;
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
-        this.crossSetRange = 9;
+        this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
         this.restartLap = 120;

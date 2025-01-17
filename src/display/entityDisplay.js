@@ -159,11 +159,12 @@ const entityDisplay = {
             if ("outBlockStart" in scoreItem) {
                 outBlockStart = scoreItem.outBlockStart;
             }
+            let score = Math.floor(scoreItem.score * 10000) / 10000;
             html += "<li>";
             html += `<span class="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
             html += `<span class="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
             html += `<span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
-            html += `<span class="scoreListScore" style="display: inline-block; width: 200px">${scoreItem.score}</span>`;
+            html += `<span class="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
             html += `<span class="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
             html += "</li>";
         }

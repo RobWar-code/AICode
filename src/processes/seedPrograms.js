@@ -176,9 +176,99 @@ const seedPrograms = {
                 {
                     ins: "RET"
                 },
+
+
+                // Input plus three loop
                 {
                     ins: "SM",
                     data: [3]
+                },
+                // Set addresses and input loop
+                {
+                    ins: "LD A, IMM",
+                    data: [40] // Output data address
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0] // Input data address
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [8] // Loop Counter
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                // Loop
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Address
+                },
+                {
+                    ins: "LDI A, (C)" // Input value
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [3]
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "INC C" // Next Input Address
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [200] // Output Address
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [200] // Updated output address
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Updated Loop Counter
+                },
+                {
+                    ins: "JRZ",
+                    data: [2] // End Loop
+                },
+                {
+                    ins: "JR",
+                    data: [0xEA]
+                },
+                {
+                    ins: "RET"
+                },
+                {
+                    ins: "SM",
+                    data: [4]
                 },
                 {
                     ins: "RETF"
