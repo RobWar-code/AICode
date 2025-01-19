@@ -80,6 +80,16 @@ class MainControl {
             this.bestSets[index] = [];
             this.scoreHistory[index] = [];
         }
+
+        // Eliminate duplicate score best set entries
+        let hiScore = scoreList[0].score;
+        for (let i = 1; i < start; i++) {
+            if (scoreList[i].score === hiScore) {
+                let index = scoreList[i].index;
+                this.bestSets[index] = [];
+                this.scoreHistory[index] = [];
+            }
+        }
     }
 
     updateScoreHistory() {

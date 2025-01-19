@@ -4,25 +4,6 @@ Contents
     Jobs Done
 
 Jobs Due
-    Introduce a score for the number of different instructions actually executed
-
-    * Round off the scores in the score list
-
-    * Use an exponential scoring system to encourage specialisation
-        This worsens results so withdraw
-
-    * Modify the rulesets to pass the rule list object to the functions
-    in a loop
-
-    * Bear in mind the current setting for numRounds im mainControl
-
-    * Add InterbreedFlagged - for flagged code segment interchange
-
-    * Add the = a b rule in the rule set
-
-    * Flatten the scoring 
-
-    * Prove the insert seed operation
 
     Remove the existing testScript functions and hooks from entity.js
     Remove the existing testScript function hooks from instructionSet
@@ -52,6 +33,34 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+
+    19/01/2025
+    
+    * Remove duplicate best sets when scores match at clearnance cycle.
+
+    * Introduce a score for the number of reverse jump JR instructions
+
+    * Adjust scoring (x/(max - opt) and x/(opt - min))
+
+    Introduce a score for the number of different instructions actually executed
+
+    * Round off the scores in the score list
+
+    * Use an exponential scoring system to encourage specialisation
+        This worsens results so withdraw
+
+    * Modify the rulesets to pass the rule list object to the functions
+    in a loop
+
+    * Bear in mind the current setting for numRounds im mainControl
+
+    * Add InterbreedFlagged - for flagged code segment interchange
+
+    * Add the = a b rule in the rule set
+
+    * Flatten the scoring 
+
+    * Prove the insert seed operation
 
     13/01/2025
 
