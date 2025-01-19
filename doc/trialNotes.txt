@@ -1,3 +1,10 @@
+18/01/2025
+Tried exponential scoring to see if it would produce specialisations,
+instead no hits were scored at all against rules other than series,
+different and params match.
+
+Consider scores overlaying a single section of output.
+
 16/01/2025
 Introduced breeding from sections of code marked as used.
 

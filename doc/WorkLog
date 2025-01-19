@@ -4,9 +4,12 @@ Contents
     Jobs Done
 
 Jobs Due
+    Introduce a score for the number of different instructions actually executed
+
     * Round off the scores in the score list
 
-    Use an exponential scoring system to encourage specialisation
+    * Use an exponential scoring system to encourage specialisation
+        This worsens results so withdraw
 
     * Modify the rulesets to pass the rule list object to the functions
     in a loop
