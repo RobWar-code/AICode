@@ -9,6 +9,29 @@
     <title>Entity Program Trace</title>
 </head>
 <body>
+    <!-- Score List -->
+    <div class="genModal" id="scoreListBackground">
+      <div class="genModalForm" id="scoreListMain">
+        <h2 class="heading">Entity Score List</h2>
+        <div id="scoreTitles">
+          <span id="scoreStartRound">Start Round</span>
+          <span id="scoreOutAddress">Out Address</span>
+          <span id="scoreRule">Rule</span>
+          <span id="score">Score</span>
+          <span id="scoreMax">Max</span>
+        </div>
+        <div id="scoreListDiv">
+          <ul id="scoreList">
+          </ul>
+        </div>
+        <div>
+          <p>Total Score: <span id="totalScore"></span></p>
+        </div>
+        <button class="textButton" id="scoreListDismiss">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Main Trace Page -->
     <div class="container-fluid">
         <div class="row">
           <div class="col text-center">
@@ -99,7 +122,13 @@
 
           <div class="row">
             <div class="col text-center">
-              <span>Options: </span><button class="textButton" id="stepButton">Next Step</button>
+              <span>Options: </span>
+              <button class="textButton" id="stepButton">Next Step</button>
+              <button class="textButton" id="autoStepButton">Auto Step</button>
+              <label for="stepPause"> Step Pause:</label>
+              <input type="range" id="stepPause" min="100" max="5000" value="2000">
+              <button class="textButton" id="traceScoreListButton">Score List</button>
+              <button class="textButton" id="stepRestartButton">Restart</button>
             </div>
           </div>
           <div class="row">

@@ -149,6 +149,11 @@ li {
     overflow: auto;
 }
 
+/* Trace Window */
+#traceScoreListButton {
+    display: none;
+}
+
 /* Test Elements */
 .testList {
     height: 450px;

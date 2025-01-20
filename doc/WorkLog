@@ -4,6 +4,11 @@ Contents
     Jobs Done
 
 Jobs Due
+    Transmit key globals to the renderer at start-up
+
+    On the step execute operation for trace allow for the score/end of program
+
+    On the trace window allow for auto step on/off and a speed control
 
     Add score for loop back code that is actually used.
 

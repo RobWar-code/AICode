@@ -133,7 +133,34 @@ const traceDisplay = {
         else {
             divElem.scrollTop = lineHeight * (stepLine - lineClearance);
         }
+    },
+
+    displayScoreList(data) {
+        if (data.scoreObj === null) return;
+        document.getElementById('scoreListBackground').style.display = "block";
+        let scoreList = data.scoreObj.scoreList;
+        let score = data.scoreObj.score;
+        // Prepare the new list
+        let html = "<ul id='scoreList'>"
+        for (let scoreItem of scoreList) {
+            let outBlockStart = "";
+            if ("outBlockStart" in scoreItem) {
+                outBlockStart = scoreItem.outBlockStart;
+            }
+            let score = Math.floor(scoreItem.score * 10000) / 10000;
+            html += "<li>";
+            html += `<span class="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
+            html += `<span class="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
+            html += `<span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
+            html += `<span class="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
+            html += `<span class="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += "</li>";
+        }
+        html += "</ul>";
+        document.getElementById('scoreListDiv').innerHTML = html;
+        document.getElementById('totalScore').innerText = score;
     }
+
 }
 
 module.exports = traceDisplay;

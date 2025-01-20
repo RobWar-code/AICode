@@ -15,6 +15,12 @@ let processingCancelled = true;
 let processTimeout = null;
 let traceActive = false;
 
+let globals = null;
+
+ipcRenderer.on("setGlobals", (event, data) => {
+    globals = data;
+});
+
 ipcRenderer.on("displayEntity", (event, data) => {
     entityDisplay.display(data);
 });
@@ -150,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let seedSetNum = document.getElementById("seedSetNumInput").value;
         let valid = false;
         if (!isNaN(seedSetNum)) {
-            if (seedSetNum >= 0 && 31 >= seedSetNum) {
+            if (seedSetNum >= 0 && globals.numBestSets > seedSetNum) {
                 document.getElementById('statusDiv').style.display = "block";
                 document.getElementById('statusPara').innerText = "Seed Inserted";
                 valid = true;

@@ -41,6 +41,14 @@ const trace = {
         this.stepExecute(traceWindow, this.entity, start);
     },
 
+    restart() {
+        let restart = true;
+        let stepData = this.entity.stepExecute(restart);
+        stepData.start = false;
+        stepData.fixedData = this.fixedData;
+        this.traceWindow.webContents.send('displayTrace', stepData);
+    },
+
     nextStep() {
         let start = false;
         this.stepExecute(this.traceWindow, this.entity, start)
@@ -49,11 +57,9 @@ const trace = {
     stepExecute(traceWindow, entity, start) {
         let restart = false;
         let stepData = entity.stepExecute(restart);
-        if (!stepData.executionEnded) {
-            stepData.start = start;
-            stepData.fixedData = this.fixedData;
-            traceWindow.webContents.send('displayTrace', stepData);
-        }
+        stepData.start = start;
+        stepData.fixedData = this.fixedData;
+        traceWindow.webContents.send('displayTrace', stepData);
     }
 }
 

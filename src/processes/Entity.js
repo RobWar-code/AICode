@@ -75,6 +75,9 @@ class Entity {
         this.breedMethod = "Random";
         this.crossSetBreed = false;
 
+        // Step Data
+        this.scoreObj = null;
+
         // Test Data
         this.testScript = this.getTestScript();
     }
@@ -865,16 +868,21 @@ class Entity {
     }
 
     stepExecute(restart) {
-        let executionsEnded = false;
+        let executionEnded = false;
         if (restart) {
             this.executionCount = 0;
+            this.scoreObj = null;
             this.resetRegisters();
-            this.copyMem();
+            this.copyMem(this.executionCount);
         }
-        if (this.registers.IC >= this.instructionSet.ICMax && this.executionCount >= this.numExecutions) {
+        if (this.registers.IC === 0 && this.executionCount >= this.numExecutions) {
             return {executionEnded: true};
         }
         if (this.registers.IC === 0) {
+            if (this.executionCount === 0) {
+                rulesets.initialise();
+                this.scoreObj = null;
+            }
             this.resetRegisters();
             this.copyMem(this.executionCount);
         }
@@ -885,7 +893,18 @@ class Entity {
             this.codeFlags, this.initialParams, this.params, this.valuesOut, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
-        if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.ICMax) {
+        if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.maxIC) {
+            this.oldValuesOut.push(this.valuesOut.concat());
+            this.oldParams.push(this.params.concat());
+            this.scoreObj = rulesets.getScore(0, 0, this.instructionSet, 
+                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
+                this.registers.IC, this.instructionSet.highestIP, this.roundNum);
+            this.score += this.scoreObj.score;
+            if (this.executionCount > 0) {
+                let s = rulesets.scoreOutputDiff(this.oldValuesOut);
+                this.score += s;
+                this.scoreObj.score += s;
+            }
             ++this.executionCount;
             this.registers.IC = 0;
         }
@@ -898,7 +917,8 @@ class Entity {
             params: this.params,
             valuesOut: this.valuesOut,
             stepLine: insListObj.stepLine,
-            insList: insListObj.insList
+            insList: insListObj.insList,
+            scoreObj: this.scoreObj
         }
     }
 

@@ -41,6 +41,9 @@ const createWindow = () => {
 
   mainWindow.webContents.once("did-finish-load", () => {
     program = new MainControl(mainWindow);
+    // Global Data
+    let globalData = {numBestSets: program.numBestSets};
+    mainWindow.webContents.send("setGlobals", globalData);
   });
 
   ipcMain.on("startTrace", (event, data) => {
@@ -152,6 +155,10 @@ ipcMain.on("activateMainProcess", () => {
 
 ipcMain.on("traceStep", (data) => {
   trace.nextStep();
+});
+
+ipcMain.on("traceStepRestart", (data) => {
+  trace.restart();
 });
 
 ipcMain.on("fetchDisplayHistory", () => {
