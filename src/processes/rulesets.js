@@ -199,12 +199,13 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        initialParams, paramsIn, valuesOut, IC, highestIP, roundNum) {
+        codeFlags, initialParams, paramsIn, valuesOut, IC, highestIP, roundNum) {
         let totalScore = 0;
 
         let dataParams = {
             instructionSet: instructionSet,
             memSpace: memSpace,
+            codeFlags: codeFlags,
             initialParams: initialParams,
             paramsIn: paramsIn,
             valuesOut: valuesOut,
@@ -349,6 +350,8 @@ const rulesets = {
     matchCASM(self, dataParams, ruleParams) {
         let instructionSet = dataParams.instructionSet;
         let memSpace = dataParams.memSpace;
+        let codeFlags = dataParams.codeFlags;
+
         let score = 0;
         // Get Codes
         let SMcode = instructionSet.getInsCode("SM").code;
@@ -376,6 +379,7 @@ const rulesets = {
                         if (label === CASMLabel) {
                             found = true;
                             ++count;
+                            if (codeFlags[p] > 0) ++count;
                             break;
                         }
                     }
@@ -388,15 +392,16 @@ const rulesets = {
                 break;
             }
         }
-        let opt = 8;
+        let opt = 16;
         let min = 0;
-        let max = Math.floor(memSpace.length / 4);
+        let max = Math.floor(memSpace.length / 4) * 2;
         score = self.doScore(opt, count, max, min)
         return score;
     },
 
     reverseJR(self, dataParams, ruleParams) {
         let memSpace = dataParams.memSpace;
+        let codeFlags = dataParams.codeFlags;
         let instructionSet = dataParams.instructionSet;
 
         let done = false;
@@ -410,6 +415,7 @@ const rulesets = {
                     let jump = memSpace[p + 1];
                     if (jump >= 0x80) {
                         ++count;
+                        if (codeFlags[p] > 0) ++count;
                     }
                 }
             }
@@ -419,8 +425,8 @@ const rulesets = {
                 break;
             }
         }
-        let opt = 6;
-        let max = 20;
+        let opt = 12;
+        let max = 40;
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;

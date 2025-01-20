@@ -843,7 +843,7 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
-                this.initialMemSpace, this.initialParams, this.params, this.valuesOut, 
+                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
                 this.registers.IC, this.instructionSet.highestIP, this.roundNum);
             this.score += scoreObj.score;
         }

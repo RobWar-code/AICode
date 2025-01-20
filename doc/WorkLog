@@ -5,6 +5,8 @@ Contents
 
 Jobs Due
 
+    Add score for loop back code that is actually used.
+
     Remove the existing testScript functions and hooks from entity.js
     Remove the existing testScript function hooks from instructionSet
 
