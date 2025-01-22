@@ -62,7 +62,6 @@ class Entity {
         else if (asRandom) {
             this.createRandomProgram();
         }
-        // this.instructionSetTest(this.initialMemSpace);
         // Breeding Parameters
         this.interbreedCycle = 5;
         this.score = 0;
@@ -77,9 +76,6 @@ class Entity {
 
         // Step Data
         this.scoreObj = null;
-
-        // Test Data
-        this.testScript = this.getTestScript();
     }
 
     resetRegisters() {
@@ -668,7 +664,7 @@ class Entity {
             let v = mem[p];
             let insItem = this.instructionSet.getInsDetails(v);
             let insLen = insItem.insLen;
-            if (flags[p] > 0) {
+            if (flags[p] > 0 && insItem.name != "NOOP/DATA") {
                 ++c;
                 for (let i = 0; i < insLen; i++) {
                     if ((p + i) < this.memLength) { 
@@ -828,14 +824,11 @@ class Entity {
         rulesets.initialise();
         let memObj = null;
         let scoreObj = null;
-        let test = false;
-        let showDataStart = 100;
-        let showDataLen = 7;
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(this.memSpace, this.codeFlags, this.initialParams, 
                 this.params, this.valuesOut, 
-                this.roundNum, test, showDataStart, showDataLen, this.testScript);
+                this.roundNum);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
                 let c = this.memSpace[i];
@@ -930,334 +923,6 @@ class Entity {
             this.params[i] = this.initialParams[i];
         }
         this.memSpace = this.initialMemSpace.concat();
-    }
-
-    getTestScript() {
-        let testCode = [
-            {
-                addr: 0,
-                ins: "LD A, (MEM)",  //  Value at &100  is 5
-                data: [100], 
-                show: "A === 5, ZF = 0"
-            },
-            {
-                addr: 2,
-                ins: "ST (MEM), A", // 2)
-                data: [101],
-                show: "&101 === 5"
-            },
-            {
-                addr: 4,
-                ins: "CLR (MEM)", // 4)
-                data: [102],
-                show: "&102 === 0"
-            },
-            {
-                addr: 6,
-                ins: "PUSH A", // 6)
-                show: "STACK_TOP === 5"
-            },
-            {
-                addr: 7,
-                ins: "LD A, (MEM)", // 7) Value at &103 is 7
-                data: [103],
-                show: "A === 7"
-            },
-            {
-                addr: 9,
-                ins: "POP A", // 8)
-                show: "A === 5"
-            },
-            {
-                addr: 10,
-                ins: "SWP A, B", // 9)
-                show: "A === 0, B === 5" 
-            },
-            {
-                addr: 11,
-                ins: "LD A, (MEM)", // 10)
-                data: [103],
-                show: "A === 7, ZF = 0"
-            },
-            {
-                addr: 13,
-                ins: "ADD A, B", // 12)
-                show: "A === 12"
-            },
-            {
-                addr: 14,
-                ins: "SWP A, B", // 13)
-                show: "A === 5, B === 12"
-            },
-            {
-                addr: 15,
-                ins: "LD A, (MEM)", // 14) Data at &104 is 254
-                data: [104],
-                show: "A === 254"
-            },
-            {
-                addr: 17,
-                ins: "ADD A, B", // 16) A is 254, B is 12
-                show: "A === 10, CF === 1, ZF = 0"
-            },
-            {
-                addr: 18,
-                ins: "SUB A, B", // 17) A is 10, B is 12
-                show: "A === 254, ZF = 0, CF = 1"
-            },
-            {
-                addr: 19,
-                ins: "SUB A, B", // 18) A is 254, B is 12
-                show: "A === 242, ZF = 0, CF = 0"
-            },
-            {
-                addr: 20,
-                ins: "AND A, B", // 19) A is 254, B is 12
-                show: "A === 0, ZF === 0"
-            },
-            {
-                addr: 21,
-                ins: "OR A, B", // 20) A is 12, B is 12
-                show: "A === 12"
-            },
-            {
-                addr: 22,
-                ins: "LD A, (MEM)", // 21) Data at &105 is 1
-                data: [105],
-                show: "A === 1, ZF = 0"
-            },
-            {
-                addr: 24,
-                ins: "NOT A", // 23)
-                show: "A === 254, ZF = 0"
-            },
-            {
-                addr: 25,
-                ins: "CMP A, B", // 24) A is 254, B is 12
-                show: "CF === 0, ZF === 0"
-            },
-            {
-                addr: 26,
-                ins: "SWP A, B", // 25) A is 254, B is 12
-                show: "A === 12, B === 254"
-            },
-            {
-                addr: 27, 
-                ins: "CMP A, B", // 26) A is 12, B is 254
-                show: "CF === 1, ZF === 0"
-            },
-            {
-                addr: 28,
-                ins: "ST (MEM), A", // 27) A is 12
-                data: [106],
-                show: "&106 === 12"
-            },
-            {
-                addr: 30,
-                ins: "SWP A, B", // 29) A is 12, B is 254
-                show: "A = 254, B = 12"
-            },
-            {
-                addr: 31,
-                ins: "LD A, (MEM)", // 31)
-                data: [106],
-                show: "A === 12, ZF === 0"
-            },
-            {
-                addr: 33,
-                ins: "CMP A, B", // 33) A is 254, B is 254
-                show: "ZF === 1, CF === 0"
-            },
-            {
-                addr: 34,
-                ins: "JRZ", // 34) ZF is 1
-                data: [2],
-                show: "IP === 38"
-            },
-            {
-                addr: 36,
-                ins: "LD A, (MEM)", // 36) &103 is 7
-                data: [103],
-                show: "A === 7, ZF === 0, note: should be skipped"
-            },
-            {    
-                addr: 38,
-                ins: "LD A, (MEM)", // 38) &100 is 5
-                data: [100],
-                show: "A === 5, ZF === 0"
-            },
-            {
-                addr: 40,
-                ins: "JRZ", // 40) Ignored
-                data: [100],
-                show: "IP === 41"
-            },
-            { 
-                addr: 42,
-                ins: "SWP A, B", // 42)
-                show: "A === 12, B === 5"
-            },
-            {
-                addr: 43,
-                ins: "LD A, (MEM)", // 43)
-                data: [105],
-                show: "A === 1"
-            },
-            {
-                addr: 45,
-                ins: "SWP A, B", // 45)
-                show: "A === 5, B === 1"
-            },
-            {
-                addr: 46,
-                ins: "SUB A, B", // 46)
-                show: "A === [4, 3, 2, 1, 0], B === 1, ZF === [0, 1], CF === 0"
-            },
-            {
-                addr: 47,
-                ins: "JRZ", // 47)
-                data: [2],
-                show: "IP === 51"
-            },
-            {
-                addr: 49,
-                ins: "JR", // 49)
-                data: [254],  // -2
-                show: "IP === 46"
-            },
-            {   
-                addr: 51,
-                ins: "JRLZ", // 51) ZF is 1
-                data: [0, 2], // 2
-                show: "IP === 56"
-            },
-            {
-                addr: 54,
-                ins: "LD A, (MEM)", // 54)
-                data: [105],
-                show: "A === 1, ZF === 0"
-            },
-            {   
-                addr: 56,
-                ins: "JRLZ", // 56) ZF is 1 first, 0 second
-                data: [255, 255], // -1
-                show: "IP === 53"
-            },
-            {
-                addr: 59,
-                ins: "CMP A, B", // 59) A is 1 B is 1
-                show: "ZF === 0, CF === 1"
-            },
-            {
-                addr: 60,
-                ins: "JRC", // 60)
-                data: [0],
-                show: "IP === 61, Notes: No effect"
-            },
-            {
-                addr: 62,
-                ins: "LD A, (MEM)", // 62)
-                data: [100],
-                show: "A === 5"
-            },
-            {
-                addr: 64,
-                ins: "SWP A, B", // 64)
-                show: "First: A === 1, B === 5, Second: A === 5, B === 1"
-            },
-            {
-                addr: 65,
-                ins: "CMP A, B", // 65)
-                show: "First: CF = 1, ZF = 0, Second: CF = 0, ZF = 0"
-            },
-            {
-                addr: 66,
-                ins: "JRC", // 66)
-                data: [254], // -2
-                show: "First: IP === 63, Second: IP === 67"
-            },
-            {
-                addr: 68,
-                ins: "JRLC", // 68)
-                data: [0, 2], // 2
-                show: "First: IP = 71, Second: IP === 70"
-            },
-            {
-                addr: 71,
-                ins: "SWP A, B", // 71) 
-                show: "A === 1, B === 5"
-            },
-            { 
-                addr: 72,
-                ins: "CMP A, B", // 72)
-                show: "CF === 1, ZF === 0"
-            },
-            {
-                addr: 73,
-                ins: "JRLC", // 73)
-                data: [255, 254], // -2
-                show: "First: IP === 71, Second: IP === 75"
-            },
-            {
-                addr: 76,
-                ins: "CALL", // 76)
-                data: [90],
-                show: "IP === 90"
-            },
-            {
-                addr: 78,
-                ins: "CFAR", // 78)
-                data: [0,0,0,0],
-                show: "IP === 83"
-            },
-            {
-                addr: 83,
-                ins: "SM", // 83)
-                data: [0,0,0,0],
-                show: "IP === 86"
-            },
-            {
-                addr: 88,
-                ins: "RETF",
-                show: "IP === 86 - Exit"
-            },
-
-            {
-                at: 90,
-                addr: 90,
-                ins: "RET",
-                show: "IP === 91"
-            },
-
-            // Data Settings 
-            {
-                ins: "DATA",
-                addr: 100,
-                value: 5
-            },
-            {
-                ins: "DATA",
-                addr: 103,
-                value: 7
-            },
-            { 
-                ins: "DATA",
-                addr: 104,
-                value: 254
-            },
-            {
-                ins: "DATA",
-                addr: 105,
-                value: 1
-            }
-        ];
-
-        return testCode;
-    }
-
-    instructionSetTest(initialMemSpace) {
-        let testScript = this.getTestScript();
-        this.instructionSet.compileTestCode(testScript, initialMemSpace);
     }
 }
 

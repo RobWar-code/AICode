@@ -1,3 +1,28 @@
+21/01/2025
+After about 30 million trials, the system tends to evolve two loops
+which spread series through the output, with random score hits in
+the output areas. There is no sign of algorithms to match specific
+requirements from the inputs to the outputs.
+
+The two loops tend to be of about 12 or 13 bytes in length (10 or 11
+instructions). Also included is a termination condition in which 
+multiple PUSH operations eventually break the end of the loop so
+the program terminates in a string of NOOP operations.
+
+As far as the system "works" it can be said to demonstrate increasing
+sophistication. As far as finding specific solutions in finite time
+we observe that it is not a practical solution.
+
+So the next stage suggested is to increase the number of problems
+set in the input space (since we have about 128 bytes remaining)
+and allow the system to "explore" this space, coming-up with whatever
+approaches it may evolve over a period of 10 to 20 days, if this
+proves practical or desirable.
+
+The things to watch-out for include getting trapped in particular 
+solutions or whether the system continues to maintain sufficient
+diversity to make steady score progress (albeit slow).
+
 20/01/2025
 The system quite rapidly resolves to a single solution - suggested
 measures:
@@ -7,6 +32,9 @@ Increase the number of best sets to 48.
 Decrease the frequency of cross-set breeding.
 
 Increase the period between pass clearances.
+
+Reaches 61 out of 146(max) over 60 million trials.
+
 
 19/01/2025
 Added score for reverse jump loops to encourage multiple score space

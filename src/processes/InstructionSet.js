@@ -618,7 +618,7 @@ class InstructionSet {
         ];
     }
 
-    execute(memSpace, codeFlags, initialParams, params, valuesOut, roundNum, test, showDataStart, showDataLen, testScript) {
+    execute(memSpace, codeFlags, initialParams, params, valuesOut, roundNum) {
         let IC = 0;
         let IP = 0;
         let highestIP = 0;
@@ -646,9 +646,6 @@ class InstructionSet {
             SP = regObj.registers.SP;
             IP = regObj.registers.IP;
             if (regObj.RETF) gotRet = true;
-            if (test) {
-                this.displayICSteps(ins, A, B, ZF, CF, SP, IC, startIP, IP, memSpace, showDataStart, showDataLen, testScript);
-            }
             startIP = IP;
             
             if (IP > highestIP) highestIP = IP;
@@ -1269,51 +1266,6 @@ class InstructionSet {
             p += insItem.insLen;
         }
         return pointer;
-    }
-
-    displayICSteps(ins, A, B, ZF, CF, SP, IC, startIP, IP, memSpace, showDataStart, showDataLen, testScript) {
-        let scriptItem = this.getTestScriptText(testScript, startIP);
-        if (scriptItem != null) { 
-            console.log(`Command: ${scriptItem.ins}`);
-        }
-        else {
-            console.log("Out of script");
-        }
-        let actualIns = "NOOP";
-        if (ins < this.numIns) {
-            actualIns = this.ins[ins].name;
-        }
-        console.log("Actual Ins: ", actualIns);
-        console.log(`Registers - A: ${A} B: ${B}, ZF: ${ZF}, CF: ${CF}, SP: ${SP} IC: ${IC}, endIP: ${IP} startIP: ${startIP}`);
-        // Mem Space
-        let mem = "Memory - ";
-        for (let i = 0; i < showDataLen; i++) {
-            let p = i + showDataStart;
-            mem += p + ": " + memSpace[p] + " ";
-        }
-        console.log(mem);
-        if (scriptItem != null) {
-            console.log("Test Notes: " + scriptItem.text);
-        }
-        console.log("----------------------------------------");
-    }
-
-    getTestScriptText(testScript, codeOffset) {
-        console.log("Code Offset:", codeOffset);
-        let found = false;
-        let text = "";
-        for (let codeItem of testScript) {
-            if ("addr" in codeItem && "ins" in codeItem) {
-                if (codeItem.addr === codeOffset) {
-                    found = true;
-                    if ("show" in codeItem) {
-                        text = codeItem.show;
-                    }
-                    return {ins: codeItem.ins, text: text};
-                }
-            }
-        }
-        return null;
     }
 
     compileTestCode(testCode, memSpace) {

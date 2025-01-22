@@ -24,7 +24,7 @@ class MainControl {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.restartLap = this.numBestSets * 8;
+        this.restartLap = this.numBestSets * 5;
         this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
@@ -56,6 +56,8 @@ class MainControl {
         }
         if (this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
             this.numBestSets * Math.floor(this.lapCounter / (4 * this.restartLap))) === 0) {
+            console.log("Clearance Pass");
+            // Clearance Pass
             this.restartSets();
         }
         ++this.lapCounter;
@@ -89,6 +91,61 @@ class MainControl {
                 this.bestSets[index] = [];
                 this.scoreHistory[index] = [];
             }
+        }
+
+        // Eliminate cases of more than three occurences of the same
+        // output values
+        this.eliminateDuplicateOutputs();
+    }
+
+    eliminateDuplicateOutputs() {
+        let maxSame = 3;
+        for (let i = 0; i < this.numBestSets - maxSame; i++) {
+            let set = this.bestSets[i];
+            if (set.length > 0) {
+                let e1 = set[0];
+                let valuesOut1 = e1.oldValuesOut;
+                let matchCount = 0;
+                let matchSet = [];
+                for (let j = i + 1; j < this.numBestSets; j++) {
+                    let set2 = this.bestSets[j];
+                    if (set2.length > 0) {
+                        let e2 = set2[0];
+                        let valuesOut2 = e2.oldValuesOut;
+                        // Compare the values out
+                        let diff = compareValues(valuesOut1, valuesOut2);
+                        if (!diff) {
+                            ++matchCount;
+                            matchSet.push({index: j, score: e2.score});
+                        }
+                    }
+                }
+                // If more than the limit of matches found
+                if (matchCount >= maxSame) {
+                    matchSet.push({index: i, score: e1.score});
+                    // Sort the match set by score
+                    matchSet.sort((a, b) => b.score - a.score);
+                    // Eliminate all the entries past the max
+                    for (let i = maxSame; i < matchSet.length; i++) {
+                        let index = matchSet[i].index;
+                        this.bestSets[index] = [];
+                    }
+                }
+            }
+        }
+
+        function compareValues(v1, v2) {
+            let diff = false;
+            for (let i = 0; i < v1.length; i++) {
+                for (let j = 0; j < v1[i].length; j++) {
+                    if (v1[i][j] != v2[i][j]) {
+                        diff = true;
+                        break;
+                    }
+                }
+                if (diff) break;
+            }
+            return diff;
         }
     }
 
@@ -170,7 +227,7 @@ class MainControl {
                         // Seeding on first pass.
                         // if (cycle === 0 && i === 0 && j === 0) seeded = true;
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, this.numRounds, memSpace, this.mainWindow);
+                            this.cycleCounter, this.numRounds, memSpace);
                     }
                     // Update breed method tallies
                     switch (entity.breedMethod) {

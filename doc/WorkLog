@@ -4,16 +4,27 @@ Contents
     Jobs Done
 
 Jobs Due
-    Transmit key globals to the renderer at start-up
+    Fix the elapsed time indicator - problem after reload?
 
-    On the step execute operation for trace allow for the score/end of program
+    * On the clearance pass eliminate cases of more than three items whose
+    output values are the same.
 
-    On the trace window allow for auto step on/off and a speed control
+    * Only count in interbreedFlagged instructions if they are not no-ops.
+        This overcomes the problem of executing all instructions with
+        the cheat of using no-ops.
 
-    Add score for loop back code that is actually used.
+    * Transmit key globals to the renderer at start-up
 
-    Remove the existing testScript functions and hooks from entity.js
-    Remove the existing testScript function hooks from instructionSet
+    * On the step execute operation for trace allow for the score/end of program
+
+    * On the trace window allow for auto step on/off and a speed control
+
+    * Add a trace restart button
+
+    * Add score for loop back code that is actually used.
+
+    * Remove the existing testScript functions and hooks from entity.js
+    * Remove the existing testScript function hooks from instructionSet
 
     Include save scorelist for an entity?
 
