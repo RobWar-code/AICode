@@ -1,6 +1,6 @@
 const InstructionSet = require('../processes/InstructionSet');
 const rulesets = require('../processes/rulesets.js');
-
+const Entity = require('../processes/Entity.js');
 
 const testRuleSets = {
     instructionSet: new InstructionSet(),
@@ -139,6 +139,68 @@ const testRuleSets = {
             instructionSet.compileTestCode(testScript, memSpace);
             return memSpace;
         }
+    },
+
+    testConvertASCIINumbers: function() {
+        let ruleNum = 18;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+
+        // Check the initial parameters in the entity
+        let insSet = new InstructionSet();
+        let entity = new Entity(0, insSet, true, false, 0, 0, null);
+        let iniParamsList = entity.initialParamsList;
+        // Output the initial params
+        let outStart = rule.outBlockStart;
+        let inStart = rule.inBlockStart;
+        let inLen = rule.inBlockLen;
+        for (let ip of iniParamsList) {
+            let p = inStart;
+            let s = "";
+            while (p < inStart + inLen) {
+                s += String.fromCharCode(ip[p]);
+                ++p;
+            }
+            console.log("params:", s);
+        }
+
+        // Setup Output values
+        let v = [];
+        let e = []
+        let v1 = [1, 5, 9];
+        let e1 = rulesets.doScore(16,3,16,0);
+        v.push(v1);
+        e.push(e1);
+        let v2 = [3, 0, 8];
+        let e2 = rulesets.doScore(16,2,16,0);
+        v.push(v2);
+        e.push(e2);
+        let index = 0;
+        for (let values of v) {
+            let valuesOut = new Array(256).fill(0);
+            // Insert the test values
+            let p = outStart;
+            for (let v of values) {
+                valuesOut[p] = v;
+                ++p;
+            }
+            // Get the initial params
+            let ip = iniParamsList[index];
+            let dataParams = {initialParams: ip, valuesOut: valuesOut};
+            let score = rulesets.convertASCIINumbers(rulesets, dataParams, rule);
+            console.log("ConvertASCIIScore:", score, "Expect:", e[index]);
+            ++index;
+        }
+
+        // Test the byte function
+        let value = 8;
+        let address = outStart + 6;
+        let initialParams = iniParamsList[0];
+        let params = new Array(256).fill(0);
+        let valuesOut = new Array(256).fill(0);
+        valuesOut[address] = value;
+        let score = rulesets.byteConvertASCIINumbers(rulesets, rule, value, address, initialParams, params, valuesOut);
+        console.log("byteConvertASCIINumbers expect 64:", score);
     }
 }
 
@@ -355,8 +417,9 @@ console.log("Got Here");
 
 // testRuleSets.testCountInsOccurrences();
 // testRuleSets.testCountInsDistribution();
-testRuleSets.testValuesOutFromInitialParams();
-//testRuleSets.testMatchCASM();
+// testRuleSets.testValuesOutFromInitialParams();
+// testRuleSets.testMatchCASM();
+testRuleSets.testConvertASCIINumbers();
 
 // testByteRules.valuesOutFromInitialParams();
 // testByteRules.valuesOutMatchInitialParams();

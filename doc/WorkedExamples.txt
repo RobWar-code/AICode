@@ -13,6 +13,7 @@ Contents
 
     AI Code - Example Sequences
     Toward Stepped Pathways
+    Performance Notes
 
 <h1>Problem Space Background
     Using the instruction set to date, we can consider the solution to
@@ -193,3 +194,31 @@ INC C
 JR 0xFC // Jump relative back to start
 
 Using the rule sets, this scores on valuesSet, outputFromInitialParams, outputMatchesInitialParams
+
+<h1>Performance Notes
+22/01/2025
+Add clearance of duplicated outputs
+
+Best Set Score: 61.6447
+Loops: 2 loops, both modified by themselves
+Elapsed Time: 18.6437
+Number of Trials: 85,017,600
+Comments: Quite a bit faster improvement than the previous 30,000,000 trials.
+
+Best Set Score: 59.8913
+Loops: 2 Self-modifying loops
+Elapsed Time: 11.5534
+Number of Trials: 51,488,000
+Comments: Note that it has taken 6 hours to gain 0.6 points.
+
+Best Set Score: 59.2335 from 146
+Loops: 3 self-modifying loops, bytes 0 - 47
+Elapsed Time: 5.5057
+Number of Trials: 21,740,800
+
+20 - 22/01/2025
+Best Set Score: 65.7074 from 146
+Loops: 2
+Loop Lengths: 12, 11
+Elapsed Time: 2.25 Days
+Number of Trials: 272,761,600

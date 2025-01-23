@@ -4,28 +4,9 @@ Contents
     Jobs Done
 
 Jobs Due
-    Fix the elapsed time indicator - problem after reload?
 
-    * On the clearance pass eliminate cases of more than three items whose
-    output values are the same.
-
-    * Only count in interbreedFlagged instructions if they are not no-ops.
-        This overcomes the problem of executing all instructions with
-        the cheat of using no-ops.
-
-    * Transmit key globals to the renderer at start-up
-
-    * On the step execute operation for trace allow for the score/end of program
-
-    * On the trace window allow for auto step on/off and a speed control
-
-    * Add a trace restart button
-
-    * Add score for loop back code that is actually used.
-
-    * Remove the existing testScript functions and hooks from entity.js
-    * Remove the existing testScript function hooks from instructionSet
-
+    Remove insert lower score into tables
+    
     Include save scorelist for an entity?
 
     Trace operation
@@ -51,6 +32,35 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+
+    23/01/2025
+    
+    * Add the rule to convert ASCII numbers
+       * Write test scripts fro the functions
+
+    * Fix the elapsed time indicator - problem when entity selected.
+
+    * Change the page font size to 13px.
+
+    * On the clearance pass eliminate cases of more than three items whose
+    output values are the same.
+
+    * Only count in interbreedFlagged instructions if they are not no-ops.
+        This overcomes the problem of executing all instructions with
+        the cheat of using no-ops.
+
+    * Transmit key globals to the renderer at start-up
+
+    * On the step execute operation for trace allow for the score/end of program
+
+    * On the trace window allow for auto step on/off and a speed control
+
+    * Add a trace restart button
+
+    * Add score for loop back code that is actually used.
+
+    * Remove the existing testScript functions and hooks from entity.js
+    * Remove the existing testScript function hooks from instructionSet
 
     19/01/2025
     

@@ -61,7 +61,7 @@ const rulesets = {
 
         let scoreItem6 = {rule: "Values Out Set (0:111)", ruleNum: 6, skip: false,
             score: 0, max: 4, startRoundNum: 0, 
-            outBlockStart: 0, outBlockLen: 112 
+            outBlockStart: 0, outBlockLen: 128 
         };
         this.scoreList.push(scoreItem6);
         this.ruleFunction.push(this.valuesOutSet);
@@ -151,19 +151,28 @@ const rulesets = {
         this.ruleFunction.push(this.divideByParams);
         this.byteFunction.push(this.byteDivideParams);
 
-        let scoreItem17 = {rule: "Use op to Convert Params (16:114, 80:111)", ruleNum:17,
+        let scoreItem17 = {rule: "Use op to Convert Params (16:111, 80:111)", ruleNum:17,
             skip: false, score: 0, max: 16, startRoundNum: 70, 
             outBlockStart: 80, outBlockLen: 32,
             inBlockStart: 16, inBlockLen: 96
-        }
+        };
         this.scoreList.push(scoreItem17);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
-        this.diffScore = 18;
-        let scoreItem18 = {rule: "Difference Between Outputs", ruleNum: 18, skip: true, 
-            score: 0, max: 4, startRoundNum: 0};
+        let scoreItem18 = {rule: "Convert ASCII Numbers (112:146, 112:127)", ruleNum: 18,
+            skip: false, score: 0, max: 8, startRoundNum: 80,
+            outBlockStart: 112, outBlockLen: 16,
+            inBlockStart: 112, inBlockLen: 38
+        };
         this.scoreList.push(scoreItem18);
+        this.ruleFunction.push(this.convertASCIINumbers);
+        this.byteFunction.push(this.byteConvertASCIINumbers);
+
+        this.diffScore = 19;
+        let scoreItem19 = {rule: "Difference Between Outputs", ruleNum: 19, skip: true, 
+            score: 0, max: 4, startRoundNum: 0};
+        this.scoreList.push(scoreItem19);
         this.byteFunction.push(null);
 
         let maxScore = 0;
@@ -183,7 +192,7 @@ const rulesets = {
             if (this.byteFunction[index] != null) {
                 if (rule.startRoundNum <= roundNum || this.ignoreRounds) {
                     if (address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
-                        let score = this.byteFunction[index](rule, value, address, initialParams, params, outputValues);
+                        let score = this.byteFunction[index](this, rule, value, address, initialParams, params, outputValues);
                         if (isNaN(score)) {
                             console.log("Invalid byte score", score, index);
                         }
@@ -229,13 +238,6 @@ const rulesets = {
 
         this.totalScore = totalScore;
 
-        // Check for originality
-        if (bestSetHighScore > 0) {
-            if (bestSetLowScore/bestSetHighScore < 0.95 && score/bestSetHighScore < 0.9 && score/bestSetHighScore > 0.8) {
-                let score = (bestSetHighScore + bestSetLowScore) / 2;
-                this.totalScore = score;
-            }
-        }
         return {score: this.totalScore, scoreList: this.scoreList};
 
     },
@@ -489,7 +491,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutSet(rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutSet(self, rule, value, address, initialParams, params, outputValues) {
         let score = 0;
         if (value != 0 && address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
             score = 82;
@@ -525,7 +527,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutDifferent(rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutDifferent(self, rule, value, address, initialParams, params, outputValues) {
         let score = 82;
         for (let i = 0; i < rule.outBlockLen; i++) {
             let a = outputValues[i + rule.outBlockStart];
@@ -557,7 +559,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutSeries(rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutSeries(self, rule, value, address, initialParams, params, outputValues) {
         let score = 82;
         if (address === rule.outBlockStart) {
             let diff = Math.abs(outputValues[rule.outBlockStart + 2] - outputValues[rule.outBlockStart + 1]);
@@ -643,7 +645,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutFromParams(rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutFromParams(self, rule, value, address, initialParams, params, outputValues) {
         let score = 0;
         let found = false;
         for (let i = rule.inBlockStart; i < rule.inBlockStart + rule.inBlockLen; i++) {
@@ -682,7 +684,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutMatch(rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutMatch(self, rule, value, address, initialParams, params, outputValues) {
         let score = 0;
         let offset = address - rule.outBlockStart;
         let param = initialParams[rule.inBlockStart + offset];
@@ -726,7 +728,7 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutFromInitialParams: function (rule, value, address, initialParams, params, outputValues) {
+    byteValuesOutFromInitialParams: function (self, rule, value, address, initialParams, params, outputValues) {
         let score = 0;
         let found = false;
         for (let i = rule.inBlockStart; i < rule.inBlockStart + rule.inBlockLen; i++) {
@@ -778,7 +780,7 @@ const rulesets = {
         return score;
     },
 
-    byteParamsPlusThree(rule, value, address, initialParams, params, outputValues) {
+    byteParamsPlusThree(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let required = initialParams[rule.inBlockStart + offset] + 3;
         if (required > 255) required = required & 255;
@@ -805,7 +807,7 @@ const rulesets = {
         return score;
     },
 
-    byteParamsMinusThree(rule, value, address, initialParams, params, outputValues) {
+    byteParamsMinusThree(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let required = (initialParams[rule.inBlockStart + offset] - 3) & 255;
         let score = Math.floor((255 - Math.abs(value - required)) / 3);
@@ -830,7 +832,7 @@ const rulesets = {
         return score;
     },
 
-    byteParamsTimesTwo(rule, value, address, initialParams, params, outputValues) {
+    byteParamsTimesTwo(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let required = initialParams[rule.inBlockStart + offset] * 2;
         let score = Math.floor((255 - Math.abs(value - required)) / 3);
@@ -860,7 +862,7 @@ const rulesets = {
         return score;
     },
 
-    byteMultiplyParams(rule, value, address, initialParams, params, outputValues) {
+    byteMultiplyParams(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset * 2];
         let b = initialParams[rule.inBlockStart + offset * 2 + 1];
@@ -895,7 +897,7 @@ const rulesets = {
         return score;
     },
 
-    byteDivideParams(rule, value, address, initialParams, params, outputValues) {
+    byteDivideParams(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset];
         let b = initialParams[rule.inBlockStart2 + offset];
@@ -952,7 +954,7 @@ const rulesets = {
         return score;
     },
 
-    byteParamOperations(rule, value, address, initialParams, params, outputValues) {
+    byteParamOperations(self, rule, value, address, initialParams, params, outputValues) {
         let numCommandTypes = 4;
         let score = 0;
         let offset = address - rule.outBlockStart;
@@ -995,6 +997,82 @@ const rulesets = {
             score = Math.floor((255 - Math.abs(value - r)) / 3);
         }
         return score;
+    },
+
+    convertASCIINumbers(self, dataParams, ruleParams) {
+        let valuesOut = dataParams.valuesOut;
+        let iniParams = dataParams.initialParams;
+        let outStart = ruleParams.outBlockStart;
+        let outLen = ruleParams.outBlockLen;
+        let inStart = ruleParams.inBlockStart;
+
+        let count = 0;
+        let p = inStart;
+        for (let i = 0; i < outLen; i++) {
+            let nObj = self.readAndConvertASCIIInput(p, iniParams);
+            let n = nObj.n;
+            p = nObj.p;
+            if (n === valuesOut[outStart + i]) ++count;
+        }
+        let opt = outLen;
+        let max = opt;
+        let min = 0;
+
+        let score = self.doScore(opt, count, max, min);
+        return score;
+
+    },
+
+    byteConvertASCIINumbers(self, rule, value, address, initialParams, params, outputValues) {
+        let outStart = rule.outBlockStart;
+        let offset = address - outStart;
+        let inStart = rule.inBlockStart;
+
+        // Find the matching input string
+        let p = inStart;
+        if (offset > 0) {
+            let c = 0;
+            let p1 = inStart;
+            let found = false;
+            while (c < offset && p1 < 256) {
+                let b = String.fromCharCode(initialParams[p1]);
+                if (b === ";") {
+                    ++c;
+                    found = true;
+                }
+                ++p1;
+            }
+            if (found) p = p1;
+        }
+
+        // Get the ascii number
+        let score = 0;
+        let nObj = self.readAndConvertASCIIInput(p, initialParams);
+        let n = nObj.n;
+        if (n === value) score = 64;
+
+        return score;
+    },
+
+    readAndConvertASCIIInput(p, iniParams) {
+        // Read the parameter
+        let p1 = p;
+        let s = "";
+        let c = "";
+        while (c != ";") {
+            c = String.fromCharCode(iniParams[p1]);
+            if (c != ";") {
+                s += c;
+                ++p1;
+            }
+            else {
+                ++p1;
+                break;
+            }
+        }
+        // Get the numeric value
+        let n = parseInt(s);
+        return {n: n, p: p1}
     },
 
     doScore: function (opt, actual, max, min) {
