@@ -65,7 +65,7 @@ const rulesets = {
         };
         this.scoreList.push(scoreItem6);
         this.ruleFunction.push(this.valuesOutSet);
-        this.byteFunction.push(this.byteValuesOutSet);
+        this.byteFunction.push(null);
 
         let scoreItem7 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 7, skip: false,
             score: 0, max: 4, startRoundNum: 2,
@@ -196,8 +196,9 @@ const rulesets = {
                         if (isNaN(score)) {
                             console.log("Invalid byte score", score, index);
                         }
-                        totalScore += score;
+                        totalScore = score;
                         totalSignificance += rule.max;
+                        break;
                     }
                 }
             }
@@ -491,14 +492,6 @@ const rulesets = {
         return score;
     },
 
-    byteValuesOutSet(self, rule, value, address, initialParams, params, outputValues) {
-        let score = 0;
-        if (value != 0 && address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
-            score = 82;
-        }
-        return score;
-    },
-
     valuesOutDifferent(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
         let outBlockStart = ruleParams.outBlockStart;
@@ -528,12 +521,13 @@ const rulesets = {
     },
 
     byteValuesOutDifferent(self, rule, value, address, initialParams, params, outputValues) {
-        let score = 82;
+        let score = 0;
         for (let i = 0; i < rule.outBlockLen; i++) {
             let a = outputValues[i + rule.outBlockStart];
             if (i != rule.outBlockStart + i) {
                 if (value === a) {
-                    score = 0;
+                    score = 255;
+                    break;
                 }
             }
         }
@@ -560,64 +554,31 @@ const rulesets = {
     },
 
     byteValuesOutSeries(self, rule, value, address, initialParams, params, outputValues) {
-        let score = 82;
+        let score = 255;
         if (address === rule.outBlockStart) {
             let diff = Math.abs(outputValues[rule.outBlockStart + 2] - outputValues[rule.outBlockStart + 1]);
-            if (diff === 0) {
-                if (value != 0) {
-                    score = 1;
-                }
-                else {
-                    score = 0;
-                }
-            }
-            else {
+            if (diff != 0) {
                 let hitDiff = Math.abs(outputValues[rule.outBlockStart + 1] - value);
-                if (hitDiff === 0) {
+                if (hitDiff === diff) {
                     score = 0;
-                }
-                else {
-                    score = Math.floor((255 - Math.abs(diff - hitDiff)) / 3);
                 }
             }
         }
         else if (address === rule.outBlockStart + 1) {
-            let diff = Math.abs(outputValues[rule.outBlockStart + 2] - outputValues[rule.outBlockStart + 3]);
-            if (diff === 0) {
-                if (value != 0) {
-                    score = 1;
-                }
-                else {
-                    score = 0;
-                }
-            }
-            else {
+            let diff = Math.abs(outputValues[rule.outBlockStart + 3] - outputValues[rule.outBlockStart + 2]);
+            if (diff != 0) {
                 let hitDiff = Math.abs(outputValues[rule.outBlockStart] - value);
-                if (hitDiff === 0) {
+                if (hitDiff === diff) {
                     score = 0;
-                }
-                else {
-                    score = Math.floor((255 - Math.abs(diff - hitDiff)) / 3);
                 }
             }
         }
         else {
             let diff = Math.abs(outputValues[rule.outBlockStart + 1] - outputValues[rule.outBlockStart]);
-            if (diff === 0) {
-                if (value != 0) {
-                    score = 1;
-                }
-                else {
-                    score = 0;
-                }
-            }
-            else {
+            if (diff != 0) {
                 let hitDiff = Math.abs(outputValues[address - 1] - value);
-                if (hitDiff === 0) {
+                if (hitDiff === diff) {
                     score = 0;
-                }
-                else {
-                    score = Math.floor((255 - Math.abs(diff - hitDiff)) / 3);
                 }
             }
         }
@@ -646,7 +607,7 @@ const rulesets = {
     },
 
     byteValuesOutFromParams(self, rule, value, address, initialParams, params, outputValues) {
-        let score = 0;
+        let score = 255;
         let found = false;
         for (let i = rule.inBlockStart; i < rule.inBlockStart + rule.inBlockLen; i++) {
             if (params[i] === value) {
@@ -658,10 +619,10 @@ const rulesets = {
             score = 1
         }
         else if (!found) {
-            score = 0;
+            score = 255;
         }
         else {
-            score = 82;
+            score = 0;
         }
         return score;
     },
@@ -685,14 +646,15 @@ const rulesets = {
     },
 
     byteValuesOutMatch(self, rule, value, address, initialParams, params, outputValues) {
-        let score = 0;
+        let score = 255;
         let offset = address - rule.outBlockStart;
         let param = initialParams[rule.inBlockStart + offset];
         if (value === param) {
-            score = 82;
+            score = 0;
         }
-        else if (value != 0) {
-            score = 1;
+        else {
+            let opt = param;
+            score = self.doByteScore(opt, value);
         }
         return score;
     },
@@ -729,7 +691,7 @@ const rulesets = {
     },
 
     byteValuesOutFromInitialParams: function (self, rule, value, address, initialParams, params, outputValues) {
-        let score = 0;
+        let score = 255;
         let found = false;
         for (let i = rule.inBlockStart; i < rule.inBlockStart + rule.inBlockLen; i++) {
             if (value === initialParams[i]) {
@@ -737,9 +699,9 @@ const rulesets = {
             }
         }
         if (found) {
-            score = 82;
+            score = 0;
         }
-        else if (value != 0) {
+        else {
             score = 1;
         }
         return score;
@@ -782,9 +744,9 @@ const rulesets = {
 
     byteParamsPlusThree(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
-        let required = initialParams[rule.inBlockStart + offset] + 3;
-        if (required > 255) required = required & 255;
-        let score = Math.floor((255 - Math.abs(value - required)) / 3);
+        let required = (initialParams[rule.inBlockStart + offset] + 3) & 255;
+        let opt = required;
+        let score = self.doByteScore(opt, value);
         return score;
     },
 
@@ -810,7 +772,7 @@ const rulesets = {
     byteParamsMinusThree(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
         let required = (initialParams[rule.inBlockStart + offset] - 3) & 255;
-        let score = Math.floor((255 - Math.abs(value - required)) / 3);
+        let score = self.doByteScore(required, value);
         return score;
     },
 
@@ -834,8 +796,8 @@ const rulesets = {
 
     byteParamsTimesTwo(self, rule, value, address, initialParams, params, outputValues) {
         let offset = address - rule.outBlockStart;
-        let required = initialParams[rule.inBlockStart + offset] * 2;
-        let score = Math.floor((255 - Math.abs(value - required)) / 3);
+        let required = (initialParams[rule.inBlockStart + offset] * 2) & 255;
+        let score = self.doByteScore(required, value);
         return score;
     },
 
@@ -870,7 +832,7 @@ const rulesets = {
         if (required > 255) {
             required = required & 255;
         }
-        let score = Math.floor((255 - Math.abs(value - required)) / 3);
+        let score = self.doByteScore(required, value);
         return score;
     },
 
@@ -901,8 +863,8 @@ const rulesets = {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset];
         let b = initialParams[rule.inBlockStart2 + offset];
-        let required = Math.floor(b/a);
-        let score = Math.floor((255 - Math.abs(value - required)) / 3);
+        let required = Math.floor(b/a) & 255;
+        let score = self.doByteScore(required, value);
         return score;
     },
 
@@ -931,19 +893,18 @@ const rulesets = {
                 let r;
                 switch (op) {
                     case 43: // +
-                        r = a + b;
+                        r = (a + b) & 255;
                         break;
                     case 45: // -
-                        r = a - b;
+                        r = (a - b) & 255;
                         break;
                     case 42: // *
-                        r = a * b;
+                        r = (a * b) & 255;
                         break;
                     default: 
                         console.log("op error in paramOperations rule at:", i, op, inAddr);
                         r = 0;
                 }
-                if (r < 0 || r > 255) r = Math.abs(r & 255);
                 if (r === v) ++count;
             }
         }
@@ -956,8 +917,9 @@ const rulesets = {
 
     byteParamOperations(self, rule, value, address, initialParams, params, outputValues) {
         let numCommandTypes = 4;
-        let score = 0;
+        let score = 255;
         let offset = address - rule.outBlockStart;
+        let required = 0;
         if (offset < 8) {
             // = a b rule
             // Find the corresponding parameter command
@@ -965,13 +927,14 @@ const rulesets = {
             for (let i = 0; i < rule.inBlockLen / numCommandTypes; i += 3) {
                 let a = initialParams[rule.inBlockStart + i + 1];
                 if (a === address) {
-                    if (value === initialParams[rule.inBlockStart + i + 2]) {
-                        found = true;
-                        break;
-                    }
+                    required = initialParams[rule.inBlockStart + i + 2];
+                    found = true;
+                    break;
                 }
             }
-            if (found) score = 64;
+            if (found) {
+                score = self.doByteScore(required, value);
+            }
         }
         else {
             let inAddr = rule.inBlockStart;
@@ -981,20 +944,19 @@ const rulesets = {
             let r;
             switch (op) {
                 case 43: // +
-                    r = a + b;
+                    r = (a + b) & 255;
                     break;
                 case 45: // -
-                    r = a - b;
+                    r = (a - b) & 255;
                     break;
                 case 42: // *
-                    r = a * b;
+                    r = (a * b) & 255;
                     break;
                 default: 
                     console.log("op error in paramOperations rule at:", i);
                     r = 0;
             }
-            if (r < 0 || r > 255) r = Math.abs(r & 255);
-            score = Math.floor((255 - Math.abs(value - r)) / 3);
+            score = self.doByteScore(r, value);
         }
         return score;
     },
@@ -1048,8 +1010,8 @@ const rulesets = {
         // Get the ascii number
         let score = 0;
         let nObj = self.readAndConvertASCIIInput(p, initialParams);
-        let n = nObj.n;
-        if (n === value) score = 64;
+        let opt = nObj.n;
+        score = self.doByteScore(opt, value); 
 
         return score;
     },
@@ -1095,7 +1057,14 @@ const rulesets = {
             }
         }
         return score;
+    },
+
+    doByteScore(opt, value) {
+        let score = 255;
+        if (opt === value) score = 0;
+        return score;
     }
+
 
 }
 

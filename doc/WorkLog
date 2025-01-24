@@ -4,8 +4,15 @@ Contents
     Jobs Done
 
 Jobs Due
+    Rationalise the byte scores for hits and near hits
+        Consider an optimum (hit) of 5 with a test value of 1
+        If we subtract 1 from 5 we get the result 4 (0 is the optimum)
+        If we have a test value of 7 we get the result -2 from which 
+        we can take the absolute (2)
+        We can therefore use ABS(opt - value) as our returned score
+        for consistency.
 
-    Remove insert lower score into tables
+    * Remove insert lower score into tables
     
     Include save scorelist for an entity?
 

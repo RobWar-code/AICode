@@ -196,10 +196,23 @@ JR 0xFC // Jump relative back to start
 Using the rule sets, this scores on valuesSet, outputFromInitialParams, outputMatchesInitialParams
 
 <h1>Performance Notes
+23/01/2025
+Addition of convert ASCII numbers rule
+
+Best Set Score: 57.7241 from 162
+Loops: As previous, but also included a send conditional jump back which may activate
+Elapsed Time: 9.2121
+Number of Trials: 51,014,400
+
+Best Set Score: 56.4711 from 162
+Loops: 2 Loops, the first with a conditional branch which jumps to the second
+Elapsed Time: 2.1539
+Number of Trials: 12,550,400
+
 22/01/2025
 Add clearance of duplicated outputs
 
-Best Set Score: 61.6447
+Best Set Score: 61.6447 from 154
 Loops: 2 loops, both modified by themselves
 Elapsed Time: 18.6437
 Number of Trials: 85,017,600
