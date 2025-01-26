@@ -14,7 +14,7 @@ const rulesets = {
     totalScore: 0,
     maxScore: 0,
     diffScore: 0,
-    ignoreRounds: true,
+    ignoreRounds: false,
 
     initialise() {
 
@@ -23,32 +23,32 @@ const rulesets = {
         this.byteFunction = [];
 
         let scoreItem0 = {rule: "Instruction Distribution", ruleNum: 0, skip: false, 
-            score: 0, max: 4, startRoundNum: 0};
+            score: 0, max: 4, startRoundNum: 100};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
 
         let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: false,
-            score: 0, max: 4, startRoundNum: 0};
+            score: 0, max: 4, startRoundNum: 100};
         this.scoreList.push(scoreItem1);
         this.ruleFunction.push(this.matchCASM);
         this.byteFunction.push(null);
 
         let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: false,
-            score: 0, max: 4, startRoundNum: 0
+            score: 0, max: 4, startRoundNum: 100
         }
         this.scoreList.push(scoreItem2);
         this.ruleFunction.push(this.reverseJR);
         this.byteFunction.push(null);
 
         let scoreItem3 = {rule: "Instruction Counter", ruleNum: 3, skip:false,
-            score: 0, max: 1, startRoundNum: 0};
+            score: 0, max: 1, startRoundNum: 100};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
 
         let scoreItem4 = {rule: "Highest IP", ruleNum: 4, skip: false,
-            score: 0, max: 1, startRoundNum: 0};
+            score: 0, max: 1, startRoundNum: 100};
         this.scoreList.push(scoreItem4);
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);
@@ -68,7 +68,7 @@ const rulesets = {
         this.byteFunction.push(null);
 
         let scoreItem7 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 7, skip: false,
-            score: 0, max: 4, startRoundNum: 2,
+            score: 0, max: 4, startRoundNum: 100,
             outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem7);
@@ -77,7 +77,7 @@ const rulesets = {
 
         let scoreItem8 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 8, skip: false,
             score: 0, max: 4, 
-            startRoundNum: 5,
+            startRoundNum: 100,
             outBlockStart: 8, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem8);
@@ -86,7 +86,7 @@ const rulesets = {
 
         let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip:false,
             score: 0, max: 4,
-            startRoundNum: 10,
+            startRoundNum: 0,
             outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem9);
@@ -94,7 +94,7 @@ const rulesets = {
         this.byteFunction.push(this.byteValuesOutMatch);
 
         let scoreItem10 = {rule: "Values Out Different (24:31)", ruleNum: 10, skip:false,
-            score: 0, max: 1, startRoundNum: 15,
+            score: 0, max: 1, startRoundNum: 100,
             outBlockStart: 24, outBlockLen: 8
         };
         this.scoreList.push(scoreItem10);
@@ -102,7 +102,7 @@ const rulesets = {
         this.byteFunction.push(this.byteValuesOutDifferent);
 
         let scoreItem11 = {rule: "Values Out Series (32:39)", ruleNum: 11, skip:false,
-            score: 0, max: 1, startRoundNum: 17,
+            score: 0, max: 1, startRoundNum: 100,
             outBlockStart: 32, outBlockLen: 8
         };
         this.scoreList.push(scoreItem11);
@@ -110,7 +110,7 @@ const rulesets = {
         this.byteFunction.push(this.byteValuesOutSeries);
 
         let scoreItem12 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 12, skip: false,
-            score: 0, max: 4, startRoundNum: 22, 
+            score: 0, max: 4, startRoundNum: 100, 
             outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem12);
@@ -126,7 +126,7 @@ const rulesets = {
         this.byteFunction.push(this.byteParamsMinusThree);
 
         let scoreItem14 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 14, skip: false, 
-            score: 0, max: 4, startRoundNum: 40,
+            score: 0, max: 4, startRoundNum: 100,
             outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
         this.scoreList.push(scoreItem14);
@@ -134,7 +134,7 @@ const rulesets = {
         this.byteFunction.push(this.byteParamsTimesTwo);
 
         let scoreItem15 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 15, 
-            skip: false, score: 0, max: 4, startRoundNum: 50, 
+            skip: false, score: 0, max: 4, startRoundNum: 100, 
             outBlockStart: 64, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
@@ -143,7 +143,7 @@ const rulesets = {
         this.byteFunction.push(this.byteMultiplyParams);
 
         let scoreItem16 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 16, 
-            skip: false, score: 0, max: 4, startRoundNum: 60, 
+            skip: false, score: 0, max: 4, startRoundNum: 100, 
             outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
@@ -152,7 +152,7 @@ const rulesets = {
         this.byteFunction.push(this.byteDivideParams);
 
         let scoreItem17 = {rule: "Use op to Convert Params (16:111, 80:111)", ruleNum:17,
-            skip: false, score: 0, max: 16, startRoundNum: 70, 
+            skip: false, score: 0, max: 16, startRoundNum: 100, 
             outBlockStart: 80, outBlockLen: 32,
             inBlockStart: 16, inBlockLen: 96
         };
@@ -161,7 +161,7 @@ const rulesets = {
         this.byteFunction.push(this.byteParamOperations);
 
         let scoreItem18 = {rule: "Convert ASCII Numbers (112:146, 112:127)", ruleNum: 18,
-            skip: false, score: 0, max: 8, startRoundNum: 80,
+            skip: false, score: 0, max: 8, startRoundNum: 100,
             outBlockStart: 112, outBlockLen: 16,
             inBlockStart: 112, inBlockLen: 38
         };

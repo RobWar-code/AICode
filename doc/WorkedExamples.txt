@@ -193,9 +193,86 @@ STO (C), A // ST A in the output buffer
 INC C 
 JR 0xFC // Jump relative back to start
 
-Using the rule sets, this scores on valuesSet, outputFromInitialParams, outputMatchesInitialParams
+Using the rule sets, this scores on valuesOutSet, valuesFromInitialParams and various random
+hits as the input fills the output.
 
+However this does not approach solving the individual problems in the ruleset.
+
+Consider:
+
+LD B, IMM 8
+Loop:
+PUSH B
+LDI A, (C)
+LD B, IMM 3
+ADD A, B
+STO (C), A
+POP B
+DEC B
+JRZ 2
+JR 0xF7 (Loop)
+
+Which is the solution for rule paramsPlusThree. How could the system arrive at this solution
+by stepwise enhancements?
+
+One possibility is to score particular sequences of instructions which might be useful, for example
+LDI A, (C)
+LD B, IMM
+ADD A, B
+STO (C), A
+
+This has the disadvantage of requiring some foreknowledge about the type and form of problems to
+be solved.
 <h1>Performance Notes
+25/01/2025
+Reduced cross-set breed chance to 0.001 to increase diversity on main computer.
+
+Best Score: 56.5636
+Loops: Long stretch (44 bytes) with multiple outputs, trailed by a closing loop producing
+    output sequences of about 10 bytes.
+Elapsed Time: 1.8105
+Number of Trials: 6,048,000
+Comments: More varied best set results
+
+24/01/2025
+Trial on main computer, adjusted clearance pass to 10 rounds
+
+Best Score: 61.1617
+Loops: Two overlapping loops reading the input and assigning to the output
+    with a couple of bytes set with immediate values. Total executed sequence
+    is 33 bytes.
+Elapsed Time: 18.8172
+Number of Trials: 57,184,000
+Comments: There seems little gain from the modification of the clearance pass
+
+Best Score: 55.2929
+Loops: First loop to set the initial parameters, second to add incrementing
+    set of numbers
+Elapsed Time: 3.0535
+Number of Trials: 9,792,000
+
+24/01/2025
+Generalisation of byte scores
+
+Best Set Score: 64.924
+Loops: Long double loop with a short tail loop with jump back to out-of sequence
+    instruction
+Elapsed Time: 22.9824
+Number of Trials: 129,420,800
+Comments: Locked into the same pattern for a long time
+
+Best Set Score: 61.2908
+Loops: Long double loop with a short tail loop with jump back to out-of sequence
+    instruction
+Elapsed Time: 5.651
+Number of Trials: 32,486,400
+
+Best Set Score: 58.8769
+Loops: Two loops, the first being invoked with a CASM and RET, the second with
+    a JR.
+Elapsed Time: 2.6263
+Number of Trials: 16,172,800
+
 23/01/2025
 Addition of convert ASCII numbers rule
 

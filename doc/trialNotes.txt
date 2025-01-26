@@ -1,3 +1,39 @@
+25/01/2025
+Ran two attempts in parallel, with clearance pass 5 on one and
+10 on the other. Similar results.
+
+Now trying reduced cross-set breeding (0.001) to attempt to
+diversify trial attempts.
+
+Next objective - study the probabilities of progressive code
+variations that might lead to improved results.
+
+24/01/2025
+Have adjusted the byte scoring to score zero for a hit and 255 for
+a miss. Had an interesting result where I had changed the scoring
+to give an idea of proximity to the correct result. The system used
+this as a cheat to obtain the correct result!
+
+Currently, I observe that what we are trying to achieve is to pluck 
+the required results from a probability field, where we are uncertain
+of the scale of the probabilities involved and therefore do not know
+how much processing time is required.
+
+From this standpoint it makes sense to put more effort into examining
+probabilities, rather than measuring it empirically, which is what the
+trials involve.
+
+From the cheat result, we note that the system rapidly evolved a method
+involving about 8 instructions, for solving scores in each problem
+space. So we know empirically that we can achieve optimal solutions
+that involve 8 instructions.
+
+The trials thus far have proved that the system tends to evolve one
+rational solution loop (transfer of input to output) and then a statistical
+loop which scatters random numbers to the other problem spaces, some
+of which incidentally score in those spaces. It does not yet evolve 
+algorithms that are effective on the problem spaces.
+
 21/01/2025
 After about 30 million trials, the system tends to evolve two loops
 which spread series through the output, with random score hits in

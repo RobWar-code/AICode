@@ -24,7 +24,7 @@ class MainControl {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.restartLap = this.numBestSets * 5;
+        this.restartLap = this.numBestSets * 10;
         this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
@@ -201,7 +201,7 @@ class MainControl {
                         let p1Entity = bestEntitySet[p1];
                         let p2Entity;
                         // Check for a mate from an alternative set
-                        if (Math.random() < 0.03) {
+                        if (Math.random() < 0.001) {
                             let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
                             let b = bestSetNum + r;
                             if (this.bestSets[b].length != 0) {
