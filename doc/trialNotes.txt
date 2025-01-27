@@ -1,3 +1,19 @@
+27/01/2025
+The preceding day's results prove that as rules are added,
+earlier rule results decay as the new conformancies rise,
+so that there is an averaging-out process.
+
+I have re-added exponential scoring, so that the "cost"
+of disinvesting in a solution is higher than a gain in
+another solution. Early testing seems to indicate that
+general improvements proceed. Yet to see transition to
+a second rule.
+
+Next is to use best score thresholds to mark the introduction
+of each new rule to the entities. But it is possible that the
+addition of the disinvestment cost is sufficient to permit
+timed introductions to work effectively.
+
 26/01/2025
 Reduced the cross-set breeding to 0.001 to increase variety,
 but this still moves toward the general solution of a list

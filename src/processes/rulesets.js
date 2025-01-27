@@ -15,6 +15,8 @@ const rulesets = {
     maxScore: 0,
     diffScore: 0,
     ignoreRounds: false,
+    bestEntity: null,
+    ruleSequenceNum: 0,
 
     initialise() {
 
@@ -22,44 +24,44 @@ const rulesets = {
         this.ruleFunction = [];
         this.byteFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleNum: 0, skip: false, 
+        let scoreItem0 = {rule: "Instruction Distribution", ruleNum: 0, skip: true, 
             score: 0, max: 4, startRoundNum: 800};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
 
-        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: false,
+        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: true,
             score: 0, max: 4, startRoundNum: 800};
         this.scoreList.push(scoreItem1);
         this.ruleFunction.push(this.matchCASM);
         this.byteFunction.push(null);
 
-        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: false,
+        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: true,
             score: 0, max: 4, startRoundNum: 800
         }
         this.scoreList.push(scoreItem2);
         this.ruleFunction.push(this.reverseJR);
         this.byteFunction.push(null);
 
-        let scoreItem3 = {rule: "Instruction Counter", ruleNum: 3, skip:false,
+        let scoreItem3 = {rule: "Instruction Counter", ruleNum: 3, skip: true,
             score: 0, max: 1, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
 
-        let scoreItem4 = {rule: "Highest IP", ruleNum: 4, skip: false,
+        let scoreItem4 = {rule: "Highest IP", ruleNum: 4, skip: true,
             score: 0, max: 1, startRoundNum: 800};
         this.scoreList.push(scoreItem4);
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);
 
-        let scoreItem5 = {rule: "Params Preserved", ruleNum: 5, skip: false,
+        let scoreItem5 = {rule: "Params Preserved", ruleNum: 5, skip: false, sequenceNum: 0,
             score: 0, max: 3, startRoundNum: 0};
         this.scoreList.push(scoreItem5);
         this.ruleFunction.push(this.initialParamsPreserved);
         this.byteFunction.push(null);
 
-        let scoreItem6 = {rule: "Values Out Set (0:111)", ruleNum: 6, skip: false,
+        let scoreItem6 = {rule: "Values Out Set (0:111)", ruleNum: 6, skip: false, sequenceNum: 0,
             score: 0, max: 4, startRoundNum: 0, 
             outBlockStart: 0, outBlockLen: 128 
         };
@@ -67,7 +69,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutSet);
         this.byteFunction.push(null);
 
-        let scoreItem7 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 7, skip: false,
+        let scoreItem7 = {rule: "Values Out From Params (0:7, 0:7)", ruleNum: 7, skip: true,
             score: 0, max: 4, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
@@ -75,7 +77,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutFromParams)
         this.byteFunction.push(this.byteValuesOutFromParams);
 
-        let scoreItem8 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 8, skip: false,
+        let scoreItem8 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 8, skip: true,
             score: 0, max: 4, 
             startRoundNum: 800,
             outBlockStart: 8, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
@@ -84,7 +86,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutFromInitialParams);
         this.byteFunction.push(this.byteValuesOutFromInitialParams);
 
-        let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip:false,
+        let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip:false, sequenceNum: 0,
             score: 0, max: 4,
             startRoundNum: 0,
             outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
@@ -93,7 +95,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutMatchInitialParams);
         this.byteFunction.push(this.byteValuesOutMatch);
 
-        let scoreItem10 = {rule: "Values Out Different (24:31)", ruleNum: 10, skip:false,
+        let scoreItem10 = {rule: "Values Out Different (24:31)", ruleNum: 10, skip:true,
             score: 0, max: 1, startRoundNum: 800,
             outBlockStart: 24, outBlockLen: 8
         };
@@ -101,7 +103,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutDifferent);
         this.byteFunction.push(this.byteValuesOutDifferent);
 
-        let scoreItem11 = {rule: "Values Out Series (32:39)", ruleNum: 11, skip:false,
+        let scoreItem11 = {rule: "Values Out Series (32:39)", ruleNum: 11, skip: true,
             score: 0, max: 1, startRoundNum: 800,
             outBlockStart: 32, outBlockLen: 8
         };
@@ -109,7 +111,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutSeries);
         this.byteFunction.push(this.byteValuesOutSeries);
 
-        let scoreItem12 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 12, skip: false,
+        let scoreItem12 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 12, skip: false, sequenceNum: 1,
             score: 0, max: 4, startRoundNum: 28, 
             outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
@@ -117,7 +119,7 @@ const rulesets = {
         this.ruleFunction.push(this.paramsPlusThree);
         this.byteFunction.push(this.byteParamsPlusThree);
 
-        let scoreItem13 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 13, skip: false,
+        let scoreItem13 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 13, skip: false, sequenceNum: 2,
             score: 0, max: 4, startRoundNum: 56,
             outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
@@ -125,7 +127,7 @@ const rulesets = {
         this.ruleFunction.push(this.paramsMinusThree);
         this.byteFunction.push(this.byteParamsMinusThree);
 
-        let scoreItem14 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 14, skip: false, 
+        let scoreItem14 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 14, skip: false, sequenceNum: 3,
             score: 0, max: 4, startRoundNum: 84,
             outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
@@ -134,7 +136,7 @@ const rulesets = {
         this.byteFunction.push(this.byteParamsTimesTwo);
 
         let scoreItem15 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 15, 
-            skip: false, score: 0, max: 4, startRoundNum: 800, 
+            skip: false, sequenceNum: 4, score: 0, max: 4, startRoundNum: 800, 
             outBlockStart: 64, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
@@ -143,7 +145,7 @@ const rulesets = {
         this.byteFunction.push(this.byteMultiplyParams);
 
         let scoreItem16 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 16, 
-            skip: false, score: 0, max: 4, startRoundNum: 800, 
+            skip: false, sequenceNum: 5, score: 0, max: 4, startRoundNum: 800, 
             outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
@@ -152,7 +154,7 @@ const rulesets = {
         this.byteFunction.push(this.byteDivideParams);
 
         let scoreItem17 = {rule: "Use op to Convert Params (16:111, 80:111)", ruleNum:17,
-            skip: false, score: 0, max: 16, startRoundNum: 800, 
+            skip: false, sequenceNum: 6, score: 0, max: 16, startRoundNum: 800, 
             outBlockStart: 80, outBlockLen: 32,
             inBlockStart: 16, inBlockLen: 96
         };
@@ -161,7 +163,7 @@ const rulesets = {
         this.byteFunction.push(this.byteParamOperations);
 
         let scoreItem18 = {rule: "Convert ASCII Numbers (112:146, 112:127)", ruleNum: 18,
-            skip: false, score: 0, max: 8, startRoundNum: 800,
+            skip: false, sequenceNum: 7, score: 0, max: 8, startRoundNum: 800,
             outBlockStart: 112, outBlockLen: 16,
             inBlockStart: 112, inBlockLen: 38
         };
@@ -212,6 +214,14 @@ const rulesets = {
         codeFlags, initialParams, paramsIn, valuesOut, IC, highestIP, roundNum) {
         let totalScore = 0;
 
+        // Get the current maximum score
+        let maxScore = this.getCurrentMaxScore();
+        if (this.bestEntity != null) {
+            if (this.bestEntity.score >= maxScore * 0.9 && this.ruleSequenceNum < this.scoreList.length) {
+                ++this.ruleSequenceNum;
+            }
+        }
+
         let dataParams = {
             instructionSet: instructionSet,
             memSpace: memSpace,
@@ -225,14 +235,16 @@ const rulesets = {
 
         for (let i = 0; i < this.scoreList.length; i++) {
             if (!this.scoreList[i].skip) {
-                if (this.ignoreRounds || this.scoreList[i].startRoundNum <= roundNum) {
-                    let score = this.ruleFunction[i](this, dataParams, this.scoreList[i]);
-                    if (isNaN(score)) {
-                        console.log("Erroneous Score:", i);
+                if (this.scoreList[i].sequenceNum <= this.ruleSequenceNum) {
+                    if (this.ignoreRounds || this.scoreList[i].startRoundNum <= roundNum) {
+                        let score = this.ruleFunction[i](this, dataParams, this.scoreList[i]);
+                        if (isNaN(score)) {
+                            console.log("Erroneous Score:", i);
+                        }
+                        score *= this.scoreList[i].max;
+                        this.scoreList[i].score += score;
+                        totalScore += score;
                     }
-                    score *= this.scoreList[i].max;
-                    this.scoreList[i].score += score;
-                    totalScore += score;
                 }
             }
         }
@@ -241,6 +253,16 @@ const rulesets = {
 
         return {score: this.totalScore, scoreList: this.scoreList};
 
+    },
+
+    getCurrentMaxScore() {
+        let maxScore = 0;
+        for (let rule of this.scoreList) {
+            if (rule.sequenceNum <= this.ruleSequenceNum) {
+                maxScore += rule.max * 2;
+            }
+        }
+        return (maxScore);
     },
 
     scoreOutputDiff(outputs) {

@@ -51,6 +51,7 @@ class MainControl {
         ++this.bestSetNum;
         if (this.bestSetNum >= this.numBestSets) {
             this.bestSetNum = 0;
+            this.saveBestScore();
             ++this.numRounds;
             dbTransactions.saveSession(this.mainWindow, this);
         }
@@ -61,6 +62,25 @@ class MainControl {
             this.restartSets();
         }
         ++this.lapCounter;
+    }
+
+    saveBestScore() {
+        // Get the best scoring index
+        let bestScore = 0;
+        let best = 0;
+        let index = 0;
+        for (let set of this.bestSets) {
+            if (set.length > 0) {
+                let score = set[0].score;
+                if (score > bestScore) {
+                    bestScore = score;
+                    best = index; 
+                }
+            }
+            ++index;
+        }
+        // Update the rule set
+        rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
     restartSets() {
