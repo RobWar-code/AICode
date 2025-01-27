@@ -12,9 +12,10 @@ const rulesets = {
     ruleFunction: [],
     byteFunction: [],
     totalScore: 0,
+    currentMaxScore: 0,
     maxScore: 0,
     diffScore: 0,
-    ignoreRounds: false,
+    ignoreRounds: true,
     bestEntity: null,
     ruleSequenceNum: 0,
 
@@ -30,14 +31,14 @@ const rulesets = {
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
 
-        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: true,
-            score: 0, max: 4, startRoundNum: 800};
+        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: false, sequenceNum: 0,
+            score: 0, max: 4, startRoundNum: 0};
         this.scoreList.push(scoreItem1);
         this.ruleFunction.push(this.matchCASM);
         this.byteFunction.push(null);
 
-        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: true,
-            score: 0, max: 4, startRoundNum: 800
+        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: false, sequenceNum: 0,
+            score: 0, max: 4, startRoundNum: 0
         }
         this.scoreList.push(scoreItem2);
         this.ruleFunction.push(this.reverseJR);
@@ -215,9 +216,9 @@ const rulesets = {
         let totalScore = 0;
 
         // Get the current maximum score
-        let maxScore = this.getCurrentMaxScore();
+        this.currentMaxScore = this.getCurrentMaxScore();
         if (this.bestEntity != null) {
-            if (this.bestEntity.score >= maxScore * 0.9 && this.ruleSequenceNum < this.scoreList.length) {
+            if (this.bestEntity.score >= this.currentMaxScore * 0.9 && this.ruleSequenceNum < this.scoreList.length) {
                 ++this.ruleSequenceNum;
             }
         }
@@ -258,10 +259,13 @@ const rulesets = {
     getCurrentMaxScore() {
         let maxScore = 0;
         for (let rule of this.scoreList) {
-            if (rule.sequenceNum <= this.ruleSequenceNum) {
-                maxScore += rule.max * 2;
+            if ("sequenceNum" in rule) {
+                if (rule.sequenceNum <= this.ruleSequenceNum) {
+                    maxScore += rule.max * 2;
+                }
             }
         }
+        maxScore += this.scoreList[this.scoreList.length - 1].max;
         return (maxScore);
     },
 

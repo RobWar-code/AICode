@@ -20,6 +20,7 @@ const entityDisplay = {
             document.getElementById("creationCycle").innerText = data.birthCycle;
             document.getElementById("numTrials").innerText = data.numTrials;
             document.getElementById("mainTotalScore").innerText = data.score;
+            document.getElementById("currentMaxScore").innerText = data.currentMaxScore;
             document.getElementById("maxScore").innerText = data.maxScore;
             document.getElementById("elapsedTime").innerText = data.elapsedTime;
             document.getElementById("breedMethod").innerText = data.breedMethod;

@@ -784,6 +784,7 @@ class Entity {
         displayData.creationTime = this.birthDateTime;
         displayData.breedMethod = this.breedMethod;
         displayData.score = Math.floor(this.score * 10000)/10000;
+        displayData.currentMaxScore = rulesets.currentMaxScore;
         displayData.maxScore = rulesets.maxScore;
         displayData.elapsedTime = Math.floor(elapsedTime * 10000)/10000;
         displayData.randomCount = randomCount;
