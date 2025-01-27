@@ -1,3 +1,36 @@
+26/01/2025
+Reduced the cross-set breeding to 0.001 to increase variety,
+but this still moves toward the general solution of a list
+of series preceded by a match of input params, at which point
+the system sticks.
+
+The basic problem is that the development of programming solutions 
+is not strictly an incremental, step-wise system. Reason uses manoeuvres
+to get to arrangements of code, not chance insertions, replacements
+and deletions of code. So there is a layer of logic missing
+in the approach. Bearing this in mind, we will pause to reflect
+and to ponder how the missing layer might be defined and filled.
+
+Another way of saying this is that gradations are fundamental to
+evolution. Assemblages (such as code or DNA) are necessary for
+the preservation and conveyance of state in the system.
+
+Revisited the idea of using single rules at a time. This time
+allowing a single rule, to sample how long it might take to achieve
+a reasonable result. Used the rule valuesOutMatchInitialParams,
+with the background rules initialParamsPreserved, valuesOutSet
+and valuesOutDifferent. This took 26 rounds to achieve 7.5 out 8.
+
+Then added in the rule paramsPlusThree to begin at round 27.
+At round 53, the best result was almost a complete set of the
+original problem plus three of the newly added rule. 
+
+The results work out best if the previous score is close to its
+threshold, so the next adaptation is to introduce each new rule
+as the threshold is approached (max - 1?) and to perform them
+in the required order.
+
+
 25/01/2025
 Ran two attempts in parallel, with clearance pass 5 on one and
 10 on the other. Similar results.
