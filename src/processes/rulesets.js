@@ -31,13 +31,13 @@ const rulesets = {
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
 
-        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: false, sequenceNum: 0,
+        let scoreItem1 = {rule: "Matching CASM Instruction", ruleNum: 1, skip: true, sequenceNum: 0,
             score: 0, max: 4, startRoundNum: 0};
         this.scoreList.push(scoreItem1);
         this.ruleFunction.push(this.matchCASM);
         this.byteFunction.push(null);
 
-        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: false, sequenceNum: 0,
+        let scoreItem2 = {rule: "Number of reverse JR ins", ruleNum: 2, skip: true, sequenceNum: 0,
             score: 0, max: 4, startRoundNum: 0
         }
         this.scoreList.push(scoreItem2);
@@ -259,7 +259,7 @@ const rulesets = {
     getCurrentMaxScore() {
         let maxScore = 0;
         for (let rule of this.scoreList) {
-            if ("sequenceNum" in rule) {
+            if ("sequenceNum" in rule && !rule.skip) {
                 if (rule.sequenceNum <= this.ruleSequenceNum) {
                     maxScore += rule.max * 2;
                 }

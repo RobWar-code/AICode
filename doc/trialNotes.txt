@@ -1,3 +1,7 @@
+28/01/2025
+
+Set-up trial excluding the code combination rules.
+
 27/01/2025
 The preceding day's results prove that as rules are added,
 earlier rule results decay as the new conformancies rise,
@@ -13,6 +17,13 @@ Next is to use best score thresholds to mark the introduction
 of each new rule to the entities. But it is possible that the
 addition of the disinvestment cost is sufficient to permit
 timed introductions to work effectively.
+
+Having added in rules for code combinations, the results
+were extremely poor. 60,000,000 trials and only a score
+of 37 out of 42 for the first challenge 
+(valuesOutMatchInitialParams).
+
+The system performed better without these rules.
 
 26/01/2025
 Reduced the cross-set breeding to 0.001 to increase variety,
