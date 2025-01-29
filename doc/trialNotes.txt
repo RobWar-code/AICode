@@ -1,6 +1,45 @@
+29/01/2025
+After 180 rounds, the main computer scored about 28 points
+out of a possible 34, with a few hits on the second rule.
+This was achieved with a loop of 61 bytes, which put outputs
+into two sections, the first extending into the first rule
+area and the second starting at the second rule area.
+
+Set the score exponent to 1.01 on the main computer. Trial
+reached the second rule in < 21 rounds.
+
+Terminated the trial on the windows system as more or less
+frozen performance after 180 rounds. Many scores the same.
+Next change suggested - eliminate incidences of duplicate
+scores, even if they are not the best.
+
+In no case has the progress on the second rule been significant.
+In order to try to overcome this, we can reduce the threshold
+for the second rule to 0.8, rather than 0.9, to allow for more
+diverse solutions.
+
+
 28/01/2025
 
 Set-up trial excluding the code combination rules.
+
+This took 71 or 72 rounds to reach the 90% mark for the 
+scoring on the first rule (valuesOutMatchInitialParams)
+
+In parallel to this is a trial to make the system slightly
+less conservative, setting the score exponent to 1.5
+instead of 2. This took 32 rounds to achieve the first result.
+
+Restarted the trial with an exponent of 1.2 on the main computer
+and 1.5 on the faster, windows computer.
+
+With the exponent set to 1.2, the system transitioned to the
+second rule (paramsPlusThree) in less than 27 rounds. However
+it had made little progress on the second rule after 60 rounds.
+
+After less then 117 rounds, the windows computer began the
+second rule.
+
 
 27/01/2025
 The preceding day's results prove that as rules are added,

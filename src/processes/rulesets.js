@@ -218,7 +218,7 @@ const rulesets = {
         // Get the current maximum score
         this.currentMaxScore = this.getCurrentMaxScore();
         if (this.bestEntity != null) {
-            if (this.bestEntity.score >= this.currentMaxScore * 0.9 && this.ruleSequenceNum < this.scoreList.length) {
+            if (this.bestEntity.score >= this.currentMaxScore * 0.8 && this.ruleSequenceNum < this.scoreList.length) {
                 ++this.ruleSequenceNum;
             }
         }
@@ -1072,14 +1072,14 @@ const rulesets = {
         else if (x > 0) {
             if (actual < min || (actual === min && min != opt)) score = 0;
             else {
-                score = (1 - x/(opt - min)) ** 2;
+                score = (1 - x/(opt - min)) ** 1.01;
             }
         }
         else {
             x = Math.abs(x);
             if (actual > max || (actual === max && max != opt)) score = 0;
             else {
-                score = (1 - x/(max - opt)) ** 2;
+                score = (1 - x/(max - opt)) ** 1.01;
             }
         }
         return score;

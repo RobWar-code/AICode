@@ -95,7 +95,7 @@ class MainControl {
         }
         scoreList.sort((a, b) => b.score - a.score);
 
-        // Eliminate the low entries
+        // Eliminate the lower entries
         let start = Math.floor(this.numBestSets * this.restartProportion);
         for (let i = start; i < scoreList.length; i++) {
             let index = scoreList[i].index;
@@ -103,22 +103,41 @@ class MainControl {
             this.scoreHistory[index] = [];
         }
 
-        // Eliminate duplicate score best set entries
-        let hiScore = scoreList[0].score;
-        for (let i = 1; i < start; i++) {
-            if (scoreList[i].score === hiScore) {
-                let index = scoreList[i].index;
-                this.bestSets[index] = [];
-                this.scoreHistory[index] = [];
-            }
-        }
+        // Eliminate duplicate scores
+        this.eliminateDuplicateScores(scoreList);
 
-        // Eliminate cases of more than three occurences of the same
-        // output values
-        this.eliminateDuplicateOutputs();
+        // Eliminate duplicate score best set entries
+        this.eliminateDuplicateOutput();
     }
 
-    eliminateDuplicateOutputs() {
+    eliminateDuplicateScores(scoreList) {
+        let maxSame = 3;
+        let count = 0;
+        let currentScore = 0;
+        for (let item of scoreList) {
+            let index = item.index;
+            let set = this.bestSets[index];
+            if (set.length > 0) {
+                let score = set[0].score;
+                if (currentScore === 0) {
+                    currentScore = score;
+                }
+                else if (score === currentScore) {
+                    ++count;
+                    if (count > maxSame) {
+                        this.bestSets[index] = [];
+                        this.scoreHistory[index] = [];
+                    }
+                }
+                else {
+                    count = 0;
+                    currentScore = 0;
+                }
+            }
+        }
+    }
+
+    eliminateDuplicateOutput() {
         let maxSame = 3;
         for (let i = 0; i < this.numBestSets - maxSame; i++) {
             let set = this.bestSets[i];
