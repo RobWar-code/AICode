@@ -3,7 +3,8 @@ const path = require('node:path');
 const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
-const dbTransactions = require(path.join(__dirname, './database/dbTransactions'));
+const rulesets = require(path.join(__dirname, "./processes/rulesets.js"))
+const dbTransactions = require(path.join(__dirname, './database/dbTransactions.js'));
 
 const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
 
@@ -143,10 +144,11 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   // Get the actual entity num
   let entity = program.bestSets[bestSetNum][bestSetEntityNum];
   let elapsedTime = program.elapsedTime / (3600 * 1000);
-  entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, program.randomCount, 
+  entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, 
+    program.ruleSequenceNum, program.randomCount, 
     program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
     program.interbreed2Count, program.interbreedFlaggedCount, program.selfBreedCount, 
-    program.crossSetCount, program.cycleCounter, program.numRounds);
+    program.seedRuleBreedCount, program.crossSetCount, program.cycleCounter, program.numRounds);
 });
 
 ipcMain.on("activateMainProcess", () => {
@@ -182,7 +184,7 @@ ipcMain.on("insertSeed", (event, seedSetNum) => {
 });
 
 ipcMain.on("saveSession", () => {
-  dbTransactions.saveSession(mainWindow, program);
+  dbTransactions.saveSession(mainWindow, program, rulesets.ruleSequenceNum, rulesets.seedRuleMemSpace);
 });
 
 ipcMain.on("loadSession", () => {

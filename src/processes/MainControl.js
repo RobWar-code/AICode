@@ -29,12 +29,14 @@ class MainControl {
         this.cycleCounter = 0;
         this.numRounds = 0;
         this.entityNumber = 0;
+        this.ruleSequenceNum = 0;
         this.monoclonalInsCount = 0;
         this.monoclonalByteCount = 0;
         this.interbreedCount = 0;
         this.interbreed2Count = 0;
         this.interbreedFlaggedCount = 0;
         this.selfBreedCount = 0;
+        this.seedRuleBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
         this.startTime = Date.now();
@@ -43,7 +45,8 @@ class MainControl {
         rulesets.initialise();
     }
 
-    mainLoop() {
+    async mainLoop() {
+        let thresholdReached = false;
         let bestEntitySet = this.bestSets[this.bestSetNum];
         bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
         this.bestSets[this.bestSetNum] = bestEntitySet;
@@ -53,9 +56,11 @@ class MainControl {
             this.bestSetNum = 0;
             this.saveBestScore();
             ++this.numRounds;
-            dbTransactions.saveSession(this.mainWindow, this);
+            await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum, rulesets.seedRuleMemSpace);
+            // Check for rule threshold reached
+            thresholdReached = this.checkRuleThreshold();
         }
-        if (this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
+        if (!thresholdReached && this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
             this.numBestSets * Math.floor(this.lapCounter / (4 * this.restartLap))) === 0) {
             console.log("Clearance Pass");
             // Clearance Pass
@@ -83,14 +88,47 @@ class MainControl {
         rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
+    checkRuleThreshold() {
+        // Sort the bestSet scores
+        // Get the best set scores
+        let scoreList = [];
+        let index = 0;
+        for (let set of this.bestSets) {
+            if (set.length > 0) {
+                let score = set[0].score;
+                scoreList.push({index: index, score: score});
+            }
+            ++index;
+        }
+        scoreList.sort((a, b) => b.score - a.score);
+
+        // Check whether the score threshold has been reached
+        let entity = this.bestSets[scoreList[0].index][0];
+        rulesets.seedRuleUpdate(entity);
+        if (rulesets.seedRuleSet) {
+            console.log("Clearing best sets");
+            // Clear down all best sets to use only the seed rule
+            for (let i = 0; i < this.numBestSets; i++) {
+                this.bestSets[i] = [];
+            }
+            this.ruleSequenceNum = rulesets.ruleSequenceNum;
+            rulesets.seedRuleSet = false;
+            return true;
+        }
+
+        return false;
+    }
+
     restartSets() {
         // Sort the bestSet scores
         // Get the best set scores
         let scoreList = [];
         let index = 0;
         for (let set of this.bestSets) {
-            let score = set[0].score;
-            scoreList.push({index: index, score: score});
+            if (set.length > 0) {
+                let score = set[0].score;
+                scoreList.push({index: index, score: score});
+            }
             ++index;
         }
         scoreList.sort((a, b) => b.score - a.score);
@@ -108,6 +146,7 @@ class MainControl {
 
         // Eliminate duplicate score best set entries
         this.eliminateDuplicateOutput();
+        
     }
 
     eliminateDuplicateScores(scoreList) {
@@ -217,15 +256,18 @@ class MainControl {
                 let currentEntitySet = [];
                 for (let j = 0; j < maxBreedActions; j++) {
                     // Create new entity
-                    const asRandom = true; 
-                    const memSpace = null;
+                    let asRandom = true; 
+                    let memSpace = null;
                     let entity = null;
                     let gotCrossMate = false;
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
                     let randomBreed = false;
-                    if (bestEntitySet.length < this.bestEntitySetMax) {
+                    if (rulesets.seedRuleMemSpace != null && bestEntitySet.length >= 1) {
+                        randomBreed = false;
+                    }
+                    else if (bestEntitySet.length < this.bestEntitySetMax) {
                         randomBreed = true;
                     }
                     else {
@@ -240,7 +282,7 @@ class MainControl {
                         let p1Entity = bestEntitySet[p1];
                         let p2Entity;
                         // Check for a mate from an alternative set
-                        if (Math.random() < 0.001) {
+                        if (Math.random() < 0.003) {
                             let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
                             let b = bestSetNum + r;
                             if (this.bestSets[b].length != 0) {
@@ -252,9 +294,14 @@ class MainControl {
                         if (!gotCrossMate){
                             let p2 = -1;
                             let found = false;
-                            while(!found) {
-                                p2 = Math.floor(Math.random() * bestEntitySet.length);
-                                if (p2 != p1) found = true;
+                            if (bestEntitySet.length === 1) {
+                                p2 = 0;
+                            }
+                            else {
+                                while(!found) {
+                                    p2 = Math.floor(Math.random() * bestEntitySet.length);
+                                    if (p2 != p1) found = true;
+                                }
                             }
                             p2Entity = bestEntitySet[p2];
                         }
@@ -265,8 +312,15 @@ class MainControl {
                         let seeded = false;
                         // Seeding on first pass.
                         // if (cycle === 0 && i === 0 && j === 0) seeded = true;
+                        if (rulesets.seedRuleMemSpace != null) {
+                            asRandom = false;
+                            memSpace = rulesets.seedRuleMemSpace;
+                        }
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
                             this.cycleCounter, this.numRounds, memSpace);
+                        if (rulesets.seedRuleMemSpace != null) {
+                            entity.breedMethod = "SeedRule";
+                        }
                     }
                     // Update breed method tallies
                     switch (entity.breedMethod) {
@@ -291,6 +345,9 @@ class MainControl {
                         case "Self-breed" :
                             ++this.selfBreedCount;
                             break;
+                        case "SeedRule" :
+                            ++this.seedRuleBreedCount;
+                            break;
                         default:
                             ++this.randomCount;
                             break;
@@ -307,6 +364,11 @@ class MainControl {
                         bestSetLowScore = bestEntitySet[this.bestEntitySet.length - 1].score;
                     }
                     let memObj = entity.execute(bestSetHighScore, bestSetLowScore);
+                    // Check whether a rule set threshold was reached
+                    if (rulesets.seedRuleSet) {
+                        this.ruleSequenceNum = rulesets.ruleSequenceNum;
+                        rulesets.seedRuleSet = false;
+                    }
                     // Add to current set
                     currentEntitySet = this.addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, entity.score);
                     ++this.entityNumber;
@@ -324,10 +386,11 @@ class MainControl {
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, this.randomCount, 
+        bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
+            this.ruleSequenceNum, this.randomCount, 
             this.monoclonalInsCount, this.monoclonalByteCount,
             this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-            this.selfBreedCount, this.crossSetCount, 
+            this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
             this.cycleCounter, this.numRounds);
         return bestEntitySet;
     }
@@ -485,6 +548,14 @@ class MainControl {
         this.bestSetNum = 0;
         this.bestSets = new Array(this.numBestSets).fill([]);
         const insSet = new InstructionSet();
+
+        // Get rule/seed details
+        rulesets.ruleSequenceNum = session.rule_sequence_num;
+        this.ruleSequenceNum = session.rule_sequence_num;
+        rulesets.seedRuleMemSpace = null;
+        if (session.seed_rule_mem_space != null) {
+            rulesets.seedRuleMemSpace = this.stringToIntArray(session.seed_rule_mem_space);
+        }
 
         // Insert the new entities
         for (let e of entities) {

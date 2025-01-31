@@ -111,67 +111,161 @@
           <h2 class="text-center sectionHead">Entity Description</h2>
           <div class="row">
             <div class="col-sm-2">
-              <p class="entityPara"><span>Best Set Num: </span><span id="bestSetNum"></span></p>
+              <p class="entityPara">Best Set Num: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Best Set Entity Num: </span><span id="bestSetEntityNum"></span></p>
+              <p class="entityPara" id="bestSetNum"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Entity Id: </span><span id="entityId"></span></p>
+              <p class="entityPara">Best Set Entity Num: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Creation Cycle: </span><span id="creationCycle"></span></p>
+              <p class="entityPara" id="bestSetEntityNum"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Number of Trials: </span><span id="numTrials"></span></p>
+              <p class="entityPara">Entity Id: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Current Cycle: </span><span id="currentCycle"></span></p>
+              <p class="entityPara" id="entityId"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Creation Cycle: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Number of Rounds: </span><span id="numRounds"></span></p>
+              <p class="entityPara" id="creationCycle"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Total Score: </span><span id="mainTotalScore"></span></p>
+              <p class="entityPara">Number of Trials: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Current Max Score: </span><span id="currentMaxScore"></span></p>
+              <p class="entityPara" id="numTrials"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Max Score: </span><span id="maxScore"></span></p>
+              <p class="entityPara">Current Cycle: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Elapsed Time: </span><span id="elapsedTime"></span></p>
+              <p class="entityPara" id="currentCycle"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Number of Rounds: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Breed Method: </span><span id="breedMethod"></span></p>
+              <p class="entityPara" id="numRounds"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Random Breeds: </span><span id="randomCount"></span></p>
+              <p class="entityPara">Rule Sequence Num: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Monoclonal Ins Breeds: </span><span id="monoclonalInsCount"></span></p>
+              <p class="entityPara" id="ruleSequenceNum"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Monoclonal Byte Breeds: </span><span id="monoclonalByteCount"></span></p>
+              <p class="entityPara">Elapsed Time: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Interbreed Breeds: </span><span id="interbreedCount"></span></p>
+              <p class="entityPara" id="elapsedTime"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Total Score: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Interbreed2 Breeds: </span><span id="interbreed2Count"></span></p>
+              <p class="entityPara" id="mainTotalScore"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>InterbreedFlagged Breeds: </span><span id="interbreedFlaggedCount"></span></p>
+              <p class="entityPara">Current Max Score: </p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Self Breeds: </span><span id="selfBreedCount"></span></p>
+              <p class="entityPara" id="currentMaxScore"></p>
             </div>
             <div class="col-sm-2">
-              <p class="entityPara"><span>Cross-set Breeds: </span><span id="crossSetCount"></span></p>
+              <p class="entityPara">Max Score: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="maxScore"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Breed Method: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="breedMethod"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Random Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="randomCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Monoclonal Ins Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="monoclonalInsCount"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Monoclonal Byte Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="monoclonalByteCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Interbreed Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="interbreedCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Interbreed2 Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="interbreed2Count"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">InterbreedFlagged Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="interbreedFlaggedCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Self Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="selfBreedCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Seed Rule Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="seedRuleBreedCount"></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2">
+              <p class="entityPara">Cross-set Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="crossSetCount"></p>
             </div>
           </div>
         </div>
+
         <div class="row">
           <div class="col">
             <p>Registers -  

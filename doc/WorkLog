@@ -4,13 +4,33 @@ Contents
     Jobs Done
 
 Jobs Due
-    Rationalise the byte scores for hits and near hits
-        Consider an optimum (hit) of 5 with a test value of 1
-        If we subtract 1 from 5 we get the result 4 (0 is the optimum)
-        If we have a test value of 7 we get the result -2 from which 
-        we can take the absolute (2)
-        We can therefore use ABS(opt - value) as our returned score
-        for consistency.
+    Do one rule at a time, replacing the rule by the next,
+    using the previous result as the seed for the next.
+        Madify the ruleset getScore to use only retained and the current rule
+
+        * Save the initialMemSpace and ruleNum of the threshold entity in rulesets
+        
+        * Set flag to indicate that the threshold has been reached
+
+        In the main loop check for threshold reached, 
+        when the threshold is reached, clear down all best sets.
+
+        * In the main loop save operation, include the ruleset ruleSequenceNum, and seedRuleMemSpace
+
+        * When calling the new entity in the process loop, use the flag to 
+        indicate using the threshold entity memSpace.
+
+        * In the general load operation, include the ruleSequenceNum and seedRuleMemSpace
+
+        * Include seedRuleBreedCount on display
+
+        * Include ruleSequenceNum on display
+
+        Update byte rule score, allowing for thresholds and retained rules
+
+    * Rationalise the byte scores for hits and near hits
+        chose 0 for hit, 255 for miss since relative
+        scoring leads to a cheat.
 
     * Remove insert lower score into tables
     

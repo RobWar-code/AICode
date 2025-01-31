@@ -748,9 +748,11 @@ class Entity {
         return {pointer: p, block: insBlock};
     }
 
-    display(mainWindow, bestSetNum, elapsedTime, numTrials, randomCount, monoclonalInsCount, 
+    display(mainWindow, bestSetNum, elapsedTime, numTrials, ruleSequenceNum,
+        randomCount, monoclonalInsCount, 
         monoclonalByteCount, interbreedCount, 
-        interbreed2Count, interbreedFlaggedCount, selfBreedCount, crossSetCount, currentCycle, numRounds) {
+        interbreed2Count, interbreedFlaggedCount, selfBreedCount, seedRuleBreedCount,
+        crossSetCount, currentCycle, numRounds) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -784,6 +786,7 @@ class Entity {
         displayData.creationTime = this.birthDateTime;
         displayData.breedMethod = this.breedMethod;
         displayData.score = Math.floor(this.score * 10000)/10000;
+        displayData.ruleSequenceNum = ruleSequenceNum;
         displayData.currentMaxScore = rulesets.currentMaxScore;
         displayData.maxScore = rulesets.maxScore;
         displayData.elapsedTime = Math.floor(elapsedTime * 10000)/10000;
@@ -794,6 +797,7 @@ class Entity {
         displayData.interbreed2Count = interbreed2Count;
         displayData.interbreedFlaggedCount = interbreedFlaggedCount;
         displayData.selfBreedCount = selfBreedCount;
+        displayData.seedRuleBreedCount = seedRuleBreedCount;
         displayData.crossSetCount = crossSetCount;
         displayData.scoreList = this.scoreList;
 

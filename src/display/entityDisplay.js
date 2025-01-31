@@ -20,6 +20,7 @@ const entityDisplay = {
             document.getElementById("creationCycle").innerText = data.birthCycle;
             document.getElementById("numTrials").innerText = data.numTrials;
             document.getElementById("mainTotalScore").innerText = data.score;
+            document.getElementById("ruleSequenceNum").innerText = data.ruleSequenceNum;
             document.getElementById("currentMaxScore").innerText = data.currentMaxScore;
             document.getElementById("maxScore").innerText = data.maxScore;
             document.getElementById("elapsedTime").innerText = data.elapsedTime;
@@ -31,6 +32,7 @@ const entityDisplay = {
             document.getElementById("interbreed2Count").innerText = data.interbreed2Count;
             document.getElementById("interbreedFlaggedCount").innerText = data.interbreedFlaggedCount;
             document.getElementById("selfBreedCount").innerText = data.selfBreedCount;
+            document.getElementById("seedRuleBreedCount").innerText = data.seedRuleBreedCount;
             document.getElementById("crossSetCount").innerText = data.crossSetCount;
         }
 

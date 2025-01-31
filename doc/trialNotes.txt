@@ -18,6 +18,36 @@ In order to try to overcome this, we can reduce the threshold
 for the second rule to 0.8, rather than 0.9, to allow for more
 diverse solutions.
 
+With the threshold set to 0.8 the second rule began at 7 rounds.
+Allowing for the threshold of resistance to change being set
+to 1.01, we may see an improvement in progress on rule 2. But
+whether this is at the expense of the quality of solutions in
+rule 1 we shall see. After 57 rounds the highest score was
+still only 26, so there must be some probabilistic obstacle
+to further progress. After 85 rounds, the situation was the same.
+
+Restart the trial with both rules from the start, to see how much 
+difference that makes in about 40 or 50 rounds. At 34 rounds the
+scores reached 24 points, so dealing with two rules is at least
+exponentially slower than dealing with one, this makes sense when
+we consider the additional combinations of instructions required.
+
+If we save the successful result of the first trial and then restart
+to do the second, then this should in theory take the same amount of
+time as the first. Would such saved solutions be useful and how could
+they be made further use of, assuming we were aiming at an escalator
+of capabilities?
+
+Let us adapt the program so that when it completes a problem, it saves
+the solution, then leaves that problem to begin another, using the
+foregoing as the seed. Would this be better than starting from scratch
+or worse? It is worth a trial. Because the seed will effectively score
+zero on the new problem, how do we introduce it?
+
+We can use the seed program rather than random code in the breeding
+stage of each entity program, but still retain the other breeding
+methods (monoclonalByte etc.).  
+
 
 28/01/2025
 

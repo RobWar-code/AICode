@@ -9,6 +9,8 @@ async function createTables() {
         console.log("createTables: problem with connection")
     }
 
+    // await clearTables(connection);
+
     let sql = "DROP TABLE session";
     await connection.query(sql);
 
@@ -17,7 +19,9 @@ async function createTables() {
     sql += "cycle_counter INT,";
     sql += "num_rounds INT,"
     sql += "elapsed_time INT,";
-    sql += "entity_number INT";
+    sql += "entity_number INT,";
+    sql += "rule_sequence_num INT,";
+    sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
 
@@ -42,4 +46,14 @@ async function createTables() {
     await connection.query(sql);
 
     connection.end();
+}
+
+async function clearTables(connection) {
+
+    sql = "DELETE FROM entity";
+    await connection.query(sql);
+
+    sql = "DELETE FROM session";
+    await connection.query(sql);
+
 }

@@ -3,7 +3,7 @@ const path = require('node:path');
 const dbConn = require(path.join(__dirname, 'dbConn.js'));
 
 const dbTransactions = {
-    async saveSession(mainWindow, program) {
+    async saveSession(mainWindow, program, ruleSequenceNum, seedRuleMemSpace) {
 
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
@@ -13,11 +13,18 @@ const dbTransactions = {
         const timeNow = Date.now();
         const elapsedTime = (timeNow - program.startTime) + program.previousElapsedTime;
         let sessionId = null;
+        let seedRuleMemSpaceStr = null;
+        if (seedRuleMemSpace != null) {
+            seedRuleMemSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
+        }
 
         // Insert the program session details
         try {
-            let sql = "INSERT INTO session (cycle_counter, num_rounds, elapsed_time, entity_number) VALUES (?, ?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, elapsedTime, program.entityNumber]);
+            let sql = "INSERT INTO session (cycle_counter, num_rounds, elapsed_time, ";
+            sql +=  "entity_number, rule_sequence_num, seed_rule_mem_space) "; 
+            sql += "VALUES (?, ?, ?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, 
+                elapsedTime, program.entityNumber, ruleSequenceNum, seedRuleMemSpaceStr]);
             console.log ("session saved");
             sessionId = results.insertId;
         }
