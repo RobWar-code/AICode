@@ -20,8 +20,7 @@ async function createTables() {
     sql += "num_rounds INT,"
     sql += "elapsed_time INT,";
     sql += "entity_number INT,";
-    sql += "rule_sequence_num INT,";
-    sql += "seed_rule_mem_space VARCHAR(256)";
+    sql += "rule_sequence_num INT";
     sql += ")";
     await connection.query(sql);
 
@@ -42,6 +41,16 @@ async function createTables() {
     sql += "initial_params_1 VARCHAR(256),";
     sql += "initial_params_2 VARCHAR(256),";
     sql += "initial_mem_space VARCHAR(256)";
+    sql += ")";
+    await connection.query(sql);
+
+    // sql = "DROP TABLE seed_rule";
+    // await connection.query(sql);
+
+    sql = "CREATE TABLE seed_rule (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "rule_sequence_num INT,";
+    sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
 

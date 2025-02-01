@@ -184,7 +184,7 @@ ipcMain.on("insertSeed", (event, seedSetNum) => {
 });
 
 ipcMain.on("saveSession", () => {
-  dbTransactions.saveSession(mainWindow, program, rulesets.ruleSequenceNum, rulesets.seedRuleMemSpace);
+  dbTransactions.saveSession(mainWindow, program, rulesets.ruleSequenceNum);
 });
 
 ipcMain.on("loadSession", () => {

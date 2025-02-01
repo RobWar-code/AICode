@@ -1,3 +1,18 @@
+31/01/2025
+
+Established the selection of only one rule at a time using
+the result of one completion as the seed for the next.
+
+Trial on windows computer switched to the second rule after
+14 rounds. The second rule had still not been solved after
+80 rounds.
+
+Since the rules are operated one by one, it may well be 
+better to use the same output addresses for each rule, as
+this would potentially save a few instruction modifications
+on the entities.
+
+
 29/01/2025
 After 180 rounds, the main computer scored about 28 points
 out of a possible 34, with a few hits on the second rule.

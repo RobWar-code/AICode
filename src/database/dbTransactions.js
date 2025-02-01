@@ -3,7 +3,7 @@ const path = require('node:path');
 const dbConn = require(path.join(__dirname, 'dbConn.js'));
 
 const dbTransactions = {
-    async saveSession(mainWindow, program, ruleSequenceNum, seedRuleMemSpace) {
+    async saveSession(mainWindow, program, ruleSequenceNum) {
 
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
@@ -13,18 +13,14 @@ const dbTransactions = {
         const timeNow = Date.now();
         const elapsedTime = (timeNow - program.startTime) + program.previousElapsedTime;
         let sessionId = null;
-        let seedRuleMemSpaceStr = null;
-        if (seedRuleMemSpace != null) {
-            seedRuleMemSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
-        }
 
         // Insert the program session details
         try {
             let sql = "INSERT INTO session (cycle_counter, num_rounds, elapsed_time, ";
-            sql +=  "entity_number, rule_sequence_num, seed_rule_mem_space) "; 
-            sql += "VALUES (?, ?, ?, ?, ?, ?)";
+            sql +=  "entity_number, rule_sequence_num) "; 
+            sql += "VALUES (?, ?, ?, ?, ?)";
             const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, 
-                elapsedTime, program.entityNumber, ruleSequenceNum, seedRuleMemSpaceStr]);
+                elapsedTime, program.entityNumber, ruleSequenceNum]);
             console.log ("session saved");
             sessionId = results.insertId;
         }
@@ -164,11 +160,44 @@ const dbTransactions = {
             console.error('Error retrieving most recent record:', err.message);
             throw err;
         }
+
+        // Get seed rule memspace
+        let seedRules;
+        try {
+            [seedRules] = await dbConnection.execute(
+                `SELECT * FROM seed_rule`
+            );
+        }
+        catch (error) {
+            console.error("Could not read from seed_rule table.", error.message);
+        }
         await dbConnection.end();
 
-        program.loadRestart(sessions[0], entities);
+        program.loadRestart(sessions[0], entities, seedRules);
 
         mainWindow.webContents.send("loadDone", 0);
+    },
+
+    async saveSeedRule(ruleSequenceNum, seedRuleMemSpace) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        // Delete any existing record for this rule sequence number
+        sql = `DELETE FROM seed_rule WHERE rule_sequence_num = ${ruleSequenceNum}`;
+        await dbConnection.query(sql);
+
+        let memSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
+        try {
+            sql = "INSERT INTO seed_rule (rule_sequence_num, seed_rule_mem_space) VALUES (?, ?)";
+            const [results] = await dbConnection.execute(sql, [ruleSequenceNum, memSpaceStr]);
+        }
+        catch (error) {
+            console.error("Failed to insert seed_rule", error.message);
+            throw error;
+        }
     }
 
 }

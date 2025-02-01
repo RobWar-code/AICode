@@ -20,8 +20,9 @@ const rulesets = {
     ignoreRounds: true,
     bestEntity: null,
     ruleSequenceNum: 0,
+    maxRuleSequenceNum: 0,
     seedRuleNum: 9,
-    seedRuleMemSpace: null,
+    seedRuleMemSpaces: [],
     seedRuleSet: false,
 
     initialise() {
@@ -86,7 +87,7 @@ const rulesets = {
         let scoreItem8 = {rule: "Values Out From Initial Params (0:8, 8:15)", ruleNum: 8, skip: true,
             score: 0, max: 4, 
             startRoundNum: 800,
-            outBlockStart: 8, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem8);
         this.ruleFunction.push(this.valuesOutFromInitialParams);
@@ -95,7 +96,7 @@ const rulesets = {
         let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip:false, sequenceNum: 0,
             retain: false, score: 0, max: 4,
             startRoundNum: 0,
-            outBlockStart: 16, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem9);
         this.ruleFunction.push(this.valuesOutMatchInitialParams);
@@ -103,7 +104,7 @@ const rulesets = {
 
         let scoreItem10 = {rule: "Values Out Different (24:31)", ruleNum: 10, skip:true,
             score: 0, max: 1, startRoundNum: 800,
-            outBlockStart: 24, outBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8
         };
         this.scoreList.push(scoreItem10);
         this.ruleFunction.push(this.valuesOutDifferent);
@@ -111,7 +112,7 @@ const rulesets = {
 
         let scoreItem11 = {rule: "Values Out Series (32:39)", ruleNum: 11, skip: true,
             score: 0, max: 1, startRoundNum: 800,
-            outBlockStart: 32, outBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8
         };
         this.scoreList.push(scoreItem11);
         this.ruleFunction.push(this.valuesOutSeries);
@@ -119,7 +120,7 @@ const rulesets = {
 
         let scoreItem12 = {rule: "Params Plus Three (0:7, 40:47)", ruleNum: 12, skip: false, sequenceNum: 1,
             retain: false, score: 0, max: 4, startRoundNum: 28, 
-            outBlockStart: 40, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem12);
         this.ruleFunction.push(this.paramsPlusThree);
@@ -127,7 +128,7 @@ const rulesets = {
 
         let scoreItem13 = {rule: "Params Minus Three (0:7, 48:55)", ruleNum: 13, skip: false, sequenceNum: 2,
             retain: false, score: 0, max: 4, startRoundNum: 56,
-            outBlockStart: 48, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem13);
         this.ruleFunction.push(this.paramsMinusThree);
@@ -135,7 +136,7 @@ const rulesets = {
 
         let scoreItem14 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 14, skip: false, sequenceNum: 3,
             retain: false, score: 0, max: 4, startRoundNum: 84,
-            outBlockStart: 56, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
         };
         this.scoreList.push(scoreItem14);
         this.ruleFunction.push(this.paramsTimesTwo)
@@ -143,7 +144,7 @@ const rulesets = {
 
         let scoreItem15 = {rule: "Multiply Initial Params By Each Other (0:9, 64:68)", ruleNum: 15, 
             retain: false, skip: false, sequenceNum: 4, score: 0, max: 4, startRoundNum: 800, 
-            outBlockStart: 64, outBlockLen:5, 
+            outBlockStart: 0, outBlockLen:5, 
             inBlockStart: 0, inBlockLen: 10
         };
         this.scoreList.push(scoreItem15);
@@ -152,7 +153,7 @@ const rulesets = {
 
         let scoreItem16 = {rule: "Divide Block of Inputs(1:6, 10:16, 72:77)", ruleNum: 16, 
             retain: false, skip: false, sequenceNum: 5, score: 0, max: 4, startRoundNum: 800, 
-            outBlockStart: 72, outBlockLen:6, inBlockStart: 1, 
+            outBlockStart: 0, outBlockLen:6, inBlockStart: 1, 
             inBlockLen: 6, inBlockStart2: 10 
         };
         this.scoreList.push(scoreItem16);
@@ -161,7 +162,7 @@ const rulesets = {
 
         let scoreItem17 = {rule: "Use op to Convert Params (16:111, 80:111)", ruleNum:17,
             retain: false, skip: false, sequenceNum: 6, score: 0, max: 16, startRoundNum: 800, 
-            outBlockStart: 80, outBlockLen: 32,
+            outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 16, inBlockLen: 96
         };
         this.scoreList.push(scoreItem17);
@@ -170,7 +171,7 @@ const rulesets = {
 
         let scoreItem18 = {rule: "Convert ASCII Numbers (112:146, 112:127)", ruleNum: 18,
             retain: false, skip: false, sequenceNum: 7, score: 0, max: 8, startRoundNum: 800,
-            outBlockStart: 112, outBlockLen: 16,
+            outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 112, inBlockLen: 38
         };
         this.scoreList.push(scoreItem18);
@@ -184,10 +185,15 @@ const rulesets = {
         this.byteFunction.push(null);
 
         let maxScore = 0;
+        let maxSequenceNum = 0;
         for (let scoreItem of this.scoreList) {
             maxScore += scoreItem.max;
+            if (scoreItem.sequenceNum > maxSequenceNum) {
+                maxSequenceNum = scoreItem.sequenceNum;
+            }
         }
         this.maxScore = maxScore * 2 - this.scoreList[this.diffScore].max;
+        this.maxRuleSequenceNum = maxSequenceNum;
 
     },
 
@@ -1096,13 +1102,14 @@ const rulesets = {
 
     seedRuleUpdate(bestEntity) {
         console.log("Got to seedRuleUpdate", bestEntity.score, this.currentMaxScore);
-        if (bestEntity.score >= this.currentMaxScore * (18/20) && this.ruleSequenceNum < this.scoreList.length) {
+        if (bestEntity.score >= this.currentMaxScore * (17.5/20) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             console.log("Doing seedRuleUpdate");
             // Save the seed entity from the current rule
-            this.seedRuleMemSpace = bestEntity.initialMemSpace.concat();
-            console.log("seedRuleMemSpace", this.seedRuleMemSpace.length);
+            this.seedRuleMemSpaces.push(bestEntity.initialMemSpace.concat());
+            console.log("seedRuleMemSpace", this.seedRuleMemSpaces.length);
             this.seedRuleSet = true;
             ++this.ruleSequenceNum;
+            dbTransactions.saveSeedRule(this.ruleSequenceNum, bestEntity.initialMemSpace.concat());
             // Get the new current rule number
             for (let rule of this.scoreList) {
                 if (!rule.skip) {

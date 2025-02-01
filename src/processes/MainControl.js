@@ -56,7 +56,7 @@ class MainControl {
             this.bestSetNum = 0;
             this.saveBestScore();
             ++this.numRounds;
-            await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum, rulesets.seedRuleMemSpace);
+            await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
             // Check for rule threshold reached
             thresholdReached = this.checkRuleThreshold();
         }
@@ -256,26 +256,36 @@ class MainControl {
                 let currentEntitySet = [];
                 for (let j = 0; j < maxBreedActions; j++) {
                     // Create new entity
+                    let breedMode = "reproduction";
                     let asRandom = true; 
+                    let seeded = false;
                     let memSpace = null;
                     let entity = null;
                     let gotCrossMate = false;
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    let randomBreed = false;
-                    if (rulesets.seedRuleMemSpace != null && bestEntitySet.length >= 1) {
-                        randomBreed = false;
+                    if (rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0) {
+                        breedMode = "seedRule";
                     }
                     else if (bestEntitySet.length < this.bestEntitySetMax) {
-                        randomBreed = true;
+                        breedMode = "random";
                     }
                     else {
                         if (this.cycleCounter < this.bestEntitySetFullCycle[bestSetNum] + 20 && Math.random() < 0.5) {
-                            randomBreed = true;
+                            breedMode = "random";
                         }
                     }
-                    if (!randomBreed) {
+
+                    if (breedMode === "seedRule") {
+                        let r = Math.floor(Math.random() * rulesets.seedRuleMemSpaces.length);
+                        memSpace = rulesets.seedRuleMemSpaces[r];
+                        asRandom = false;
+                        entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
+                            this.cycleCounter, this.numRounds, memSpace);
+                        entity.breedMethod = "SeedRule";
+                    }
+                    else if (breedMode === "reproduction") {
                         // Set-up for a breed operation 
                         // select the parent entities
                         let p1 = Math.floor(Math.random() * bestEntitySet.length);
@@ -312,15 +322,8 @@ class MainControl {
                         let seeded = false;
                         // Seeding on first pass.
                         // if (cycle === 0 && i === 0 && j === 0) seeded = true;
-                        if (rulesets.seedRuleMemSpace != null) {
-                            asRandom = false;
-                            memSpace = rulesets.seedRuleMemSpace;
-                        }
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
                             this.cycleCounter, this.numRounds, memSpace);
-                        if (rulesets.seedRuleMemSpace != null) {
-                            entity.breedMethod = "SeedRule";
-                        }
                     }
                     // Update breed method tallies
                     switch (entity.breedMethod) {
@@ -538,7 +541,7 @@ class MainControl {
      * @param {*} session -session database record
      * @param {*} entities - entity database records
      */
-    loadRestart(session, entities) {
+    loadRestart(session, entities, seedRules) {
         // Set session details
         this.cycleCounter = session.cycle_counter;
         this.numRounds = session.num_rounds;
@@ -577,6 +580,14 @@ class MainControl {
             this.bestSets[bestSetNum] = set;
         }
         console.log("Entities Loaded");
+
+        // Load the seed rules
+        rulesets.seedRuleMemSpaces = [];
+        for (let item of seedRules) {
+            let memStr = item.seed_rule_mem_space;
+            let memArray = this.stringToIntArray(memStr);
+            rulesets.seedRuleMemSpaces.push(memArray);
+        }
     }
 
     stringToIntArray(str) {
