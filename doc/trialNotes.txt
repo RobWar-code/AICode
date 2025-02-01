@@ -1,3 +1,17 @@
+01/02/2025
+
+When the output address was set to start at 0 for each rule
+results were much more rapid, although rule 3 (multiply params
+by 2) had not been solved after 100 rounds.
+
+Changed the input block for multiply params by 2, to 0. rule solved
+by round 5.
+
+Now the system sticks at rule sequence 4 (multiply parameters
+by each other) - since this is a complex loop, it would be better
+to include an intermediate rule such as add parameters to
+each other, or subtract parameters from each other or both.
+
 31/01/2025
 
 Established the selection of only one rule at a time using
@@ -5,7 +19,7 @@ the result of one completion as the seed for the next.
 
 Trial on windows computer switched to the second rule after
 14 rounds. The second rule had still not been solved after
-80 rounds.
+150 rounds.
 
 Since the rules are operated one by one, it may well be 
 better to use the same output addresses for each rule, as

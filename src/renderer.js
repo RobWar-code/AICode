@@ -49,6 +49,10 @@ ipcRenderer.on("seedDisplayResults", (event, data) => {
     seedDisplay.displaySeedResults(data);
 });
 
+ipcRenderer.on("seedRuleSelectorActivate", (event, listLength) => {
+    seedDisplay.displaySeedRuleSelector(listLength);
+});
+
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "SAVE DONE";
@@ -74,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
     const insertSeedForm = document.getElementById('insertSeedForm');
+    const loadSeedRuleButton = document.getElementById('loadSeedRuleButton');
+    const seedRuleSelectorForm = document.getElementById('seedRuleSelectorForm');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const testMonoclonalButton = document.getElementById('testMonoclonalButton');
@@ -168,6 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         ipcRenderer.send("insertSeed", seedSetNum);
+    });
+
+    loadSeedRuleButton.addEventListener('click', (event) => {
+        ipcRenderer.send("seedRuleListRequest", 0);
+    });
+
+    seedRuleSelectorForm.addEventListener('click', (event) => {
+        event.preventDefault();
+        let seedRuleNum = document.getElementById('seedRuleSelector').value;
+        ipcRenderer.send("loadAndExecuteSeedRule", seedRuleNum);
     });
 
     saveButton.addEventListener('click', (event) => {

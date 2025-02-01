@@ -434,6 +434,25 @@ class MainControl {
         return seedDisplayData;
     }
 
+    loadAndExecuteSeedRule(seedRuleNum) {
+        let insSet = new InstructionSet();
+        // Fetch the seed rule program
+        let memSpace = rulesets.seedRuleMemSpaces[seedRuleNum];
+        let asRandom = false;
+        let seeded = false;
+        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
+            this.numRounds, memSpace, this.mainWindow);
+        this.seedEntity = entity;
+        let memObj = entity.execute(0, 0);
+        // Get the display details
+        let seedProgram = {};
+        seedProgram.name = "Sequence Num: " + seedRuleNum;
+        let seedRuleDescription = rulesets.getDescriptionFromSequence(seedRuleNum);
+        seedProgram.description = seedRuleDescription; 
+        let seedDisplayData = entity.getSeedDisplayData(seedProgram);
+        return seedDisplayData;
+    }
+
     insertSeed(seedSetNum) {
         if (seedSetNum < 0 || this.numBestSets <= seedSetNum) return;
         this.seedEntity.breedMethod = "Seeded";

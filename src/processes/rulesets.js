@@ -136,7 +136,7 @@ const rulesets = {
 
         let scoreItem14 = {rule: "Params Times Two (0:7, 56:63)", ruleNum: 14, skip: false, sequenceNum: 3,
             retain: false, score: 0, max: 4, startRoundNum: 84,
-            outBlockStart: 0, outBlockLen: 8, inBlockStart: 4, inBlockLen: 8
+            outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem14);
         this.ruleFunction.push(this.paramsTimesTwo)
@@ -1102,7 +1102,7 @@ const rulesets = {
 
     seedRuleUpdate(bestEntity) {
         console.log("Got to seedRuleUpdate", bestEntity.score, this.currentMaxScore);
-        if (bestEntity.score >= this.currentMaxScore * (17.5/20) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
+        if (bestEntity.score >= this.currentMaxScore * (19/20) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             console.log("Doing seedRuleUpdate");
             // Save the seed entity from the current rule
             this.seedRuleMemSpaces.push(bestEntity.initialMemSpace.concat());
@@ -1124,6 +1124,18 @@ const rulesets = {
         else {
             this.seedRuleSet = false;
         }
+    },
+
+    getDescriptionFromSequence(sequenceNum) {
+        let found = false;
+        let rule = "";
+        for (let item of this.scoreList) {
+            if (item.sequenceNum === sequenceNum && item.retain === false) {
+                found = true;
+                rule = item.rule;
+            }
+        }
+        return rule;
     }
 }
 

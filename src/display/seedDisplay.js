@@ -50,8 +50,22 @@ const seedDisplay = {
             document.getElementById("loadButton").style.display = "none";
 
         }
-    }
+    },
 
+    displaySeedRuleSelector(listLength) {
+        // Build the selection list
+        const selector = document.getElementById("seedRuleSelector");
+        selector.innerHTML = "";
+        for (let count = 0; count < listLength; count++) {
+            const opt = document.createElement('option');
+            opt.value = count;
+            opt.textContent = count;
+            selector.appendChild(opt);
+            ++count;
+        };
+        // Display the seed selector div
+        document.getElementById("seedRuleSelectionDiv").style.display = "block";
+    }
 }
 
 module.exports = seedDisplay; 

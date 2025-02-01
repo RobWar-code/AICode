@@ -93,6 +93,11 @@ li {
     display: none;
 }
 
+/* Seed Rule Selection */
+#seedRuleSelectionDiv {
+    display: none;
+}
+
 /* Score List */
 #scoreListBackground {
     display: none;
@@ -115,6 +120,11 @@ li {
 #scoreOutAddress {
     display: inline-block;
     width: 50px;
+}
+
+#scoreSequenceNum {
+    display: inline-block;
+    width: 60px;
 }
 
 #scoreRule {

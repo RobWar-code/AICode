@@ -9,9 +9,13 @@ Jobs Due
 
     Update the README with the current system definition
 
-    Set the rule output positions to the same for each rule
+    Add the add adjacent params rule
 
-    Allow for load and inspect completed solutions
+    Add the subtract the adjacent params rule
+
+    * Set the rule output positions to the same for each rule
+
+    * Allow for load and inspect completed solutions (seed rules)
 
     * Save the completed solutions.
 

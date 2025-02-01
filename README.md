@@ -88,7 +88,10 @@ The rulesets logic should be general purpose and provide a gradated
 set of challenges.
 
 ### Operating Principles
-The AI code element is a machine instruction based on Z-80 code, with a minimum code set to keep it simple. Here it is the balance between the probability of a single instruction and the selection of several.
+The AI code element is a machine instruction based on Z-80 code, 
+with a minimum code set to keep it simple. Here it is the balance 
+between the probability of a single instruction and the selection 
+of several.
 
 #### Probabilities and Time Issues
 To keep within problem space time restraints, the following methods
@@ -104,10 +107,18 @@ Each rule set scores up to one point, distributions generally follow the
 1 - proportional distance from the optimum. Or just 1 for an absolute
 hit.
 
-The scores for each rule are tallied at the end and calculated as a proportion
-of the number of rules.
+The scores for each rule are multiplied-up as a weighting factor. 
 
 #### Rulesets
+
+##### Operating Process
+
+Apart from couple of booster rules, which encourage output
+the rules are executed in a sequence, with the next rule
+being operated once the previous is solved.
+
+The solution to each rule is saved as the system progresses.
+These solutions are used as random seed to each new rule.
 
 ##### Code Distribution
 The most basic set of tests looks at distribution and frequency 
@@ -326,7 +337,9 @@ And a set of constants such as sizes of code, required
 to set constraints. A unique identity code should be provided
 for each entity generated (memorable/pronunceable).
 
-We can leave out the subroutine library for now, because we are speed trialing initially, but this would basically be a database or array of saved entities in their initial state.
+We can leave out the subroutine library for now, because we are 
+speed trialing initially, but this would basically be a database or 
+array of saved entities in their initial state.
 
 We can use javascript objects to define our rulesets, with their
 own evaluation functions. The top level evaluation object is passed
@@ -337,12 +350,17 @@ an array to be tested sequentially. The final score being maintained
 in the super class. We can think about categorisation of sets of
 rulesets later.
 
-The breeding operations are arranged in classes (we may want variants later) divided into monoclonal and parent classes. The operating functions of these accept an initial entity code/memory block as input and output a derived block. As an aside we note that entities might be permitted to manage their own breeding.
+The breeding operations are arranged in classes (we may want variants later) 
+divided into monoclonal and parent classes. The operating functions of these 
+accept an initial entity code/memory block as input and output a derived 
+block. As an aside we note that entities might be permitted to manage 
+their own breeding.
 
 Breeding operations consist of combining blocks from parents and
 code level insert, delete and replace.
 
-The master control loop is also defined as a class, so that we permit ourselves different environmental settings.
+The master control loop is also defined as a class, so that we permit ourselves 
+different environmental settings.
 
 It should be possible to save the current system state to
 permanent memory for resumption at another time. ie: best
@@ -494,6 +512,13 @@ seed details are inserted as the first entry for that best set and
 normal processing is resumed from that best set number. The display
 is reset to general mode.
 
+##### Seed Rule Programs
+
+As rules are completed, rule by rule, the highest scoring entity that
+reaches the threshold is recorded in the database and in the rulesets
+object. A user interface is provided to allow these programs to be
+selected and viewed using the Seed Program interface.
+
 ## Test Scripts
 
 For isolated function testing the test scripts are in the src/tests folder
@@ -523,11 +548,7 @@ TABLE session
     cycle_counter INT
     elapsed_time INT
     entity_number INT
-
-TABLE session_entity_link
-    id INT
-    session_id INT
-    entity_id INT
+    rule_sequence_num INT
 
 TABLE entity
     id INT
@@ -543,10 +564,18 @@ TABLE entity
     initial_params_2 VARCHAR(256)
     initial_mem_space VARCHAR(256)
 
+TABLE seed_rule
+    id INT UNIQUE PRIMARY KEY
+    rule_sequence_num INT
+    seed_rule_mem_space VARCHAR(256)
+
 The load operation halts processing, loads the most recent (highest save_time) 
 session into memory, clears down the best sets, creates an entity for each database 
 entity loaded and includes the initial params and initial_mem_space for that entity. 
 Inserting each of these entities into their own best set.
+
+The seed rule memory spaces are also loaded and these are inserted into
+empty slots in the best sets as the program runs 
 
 ## Installation Notes
 On Windows, the mysql server program file is found at

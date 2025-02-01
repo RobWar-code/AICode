@@ -16,6 +16,7 @@
           <div id="scoreTitles">
             <span id="scoreStartRound">Start Round</span>
             <span id="scoreOutAddress">Out Address</span>
+            <span id="scoreSequenceNum">Sequence</span>
             <span id="scoreRule">Rule</span>
             <span id="score">Score</span>
             <span id="scoreMax">Max</span>
@@ -67,11 +68,13 @@
           <button class="textButton" id="haltProcessButton">Start Process</button>
           <button class="textButton" id="traceButton">Trace</button>
           <button class="textButton" id="loadSeedButton">Load Seed</button>
+          <button class="textButton" id="loadSeedRuleButton">Load Seed Rule</button>
           <button class="textButton" id="saveButton">Save</button>
           <button class="textButton" id="loadButton">Load</button>
           <button class="textButton" id="testMonoclonalButton">Test Monoclonal</button>
         </div>
       </div>
+
       <!-- Seed Selection -->
       <div class="row" id="seedSelectionDiv">
         <div class="col">
@@ -82,6 +85,18 @@
           </form>
         </div>
       </div>
+
+      <!-- Seed Rule Selection -->
+      <div class="row" id="seedRuleSelectionDiv">
+        <div class="col">
+          <form id="seedRuleSelectorForm">
+            <label for="seedRuleSelector">Select Seed Program: </label>
+            <select id="seedRuleSelector" name="seedRuleSelector"></select>
+            <button type="submit" class="textButton">Submit</button>
+          </form>
+        </div>
+      </div>
+
       <div id="entityDescription">
         <!-- Seed Program Details -->
         <div id="seedDetails">

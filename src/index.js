@@ -183,6 +183,19 @@ ipcMain.on("insertSeed", (event, seedSetNum) => {
   program.insertSeed(seedSetNum);
 });
 
+ipcMain.on("seedRuleListRequest", (event, data) => {
+  let seedRulesLength = rulesets.seedRuleMemSpaces.length;
+  if (seedRulesLength === 0) return;
+  else {
+    mainWindow.webContents.send("seedRuleSelectorActivate", seedRulesLength);
+  }  
+});
+
+ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleNum) => {
+  let seedDisplayData = program.loadAndExecuteSeedRule(seedRuleNum);
+  mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
+});
+
 ipcMain.on("saveSession", () => {
   dbTransactions.saveSession(mainWindow, program, rulesets.ruleSequenceNum);
 });

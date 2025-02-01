@@ -162,13 +162,18 @@ const entityDisplay = {
             if ("outBlockStart" in scoreItem) {
                 outBlockStart = scoreItem.outBlockStart;
             }
+            let sequenceNum = "";
+            if ("sequenceNum" in scoreItem) {
+                sequenceNum = scoreItem.sequenceNum;
+            }
             let score = Math.floor(scoreItem.score * 10000) / 10000;
             html += "<li>";
-            html += `<span class="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
-            html += `<span class="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
-            html += `<span class="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
-            html += `<span class="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
-            html += `<span class="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += `<span id="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
+            html += `<span id="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
+            html += `<span id="scoreListSequenceNum" style="display: inline-block; width: 60px">${sequenceNum}</span>`;
+            html += `<span id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
+            html += `<span id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
+            html += `<span id="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
             html += "</li>";
         }
         html += "</ul>";
