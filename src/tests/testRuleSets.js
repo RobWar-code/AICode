@@ -141,6 +141,54 @@ const testRuleSets = {
         }
     },
 
+    testAddAdjacentParams: function() {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+
+
+        // Test 1
+        console.log("testAddAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [4, 0, 13, 17, 9, 11, 21, 14, 10];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 16;
+        let score = rulesets.addAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx: 0.5; Got: ", score);
+
+    },
+
+    testSubtractAdjacentParams: function() {
+        let ruleNum = 16;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+
+
+        // Test 1
+        console.log("testSubtractAdjacentParams:")
+        // Get the initial params
+        let iniParams = [3,1, 156,100, 8,5, 10,7, 10,11, 16,17, 9,10, 30,40];
+        let valuesOut = [2, 56, 3, 3, 0xFF, 11, 21, 14, 10];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 16;
+        let score = rulesets.subtractAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx: 0.625; Got: ", score);
+
+    },
+
     testConvertASCIINumbers: function() {
         let ruleNum = 18;
         rulesets.initialise();
@@ -356,6 +404,48 @@ const testByteRules = {
 
     },
 
+    addAdjacentParams: function () {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+
+        // Test 1
+        console.log("testByteAddAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [4, 0, 13, 17, 9, 11, 21, 14, 10];
+        let params = [];
+        let address = 2;
+        let value = 13;
+        let score = rulesets.byteAddAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got: ", score);
+        address = 4;
+        value = 9;
+        score = rulesets.byteAddAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got: ", score);
+    },
+
+    subtractAdjacentParams: function () {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+
+        // Test 1
+        console.log("testByteSubtractAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 8,5, 7,10, 21,11, 16,17, 9,10, 30,40];
+        let valuesOut = [4, 0, 3, 17, 9, 11, 21, 14, 10];
+        let params = [];
+        let address = 2;
+        let value = 3;
+        let score = rulesets.byteSubtractAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got: ", score);
+        address = 4;
+        value = 9;
+        score = rulesets.byteSubtractAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got: ", score);
+    },
+
     multiplyParams: function () {
 
         let ruleNum = 12;
@@ -419,7 +509,9 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testConvertASCIINumbers();
+testRuleSets.testAddAdjacentParams();
+testRuleSets.testSubtractAdjacentParams();
+// testRuleSets.testConvertASCIINumbers();
 
 // testByteRules.valuesOutFromInitialParams();
 // testByteRules.valuesOutMatchInitialParams();
@@ -428,5 +520,7 @@ testRuleSets.testConvertASCIINumbers();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
+testByteRules.addAdjacentParams();
+testByteRules.subtractAdjacentParams();
 // testByteRules.multiplyParams();
 // testByteRules.divideParams();
