@@ -141,6 +141,11 @@ li {
     display: inline-block;
 }
 
+#scoreCompletionRound {
+    display: inline-block;
+    width: 60px;
+}
+
 .scoreListRule {
     width: 200px;
 }

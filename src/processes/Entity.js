@@ -752,7 +752,7 @@ class Entity {
         randomCount, monoclonalInsCount, 
         monoclonalByteCount, interbreedCount, 
         interbreed2Count, interbreedFlaggedCount, selfBreedCount, seedRuleBreedCount,
-        crossSetCount, currentCycle, numRounds) {
+        crossSetCount, currentCycle, numRounds, currentRule) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -799,6 +799,7 @@ class Entity {
         displayData.selfBreedCount = selfBreedCount;
         displayData.seedRuleBreedCount = seedRuleBreedCount;
         displayData.crossSetCount = crossSetCount;
+        displayData.currentRule = currentRule;
         displayData.scoreList = this.scoreList;
 
         mainWindow.webContents.send('displayEntity', displayData);

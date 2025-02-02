@@ -1,3 +1,15 @@
+02/02/2025
+
+Added the rules addAdjacentParams and subtractAdjacentParams
+to try to ease the passage to multiplyParamsByEachOther.
+
+Currently the rate of progress is about one rule every 20
+rounds. Although after a couple of trials, we find that there
+is substantial variation in the amount of time taken to reach rule
+4 (addAdjacentParams).
+
+At rule 4, the system gets stuck
+
 01/02/2025
 
 When the output address was set to start at 0 for each rule
@@ -5,7 +17,7 @@ results were much more rapid, although rule 3 (multiply params
 by 2) had not been solved after 100 rounds.
 
 Changed the input block for multiply params by 2, to 0. rule solved
-by round 5.
+by round 5, using lower threshold.
 
 Now the system sticks at rule sequence 4 (multiply parameters
 by each other) - since this is a complex loop, it would be better

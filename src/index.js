@@ -144,11 +144,13 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   // Get the actual entity num
   let entity = program.bestSets[bestSetNum][bestSetEntityNum];
   let elapsedTime = program.elapsedTime / (3600 * 1000);
+  let currentRule = rulesets.getDescriptionFromSequence(rulesets.ruleSequenceNum);
   entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, 
     program.ruleSequenceNum, program.randomCount, 
     program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
     program.interbreed2Count, program.interbreedFlaggedCount, program.selfBreedCount, 
-    program.seedRuleBreedCount, program.crossSetCount, program.cycleCounter, program.numRounds);
+    program.seedRuleBreedCount, program.crossSetCount, program.cycleCounter, program.numRounds,
+    currentRule);
 });
 
 ipcMain.on("activateMainProcess", () => {

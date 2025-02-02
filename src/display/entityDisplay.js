@@ -34,8 +34,8 @@ const entityDisplay = {
             document.getElementById("selfBreedCount").innerText = data.selfBreedCount;
             document.getElementById("seedRuleBreedCount").innerText = data.seedRuleBreedCount;
             document.getElementById("crossSetCount").innerText = data.crossSetCount;
+            document.getElementById("currentRule").innerText = data.currentRule;
         }
-
     },
 
     displayEntityRegisters(data) {
@@ -166,6 +166,12 @@ const entityDisplay = {
             if ("sequenceNum" in scoreItem) {
                 sequenceNum = scoreItem.sequenceNum;
             }
+            let completionRound = "";
+            if ("completionRound" in scoreItem) {
+                if (scoreItem.completionRound > -1) {
+                    completionRound = scoreItem.completionRound;
+                }
+            }
             let score = Math.floor(scoreItem.score * 10000) / 10000;
             html += "<li>";
             html += `<span id="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
@@ -174,6 +180,7 @@ const entityDisplay = {
             html += `<span id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
             html += `<span id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
             html += `<span id="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += `<span id="scoreListCompletionRound style="display: inline-block; width: 60px">${completionRound}</span>`;
             html += "</li>";
         }
         html += "</ul>";

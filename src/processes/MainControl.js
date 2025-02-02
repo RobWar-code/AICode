@@ -104,7 +104,7 @@ class MainControl {
 
         // Check whether the score threshold has been reached
         let entity = this.bestSets[scoreList[0].index][0];
-        rulesets.seedRuleUpdate(entity);
+        rulesets.seedRuleUpdate(entity, this.numRounds);
         if (rulesets.seedRuleSet) {
             console.log("Clearing best sets");
             // Clear down all best sets to use only the seed rule
@@ -265,7 +265,7 @@ class MainControl {
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    if (rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0) {
+                    if (rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0 && Math.random() < 0.5) {
                         breedMode = "seedRule";
                     }
                     else if (bestEntitySet.length < this.bestEntitySetMax) {
@@ -389,12 +389,13 @@ class MainControl {
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
+        let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
             this.ruleSequenceNum, this.randomCount, 
             this.monoclonalInsCount, this.monoclonalByteCount,
             this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
             this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-            this.cycleCounter, this.numRounds);
+            this.cycleCounter, this.numRounds, currentRule);
         return bestEntitySet;
     }
 
