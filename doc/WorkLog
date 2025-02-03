@@ -9,9 +9,13 @@ Jobs Due
 
     Update the README with the current system definition
 
-    Add the add adjacent params rule
+    Add the skip adjacent params rule
 
-    Add the subtract the adjacent params rule
+    Add the swap adjacent params rule
+
+    * Add the add adjacent params rule
+
+    * Add the subtract the adjacent params rule
 
     * Set the rule output positions to the same for each rule
 

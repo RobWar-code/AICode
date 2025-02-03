@@ -2,6 +2,9 @@ const InstructionSet = require('../processes/InstructionSet');
 const rulesets = require('../processes/rulesets.js');
 const Entity = require('../processes/Entity.js');
 
+// Check the rule numbers before running the tests, as these are subject to on-going
+// updates
+
 const testRuleSets = {
     instructionSet: new InstructionSet(),
 
@@ -139,6 +142,43 @@ const testRuleSets = {
             instructionSet.compileTestCode(testScript, memSpace);
             return memSpace;
         }
+    },
+
+    testSkipAdjacentParams: function() {
+        rulesets.initialise();
+
+        console.log("testSkipAdjacentParams");
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [3, 156, 8, 10, 9, 11, 21, 14];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 8;
+        let score = rulesets.skipAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx: 0.5; Got:", score);
+    },
+
+    testSwapAdjacentParams: function() {
+        rulesets.initialise();
+
+        console.log("testSwapAdjacentParams");
+        let iniParams = [1,3, 100,156, 5,8, 7,10];
+        let valuesOut = [3,1, 156,100, 8,5, 12,15];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 8;
+        let score = rulesets.swapAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx: 0.75; Got:", score);
+
     },
 
     testAddAdjacentParams: function() {
@@ -404,6 +444,45 @@ const testByteRules = {
 
     },
 
+    skipAdjacentParams: function() {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        console.log("testByteSkipAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [3, 156, 13, 17, 9, 11, 21, 14];
+        let params = [];
+        let address = 1;
+        let value = 156;
+        let score = rulesets.byteSkipAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got: ", score);
+        address = 4;
+        value = 9;
+        score = rulesets.byteSkipAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got: ", score);
+
+    },
+
+    swapAdjacentParams: function() {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        console.log("testByteSwapAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 5,8, 7,10];
+        let valuesOut = [3,1, 156,100, 9,7, 11,12];
+        let params = [];
+        let address = 2;
+        let value = 156;
+        let score = rulesets.byteSwapAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got: ", score);
+        address = 4;
+        value = 9;
+        score = rulesets.byteSwapAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got: ", score);
+    },
+
     addAdjacentParams: function () {
         let ruleNum = 15;
         rulesets.initialise();
@@ -509,8 +588,10 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testAddAdjacentParams();
-testRuleSets.testSubtractAdjacentParams();
+testRuleSets.testSkipAdjacentParams();
+testRuleSets.testSwapAdjacentParams();
+// testRuleSets.testAddAdjacentParams();
+// testRuleSets.testSubtractAdjacentParams();
 // testRuleSets.testConvertASCIINumbers();
 
 // testByteRules.valuesOutFromInitialParams();
@@ -520,7 +601,9 @@ testRuleSets.testSubtractAdjacentParams();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
-testByteRules.addAdjacentParams();
-testByteRules.subtractAdjacentParams();
+testByteRules.skipAdjacentParams();
+testByteRules.swapAdjacentParams();
+// testByteRules.addAdjacentParams();
+// testByteRules.subtractAdjacentParams();
 // testByteRules.multiplyParams();
 // testByteRules.divideParams();

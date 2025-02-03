@@ -8,7 +8,9 @@ rounds. Although after a couple of trials, we find that there
 is substantial variation in the amount of time taken to reach rule
 4 (addAdjacentParams).
 
-At rule 4, the system gets stuck
+At rule 4, the system gets stuck, so this still requires an
+intermediate step. Consider swapping around the adjacent 
+parameters, which involves fewer instructions.
 
 01/02/2025
 
