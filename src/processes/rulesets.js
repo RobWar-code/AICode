@@ -908,7 +908,7 @@ const rulesets = {
         let inBlockStart = rule.inBlockStart;
         let offset = address - outBlockStart;
         let required = initialParams[inBlockStart + (offset * 2 + 1)];
-        let score = this.doByteScore(required, value);
+        let score = self.doByteScore(required, value);
         return score;
     },
 
@@ -945,7 +945,7 @@ const rulesets = {
         let osc = (offset + 1) % 2;
         if (osc === 0) osc = -1;
         let required = initialParams[inBlockStart + (offset + osc)];
-        let score = this.doByteScore(required, value);
+        let score = self.doByteScore(required, value);
         return score;
     },
 
