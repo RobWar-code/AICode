@@ -1,3 +1,23 @@
+04/02/2025
+The main system had not completed rule sequence num 4 (skip
+adjacent params) by 160 rounds.
+
+The windows system had not completed rule 6 by 340 rounds -
+this rule has yet to be completed.
+
+03/02/2025
+
+Got to rule 6 (addAjacentParams) after 125 rounds, completing
+the skipAdjacentParams and swapAdjacentParams rules. The question
+is whether the completion of these two rules adds to the speed
+of completing rule 6.
+
+Note that the completion time of rules is quite variable from run to
+run.
+
+On the trial run, the system reached rule 4 (skipAdjacentParams) in just
+26 rounds, showing just how wide the variance in time taken is.
+ 
 02/02/2025
 
 Added the rules addAdjacentParams and subtractAdjacentParams

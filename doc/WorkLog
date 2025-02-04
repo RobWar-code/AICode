@@ -9,9 +9,13 @@ Jobs Due
 
     Update the README with the current system definition
 
-    Add the skip adjacent params rule
+    Check through code sequences to establish stepwise rules
 
-    Add the swap adjacent params rule
+    Add skip adjacent param 1 rule (first byte)
+
+    * Add the skip adjacent params rule
+
+    * Add the swap adjacent params rule
 
     * Add the add adjacent params rule
 

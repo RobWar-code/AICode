@@ -179,8 +179,8 @@ const entityDisplay = {
             html += `<span id="scoreListSequenceNum" style="display: inline-block; width: 60px">${sequenceNum}</span>`;
             html += `<span id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
             html += `<span id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
-            html += `<span id="scoreListMax style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
-            html += `<span id="scoreListCompletionRound style="display: inline-block; width: 60px">${completionRound}</span>`;
+            html += `<span id="scoreListMax" style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += `<span id="scoreListCompletionRound" style="display: inline-block; width: 60px">${completionRound}</span>`;
             html += "</li>";
         }
         html += "</ul>";
