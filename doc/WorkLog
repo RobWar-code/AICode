@@ -11,7 +11,7 @@ Jobs Due
 
     Check through code sequences to establish stepwise rules
 
-    Add interbreedInsMerge breed method
+    * Add interbreedInsMerge breed method
 
     Add duplicate input params rule
 

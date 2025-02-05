@@ -144,6 +144,28 @@ const testRuleSets = {
         }
     },
 
+    testDuplicateParams: function () {
+        let initialParams = [7,6,8,9,11,12,72,73];
+        let valuesOut = [7,7,6,6,8,9,11,12];
+        let dataParams = {};
+        dataParams.initialParams = initialParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 4;
+
+        console.log("testDuplicateParams:");
+        let score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
+        console.log("Expect Approx 0.5; Got: ", score);
+        valuesOut = [7,7,6,6,8,8,9,9];
+        dataParams.valuesOut = valuesOut;
+        score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
+        console.log("Expect 1; Got: ", score);
+
+    },
+
     testSkipAdjacentParams: function() {
         rulesets.initialise();
 
@@ -444,8 +466,26 @@ const testByteRules = {
 
     },
 
-    skipAdjacentParams: function() {
+    duplicateParams: function () {
         let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [1, 1, 3, 3, 17, 9, 11, 21, 14];
+        let params = [];
+        let address = 3;
+        let value = 3;
+        console.log("testByteDuplicateParams:");
+        let score = rulesets.byteDuplicateParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got:", score);
+        address = 4;
+        value = 17;
+        score = rulesets.byteDuplicateParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got:", score);
+    },
+
+    skipAdjacentParams: function() {
+        let ruleNum = 17;
         rulesets.initialise();
         let rule = rulesets.scoreList[ruleNum];
         console.log("testByteSkipAdjacentParams:")
@@ -455,11 +495,11 @@ const testByteRules = {
         let params = [];
         let address = 1;
         let value = 156;
-        let score = rulesets.byteSkipAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        let score = rulesets.byteSkipAdjacentParams2(rulesets, rule, value, address, iniParams, params, valuesOut);
         console.log("Expect: 0; Got: ", score);
         address = 4;
         value = 9;
-        score = rulesets.byteSkipAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        score = rulesets.byteSkipAdjacentParams2(rulesets, rule, value, address, iniParams, params, valuesOut);
         console.log("Expect: 255; Got: ", score);
 
     },
@@ -588,8 +628,9 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testSkipAdjacentParams();
-testRuleSets.testSwapAdjacentParams();
+testRuleSets.testDuplicateParams();
+// testRuleSets.testSkipAdjacentParams();
+// testRuleSets.testSwapAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
 // testRuleSets.testConvertASCIINumbers();
@@ -601,8 +642,9 @@ testRuleSets.testSwapAdjacentParams();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
-testByteRules.skipAdjacentParams();
-testByteRules.swapAdjacentParams();
+testByteRules.duplicateParams();
+// testByteRules.skipAdjacentParams();
+// testByteRules.swapAdjacentParams();
 // testByteRules.addAdjacentParams();
 // testByteRules.subtractAdjacentParams();
 // testByteRules.multiplyParams();
