@@ -148,7 +148,8 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, 
     program.ruleSequenceNum, program.randomCount, 
     program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
-    program.interbreed2Count, program.interbreedFlaggedCount, program.selfBreedCount, 
+    program.interbreed2Count, program.interbreedFlaggedCount, 
+    program.interbreedInsMergeCount, program.selfBreedCount, 
     program.seedRuleBreedCount, program.crossSetCount, program.cycleCounter, program.numRounds,
     currentRule);
 });

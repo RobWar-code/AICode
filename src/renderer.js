@@ -178,6 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadSeedRuleButton.addEventListener('click', (event) => {
         ipcRenderer.send("seedRuleListRequest", 0);
+        // Halt the on-going processing
+        document.getElementById("haltProcessButton").innerText = "Restart";
+        clearTimeout(processTimeout);
+        processingCancelled = true;
     });
 
     seedRuleSelectorForm.addEventListener('click', (event) => {

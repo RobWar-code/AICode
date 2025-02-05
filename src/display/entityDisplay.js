@@ -196,6 +196,8 @@ const entityDisplay = {
         // Hide the seed divs
         document.getElementById("seedSelectionDiv").style.display = "none";
         document.getElementById("seedDetails").style.display = "none";
+        // Hide the seed rule divs
+        document.getElementById("seedRuleSelectionDiv").style.display = "none";
         // Re-display the option buttons
         document.getElementById("scoreHistoryButton").style.display = "inline";
         document.getElementById("loadSeedButton").style.display = "inline";

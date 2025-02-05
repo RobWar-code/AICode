@@ -35,6 +35,7 @@ class MainControl {
         this.interbreedCount = 0;
         this.interbreed2Count = 0;
         this.interbreedFlaggedCount = 0;
+        this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
         this.seedRuleBreedCount = 0;
         this.randomCount = 0;
@@ -292,7 +293,7 @@ class MainControl {
                         let p1Entity = bestEntitySet[p1];
                         let p2Entity;
                         // Check for a mate from an alternative set
-                        if (Math.random() < 0.003) {
+                        if (Math.random() < 0.005) {
                             let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
                             let b = bestSetNum + r;
                             if (this.bestSets[b].length != 0) {
@@ -345,6 +346,9 @@ class MainControl {
                             ++this.interbreedFlaggedCount;
                             if (gotCrossMate) ++this.crossSetCount;
                             break;
+                        case "InterbreedInsMerge" :
+                            ++this.interbreedInsMergeCount;
+                            if (gotCrossMate) ++this.crossSetCount;
                         case "Self-breed" :
                             ++this.selfBreedCount;
                             break;
@@ -394,6 +398,7 @@ class MainControl {
             this.ruleSequenceNum, this.randomCount, 
             this.monoclonalInsCount, this.monoclonalByteCount,
             this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+            this.interbreedInsMergeCount,
             this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
             this.cycleCounter, this.numRounds, currentRule);
         return bestEntitySet;
@@ -448,8 +453,8 @@ class MainControl {
         // Get the display details
         let seedProgram = {};
         seedProgram.name = "Sequence Num: " + seedRuleNum;
-        let seedRuleDescription = rulesets.getDescriptionFromSequence(seedRuleNum);
-        seedProgram.description = seedRuleDescription; 
+        let seedRuleDescription = rulesets.getDescriptionFromSequence(parseInt(seedRuleNum));
+        seedProgram.description = seedRuleDescription;
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
         return seedDisplayData;
     }

@@ -11,7 +11,27 @@ Jobs Due
 
     Check through code sequences to establish stepwise rules
 
-    Add skip adjacent param 1 rule (first byte)
+    Add interbreedInsMerge breed method
+
+    Add duplicate input params rule
+
+    Add add first param to params rule
+
+    * Add duplicate instruction/byte to monoclonal breeding
+
+    * Add transpose instruction/byte to monoclonal breeding
+
+    * Clear seed selector when processing resumed
+
+    * Halt the process when seed rule option selected
+
+    * Fix Display of Rule Description in seed program display
+
+    * Fix seed program selector
+
+    Tidy-up rule descriptions
+
+    * Add skip adjacent param 1 rule (first byte)
 
     * Add the skip adjacent params rule
 

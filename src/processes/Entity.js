@@ -339,19 +339,25 @@ class Entity {
             }
         }
         else {
-            if (Math.random() < 0.25) {
+            let interbreedChance = Math.random();
+            if (interbreedChance < 0.2) {
                 newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed";
                 if (crossSet) this.crossSetBreed = true;
             }
-            else if (Math.random() < 0.5) {
+            else if (interbreedChance < 0.4) {
                 newEntity = this.interbreed2(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed2";
                 if (crossSet) this.crossSetBreed = true;
             }
-            else if (Math.random() < 0.75) {
+            else if (interbreedChance < 0.6) {
                 newEntity = this.interbreedFlagged(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "InterbreedFlagged";
+                if (crossSet) this.crossSetBreed = true;
+            }
+            else if (interbreedChance < 0.9) {
+                newEntity = this.interbreedInsMerge(mateEntity, entityNumber, cycleCounter, roundNum);
+                newEntity.breedMethod = "InterbreedInsMerged";
                 if (crossSet) this.crossSetBreed = true;
             }
             else {
@@ -390,10 +396,15 @@ class Entity {
             codeHitChance = 0.3;
         }
 
+        const duplicateChance = 0.1;
+        const transposeChance = 0.15;
         const replaceChance = 0.5;
         const insertChance = 0.75;
         const deleteChance = 1.0;
         let newCodeSegment = [];
+        let oldInsLen = 0;
+        let oldCodeItem = [];
+        let lastNoChange = false;
         for (let i = 0; i < this.initialMemSpace.length; i++) {
             let oldi = i;
             // Get instruction
@@ -414,6 +425,7 @@ class Entity {
                 }
             }
             i += insItem.insLen - 1;
+            let insLen = insItem.insLen;
 
             if (Math.random() < codeHitChance) {
                 // Create a random instruction
@@ -426,7 +438,29 @@ class Entity {
                 }
 
                 let hitType = Math.random();
-                if (hitType < replaceChance) {
+                if (hitType <= duplicateChance) {
+                    // Add the current instruction twice
+                    let full = false;
+                    for (let i = 0; i < 2; i++) {
+                        for (let j = 0; j < codeItem.length; j++) {
+                            newCodeSegment.push(codeItem[j]);
+                            if (newCodeSegment.length >= this.memLength) {
+                                full = true;
+                                break;
+                            }
+                        }
+                        if (full) break;
+                    }
+                }
+                else if (hitType < transposeChance && newCodeSegment.length > 0 && 
+                    lastNoChange && (newCodeSegment.length + oldInsLen + insLen) <= this.memLength) {
+                    // Clear the last instruction
+                    let len = newCodeSegment.length;
+                    newCodeSegment = newCodeSegment.slice(0, len - oldInsLen);
+                    newCodeSegment = newCodeSegment.concat(codeItem);
+                    newCodeSegment = newCodeSegment.concat(oldCodeItem);
+                }
+                else if (hitType < replaceChance) {
                     for (let j = 0; j < codeItem2.length; j++) {
                         newCodeSegment.push(codeItem2[j]);
                         if (newCodeSegment.length >= this.memLength) {
@@ -447,6 +481,7 @@ class Entity {
                 else {
                     // Delete - exclude the instruction
                 }
+                lastNoChange = false;
             }
             else {
                 // Insert the old instruction
@@ -455,8 +490,11 @@ class Entity {
                     if (newCodeSegment.length >= this.memLength) {
                         break;
                     }
-                }            
+                }
+                lastNoChange = true;            
             }
+            oldInsLen = insLen;
+            oldCodeItem = codeItem.concat();
             if (newCodeSegment.length >= this.memLength) break;
         }
         if (newCodeSegment.length < this.memLength) {
@@ -484,12 +522,25 @@ class Entity {
             // Determine whether change occurs
             if (Math.random() < changeChance) {
                 let c = Math.random();
-                if (c < 0.4) {
+                if (c < 0.1) {
+                    // Duplicate
+                    newCode.push(v);
+                    if (newCode.length < this.memLength) {
+                        newCode.push(v);
+                    }
+                }
+                else if (c < 0.15 && newCode.length > 0 && newCode.length + 2 <= this.memLength) {
+                    // Transpose
+                    let oldV = newCode.pop();
+                    newCode.push(v);
+                    newCode.push(oldV);
+                }
+                else if (c < 0.5) {
                     // Replace
                     let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
                     newCode.push(n);
                 }
-                else if (c < 0.65) {
+                else if (c < 0.75) {
                     // Insert
                     let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
                     newCode.push(n);
@@ -727,6 +778,76 @@ class Entity {
             }
         }
         return {block: block, length: c, nextPointer: p};
+    }
+
+    interbreedInsMerge(mate, entityNumber, cycleCounter, roundNum) {
+        let newCode = [];
+        let srcCode = [];
+        srcCode.push(this.initialMemSpace);
+        srcCode.push(mate.initialMemSpace);
+        let p = [];
+        p.push(0);
+        p.push(0);
+        let done = false;
+        while (!done) {
+            // Choose the parent
+            let source = 0;
+            if (Math.random() < 0.5) {
+                source = 1;
+            }
+            if (p[source] >= srcCode[source].length) {
+                source = (source + 1) % 2;
+            }
+            let otherSource = (source + 1) % 2;
+            // Decide whether insert or swap
+            let insert = false;
+            if (Math.random() < 0.25) {
+                insert = true;
+            }
+            let insObj = this.getInsBlock(this.memLength, srcCode[source], p[source]);
+            // Insert the code block
+            let insBlock = insObj.block;
+            for (let i = 0; i < insBlock.length; i++) {
+                newCode.push(insBlock[i]);
+                if (newCode.length >= this.memLength) {
+                    done = true;
+                    break;
+                }
+            }
+            p[source] += insBlock.length;
+
+            // If this is a swap, increment the other pointer
+            if (!insert && p[otherSource] < srcCode[otherSource].length) {
+                let ins = srcCode[p[otherSource]];
+                let insItem = this.instructionSet.getInsDetails(ins);
+                p[otherSource] += insItem.insLen;
+            }
+
+            // Check for limits
+            if ((p[source] >= srcCode[source].length && p[otherSource] >= srcCode[otherSource].length) ||
+                newCode.length >= this.memLength) {
+                    done = true;
+                    break;
+            }
+        }
+
+        // Check whether the length is correct
+        if (newCode.length < this.memLength) {
+            let d = this.memLength - newCode.length;
+            for (let i = 0; i < d; i++) {
+                newCode.push(Math.floor(Math.random() * (this.dataMaxValue + 1)));
+            }
+        }
+        else if (newCode.length > this.memLength) {
+            newCode = newCode.slice(0, this.memLength);
+        }
+
+        // Create the new entity
+        let asRandom = false;
+        let seeded = false;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCode);
+        return newEntity;
+        
     }
 
     getInsBlock(insBlockLen, memSpace, pointer) {

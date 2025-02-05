@@ -1,3 +1,29 @@
+05/02/2025
+
+Introduced duplicate and transpose mutations to monoclonal
+breeds.
+
+The following were obtained on an overnight run:
+
+Rule      | Rule                                 | Round
+Sequence  |                                      |
+0         | outputMatchesInitialParams           | 1
+1         | paramsPlusThree                      | 5
+2         | paramsMinusThree                     | 18
+3         | paramsTimesTwo                       | 20
+4         | skipAdjacentParams1                  | 27
+5         | skipAdjacentParams2                  | 104
+6         | swapAdjacentParams                   | 107
+7         | addAdjacentParams - not completed    | >149
+
+Suggested changes:
+Add the following Rules:
+    duplicateParams
+    paramsPlusFirstParam
+
+Include an interbreedInsMerge breed method to favour combinations
+of proven code.                 
+
 04/02/2025
 The main system had not completed rule sequence num 4 (skip
 adjacent params) by 160 rounds.

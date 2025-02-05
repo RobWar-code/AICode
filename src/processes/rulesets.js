@@ -1364,6 +1364,7 @@ const rulesets = {
             if (item.sequenceNum === sequenceNum && item.retain === false) {
                 found = true;
                 rule = item.rule;
+                break;
             }
         }
         return rule;

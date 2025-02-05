@@ -61,7 +61,6 @@ const seedDisplay = {
             opt.value = count;
             opt.textContent = count;
             selector.appendChild(opt);
-            ++count;
         };
         // Display the seed selector div
         document.getElementById("seedRuleSelectionDiv").style.display = "block";
