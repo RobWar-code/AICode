@@ -357,7 +357,7 @@ class Entity {
             }
             else if (interbreedChance < 0.9) {
                 newEntity = this.interbreedInsMerge(mateEntity, entityNumber, cycleCounter, roundNum);
-                newEntity.breedMethod = "InterbreedInsMerged";
+                newEntity.breedMethod = "InterbreedInsMerge";
                 if (crossSet) this.crossSetBreed = true;
             }
             else {
@@ -818,7 +818,7 @@ class Entity {
 
             // If this is a swap, increment the other pointer
             if (!insert && p[otherSource] < srcCode[otherSource].length) {
-                let ins = srcCode[p[otherSource]];
+                let ins = srcCode[otherSource][p[otherSource]];
                 let insItem = this.instructionSet.getInsDetails(ins);
                 p[otherSource] += insItem.insLen;
             }
@@ -872,7 +872,8 @@ class Entity {
     display(mainWindow, bestSetNum, elapsedTime, numTrials, ruleSequenceNum,
         randomCount, monoclonalInsCount, 
         monoclonalByteCount, interbreedCount, 
-        interbreed2Count, interbreedFlaggedCount, selfBreedCount, seedRuleBreedCount,
+        interbreed2Count, interbreedFlaggedCount, 
+        interbreedInsMergeCount, selfBreedCount, seedRuleBreedCount,
         crossSetCount, currentCycle, numRounds, currentRule) {
         let displayData = {};
         // Code, parameters and memory output
@@ -917,6 +918,7 @@ class Entity {
         displayData.interbreedCount = interbreedCount;
         displayData.interbreed2Count = interbreed2Count;
         displayData.interbreedFlaggedCount = interbreedFlaggedCount;
+        displayData.interbreedInsMergeCount = interbreedInsMergeCount;
         displayData.selfBreedCount = selfBreedCount;
         displayData.seedRuleBreedCount = seedRuleBreedCount;
         displayData.crossSetCount = crossSetCount;
