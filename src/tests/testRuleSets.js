@@ -144,6 +144,27 @@ const testRuleSets = {
         }
     },
 
+    testAddFirstParam: function() {
+        let initialParams = [5,6,7,9,10,15,18,23];
+        let valuesOut = [10,11,12,14,10,15,18,23];
+        let dataParams = {};
+        dataParams.initialParams = initialParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 8;
+
+        console.log("testAddFirstParam:");
+        let score = rulesets.addFirstParam(rulesets, dataParams, ruleParams);
+        console.log("Expect approx 0.5; Got: ", score);
+        valuesOut = [10,11,12,14,15,20,18,23];
+        dataParams.valuesOut = valuesOut;
+        score = rulesets.addFirstParam(rulesets, dataParams, ruleParams);
+        console.log("Expect approx 0.75; Got: ", score);
+    },
+
     testDuplicateParams: function () {
         let initialParams = [7,6,8,9,11,12,72,73];
         let valuesOut = [7,7,6,6,8,9,11,12];
@@ -158,7 +179,7 @@ const testRuleSets = {
 
         console.log("testDuplicateParams:");
         let score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
-        console.log("Expect Approx 0.5; Got: ", score);
+        console.log("Expect Approx 0.6; Got: ", score);
         valuesOut = [7,7,6,6,8,8,9,9];
         dataParams.valuesOut = valuesOut;
         score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
@@ -466,6 +487,25 @@ const testByteRules = {
 
     },
 
+    addFirstParam: function () {
+        let ruleNum = 15;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        let iniParams = [1, 3, 100, 156, 5, 8, 7, 10];
+        let valuesOut = [2, 4, 101, 157, 17, 9, 11, 21];
+        let params = [];
+        let address = 2;
+        let value = 101;
+        console.log("testByteAddFirstParam:");
+        let score = rulesets.byteAddFirstParam(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got:", score);
+        address = 4;
+        value = 17;
+        score = rulesets.byteAddFirstParam(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got:", score);
+
+    },
+
     duplicateParams: function () {
         let ruleNum = 15;
         rulesets.initialise();
@@ -628,7 +668,8 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testDuplicateParams();
+testRuleSets.testAddFirstParam();
+// testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
@@ -642,7 +683,8 @@ testRuleSets.testDuplicateParams();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
-testByteRules.duplicateParams();
+testByteRules.addFirstParam();
+// testByteRules.duplicateParams();
 // testByteRules.skipAdjacentParams();
 // testByteRules.swapAdjacentParams();
 // testByteRules.addAdjacentParams();
