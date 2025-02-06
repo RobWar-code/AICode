@@ -224,12 +224,26 @@ const testRuleSets = {
 
     },
 
-    testAddAdjacentParams: function() {
-        let ruleNum = 15;
+    testSortAdjacentParams: function() {
         rulesets.initialise();
-        let rule = rulesets.scoreList[ruleNum];
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [3,1, 156,100, 17,9, 11,21];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 8;
+        console.log("testSortAdjacentParams: ")
+        let score = rulesets.sortAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx: 0.5; Got: ", score);
 
+    },
 
+    testAddAdjacentParams: function() {
+        rulesets.initialise();
         // Test 1
         console.log("testAddAdjacentParams:")
         // Get the initial params
@@ -563,6 +577,26 @@ const testByteRules = {
         console.log("Expect: 255; Got: ", score);
     },
 
+    sortAdjacentParams: function() {
+        let ruleNum = 21;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        console.log("testByteSwapAdjacentParams:")
+        // Get the initial params
+        let iniParams = [1,3, 100,156, 5,8, 7,10];
+        let valuesOut = [3,1, 156,100, 9,7, 11,12];
+        let params = [];
+        let address = 2;
+        let value = 156;
+        let score = rulesets.byteSortAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got: ", score);
+        address = 4;
+        value = 9;
+        score = rulesets.byteSortAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got: ", score);
+
+    },
+
     addAdjacentParams: function () {
         let ruleNum = 15;
         rulesets.initialise();
@@ -668,10 +702,11 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testAddFirstParam();
+// testRuleSets.testAddFirstParam();
 // testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
+testRuleSets.testSortAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
 // testRuleSets.testConvertASCIINumbers();
@@ -683,10 +718,11 @@ testRuleSets.testAddFirstParam();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
-testByteRules.addFirstParam();
+// testByteRules.addFirstParam();
 // testByteRules.duplicateParams();
 // testByteRules.skipAdjacentParams();
 // testByteRules.swapAdjacentParams();
+testByteRules.sortAdjacentParams();
 // testByteRules.addAdjacentParams();
 // testByteRules.subtractAdjacentParams();
 // testByteRules.multiplyParams();

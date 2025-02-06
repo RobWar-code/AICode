@@ -1,3 +1,25 @@
+06/02/2025
+
+Having added rules add first param and duplicate params
+ 
+Overnight Run
+
+Rule      | Rule                                 | Round
+Sequence  |                                      |
+0         | outputMatchesInitialParams           | 1
+1         | paramsPlusThree                      | 10
+2         | paramsMinusThree                     | 12
+3         | paramsTimesTwo                       | 14
+4         | addFirstParam                        | 15
+5         | duplicateParams                      | 19
+6         | skipAdjacentParams1                  | 63
+7         | skipAdjacentParams2                  | 94
+8         | swapAdjacentParams                   | 97
+9         | addAdjacentParams - not completed    | >271
+
+Added the rule addSecondParam to see if this would accelerate
+the completion of rule 9.
+
 05/02/2025
 
 Introduced duplicate and transpose mutations to monoclonal

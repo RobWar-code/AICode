@@ -11,11 +11,15 @@ Jobs Due
 
     Check through code sequences to establish stepwise rules
 
+    Pass ExecutionCycle to the rule getScore method to trigger some rules
+    
     * Add interbreedInsMerge breed method
 
-    Add duplicate input params rule
+    * Add duplicate input params rule
 
-    Add add first param to params rule
+    * Add add first param to params rule
+    
+    Add add second param rule
 
     * Add duplicate instruction/byte to monoclonal breeding
 
