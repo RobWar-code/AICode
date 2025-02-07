@@ -224,6 +224,23 @@ const testRuleSets = {
 
     },
 
+    testGreaterOfAdjacentParams() {
+        rulesets.initialise();
+        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [3, 156, 8, 10, 17, 19, 24, 20];
+        let dataParams = {};
+        dataParams.initialParams = iniParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 16;
+        console.log("testGreaterOfAdjacentParams:");
+        let score = rulesets.greaterOfAdjacentParams(rulesets, dataParams, ruleParams);
+        console.log("Expect approx 0.5; Got: ", score);
+    },
+
     testSortAdjacentParams: function() {
         rulesets.initialise();
         let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
@@ -247,8 +264,8 @@ const testRuleSets = {
         // Test 1
         console.log("testAddAdjacentParams:")
         // Get the initial params
-        let iniParams = [1,3, 100,156, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
-        let valuesOut = [4, 0, 13, 17, 9, 11, 21, 14, 10];
+        let iniParams = [1,3, 100,157, 5,8, 7,10, 11,21, 16,17, 9,10, 30,40];
+        let valuesOut = [4, 0, 13, 17, 32, 11, 21, 14];
         let dataParams = {};
         dataParams.initialParams = iniParams;
         dataParams.valuesOut = valuesOut;
@@ -577,6 +594,24 @@ const testByteRules = {
         console.log("Expect: 255; Got: ", score);
     },
 
+    greaterOfAdjacentParams() {
+        let ruleNum = 21;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        let iniParams = [100,50, 5,200, 7,3, 9,11];
+        let params = [];
+        let valuesOut = [10, 200, 3, 11];
+        let address = 1;
+        let value = 200;
+        console.log("testByteGreaterOfAdjacentParams:");
+        let score = rulesets.byteGreaterOfAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect 0; Got: ", score);
+        address = 2;
+        value = 3; 
+        score = rulesets.byteGreaterOfAdjacentParams(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect 255; Got: ", score);
+    },
+
     sortAdjacentParams: function() {
         let ruleNum = 21;
         rulesets.initialise();
@@ -706,7 +741,8 @@ console.log("Got Here");
 // testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
-testRuleSets.testSortAdjacentParams();
+testRuleSets.testGreaterOfAdjacentParams();
+// testRuleSets.testSortAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
 // testRuleSets.testConvertASCIINumbers();
@@ -722,7 +758,8 @@ testRuleSets.testSortAdjacentParams();
 // testByteRules.duplicateParams();
 // testByteRules.skipAdjacentParams();
 // testByteRules.swapAdjacentParams();
-testByteRules.sortAdjacentParams();
+testByteRules.greaterOfAdjacentParams();
+// testByteRules.sortAdjacentParams();
 // testByteRules.addAdjacentParams();
 // testByteRules.subtractAdjacentParams();
 // testByteRules.multiplyParams();
