@@ -1,3 +1,27 @@
+08/02/2025
+
+Changed the length of the output field data to 16 bytes
+rather than 8. Replaced paramsPlus/MinusThree by 
+paramsPlus/MinusSix to obviate the appearance of
+INC A, INC A, INC A rather than ADD A,B. However we
+note that in today's trial the system used the crafty
+trick of substracting 250.
+
+The addAdjacentParams rule remains problematic so some
+form of intermediate rule is required.
+
+07/02/2025
+
+Having added the rule greaterThanAdjacentParam we find
+that although this rule is completed (after 72 rounds),
+the code produced matches by rescrambling the inputs,
+not by using the CMP or SUB operations. This demonstrates
+a basic weakness in the design. It could be overcome
+by using 16 bytes of output data rather than 8, making
+coincidences of arrangement between the two input datasets
+less likely. This kind of effect could be defined as
+"Right answer, wrong method".
+
 06/02/2025
 
 Having added rules add first param and duplicate params
