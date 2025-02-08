@@ -171,6 +171,33 @@ Contents
     JR 0x8E
 
 <h1>Toward Stepped Rules
+As at 08/02/2025 The following rules have been successfully
+matched:
+0) output matches initial params
+1) params plus six
+2) params minus six
+3) params times two
+4) add first param
+5) add second param
+6) duplicate params
+7) skip adjacent params 1
+8) skip adjacent params 2
+9) swap adjacent params
+10) greater of adjacent params
+11) sort adjacent params
+12) add adjacent params - stuck trying this rule
+
+The idea is that each rule leads to another by the overcoming
+of a probabilistic hurdle, such as adding three instructions.
+Hurdles should not be too high (generally not more than three
+or four instructions).
+
+Part of the problem is that a higher score does not necessarily
+mean greater proximity, in instruction terms, to the required
+result. But it is hard to see, if we avoid foreknowledge, how
+we can avoid this.
+
+
 As at 04/02/2025, the system now issues rules in a predefined
 sequence. The following rules have been successful:
 0) output matches initial params

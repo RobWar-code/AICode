@@ -10,6 +10,21 @@ trick of substracting 250.
 The addAdjacentParams rule remains problematic so some
 form of intermediate rule is required.
 
+Having observed that paramsTimesTwo now takes at least
+70 rounds, it seems necessary to reintroduce paramsPlusThree
+and paramsMinusThree
+
+So the following rules are to be introduced / adapted:
+    paramsPlusN - where N is supplied in the rule
+    paramsMinusN - where N is supplied in the rule
+    paramsTimesN - where N is supplied in the rule
+
+In addition, the instruction set will be modified to
+include the instructions JRNZ and JRNC
+
+Note that in fact paramsTimesTwo lacked the qualifier & 255,
+so these results were invalid.
+
 07/02/2025
 
 Having added the rule greaterThanAdjacentParam we find

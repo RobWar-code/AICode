@@ -11,48 +11,18 @@ Jobs Due
 
     Check through code sequences to establish stepwise rules
 
-    Pass ExecutionCycle to the rule getScore method to trigger some rules
+    Pass ExecutionCycle to the rulesets getScore method to trigger some rules
     
-    * Add interbreedInsMerge breed method
-
-    * Add duplicate input params rule
-
-    * Add add first param to params rule
-    
-    Add add second param rule
-
-    * Add duplicate instruction/byte to monoclonal breeding
-
-    * Add transpose instruction/byte to monoclonal breeding
-
-    * Clear seed selector when processing resumed
-
-    * Halt the process when seed rule option selected
-
-    * Fix Display of Rule Description in seed program display
-
-    * Fix seed program selector
-
     Tidy-up rule descriptions
 
-    * Add skip adjacent param 1 rule (first byte)
+    * Add the rules:
+        * paramsPlusN (n = 3, n = 6)
+        * paramsPlusN (n = 3, n = 6)
+        * paramsTimesN (n = 2, n = 6)
 
-    * Add the skip adjacent params rule
-
-    * Add the swap adjacent params rule
-
-    * Add the add adjacent params rule
-
-    * Add the subtract the adjacent params rule
-
-    * Set the rule output positions to the same for each rule
-
-    * Allow for load and inspect completed solutions (seed rules)
-
-    * Save the completed solutions.
-
-    * When using seed rules, select at random from the set of completed
-    solutions
+    * Add the instructions
+        * JRNZ
+        * JRNC
 
     Include save scorelist for an entity?
 
@@ -79,6 +49,46 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    08/02/2025
+
+    * Add interbreedInsMerge breed method
+
+    * Add duplicate input params rule
+
+    * Add add first param to params rule
+    
+    * Add add second param rule
+
+    * Add duplicate instruction/byte to monoclonal breeding
+
+    * Add transpose instruction/byte to monoclonal breeding
+
+    * Clear seed selector when processing resumed
+
+    * Halt the process when seed rule option selected
+
+    * Fix Display of Rule Description in seed program display
+
+    * Fix seed program selector
+
+    * Add skip adjacent param 1 rule (first byte)
+
+    * Add the skip adjacent params rule
+
+    * Add the swap adjacent params rule
+
+    * Add the add adjacent params rule
+
+    * Add the subtract the adjacent params rule
+
+    * Set the rule output positions to the same for each rule
+
+    * Allow for load and inspect completed solutions (seed rules)
+
+    * Save the completed solutions.
+
+    * When using seed rules, select at random from the set of completed
+    solutions
 
     31/01/25
     
