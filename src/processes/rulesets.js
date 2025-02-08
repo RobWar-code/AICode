@@ -961,7 +961,7 @@ const rulesets = {
         let n = ruleParams.n;
         let count = 0;
         for (let i = 0; i < outBlockLen; i++) {
-            if (valuesOut[outBlockStart + i] === (n * initialParams[inBlockStart + i]) && 255) ++count;
+            if (valuesOut[outBlockStart + i] === ((n * initialParams[inBlockStart + i]) && 255)) ++count;
         }
         let min = 0;
         let max = outBlockLen;
