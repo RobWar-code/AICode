@@ -961,7 +961,8 @@ const rulesets = {
         let n = ruleParams.n;
         let count = 0;
         for (let i = 0; i < outBlockLen; i++) {
-            if (valuesOut[outBlockStart + i] === ((n * initialParams[inBlockStart + i]) && 255)) ++count;
+            let r = (n * initialParams[inBlockStart + i]) & 255;
+            if (valuesOut[outBlockStart + i] === r) ++count;
         }
         let min = 0;
         let max = outBlockLen;
@@ -1575,14 +1576,14 @@ const rulesets = {
         else if (x > 0) {
             if (actual < min || (actual === min && min != opt)) score = 0;
             else {
-                score = (1 - x/(opt - min)) ** 1.01;
+                score = 1 - x/(opt - min);
             }
         }
         else {
             x = Math.abs(x);
             if (actual > max || (actual === max && max != opt)) score = 0;
             else {
-                score = (1 - x/(max - opt)) ** 1.01;
+                score = 1 - x/(max - opt);
             }
         }
         return score;

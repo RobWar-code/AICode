@@ -1,3 +1,31 @@
+09/02/2025
+
+The new rules and instructions were added. The resultant
+times were as follows:
+
+Rule      | Rule                                 | Round
+Sequence  |                                      |
+0         | outputMatchesInitialParams           | 1
+1         | paramsPlusN (3)                      | 5
+2         | paramsPlusN (6)                      | 6
+3         | paramsMinusN (3)                     | 8
+4         | paramsMinusN (6)                     | 12
+5         | paramsTimesN (2)                     | 13
+6         | paramsTimesN (6)                     | 14
+7         | addFirstParam                        | 20
+8         | addSecondParam                       | 28
+9         | duplicateParams                      | 127
+10        | skipAdjacentParams1                  | 175
+11        | skipAdjacentParams2                  | >190
+
+Note the large gap between addSecondParam and duplicate params
+and that this has been performed much more quickly previously.
+We cannot be certain that this is not just a statistical quirk.
+But we can investigate the code. See WorkedExamples.txt.
+
+
+
+
 08/02/2025
 
 Changed the length of the output field data to 16 bytes
