@@ -129,7 +129,7 @@ const rulesets = {
 
         let scoreItem13 = {rule: "Params Plus N (6)", ruleNum: 13, skip: false, sequenceNum: 2,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 28, 
-            n: 3, outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
+            n: 6, outBlockStart: 0, outBlockLen: 8, inBlockStart: 0, inBlockLen: 8
         };
         this.scoreList.push(scoreItem13);
         this.ruleFunction.push(this.paramsPlusN);
