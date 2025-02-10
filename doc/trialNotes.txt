@@ -23,6 +23,13 @@ and that this has been performed much more quickly previously.
 We cannot be certain that this is not just a statistical quirk.
 But we can investigate the code. See WorkedExamples.txt.
 
+Fixed error in paramsTimesN, adjusted scoring by removing exponent
+since we are doing one rule at a time. New trial started.
+
+Suggest changing the number of rounds in a clearance pass to
+10 as standard, rather than letting it grow longer and longer
+as more rounds pass, since we are dealing with longer trials.
+
 
 
 

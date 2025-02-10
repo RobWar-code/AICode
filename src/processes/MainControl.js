@@ -24,7 +24,7 @@ class MainControl {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.restartLap = this.numBestSets * 10;
+        this.clearanceRound = 10;
         this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
@@ -61,9 +61,8 @@ class MainControl {
             // Check for rule threshold reached
             thresholdReached = this.checkRuleThreshold();
         }
-        if (!thresholdReached && this.lapCounter > 0 && this.lapCounter % (this.restartLap + 
-            this.numBestSets * Math.floor(this.lapCounter / (4 * this.restartLap))) === 0) {
-            console.log("Clearance Pass");
+        if (!thresholdReached && this.numRounds > 0 && this.numRounds % this.clearanceRound === 0) {
+            console.log("Clearance Round");
             // Clearance Pass
             this.restartSets();
         }
