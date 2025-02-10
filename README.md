@@ -1,5 +1,22 @@
 # Explorations in Evolutionary Developments
 
+## Set-up And Installation
+Pull the project from RobWar-code/AICode - git pull origin main
+Install node
+Install Electron
+Install mySql
+Install node mySql tools
+
+Create the file dbConn.js in src/database to provide the
+database connection
+
+Create the ai_code database in MySql
+
+Run the node program src/database/createTables.js
+
+On Windows, the mysql server program file is found at
+    "c:\Program Files\MySQL\MySql Server 8.0\bin"
+
 ## Background
 
 This document suggests ideas for further developments derived or based upon the ideas implemented in the XBasic program EvoGraphII01.x
@@ -577,6 +594,3 @@ Inserting each of these entities into their own best set.
 The seed rule memory spaces are also loaded and these are inserted into
 empty slots in the best sets as the program runs 
 
-## Installation Notes
-On Windows, the mysql server program file is found at
-    "c:\Program Files\MySQL\MySql Server 8.0\bin"

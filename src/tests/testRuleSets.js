@@ -144,6 +144,25 @@ const testRuleSets = {
         }
     },
 
+    testParamsGreaterThanN: function () {
+        let initialParams = [5,6,7,9,10,15,18,23];
+        let valuesOut = [1,0,0,0,0,1,1,0];
+        let dataParams = {};
+        dataParams.initialParams = initialParams;
+        dataParams.valuesOut = valuesOut;
+        let ruleParams = {};
+        ruleParams.outBlockStart = 0;
+        ruleParams.outBlockLen = 8;
+        ruleParams.inBlockStart = 0;
+        ruleParams.inBlockLen = 8;
+        ruleParams.n = 12;
+
+        console.log("testParamsGreaterThanN:");
+        let score = rulesets.paramsGreaterThanN(rulesets, dataParams, ruleParams);
+        console.log("Expect:", 6/8, "Got: ", score);
+
+    },
+
     testAddFirstParam: function() {
         let initialParams = [5,6,7,9,10,15,18,23];
         let valuesOut = [10,11,12,14,10,15,18,23];
@@ -518,6 +537,29 @@ const testByteRules = {
 
     },
 
+    paramsGreaterThanN: function () {
+        let ruleNum = 18;
+        rulesets.initialise();
+        let rule = rulesets.scoreList[ruleNum];
+        let iniParams = [1, 3, 100, 156, 5, 8, 7, 10];
+        let valuesOut = [2, 1, 1, 157, 0, 9, 11, 21];
+        let params = [];
+        let address = 2;
+        let value = 1;
+        console.log("testByteParamsGreaterThanN:");
+        let score = rulesets.byteParamsGreaterThanN(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got:", score);
+        address = 1;
+        value = 1;
+        score = rulesets.byteParamsGreaterThanN(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 255; Got:", score);
+        address = 4;
+        value = 0;
+        score = rulesets.byteParamsGreaterThanN(rulesets, rule, value, address, iniParams, params, valuesOut);
+        console.log("Expect: 0; Got:", score);
+
+    },
+
     addFirstParam: function () {
         let ruleNum = 15;
         rulesets.initialise();
@@ -737,11 +779,12 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
+testRuleSets.testParamsGreaterThanN();
 // testRuleSets.testAddFirstParam();
 // testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
-testRuleSets.testGreaterOfAdjacentParams();
+//testRuleSets.testGreaterOfAdjacentParams();
 // testRuleSets.testSortAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
@@ -754,11 +797,12 @@ testRuleSets.testGreaterOfAdjacentParams();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
+testByteRules.paramsGreaterThanN();
 // testByteRules.addFirstParam();
 // testByteRules.duplicateParams();
 // testByteRules.skipAdjacentParams();
 // testByteRules.swapAdjacentParams();
-testByteRules.greaterOfAdjacentParams();
+// testByteRules.greaterOfAdjacentParams();
 // testByteRules.sortAdjacentParams();
 // testByteRules.addAdjacentParams();
 // testByteRules.subtractAdjacentParams();
