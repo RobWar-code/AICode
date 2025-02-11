@@ -145,21 +145,25 @@ const testRuleSets = {
     },
 
     testParamsGreaterThanN: function () {
-        let initialParams = [5,6,7,9,10,15,18,23];
-        let valuesOut = [1,0,0,0,0,1,1,0];
+        let initialParams = [5,6,7,9,10,15,18,23,27,8,4,5,19,10,12,13];
+        let valuesOut =     [1,0,0,0,0 ,1 ,1, 1, 1, 0,0,0,5, 5, 5, 5 ];
         let dataParams = {};
         dataParams.initialParams = initialParams;
         dataParams.valuesOut = valuesOut;
         let ruleParams = {};
         ruleParams.outBlockStart = 0;
-        ruleParams.outBlockLen = 8;
+        ruleParams.outBlockLen = 16;
         ruleParams.inBlockStart = 0;
-        ruleParams.inBlockLen = 8;
+        ruleParams.inBlockLen = 16;
         ruleParams.n = 12;
 
         console.log("testParamsGreaterThanN:");
         let score = rulesets.paramsGreaterThanN(rulesets, dataParams, ruleParams);
-        console.log("Expect:", 6/8, "Got: ", score);
+        console.log("Expect:", 11/16, "Got: ", score);
+        valuesOut =     [255,0,0,0,0 ,0 ,0, 0, 0, 0,0,0,0, 0, 0, 0 ];
+        dataParams.valuesOut = valuesOut;
+        score = rulesets.paramsGreaterThanN(rulesets, dataParams, ruleParams);
+        console.log("Expect:", 9/16, "Got: ", score);
 
     },
 
@@ -186,20 +190,20 @@ const testRuleSets = {
 
     testDuplicateParams: function () {
         let initialParams = [7,6,8,9,11,12,72,73];
-        let valuesOut = [7,7,6,6,8,9,11,12];
+        let valuesOut = [7,7,6,6,8,8,9,9,11,11,12,12,72,72,71,75];
         let dataParams = {};
         dataParams.initialParams = initialParams;
         dataParams.valuesOut = valuesOut;
         let ruleParams = {};
         ruleParams.outBlockStart = 0;
-        ruleParams.outBlockLen = 8;
+        ruleParams.outBlockLen = 16;
         ruleParams.inBlockStart = 0;
-        ruleParams.inBlockLen = 4;
+        ruleParams.inBlockLen = 8;
 
         console.log("testDuplicateParams:");
         let score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
-        console.log("Expect Approx 0.6; Got: ", score);
-        valuesOut = [7,7,6,6,8,8,9,9];
+        console.log("Expect: ", 14/16, "; Got: ", score);
+        valuesOut = [7,7,6,6,8,8,9,9,11,11,12,12,72,72,73,73]
         dataParams.valuesOut = valuesOut;
         score = rulesets.duplicateParams(rulesets, dataParams, ruleParams);
         console.log("Expect 1; Got: ", score);
@@ -784,7 +788,7 @@ testRuleSets.testParamsGreaterThanN();
 // testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
-//testRuleSets.testGreaterOfAdjacentParams();
+// testRuleSets.testGreaterOfAdjacentParams();
 // testRuleSets.testSortAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
@@ -797,7 +801,7 @@ testRuleSets.testParamsGreaterThanN();
 // testByteRules.valuesOutFromParams();
 // testByteRules.paramsPlusThree();
 // testByteRules.paramsTimesTwo();
-testByteRules.paramsGreaterThanN();
+// testByteRules.paramsGreaterThanN();
 // testByteRules.addFirstParam();
 // testByteRules.duplicateParams();
 // testByteRules.skipAdjacentParams();
