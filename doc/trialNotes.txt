@@ -1,3 +1,17 @@
+11/02/2025
+
+It is now clear from the proceedings that time scales
+required to pass each rule are too large using this
+existing technology (laptops). Options are: 
+
+1) To obtain a quad computer and parallelise the main
+processing loop.
+
+2) To rewrite the backend in PHP and use my existing server, using
+parallel threads.
+
+The first solution requires time to obtain the finance.
+
 09/02/2025
 
 The new rules and instructions were added. The resultant

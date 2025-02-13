@@ -1007,7 +1007,7 @@ class Entity {
             this.score += scoreObj.score;
         }
         // Score the difference between the outputs of the passes
-        this.score += rulesets.scoreOutputDiff(this.oldValuesOut);
+        // this.score += rulesets.scoreOutputDiff(this.oldValuesOut);
 
         if (typeof(memObj.A) != "number") memObj.A = 0;
         if (typeof(memObj.B) != "number") memObj.B = 0;

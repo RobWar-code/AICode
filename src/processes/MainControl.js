@@ -61,12 +61,12 @@ class MainControl {
             // Check for rule threshold reached
             thresholdReached = this.checkRuleThreshold();
         }
-        if (!thresholdReached && this.numRounds > 0 && this.numRounds % this.clearanceRound === 0) {
+        ++this.lapCounter;
+        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
             console.log("Clearance Round");
             // Clearance Pass
             this.restartSets();
         }
-        ++this.lapCounter;
     }
 
     saveBestScore() {

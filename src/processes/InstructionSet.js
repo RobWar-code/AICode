@@ -18,7 +18,7 @@ class InstructionSet {
         };
         this.callStack = []; 
         this.farCallStack = [];
-        this.numIns = 58;
+        this.numIns = 56;
         // Notes: Later we need to decide how the return communication with CFAR functions
         // should be performed.
         // multi-byte numbers are most significant byte first
@@ -42,19 +42,19 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 15
+                        code: 19
                     }
                 ]
             },
@@ -82,19 +82,19 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
+                        code: 19
                     }
                 ]
             },
@@ -117,19 +117,19 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
+                        code: 19
                     }
                 ]
             },
@@ -163,30 +163,25 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
+                        code: 19
                     }
                 ]
             },
             {
-                name: "STI (MEM), A",
-                code: 6,
-                insLen: 2
-            },
-            {
                 name: "LDI A, (C)",
-                code: 7,
+                code: 6,
                 insLen: 1,
                 redundantPairs: [
                     {
@@ -203,36 +198,25 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
-                    }
-                ]
-            },
-            {
-                name: "STI (C), A",
-                code: 8,
-                insLen: 1,
-                redundantPairs: [
-                    {
-                        name: "STI (C), A",
-                        code: 8
+                        code: 19
                     }
                 ]
             },
             {
                 name: "LDO A, (MEM)", // Pass the value of A to the output values
-                code: 9,
+                code: 7,
                 insLen: 2,
                 redundantPairs: [
                     {
@@ -249,30 +233,30 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
+                        code: 19
                     }
                 ]
             },
             {
                 name: "STO (MEM), A",
-                code: 10,
+                code: 8,
                 insLen: 2
             },
             {
                 name: "LDO A, (C)",
-                code: 11,
+                code: 9,
                 insLen: 1,
                 redundantPairs: [
                     {
@@ -289,335 +273,335 @@ class InstructionSet {
                     },
                     {
                         name: "LDI A, (C)",
-                        code: 7
+                        code: 6
                     },
                     {
                         name: "LDO A, (MEM)",
-                        code: 9
+                        code: 7
                     },
                     {
                         name: "LDO A, (C)",
-                        code: 11
+                        code: 9
                     },
                     {
                         name: "POP A",
-                        code: 21
+                        code: 19
                     }
                 ]
             },
             {
                 name: "STO (C), A",
-                code: 12,
+                code: 10,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "STO (C), A",
-                        code: 12
+                        code: 10
                     }
                 ]
             },
             {
                 name: "LD B, IMM",
-                code: 13,
+                code: 11,
                 insLen: 2
             },
             {
                 name: "LD B, (MEM)",
-                code: 14,
+                code: 12,
                 insLen: 2
             },
             {
                 name: "ST (MEM), B",
-                code: 15,
+                code: 13,
                 insLen: 2
             },
             {
                 name: "LD C, IMM",
-                code: 16,
+                code: 14,
                 insLen: 2
             },
             {
                 name: "LD C, (MEM)",
-                code: 17,
+                code: 15,
                 insLen: 2
             },
             {
                 name: "ST (MEM), C",
-                code: 18,
+                code: 16,
                 insLen: 2
             },
             {
                 name: "CLR (MEM)",       // Set (MEM) to zero
-                code: 19,
+                code: 17,
                 insLen: 2
             },
             {
                 name: "PUSH A",
-                code: 20,
+                code: 18,
                 insLen: 1
             },
             {
                 name: "POP A",
-                code: 21,
+                code: 19,
                 insLen: 1
             },
             {
                 name: "PUSH B",
-                code: 22,
+                code: 20,
                 insLen: 1
             },
             {
                 name: "POP B",
-                code: 23,
+                code: 21,
                 insLen: 1
             },
             {
                 name: "PUSH C",
-                code: 24,
+                code: 22,
                 insLen: 1
             },
             {
                 name: "POP C",
-                code: 25,
+                code: 23,
                 insLen: 1
             },
             {
                 name: "INC SP",
-                code: 26,
+                code: 24,
                 insLen: 1
             },
             {
                 name: "DEC SP",
-                code: 27,
+                code: 25,
                 insLen: 1
             },
             {
                 name: "SWP A, B",
-                code: 28,
+                code: 26,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "SWP A, B",
-                        code: 28
+                        code: 26
                     }
                 ]
             },
             {
                 name: "SWP B, C",
-                code: 29,
+                code: 27,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "SWP B, C",
-                        code: 29
+                        code: 27
                     }
                 ]
             },
             {
                 name: "SWP A, C",
-                code: 30,
+                code: 28,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "SWP A, C",
-                        code: 30
+                        code: 28
                     }
                 ]
             },
             {
                 name: "LD A, R",
-                code: 31,
+                code: 29,
                 insLen: 1
             },
             {
                 name: "LD A, S",
-                code: 32,
+                code: 30,
                 insLen: 1
             },
             {
                 name: "INC A",
-                code: 33,
+                code: 31,
                 insLen: 1
             },
             {
                 name: "DEC A",
-                code: 34,
+                code: 32,
                 insLen: 1
             },
             {
                 name: "INC B",
-                code: 35,
+                code: 33,
                 insLen: 1
             },
             {
                 name: "DEC B",
-                code: 36,
+                code: 34,
                 insLen: 1
             },
             {
                 name: "INC C",
-                code: 37,
+                code: 35,
                 insLen: 1
             },
             {
                 name: "DEC C",
-                code: 38,
+                code: 36,
                 insLen: 1
             },
             {
                 name: "ADD A, B",        // Sets carry bit if more than 256
-                code: 39,
+                code: 37,
                 insLen: 1
             },
             {
                 name: "SUB A, B",        // Sets carry bit if negative result
-                code: 40,
+                code: 38,
                 insLen: 1
             },
             {
                 name: "AND A, B",
-                code: 41,
+                code: 39,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "AND A, B",
-                        code: 41
+                        code: 39
                     }
                 ]
             },
             {
                 name: "OR A, B",
-                code: 42,
+                code: 40,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "OR A, B",
-                        code: 42
+                        code: 40
                     }
                 ]
             },
             {
                 name: "NOT A",
-                code: 43,
+                code: 41,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "NOT A",
-                        code: 43 
+                        code: 41 
                     }
                 ]
             },
             {       
                 name: "CMP A, B",        // If equal, z flag set; if B > A carry flag set; else flags cleared
-                code: 44,
+                code: 42,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "CMP A, B",
-                        code: 44
+                        code: 42
                     }
                 ]
             },
             {
                 name: "JR", // Unconditional Jump Relative
-                code: 45,
+                code: 43,
                 insLen: 2
             },
             {
                 name: "JRZ",
-                code: 46,
+                code: 44,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRZ",
-                        code: 46
+                        code: 44
                     }
                 ]
             },
             {
                 name: "JRNZ",
-                code: 47,
+                code: 45,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRNZ",
-                        code: 47
+                        code: 45
                     }
                 ]
             },
             {
                 name: "JRLZ",
-                code: 48,
+                code: 46,
                 insLen: 3,
                 redundantPairs: [
                     {
                         name: "JRLZ",
-                        code: 48
+                        code: 46
                     }
                 ]
             },
             {
                 name: "JRC",
-                code: 49,
+                code: 47,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRC",
-                        code: 49
+                        code: 47
                     }
                 ]
             },
             {
                 name: "JRNC",
-                code: 50,
+                code: 48,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRNC",
-                        code: 50
+                        code: 48
                     }
                 ]
             },
             {
                 name: "JRLC",
-                code: 51,
+                code: 49,
                 insLen: 3,
                 redundantPairs: [
                     {
                         name: "JRLC",
-                        code: 51
+                        code: 49
                     }
                 ]
             },
             {
                 name: "CALL",
-                code: 52,
+                code: 50,
                 insLen: 2
             },
             {
                 name: "CASM",              // Call the code at the SM marker
-                code: 53,
+                code: 51,
                 insLen: 2
             },
             {
                 name: "CFAR",              // Call Far
-                code: 54,
+                code: 52,
                 insLen: 5
             },
             {
                 name: "RET",
-                code: 55,
+                code: 53,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "RET",
-                        code: 55
+                        code: 53
                     }
                 ]
             },
             {
                 name: "RETF",               // Return from far call
-                code: 56,
+                code: 54,
                 insLen: 1,
                 redundantPairs: [
                     {
@@ -628,7 +612,7 @@ class InstructionSet {
             },
             {
                 name:"SM",              // Section Marker - no operation used for breeding (4 data bytes)
-                code: 57,
+                code: 55,
                 insLen: 2,
                 redundantPairs: [
                     {
@@ -749,23 +733,11 @@ class InstructionSet {
                     ++IP;
                     break;
                 case 6:
-                    // STI (MEM), A
-                    ++IP;
-                    pointer = memSpace[IP];
-                    params[pointer] = A;
-                    ++IP;
-                    break;
-                case 7:
                     // LDI A, (C)
                     A = params[C];
                     ++IP;
                     break;
-                case 8:
-                    // STI (C), A
-                    params[C] = A;
-                    ++IP;
-                    break;
-                case 9:
+                case 7:
                     // LDO A, (MEM)
                     ++IP;
                     pointer = memSpace[IP];
@@ -773,7 +745,7 @@ class InstructionSet {
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 10:
+                case 8:
                     // STO (MEM), A
                     ++IP;
                     pointer = memSpace[IP];
@@ -794,12 +766,12 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 11:
+                case 9:
                     // LDO A, (C)
                     A = valuesOut[C];
                     ++IP;
                     break;
-                case 12:
+                case 10:
                     // STO (C), A
                     valuesOut[C] = A;
                     // Get byte score
@@ -818,61 +790,61 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 13:
+                case 11:
                     // LD B, IMM
                     ++IP;
                     B = memSpace[IP];
                     ++IP;
                     break;
-                case 14:
+                case 12:
                     // LD B, (MEM)
                     ++IP;
                     pointer = memSpace[IP];
                     B = memSpace[pointer];
                     ++IP;
                     break;
-                case 15:
+                case 13:
                     // ST (MEM), B
                     ++IP;
                     pointer = memSpace[IP];
                     memSpace[pointer] = B;
                     ++IP;
                     break;
-                case 16:
+                case 14:
                     // LD C, IMM
                     ++IP;
                     C = memSpace[IP];
                     ++IP;
                     break;
-                case 17:
+                case 15:
                     // LD C, (MEM)
                     ++IP;
                     pointer = memSpace[IP];
                     C = memSpace[pointer];
                     ++IP;
                     break;
-                case 18:
+                case 16:
                     // ST (MEM), C
                     ++IP;
                     pointer = memSpace[IP];
                     memSpace[pointer] = C;
                     ++IP;
                     break;
-                case 19:
+                case 17:
                     // CLR (MEM)
                     ++IP;
                     pointer = memSpace[IP];
                     memSpace[pointer] = 0;
                     ++IP;
                     break;
-                case 20:
+                case 18:
                     // PUSH A
                     --SP;
                     if (SP < 0) SP = 0;
                     memSpace[SP] = A;
                     ++IP;
                     break;
-                case 21:
+                case 19:
                     // POP A
                     A = memSpace[SP];
                     ++SP;
@@ -880,47 +852,47 @@ class InstructionSet {
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 22:
+                case 20:
                     // PUSH B
                     --SP;
                     if (SP < 0) SP = 0;
                     memSpace[SP] = B;
                     ++IP;
                     break;
-                case 23:
+                case 21:
                     // POP B
                     B = memSpace[SP];
                     ++SP;
                     if (SP >= memSpace.length) SP = memSpace.length - 1;
                     ++IP;
                     break;
-                case 24:
+                case 22:
                     // PUSH C
                     --SP;
                     if (SP < 0) SP = 0;
                     memSpace[SP] = C;
                     ++IP;
                     break;
-                case 25:
+                case 23:
                     // POP C
                     C = memSpace[SP];
                     ++SP;
                     if (SP >= memSpace.length) SP = memSpace.length - 1;
                     ++IP;
                     break;
-                case 26:
+                case 24:
                     // INC SP
                     ++SP;
                     if (SP >= memSpace.length) SP = memSpace.length - 1;
                     ++IP;
                     break;
-                case 27:
+                case 25:
                     // DEC SP
                     --SP;
                     if (SP < 0) SP = 0;
                     ++IP;
                     break;
-                case 28:
+                case 26:
                     // SWP A, B
                     value = A;
                     A = B;
@@ -928,31 +900,31 @@ class InstructionSet {
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 29:
+                case 27:
                     // SWP B, C
                     value = B;
                     B = C;
                     C = value;
                     ++IP;
                     break;
-                case 30:
+                case 28:
                     // SWP A, C
                     value = A;
                     A = C;
                     C = value;
                     ++IP;
                     break;
-                case 31:
+                case 29:
                     // LD A, R
                     A = R;
                     ++IP;
                     break;
-                case 32:
+                case 30:
                     // LD A, S
                     A = S;
                     ++IP;
                     break;
-                case 33:
+                case 31:
                     // INC A
                     ++A;
                     if (A > 255) {
@@ -966,7 +938,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 34:
+                case 32:
                     // DEC A
                     --A;
                     if (A === 0) {
@@ -984,7 +956,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 35:
+                case 33:
                     // INC B
                     ++B;
                     if (B > 255) {
@@ -998,7 +970,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 36:
+                case 34:
                     // DEC B
                     --B;
                     if (B < 0) {
@@ -1016,7 +988,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 37:
+                case 35:
                     // INC C
                     ++C;
                     if (C > 255) {
@@ -1030,7 +1002,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 38:
+                case 36:
                     // DEC C
                     --C;
                     if (C < 0) {
@@ -1048,7 +1020,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 39:
+                case 37:
                     // ADD A, B
                     A += B;
                     if (A > 255) {
@@ -1061,7 +1033,7 @@ class InstructionSet {
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 40:
+                case 38:
                     // SUB A, B
                     A -= B;
                     if (A < 0) {
@@ -1080,26 +1052,26 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 41:
+                case 39:
                     // AND A, B
                     A = A & B;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 42:
+                case 40:
                     // OR A, B
                     A = A | B;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 43:
+                case 41:
                     // NOT A
                     A = ~A;
                     A = A & 255;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 44:
+                case 42:
                     // CMP A, B
                     if (A < B) {
                         CF = 1;
@@ -1117,7 +1089,7 @@ class InstructionSet {
                     break;
                 // Jumps relative are taken from the byte preceding or the byte 
                 // following the jump instruction
-                case 45:
+                case 43:
                     // JR
                     pointer = IP;
                     ++IP;
@@ -1132,7 +1104,7 @@ class InstructionSet {
                         if (IP > 255) IP = 255;
                     }
                     break;
-                case 46:
+                case 44:
                     // JRZ
                     ++IP;
                     if (ZF) {
@@ -1151,7 +1123,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 47:
+                case 45:
                     // JRNZ
                     ++IP;
                     if (!ZF) {
@@ -1170,7 +1142,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 48:
+                case 46:
                     // JRLZ
                     if (ZF) {
                         ++IP;
@@ -1194,7 +1166,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 49:
+                case 47:
                     // JRC
                     ++IP;
                     if (CF) {
@@ -1213,7 +1185,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 50:
+                case 48:
                     // JRNC
                     ++IP;
                     if (!CF) {
@@ -1232,7 +1204,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 51:
+                case 49:
                     // JRLC
                     if (CF) {
                         ++IP;
@@ -1256,7 +1228,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 52:
+                case 50:
                     // CALL
                     ++IP;
                     pointer = memSpace[IP];
@@ -1264,7 +1236,7 @@ class InstructionSet {
                     this.callStack.push(IP);
                     IP = pointer;
                     break;
-                case 53:
+                case 51:
                     // CASM
                     ++IP;
                     value = memSpace[IP];
@@ -1277,11 +1249,11 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 54:
+                case 52:
                     // CFAR - currently a NOOP
                     IP += 5;
                     break;
-                case 55:
+                case 53:
                     // RET
                     if (this.callStack.length > 0) {
                         pointer = this.callStack.pop();
@@ -1292,11 +1264,11 @@ class InstructionSet {
                         RETF = true;
                     }
                     break;
-                case 56:
+                case 54:
                     // RETF
                     RETF = true;
                     break;
-                case 57:
+                case 55:
                     // SM - used for marking blocks of code, NOOP
                     IP += 2;
                     break;

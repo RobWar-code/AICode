@@ -15,6 +15,12 @@ Jobs Due
     
     Tidy-up rule descriptions
 
+    Allow for the selection of a rule to run in isolation.
+
+    Allow for input parameters associated with a rule (to be passed to the entities)
+
+    Fix the paramsGreaterThanN issue
+
     * Add the rules:
         * paramsPlusN (n = 3, n = 6)
         * paramsPlusN (n = 3, n = 6)

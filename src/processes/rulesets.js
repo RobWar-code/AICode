@@ -63,7 +63,7 @@ const rulesets = {
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);
 
-        let scoreItem5 = {rule: "Params Preserved", ruleNum: 5, skip: false, sequenceNum: 0,
+        let scoreItem5 = {rule: "Params Preserved", ruleNum: 5, skip: true, sequenceNum: 0,
             retain: true, score: 0, max: 3, startRoundNum: 0};
         this.scoreList.push(scoreItem5);
         this.ruleFunction.push(this.initialParamsPreserved);
@@ -94,7 +94,7 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutFromInitialParams);
         this.byteFunction.push(this.byteValuesOutFromInitialParams);
 
-        let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip:false, sequenceNum: 0,
+        let scoreItem9 = {rule:"Values Out Match Initial Params (0:8, 16:23)", ruleNum: 9, skip: false, sequenceNum: 0,
             retain: false, score: 0, completionRound: -1, max: 4,
             startRoundNum: 0,
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
@@ -338,14 +338,16 @@ const rulesets = {
         let maxSequenceNum = 0;
         let index = 0;
         for (let scoreItem of this.scoreList) {
-            maxScore += scoreItem.max;
+            if (scoreItem.skip != true) {
+                maxScore += scoreItem.max;
+            }
             if (scoreItem.sequenceNum > maxSequenceNum) {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
             scoreItem.completionRound = this.ruleCompletionRound[index];
             ++index;
         }
-        this.maxScore = maxScore * 2 - this.scoreList[this.diffScore].max;
+        this.maxScore = maxScore * 2;
         this.maxRuleSequenceNum = maxSequenceNum;
 
     },
@@ -422,12 +424,11 @@ const rulesets = {
         for (let rule of this.scoreList) {
             if ("sequenceNum" in rule && !rule.skip) {
                 if (rule.sequenceNum === this.ruleSequenceNum || 
-                    (rule.sequenceNum < this.ruleSequenceNum && rule.retain)) {
+                    (rule.sequenceNum <= this.ruleSequenceNum && rule.retain)) {
                     maxScore += rule.max * 2;
                 }
             }
         }
-        maxScore += this.scoreList[this.diffScore].max;
         return (maxScore);
     },
 
@@ -1008,8 +1009,8 @@ const rulesets = {
         for (let i = 0; i < outBlockLen; i++) {
             let v = valuesOut[outBlockStart + i];
             let a = initialParams[inBlockStart + i];
-            let r = 0;
-            if (a > n) r = 1;
+            let r = 1;
+            if (a > n) r = 2;
             if (v === r) ++count;
         }
         let opt = outBlockLen;
@@ -1023,8 +1024,8 @@ const rulesets = {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset];
         let n = rule.n;
-        let required = 0;
-        if (a > n) required = 1;
+        let required = 1;
+        if (a > n) required = 2;
         let score = self.doByteScore(required, value);
         return score;
     },
