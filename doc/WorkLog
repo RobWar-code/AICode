@@ -17,8 +17,12 @@ Jobs Due
     
     * Tidy-up rule descriptions
 
-    Allow for the selection of a rule to run in isolation.
+    * Allow for the selection of a rule to run in isolation.
 
+    Save and load the completion round for each rule
+
+    Make all the rules use output from address 0 and input from address 0
+    
     Allow for input parameters associated with a rule (to be passed to the entities)
 
     Change Divide Inputs

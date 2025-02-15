@@ -50,7 +50,13 @@ class Entity {
         this.oldParams = [];
 
         this.initialParamsListIndex = 0;
-        this.initialParams = this.initialParamsList[0];
+        this.ruleParams = rulesets.getCurrentParamsIn();
+        if (this.ruleParams === null) {
+            this.initialParams = this.initialParamsList[0];
+        }
+        else {
+            this.initialParams = this.ruleParams[0];
+        }
         this.initialMemSpace = new Array(this.memLength).fill(0);
         this.codeFlags = new Array(this.memLength).fill(0);
         this.executionCount = 0;
@@ -909,8 +915,12 @@ class Entity {
         displayData.params = this.oldParams;
         displayData.valuesOut = this.oldValuesOut;
 
-        displayData.initialParamsList = this.initialParamsList;
-
+        if (this.ruleParams === null) {
+            displayData.initialParamsList = this.initialParamsList;
+        }
+        else {
+            displayData.initialParamsList = this.ruleParams;
+        }
 
         // Registers
         displayData.registers = this.registers;
@@ -1100,7 +1110,12 @@ class Entity {
     copyMem(executionCount) {
         this.valuesOut = new Array(this.valuesOutMax).fill(0);
         this.params = new Array(this.paramsMax).fill(0);
-        this.initialParams = this.initialParamsList[executionCount];
+        if (this.ruleParams === null) {
+            this.initialParams = this.initialParamsList[executionCount];
+        }
+        else {
+            this.initialParams = this.ruleParams[executionCount];
+        }
         for (let i = 0; i < this.initialParams.length; i++) {
             this.params[i] = this.initialParams[i];
         }

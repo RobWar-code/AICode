@@ -91,26 +91,29 @@ class MainControl {
     }
 
     checkRuleThreshold() {
-        // Sort the bestSet scores
         // Get the best set scores
-        let scoreList = [];
         let index = 0;
+        let highScore = 0;
+        let highIndex = -1;
         for (let set of this.bestSets) {
             if (set.length > 0) {
                 let score = set[0].score;
-                scoreList.push({index: index, score: score});
+                if (score > highScore) {
+                    highIndex = index;
+                    highScore = score;
+                }
             }
             ++index;
         }
-        scoreList.sort((a, b) => b.score - a.score);
 
         // Check whether the score threshold has been reached
-        let entity = this.bestSets[scoreList[0].index][0];
+        let set = this.bestSets[highIndex]
+        let entity = set[0];
 
         // Check for single rule run
         if (this.runningSingleRule) {
             if (entity.score >= rulesets.currentMaxScore * (9.5/10)) {
-                let setNum = scoreList[0].index;
+                let setNum = highIndex;
                 let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
                 let terminateProcessing = true;
                 entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
@@ -465,17 +468,19 @@ class MainControl {
     loadAndExecuteSeedRule(seedRuleNum) {
         let insSet = new InstructionSet();
         // Fetch the seed rule program
-        let memSpace = rulesets.seedRuleMemSpaces[seedRuleNum];
+        let memSpace = rulesets.seedRuleMemSpaces[seedRuleNum].concat();
+        console.log("loadAndExecuteSeedRule - memSpace:", memSpace);
+        console.log("loadAndExecuteSeedRule - ruleNum:", seedRuleNum);
         let asRandom = false;
         let seeded = false;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
-            parseInt(seedRuleNum), this.numRounds, memSpace, this.mainWindow);
+            seedRuleNum, this.numRounds, memSpace);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
         let seedProgram = {};
         seedProgram.name = "Sequence Num: " + seedRuleNum;
-        let seedRuleDescription = rulesets.getDescriptionFromSequence(parseInt(seedRuleNum));
+        let seedRuleDescription = rulesets.getDescriptionFromSequence(seedRuleNum);
         seedProgram.description = seedRuleDescription;
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
         return seedDisplayData;

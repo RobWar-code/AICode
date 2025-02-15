@@ -25,16 +25,23 @@ const trace = {
         let instructionSet = new InstructionSet();
         let asRandom = false;
         let seeded = false;
+        let ruleSequenceNum = program.ruleSequenceNum;
         let currentCycle = program.cycleCounter;
         // Create the trace entity
         let roundNum = traceEntity.roundNum;
-        this.entity = new Entity(entityNumber, instructionSet, asRandom, seeded, currentCycle, roundNum, memSpace);
+        this.entity = new Entity(entityNumber, instructionSet, asRandom, seeded, currentCycle, 
+            ruleSequenceNum, roundNum, memSpace);
         // Save the fixed data
         this.fixedData = {};
         this.fixedData.entityNumber = this.entity.entityNumber;
         this.fixedData.bestSetNum = this.bestSetNum;
         this.fixedData.bestSetEntityNum = this.bestSetEntityNum;
-        this.fixedData.initialParamsList = this.entity.initialParamsList;
+        if (this.entity.ruleParams === null) {
+            this.fixedData.initialParamsList = this.entity.initialParamsList;
+        }
+        else {
+            this.fixedData.initialParamsList = this.entity.ruleParams;
+        }
         this.fixedData.initialMemList = this.entity.instructionSet.disassemble(memSpace, 0, this.entity.memLength);
 
         let start = true;

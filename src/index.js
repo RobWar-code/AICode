@@ -199,7 +199,8 @@ ipcMain.on("seedRuleListRequest", (event, data) => {
 });
 
 ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleNum) => {
-  let seedDisplayData = program.loadAndExecuteSeedRule(seedRuleNum);
+  let seedNum = parseInt(seedRuleNum);
+  let seedDisplayData = program.loadAndExecuteSeedRule(seedNum);
   mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
 });
 
