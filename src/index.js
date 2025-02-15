@@ -145,13 +145,14 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   let entity = program.bestSets[bestSetNum][bestSetEntityNum];
   let elapsedTime = program.elapsedTime / (3600 * 1000);
   let currentRule = rulesets.getDescriptionFromSequence(rulesets.ruleSequenceNum);
+  let terminateProcessing = false;
   entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, 
     program.ruleSequenceNum, program.randomCount, 
     program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
     program.interbreed2Count, program.interbreedFlaggedCount, 
     program.interbreedInsMergeCount, program.selfBreedCount, 
     program.seedRuleBreedCount, program.crossSetCount, program.cycleCounter, program.numRounds,
-    currentRule);
+    currentRule, terminateProcessing);
 });
 
 ipcMain.on("activateMainProcess", () => {
@@ -200,6 +201,15 @@ ipcMain.on("seedRuleListRequest", (event, data) => {
 ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleNum) => {
   let seedDisplayData = program.loadAndExecuteSeedRule(seedRuleNum);
   mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
+});
+
+ipcMain.on("requestRuleSequenceList", (event, data) => {
+  let ruleList = rulesets.fetchRuleSequenceList();
+  mainWindow.webContents.send("displayRuleSelectionList", ruleList);
+});
+
+ipcMain.on("startSelectedRule", (event, ruleNum) => {
+  program.startSelectedRule(ruleNum);
 });
 
 ipcMain.on("saveSession", () => {

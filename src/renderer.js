@@ -3,6 +3,7 @@ const path = require('node:path');
 const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"));
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
+const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
 const testObj = require(path.join(__dirname, '/processes/testObj.js'));
 /*
 document.getElementById("button01").addEventListener("click", () => {
@@ -22,6 +23,12 @@ ipcRenderer.on("setGlobals", (event, data) => {
 });
 
 ipcRenderer.on("displayEntity", (event, data) => {
+    if (data.terminateProcessing) {
+        processingCancelled = true;
+        clearTimeout(processTimeout);
+        document.getElementById('statusDiv').style.display = "block";
+        document.getElementById('statusPara').innerText = "Score Threshold Reached";
+    }
     entityDisplay.display(data);
 });
 
@@ -53,6 +60,10 @@ ipcRenderer.on("seedRuleSelectorActivate", (event, listLength) => {
     seedDisplay.displaySeedRuleSelector(listLength);
 });
 
+ipcRenderer.on("displayRuleSelectionList", (event, ruleList) => {
+    ruleDisplay.displayRuleSelector(ruleList);
+});
+
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "SAVE DONE";
@@ -80,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const insertSeedForm = document.getElementById('insertSeedForm');
     const loadSeedRuleButton = document.getElementById('loadSeedRuleButton');
     const seedRuleSelectorForm = document.getElementById('seedRuleSelectorForm');
+    const ruleSelectionButton = document.getElementById('ruleSelectionButton');
+    const ruleSelectorForm = document.getElementById('ruleSelectorForm');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const testMonoclonalButton = document.getElementById('testMonoclonalButton');
@@ -188,6 +201,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         let seedRuleNum = document.getElementById('seedRuleSelector').value;
         ipcRenderer.send("loadAndExecuteSeedRule", seedRuleNum);
+    });
+
+    ruleSelectionButton.addEventListener('click', (event) => {
+        ipcRenderer.send("requestRuleSequenceList", 0);
+        processingCancelled = true;
+        clearTimeout(processTimeout);
+    });
+
+    ruleSelectorForm.addEventListener('click', (event) => {
+        event.preventDefault();
+        document.getElementById("ruleSelectionDiv").style.display = "none";
+        document.getElementById("haltProcessButton").innerText = "Halt Process";
+        document.getElementById("statusPara").innerText = "Processing...";
+        processingCancelled = false;
+        let selectedRuleSequenceNum = parseInt(document.getElementById('ruleSelector').value);
+        ipcRenderer.send("startSelectedRule", selectedRuleSequenceNum);
     });
 
     saveButton.addEventListener('click', (event) => {

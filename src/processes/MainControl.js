@@ -30,6 +30,8 @@ class MainControl {
         this.numRounds = 0;
         this.entityNumber = 0;
         this.ruleSequenceNum = 0;
+        this.runningSingleRule = false;
+        this.runRuleNum = 0;
         this.monoclonalInsCount = 0;
         this.monoclonalByteCount = 0;
         this.interbreedCount = 0;
@@ -104,16 +106,35 @@ class MainControl {
 
         // Check whether the score threshold has been reached
         let entity = this.bestSets[scoreList[0].index][0];
-        rulesets.seedRuleUpdate(entity, this.numRounds);
-        if (rulesets.seedRuleSet) {
-            console.log("Clearing best sets");
-            // Clear down all best sets to use only the seed rule
-            for (let i = 0; i < this.numBestSets; i++) {
-                this.bestSets[i] = [];
+
+        // Check for single rule run
+        if (this.runningSingleRule) {
+            if (entity.score >= rulesets.currentMaxScore * (9.5/10)) {
+                let setNum = scoreList[0].index;
+                let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
+                let terminateProcessing = true;
+                entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
+                    this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
+                    this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
+                    this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
+                    this.seedRuleBreedCount, this.crossSetCount, this.currentCycle, this.numRounds, 
+                    currentRule, terminateProcessing
+                );
+                return true;
             }
-            this.ruleSequenceNum = rulesets.ruleSequenceNum;
-            rulesets.seedRuleSet = false;
-            return true;
+        }
+        else {
+            rulesets.seedRuleUpdate(entity, this.numRounds);
+            if (rulesets.seedRuleSet) {
+                console.log("Clearing best sets");
+                // Clear down all best sets to use only the seed rules or random
+                for (let i = 0; i < this.numBestSets; i++) {
+                    this.bestSets[i] = [];
+                }
+                this.ruleSequenceNum = rulesets.ruleSequenceNum;
+                rulesets.seedRuleSet = false;
+                return true;
+            }
         }
 
         return false;
@@ -282,7 +303,7 @@ class MainControl {
                         memSpace = rulesets.seedRuleMemSpaces[r];
                         asRandom = false;
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, this.numRounds, memSpace);
+                            this.cycleCounter, rulesets.ruleSequenceNum, this.numRounds, memSpace);
                         entity.breedMethod = "SeedRule";
                     }
                     else if (breedMode === "reproduction") {
@@ -323,7 +344,7 @@ class MainControl {
                         // Seeding on first pass.
                         // if (cycle === 0 && i === 0 && j === 0) seeded = true;
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, this.numRounds, memSpace);
+                            this.cycleCounter, rulesets.ruleSequenceNum, this.numRounds, memSpace);
                     }
                     // Update breed method tallies
                     switch (entity.breedMethod) {
@@ -393,13 +414,14 @@ class MainControl {
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
         let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
+        let terminateProcessing = false;
         bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
             this.ruleSequenceNum, this.randomCount, 
             this.monoclonalInsCount, this.monoclonalByteCount,
             this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
             this.interbreedInsMergeCount,
             this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-            this.cycleCounter, this.numRounds, currentRule);
+            this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
         return bestEntitySet;
     }
 
@@ -430,8 +452,9 @@ class MainControl {
         // Create the test entity
         let asRandom = false;
         let seeded = false;
+        let ruleSequenceNum = null;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
-            this.numRounds, memSpace, this.mainWindow);
+            ruleSequenceNum, this.numRounds, memSpace, this.mainWindow);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
@@ -446,7 +469,7 @@ class MainControl {
         let asRandom = false;
         let seeded = false;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
-            this.numRounds, memSpace, this.mainWindow);
+            parseInt(seedRuleNum), this.numRounds, memSpace, this.mainWindow);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
@@ -594,7 +617,7 @@ class MainControl {
             let asRandom = false;
             let seeded = false;
             let entity = new Entity(e.entity_number, insSet, asRandom, seeded, e.birth_cycle, 
-                this.numRounds, initialMemSpace);
+                rulesets.ruleSequenceNum, this.numRounds, initialMemSpace);
             let memObj = entity.execute(0, 0);
             entity.birthTime = e.birth_time;
             entity.birthDateTime = e.birth_date_time;
@@ -620,6 +643,38 @@ class MainControl {
             a.push(str.charCodeAt(i));
         }
         return a;
+    }
+
+    startSelectedRule(ruleNum) {
+        this.ruleSequenceNum = ruleNum;
+        rulesets.ruleSequenceNum = ruleNum;
+        this.runningSingleRule = true;
+        this.runRuleNum = ruleNum;
+
+        // Restart Processing
+        this.numRounds = 0;
+        this.cycleCounter = 0;
+        this.numTrials = 0;
+        this.bestSetNum = 0;
+        this.bestSets = new Array(this.numBestSets).fill([]);
+        this.scoreHistory = new Array(this.numBestSets).fill([]);
+        this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
+        this.elapsedTime = 0;
+        this.previousElapsedTime = 0;
+        this.monoclonalInsCount = 0;
+        this.monoclonalByteCount = 0;
+        this.interbreedCount = 0;
+        this.interbreed2Count = 0;
+        this.interbreedFlaggedCount = 0;
+        this.interbreedInsMergeCount = 0;
+        this.selfBreedCount = 0;
+        this.seedRuleBreedCount = 0;
+        this.randomCount = 0;
+        this.crossSetCount = 0;
+        this.startTime = Date.now();
+
+        this.mainLoop();
+        this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }
 }
 

@@ -146,7 +146,7 @@ const testRuleSets = {
 
     testParamsGreaterThanN: function () {
         let initialParams = [3,6,22,15,12,18,21,0,1,2,30,40,50,100,150,255,];
-        let valuesOut1 =    [1,1,1 ,1 ,1 ,1 ,1 ,1,1,1,1 ,1 ,1 ,1  ,2  ,2   ];
+        let valuesOut1 =    [1,1,1 ,1 ,1 ,1 ,1 ,1,1,1,1 ,1 ,1 ,1  ,1  ,1   ];
         let valuesOut2 =    [1,1,2 ,2 ,1 ,1 ,1 ,1,1,1,1 ,1 ,1 ,1  ,2  ,2   ];
         let dataParams = {};
         dataParams.initialParams = initialParams;
@@ -160,7 +160,7 @@ const testRuleSets = {
 
         console.log("testParamsGreaterThanN:");
         let score = rulesets.paramsGreaterThanN(rulesets, dataParams, ruleParams);
-        console.log("Expect:", 8/16, "Got: ", score);    
+        console.log("Expect:", 6/16, "Got: ", score);    
         dataParams.valuesOut = valuesOut2;
         score = rulesets.paramsGreaterThanN(rulesets, dataParams, ruleParams);
         console.log("Expect:", 10/16, "Got: ", score);
@@ -787,9 +787,9 @@ console.log("Got Here");
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-// testRuleSets.testParamsGreaterThanN();
+testRuleSets.testParamsGreaterThanN();
 // testRuleSets.testAddFirstParam();
-testRuleSets.testDuplicateParams();
+// testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
 // testRuleSets.testSwapAdjacentParams();
 // testRuleSets.testGreaterOfAdjacentParams();

@@ -12,7 +12,7 @@ class Entity {
      * 
      * Create, execute or breed a similar entity
      */
-    constructor(entityNumber, instructionSet, asRandom, seeded, currentCycle, roundNum, memSpace) {
+    constructor(entityNumber, instructionSet, asRandom, seeded, currentCycle, ruleSequenceNum, roundNum, memSpace) {
         this.entityNumber = entityNumber;
         this.bestSetEntityNum = -1;
         // Segments
@@ -66,6 +66,12 @@ class Entity {
         }
         else if (asRandom) {
             this.createRandomProgram();
+        }
+        if (ruleSequenceNum === null) {
+            this.ruleSequenceNum = rulesets.ruleSequenceNum;
+        }
+        else {
+            this.ruleSequenceNum = ruleSequenceNum;
         }
         // Breeding Parameters
         this.interbreedCycle = 5;
@@ -364,8 +370,9 @@ class Entity {
                 // Self-breed
                 let asRandom = false;
                 let seeded = false;
+                let ruleSequenceNum = null;
                 newEntity = new Entity(this.entityNumber, this.instructionSet, asRandom, seeded, 
-                    cycleCounter, roundNum, this.memSpace);
+                    cycleCounter, ruleSequenceNum, roundNum, this.memSpace);
                 newEntity.breedMethod = "Self-breed";
             }
             // Compare with old entity
@@ -507,7 +514,8 @@ class Entity {
 
         let asRandom = false;
         let seeded = false;
-        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCodeSegment);
+        let ruleSequenceNum = null;
+        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, ruleSequenceNum, roundNum, newCodeSegment);
 
         return entity;
     }
@@ -564,7 +572,9 @@ class Entity {
         }
         let asRandom = false;
         let seeded = false;
-        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCode);
+        let ruleSequenceNum = null;
+        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, 
+            cycleCounter, ruleSequenceNum, roundNum, newCode);
         return entity;
     }
 
@@ -614,7 +624,9 @@ class Entity {
         }
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newMemSpace);
+        let ruleSequenceNum = null;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, 
+            ruleSequenceNum, roundNum, newMemSpace);
         return newEntity;
     }
 
@@ -653,7 +665,9 @@ class Entity {
 
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newProgram);
+        let ruleSequenceNum = null;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, 
+            ruleSequenceNum, roundNum, newProgram);
         return newEntity;
     }
 
@@ -734,7 +748,9 @@ class Entity {
         // Create the new entity
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, memSpace);
+        let ruleSequenceNum = null;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, 
+            ruleSequenceNum, roundNum, memSpace);
         return newEntity;
     }
 
@@ -845,7 +861,9 @@ class Entity {
         // Create the new entity
         let asRandom = false;
         let seeded = false;
-        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, roundNum, newCode);
+        let ruleSequenceNum = null;
+        let newEntity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, cycleCounter, 
+            ruleSequenceNum, roundNum, newCode);
         return newEntity;
         
     }
@@ -874,7 +892,7 @@ class Entity {
         monoclonalByteCount, interbreedCount, 
         interbreed2Count, interbreedFlaggedCount, 
         interbreedInsMergeCount, selfBreedCount, seedRuleBreedCount,
-        crossSetCount, currentCycle, numRounds, currentRule) {
+        crossSetCount, currentCycle, numRounds, currentRule, terminateProcessing) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -898,6 +916,7 @@ class Entity {
         displayData.registers = this.registers;
 
         // Details
+        displayData.terminateProcessing = terminateProcessing;
         displayData.bestSetNum = bestSetNum;
         displayData.bestSetEntityNum = this.bestSetEntityNum;
         displayData.numTrials = numTrials;
@@ -969,7 +988,7 @@ class Entity {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
             this.instructionSet, this.initialMemSpace, 
             this.initialParams, this.params, this.valuesOut, this.registers.IC, 
-            this.instructionSet.highestIP, this.roundNum);
+            this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
         this.scoreList = scoreObj.scoreList;
         return score;
@@ -1003,7 +1022,7 @@ class Entity {
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
                 this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                this.registers.IC, this.instructionSet.highestIP, this.roundNum);
+                this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
         }
         // Score the difference between the outputs of the passes

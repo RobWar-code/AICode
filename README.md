@@ -532,9 +532,21 @@ is reset to general mode.
 ##### Seed Rule Programs
 
 As rules are completed, rule by rule, the highest scoring entity that
-reaches the threshold is recorded in the database and in the rulesets
-object. A user interface is provided to allow these programs to be
+reaches the threshold is recorded in the rulesets object. A user interface 
+is provided to allow these programs to be
 selected and viewed using the Seed Program interface.
+
+##### Select Rule Option
+
+A Select Rule option is provided to allow for the selection of a specific
+rule for the system to operate on.
+
+When the Select Rule option is selected, a complete list of the rules
+in sequence number order is provided. When one of these is selected, the
+system is flagged to run until that rule has been completed.
+
+Once completed, processing is halted and the corresponding message is
+displayed on the user interface.
 
 ## Test Scripts
 
@@ -583,6 +595,7 @@ TABLE entity
 
 TABLE seed_rule
     id INT UNIQUE PRIMARY KEY
+    session_id INT
     rule_sequence_num INT
     seed_rule_mem_space VARCHAR(256)
 

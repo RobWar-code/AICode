@@ -98,6 +98,11 @@ li {
     display: none;
 }
 
+/* Rule Selection */
+#ruleSelectionDiv {
+    display: none;
+}
+
 /* Score List */
 #scoreListBackground {
     display: none;

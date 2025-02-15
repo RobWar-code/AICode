@@ -41,6 +41,7 @@ const seedDisplay = {
             document.getElementById("seedDetails").style.display = "block";
             document.getElementById("seedName").innerText = displayData.seedName;
             document.getElementById("seedDescription").innerText = displayData.seedDescription;
+            document.getElementById("seedScore").innerText = displayData.score;
 
             // Hide the process button options
             document.getElementById("scoreHistoryButton").style.display = "none";
