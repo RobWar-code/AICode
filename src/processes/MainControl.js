@@ -107,7 +107,7 @@ class MainControl {
         }
 
         // Check whether the score threshold has been reached
-        let set = this.bestSets[highIndex]
+        let set = this.bestSets[highIndex];
         let entity = set[0];
 
         // Check for single rule run
@@ -127,8 +127,13 @@ class MainControl {
             }
         }
         else {
-            rulesets.seedRuleUpdate(entity, this.numRounds);
+            let memSpace = entity.initialMemSpace.concat();
+            let score = entity.score;
+            rulesets.seedRuleUpdate(memSpace, score, this.numRounds);
             if (rulesets.seedRuleSet) {
+                console.log("checkRuleThreshold - highIndex:", highIndex, "highScore:", highScore);
+                console.log("checkRuleThreshold - score:", score, "sequenceNum:", this.ruleSequenceNum);
+                console.log("checkRuleThreshold - valuesOut:", entity.valuesOut);
                 console.log("Clearing best sets");
                 // Clear down all best sets to use only the seed rules or random
                 for (let i = 0; i < this.numBestSets; i++) {

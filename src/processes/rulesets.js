@@ -138,7 +138,7 @@ const rulesets = {
             n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
         };
         this.scoreList.push(scoreItem14);
-        this.ruleFunction.push(this.paramsGreaterThanN)
+        this.ruleFunction.push(this.paramsGreaterThanN);
         this.byteFunction.push(this.byteParamsGreaterThanN);
 
         let scoreItem15 = {rule: "Params Minus N (3)", ruleNum: 15, skip: false, sequenceNum: 4,
@@ -1654,10 +1654,8 @@ const rulesets = {
         return score;
     },
 
-    seedRuleUpdate(bestEntity, roundNum) {
-        if ((bestEntity.score >= this.currentMaxScore * (9.5/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
-            // Save the seed entity from the current rule
-            let memSpace = bestEntity.initialMemSpace.concat();
+    seedRuleUpdate(memSpace, score, roundNum) {
+        if ((score >= this.currentMaxScore * (9.5/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             this.seedRuleMemSpaces.push(memSpace);
             this.seedRuleSet = true;
             ++this.ruleSequenceNum;

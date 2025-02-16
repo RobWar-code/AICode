@@ -18,7 +18,7 @@ class InstructionSet {
         };
         this.callStack = []; 
         this.farCallStack = [];
-        this.numIns = 56;
+        this.numIns = 54;
         // Notes: Later we need to decide how the return communication with CFAR functions
         // should be performed.
         // multi-byte numbers are most significant byte first
@@ -409,215 +409,205 @@ class InstructionSet {
                 ]
             },
             {
-                name: "LD A, R",
+                name: "INC A",
                 code: 29,
                 insLen: 1
             },
             {
-                name: "LD A, S",
+                name: "DEC A",
                 code: 30,
                 insLen: 1
             },
             {
-                name: "INC A",
+                name: "INC B",
                 code: 31,
                 insLen: 1
             },
             {
-                name: "DEC A",
+                name: "DEC B",
                 code: 32,
                 insLen: 1
             },
             {
-                name: "INC B",
+                name: "INC C",
                 code: 33,
                 insLen: 1
             },
             {
-                name: "DEC B",
+                name: "DEC C",
                 code: 34,
                 insLen: 1
             },
             {
-                name: "INC C",
+                name: "ADD A, B",        // Sets carry bit if more than 256
                 code: 35,
                 insLen: 1
             },
             {
-                name: "DEC C",
+                name: "SUB A, B",        // Sets carry bit if negative result
                 code: 36,
                 insLen: 1
             },
             {
-                name: "ADD A, B",        // Sets carry bit if more than 256
-                code: 37,
-                insLen: 1
-            },
-            {
-                name: "SUB A, B",        // Sets carry bit if negative result
-                code: 38,
-                insLen: 1
-            },
-            {
                 name: "AND A, B",
-                code: 39,
+                code: 37,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "AND A, B",
-                        code: 39
+                        code: 37
                     }
                 ]
             },
             {
                 name: "OR A, B",
-                code: 40,
+                code: 38,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "OR A, B",
-                        code: 40
+                        code: 38
                     }
                 ]
             },
             {
                 name: "NOT A",
-                code: 41,
+                code: 39,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "NOT A",
-                        code: 41 
+                        code: 39 
                     }
                 ]
             },
             {       
                 name: "CMP A, B",        // If equal, z flag set; if B > A carry flag set; else flags cleared
-                code: 42,
+                code: 40,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "CMP A, B",
-                        code: 42
+                        code: 40
                     }
                 ]
             },
             {
                 name: "JR", // Unconditional Jump Relative
-                code: 43,
+                code: 41,
                 insLen: 2
             },
             {
                 name: "JRZ",
-                code: 44,
+                code: 42,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRZ",
-                        code: 44
+                        code: 42
                     }
                 ]
             },
             {
                 name: "JRNZ",
-                code: 45,
+                code: 43,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRNZ",
-                        code: 45
+                        code: 43
                     }
                 ]
             },
             {
                 name: "JRLZ",
-                code: 46,
+                code: 44,
                 insLen: 3,
                 redundantPairs: [
                     {
                         name: "JRLZ",
-                        code: 46
+                        code: 44
                     }
                 ]
             },
             {
                 name: "JRC",
-                code: 47,
+                code: 45,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRC",
-                        code: 47
+                        code: 45
                     }
                 ]
             },
             {
                 name: "JRNC",
-                code: 48,
+                code: 46,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRNC",
-                        code: 48
+                        code: 46
                     }
                 ]
             },
             {
                 name: "JRLC",
-                code: 49,
+                code: 47,
                 insLen: 3,
                 redundantPairs: [
                     {
                         name: "JRLC",
-                        code: 49
+                        code: 47
                     }
                 ]
             },
             {
                 name: "CALL",
-                code: 50,
+                code: 48,
                 insLen: 2
             },
             {
                 name: "CASM",              // Call the code at the SM marker
-                code: 51,
+                code: 49,
                 insLen: 2
             },
             {
                 name: "CFAR",              // Call Far
-                code: 52,
+                code: 50,
                 insLen: 5
             },
             {
                 name: "RET",
-                code: 53,
+                code: 51,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "RET",
-                        code: 53
+                        code: 51
                     }
                 ]
             },
             {
                 name: "RETF",               // Return from far call
-                code: 54,
+                code: 52,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "RETF",
-                        code: 54
+                        code: 52
                     }
                 ]
             },
             {
                 name:"SM",              // Section Marker - no operation used for breeding (4 data bytes)
-                code: 55,
+                code: 53,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "SM",
-                        code: 55
+                        code: 53
                     }
                 ]
             }
@@ -915,16 +905,6 @@ class InstructionSet {
                     ++IP;
                     break;
                 case 29:
-                    // LD A, R
-                    A = R;
-                    ++IP;
-                    break;
-                case 30:
-                    // LD A, S
-                    A = S;
-                    ++IP;
-                    break;
-                case 31:
                     // INC A
                     ++A;
                     if (A > 255) {
@@ -938,7 +918,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 32:
+                case 30:
                     // DEC A
                     --A;
                     if (A === 0) {
@@ -956,7 +936,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 33:
+                case 31:
                     // INC B
                     ++B;
                     if (B > 255) {
@@ -970,7 +950,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 34:
+                case 32:
                     // DEC B
                     --B;
                     if (B < 0) {
@@ -988,7 +968,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 35:
+                case 33:
                     // INC C
                     ++C;
                     if (C > 255) {
@@ -1002,7 +982,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 36:
+                case 34:
                     // DEC C
                     --C;
                     if (C < 0) {
@@ -1020,7 +1000,7 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 37:
+                case 35:
                     // ADD A, B
                     A += B;
                     if (A > 255) {
@@ -1033,7 +1013,7 @@ class InstructionSet {
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 38:
+                case 36:
                     // SUB A, B
                     A -= B;
                     if (A < 0) {
@@ -1052,26 +1032,26 @@ class InstructionSet {
                     }
                     ++IP;
                     break;
-                case 39:
+                case 37:
                     // AND A, B
                     A = A & B;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 40:
+                case 38:
                     // OR A, B
                     A = A | B;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 41:
+                case 39:
                     // NOT A
                     A = ~A;
                     A = A & 255;
                     A === 0 ? ZF = 1 : ZF = 0;
                     ++IP;
                     break;
-                case 42:
+                case 40:
                     // CMP A, B
                     if (A < B) {
                         CF = 1;
@@ -1089,7 +1069,7 @@ class InstructionSet {
                     break;
                 // Jumps relative are taken from the byte preceding or the byte 
                 // following the jump instruction
-                case 43:
+                case 41:
                     // JR
                     pointer = IP;
                     ++IP;
@@ -1104,7 +1084,7 @@ class InstructionSet {
                         if (IP > 255) IP = 255;
                     }
                     break;
-                case 44:
+                case 42:
                     // JRZ
                     ++IP;
                     if (ZF) {
@@ -1123,7 +1103,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 45:
+                case 43:
                     // JRNZ
                     ++IP;
                     if (!ZF) {
@@ -1142,7 +1122,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 46:
+                case 44:
                     // JRLZ
                     if (ZF) {
                         ++IP;
@@ -1166,7 +1146,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 47:
+                case 45:
                     // JRC
                     ++IP;
                     if (CF) {
@@ -1185,7 +1165,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 48:
+                case 46:
                     // JRNC
                     ++IP;
                     if (!CF) {
@@ -1204,7 +1184,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 49:
+                case 47:
                     // JRLC
                     if (CF) {
                         ++IP;
@@ -1228,7 +1208,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 50:
+                case 48:
                     // CALL
                     ++IP;
                     pointer = memSpace[IP];
@@ -1236,7 +1216,7 @@ class InstructionSet {
                     this.callStack.push(IP);
                     IP = pointer;
                     break;
-                case 51:
+                case 49:
                     // CASM
                     ++IP;
                     value = memSpace[IP];
@@ -1249,11 +1229,11 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 52:
+                case 50:
                     // CFAR - currently a NOOP
                     IP += 5;
                     break;
-                case 53:
+                case 51:
                     // RET
                     if (this.callStack.length > 0) {
                         pointer = this.callStack.pop();
@@ -1264,11 +1244,11 @@ class InstructionSet {
                         RETF = true;
                     }
                     break;
-                case 54:
+                case 52:
                     // RETF
                     RETF = true;
                     break;
-                case 55:
+                case 53:
                     // SM - used for marking blocks of code, NOOP
                     IP += 2;
                     break;

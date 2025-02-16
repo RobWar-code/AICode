@@ -19,15 +19,26 @@ Jobs Due
 
     * Allow for the selection of a rule to run in isolation.
 
+    * Allow for input parameters associated with a rule (to be passed to the entities)
+
+    * Change Divide Inputs
+
+    Remove LD A, R, LD A, S instructions as these produce results outside of the direct
+    causality of the programs.
+
     Save and load the completion round for each rule
 
     Make all the rules use output from address 0 and input from address 0
-    
-    Allow for input parameters associated with a rule (to be passed to the entities)
 
-    Change Divide Inputs
+    Fix the paramsGreaterThanN issue -
+        This appears to have been caused by the program entities' use of the LD A, R
+        operation to obtain an output value that is, apparently, different in the
+        load seed rule operation, to the standard execute operation.
 
-    Fix the paramsGreaterThanN issue
+        Have changed the rule to provide < = > values as output. Yet to be proved.
+
+        The problem persists - perhaps it has something to do with the rule implementation,
+        seeing that other seed rule operations appear to work well.
 
     * Add the rules:
         * paramsPlusN (n = 3, n = 6)
