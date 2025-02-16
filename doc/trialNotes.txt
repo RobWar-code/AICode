@@ -1,3 +1,23 @@
+16/02/2025
+
+Latest trial with LD A, R, LD A, S removed in response
+to unpredictable results with paramsGreaterThanN.
+Trial without these is stuck on the rule after 71
+rounds. So moving the rule back to the position after
+paramsMinusN, as subtract is more likely to be useful
+as a step.
+
+Have decided to leave the idea of the faster computer
+until finances are more settled. Better to focus on
+rules that can proceed in reasonable time and to consider
+ways in which the output from these can be combined/re-utilised.
+
+The paramsGreaterThanN rule was completed after 87 rounds
+when following paramsPlusN (6).
+
+By positioning the paramsGreaterThanN rule after paramsMinusN,
+the rule was completed by round 27.
+
 11/02/2025
 
 It is now clear from the proceedings that time scales

@@ -112,7 +112,7 @@ class MainControl {
 
         // Check for single rule run
         if (this.runningSingleRule) {
-            if (entity.score >= rulesets.currentMaxScore * (9.5/10)) {
+            if (entity.score >= rulesets.currentMaxScore * (9.9/10)) {
                 let setNum = highIndex;
                 let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
                 let terminateProcessing = true;

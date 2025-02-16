@@ -133,29 +133,29 @@ const rulesets = {
         this.ruleFunction.push(this.paramsPlusN);
         this.byteFunction.push(this.byteParamsPlusN);
 
-        let scoreItem14 = {rule: "Params Greater Than N (12)", ruleNum: 14, skip: false, sequenceNum: 3,
-            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
-            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
-        };
-        this.scoreList.push(scoreItem14);
-        this.ruleFunction.push(this.paramsGreaterThanN);
-        this.byteFunction.push(this.byteParamsGreaterThanN);
-
-        let scoreItem15 = {rule: "Params Minus N (3)", ruleNum: 15, skip: false, sequenceNum: 4,
+        let scoreItem14 = {rule: "Params Minus N (3)", ruleNum: 14, skip: false, sequenceNum: 3,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 56,
             n: 3, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+        };
+        this.scoreList.push(scoreItem14);
+        this.ruleFunction.push(this.paramsMinusN);
+        this.byteFunction.push(this.byteParamsMinusN);
+
+        let scoreItem15 = {rule: "Params Minus N (6)", ruleNum: 15, skip: false, sequenceNum: 4,
+            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 56,
+            n: 6, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
         };
         this.scoreList.push(scoreItem15);
         this.ruleFunction.push(this.paramsMinusN);
         this.byteFunction.push(this.byteParamsMinusN);
 
-        let scoreItem16 = {rule: "Params Minus N (6)", ruleNum: 16, skip: false, sequenceNum: 5,
-            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 56,
-            n: 6, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+        let scoreItem16 = {rule: "Params Greater Than N (12)", ruleNum: 16, skip: false, sequenceNum: 5,
+            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
+            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
         };
         this.scoreList.push(scoreItem16);
-        this.ruleFunction.push(this.paramsMinusN);
-        this.byteFunction.push(this.byteParamsMinusN);
+        this.ruleFunction.push(this.paramsGreaterThanN);
+        this.byteFunction.push(this.byteParamsGreaterThanN);
 
         let scoreItem17 = {rule: "Params Times N (2)", ruleNum: 17, skip: false, sequenceNum: 6,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
@@ -319,17 +319,33 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 21, 
             score: 0, completionRound: -1, max: 16, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 32,
-            inBlockStart: 16, inBlockLen: 96
+            inBlockStart: 0, inBlockLen: 96,
+            paramsIn: [
+                [
+                    61,82,5,61,85,3,61,80,4,61,86,7,61,81,12,61,84,20,61,87,95,61,83,100, // 0:23 = a b
+                    43,3,2,43,4,5,43,12,13,43,9,11,43,10,10,43,15,8,43,100,50,43,75,72, // 24:47 +
+                    45,9,4,45,10,2,45,100,22,45,85,13,45,3,4,45,19,2,45,201,105,45,222,37, // 48:71 -
+                    42,3,4,42,5,7,42,9,10,42,12,12,42,8,15,42,20,9,42,7,7,42,11,7 // 72:95 *    
+                ],
+                [
+                    61,81,5,61,84,3,61,82,4,61,86,7,61,83,12,61,85,20,61,80,95,61,87,100, // 0:23 = a b
+                    43,5,2,43,10,5,43,22,13,43,19,11,43,17,10,43,18,8,43,109,50,43,77,72, // 24:47 +
+                    45,19,4,45,17,2,45,107,22,45,87,13,45,3,5,45,21,2,45,209,105,45,217,37, // 48:71 -
+                    42,3,5,42,5,9,42,9,11,42,13,13,42,9,15,42,20,3,42,7,8,42,12,7 // 72:95 *
+                ]
+            ]
         };
         this.scoreList.push(scoreItem32);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
+        let asciiParams = this.getASCIIParams();
         let scoreItem33 = {rule: "Convert ASCII Numbers", ruleNum: 33,
             retain: false, skip: false, sequenceNum: 22, 
             score: 0, completionRound: -1, max: 8, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 112, inBlockLen: 38
+            inBlockStart: 0, inBlockLen: 32,
+            paramsIn: asciiParams
         };
         this.scoreList.push(scoreItem33);
         this.ruleFunction.push(this.convertASCIINumbers);
@@ -359,14 +375,43 @@ const rulesets = {
 
     },
 
-    getOutputByteScore(value, address, initialParams, params, outputValues, roundNum) {
+    getASCIIParams() {
+        let paramsBlock = [];
+
+        let set1 = ["1","5","7","6","9","0","8","3","2","4","17","23","45","77","81","63"]; // 38 chars
+        let set2 = ["2","4","8","7","5","9","0","6","1","3","14","39","52","89","96","55"];
+        let params1 = insertAsciiStrings(set1);
+        paramsBlock.push(params1);
+        let params2 = insertAsciiStrings(set2);
+        paramsBlock.push(params2);
+
+        return paramsBlock;
+
+        function insertAsciiStrings(set) {
+            let p = [];
+            for (let numStr of set) {
+                for (let i = 0; i < numStr.length; i++) {
+                    let c = numStr.charCodeAt(i);
+                    p.push(c);
+                }
+                let s = ";";
+                p.push(s.charCodeAt(0));
+            }
+            if (p.length >= 256) {
+                console.log("initial params too long");
+            }
+            return p;
+        }
+    },
+
+    getOutputByteScore(value, address, initialParams, params, outputValues, ruleSequenceNum, roundNum) {
         let totalScore = 0;
         let totalSignificance = 0;
         // For each rule applicable to the address
         let index = 0;
         for (let rule of this.scoreList) {
             if (this.byteFunction[index] != null) {
-                if (rule.retain || rule.sequenceNum === this.ruleSequenceNum) {
+                if (rule.retain || rule.sequenceNum === ruleSequenceNum) {
                     if (rule.startRoundNum <= roundNum || this.ignoreRounds) {
                         if (address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
                             let score = this.byteFunction[index](this, rule, value, address, initialParams, params, outputValues);
@@ -1016,9 +1061,9 @@ const rulesets = {
         for (let i = 0; i < outBlockLen; i++) {
             let v = valuesOut[outBlockStart + i];
             let a = initialParams[inBlockStart + i];
-            let r = 4;
-            if (a > n) r = 6;
-            else if (a === n) r = 5;
+            let r = 0;
+            if (a > n) r = 2;
+            else if (a === n) r = 1;
             if (v === r) ++count;
         }
         let opt = outBlockLen;
@@ -1032,9 +1077,9 @@ const rulesets = {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset];
         let n = rule.n;
-        let required = 4;
-        if (a > n) required = 6;
-        else if (a === n) required = 5;
+        let required = 0;
+        if (a > n) required = 2;
+        else if (a === n) required = 1;
         let score = self.doByteScore(required, value);
         return score;
     },
@@ -1655,7 +1700,7 @@ const rulesets = {
     },
 
     seedRuleUpdate(memSpace, score, roundNum) {
-        if ((score >= this.currentMaxScore * (9.5/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
+        if ((score >= this.currentMaxScore * (9.9/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             this.seedRuleMemSpaces.push(memSpace);
             this.seedRuleSet = true;
             ++this.ruleSequenceNum;

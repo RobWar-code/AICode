@@ -13,6 +13,11 @@ Jobs Due
 
     Pass ExecutionCycle to the rulesets getScore method to trigger some rules
 
+    Include a cancel option button for the load options.
+    
+    * Pass the rule sequence num for seed rules to the execute (entity and instruction)
+    functions and from there to the getOutputByteScore function.
+
     * Fix the save/load seed rules
     
     * Tidy-up rule descriptions
@@ -23,8 +28,8 @@ Jobs Due
 
     * Change Divide Inputs
 
-    Remove LD A, R, LD A, S instructions as these produce results outside of the direct
-    causality of the programs.
+    * Remove LD A, R, LD A, S instructions as these produce results outside of the direct
+        causality of the programs.
 
     Save and load the completion round for each rule
 

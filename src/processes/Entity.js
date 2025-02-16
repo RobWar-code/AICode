@@ -28,22 +28,12 @@ class Entity {
 
         this.initialParamsList = [
             [   5,1,2,3,11,15,13,7,8,10,12,32,64,100,128,255, // 0:15
-                61,82,5,61,85,3,61,80,4,61,86,7,61,81,12,61,84,20,61,87,95,61,83,100, // 16:39 = a b
-                43,3,2,43,4,5,43,12,13,43,9,11,43,10,10,43,15,8,43,100,50,43,75,72, // 40:63 +
-                45,9,4,45,10,2,45,100,22,45,85,13,45,3,4,45,19,2,45,201,105,45,222,37, // 64:87 -
-                42,3,4,42,5,7,42,9,10,42,12,12,42,8,15,42,20,9,42,7,7,42,11,7 // 88:111 *
-                // 112:146 ascii numbers
+                17,9,64,0,12,15,102,84,87,25,2,18,36,5,7,16 // 16:31
             ],
             [   3,6,22,15,12,18,21,0,1,2,30,40,50,100,150,255, // 0:15
-                61,81,5,61,84,3,61,82,4,61,86,7,61,83,12,61,85,20,61,80,95,61,87,100, // 16:39 = a b
-                43,5,2,43,10,5,43,22,13,43,19,11,43,17,10,43,18,8,43,109,50,43,77,72, // 40:63 +
-                45,19,4,45,17,2,45,107,22,45,87,13,45,3,5,45,21,2,45,209,105,45,217,37, // 64:87 -
-                42,3,5,42,5,9,42,9,11,42,13,13,42,9,15,42,20,3,42,7,8,42,12,7 // 88-111 *
-                // 112:146 ascii numbers
+                23,5,18,7,31,126,7,91,8,127,18,54,202,207,4,22 // 16:31
             ]
         ];
-        this.initialParamsList = this.addAsciiParams(this.initialParamsList);
-
         this.valuesOut = new Array(this.valuesOutMax).fill(0);
         this.oldValuesOut = [];
         this.params = new Array(this.paramsMax).fill(0);
@@ -93,35 +83,6 @@ class Entity {
 
         // Step Data
         this.scoreObj = null;
-    }
-
-    addAsciiParams(initialParamsList) {
-        let set1 = ["1","5","7","6","9","0","8","3","2","4","17","23","45","77","81","63"]; // 38 chars
-        let set2 = ["2","4","8","7","5","9","0","6","1","3","14","39","52","89","96","55"];
-        let params1 = insertAsciiStrings(initialParamsList[0], set1);
-        initialParamsList[0] = params1;
-        let params2 = insertAsciiStrings(initialParamsList[1], set2);
-        initialParamsList[1] = params2;
-
-        return initialParamsList;
-
-        function insertAsciiStrings(ip, set) {
-            let p = [];
-            for (let numStr of set) {
-                for (let i = 0; i < numStr.length; i++) {
-                    let c = numStr.charCodeAt(i);
-                    p.push(c);
-                }
-                let s = ";";
-                p.push(s.charCodeAt(0));
-            }
-            if (p.length + ip.length >= 256) {
-                console.log("initial params too long");
-            }
-            let op = ip.concat(p);
-            return op;
-        }
-
     }
 
     resetRegisters() {
@@ -1019,7 +980,7 @@ class Entity {
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(this.memSpace, this.codeFlags, this.initialParams, 
-                this.params, this.valuesOut, 
+                this.params, this.valuesOut, this.ruleSequenceNum,
                 this.roundNum);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
@@ -1075,7 +1036,7 @@ class Entity {
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
         let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, 
-            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.roundNum);
+            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.maxIC) {
