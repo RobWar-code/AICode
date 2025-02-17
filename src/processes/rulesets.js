@@ -1061,9 +1061,9 @@ const rulesets = {
         for (let i = 0; i < outBlockLen; i++) {
             let v = valuesOut[outBlockStart + i];
             let a = initialParams[inBlockStart + i];
-            let r = 0;
-            if (a > n) r = 2;
-            else if (a === n) r = 1;
+            let r = 1;
+            if (a === n) r = 2;
+            else if (a > n) r = 3;
             if (v === r) ++count;
         }
         let opt = outBlockLen;
@@ -1077,9 +1077,9 @@ const rulesets = {
         let offset = address - rule.outBlockStart;
         let a = initialParams[rule.inBlockStart + offset];
         let n = rule.n;
-        let required = 0;
-        if (a > n) required = 2;
-        else if (a === n) required = 1;
+        let required = 1;
+        if (a == n) required = 2;
+        else if (a === n) required = 3;
         let score = self.doByteScore(required, value);
         return score;
     },

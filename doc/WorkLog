@@ -14,6 +14,11 @@ Jobs Due
     Pass ExecutionCycle to the rulesets getScore method to trigger some rules
 
     Include a cancel option button for the load options.
+
+    Consider the facility of adding code rules and still using the saved
+    entities to resume.
+
+    Add a completion of all rules procedure.
     
     * Pass the rule sequence num for seed rules to the execute (entity and instruction)
     functions and from there to the getOutputByteScore function.

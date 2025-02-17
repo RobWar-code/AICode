@@ -1,3 +1,56 @@
+17/02/2025
+
+Having set the rule pass score to 9.9/10 we find that
+the paramsGreaterThanN rule takes more than 220 rounds.
+The previous trial did not include the output case in which
+a === b, since the score was 9.5/10.
+
+However, since the output result requires 8 zeroes on trial A
+and 5 on trial B, this clashes with the valuesOutSet rule, so
+that the maximum score attainable on the correct result is
+9.8437
+
+We can fix this by having 1 = <, 2 = =, 3 = > and thereby
+avoiding zeroes on the output. 
+
+The code required is something like:
+
+ie:
+LD A, IMM 2
+LD B, IMM 112 (or greater)
+// Output 2's
+STO (C), A
+INC C
+DEC B
+JRNZ 0xFD
+LD C, IMM 0
+LD B, IMM 12
+// Loop
+PUSH A
+LD A, IMM 16
+LDI A, (C)
+CMP A, B
+JRC       // 12 > A
+JRZ 4     // A === 12
+LD A, IMM 3 // A > 12
+STO (C), A
+JR 8   // Next
+// A === 12
+LD A, IMM 2 // A === 12
+STO (C), A
+JR  3 // Next
+// A < 12
+LD A, IMM 1
+STO (C), A
+// Next
+INC C
+POP A
+DEC A
+JR NZ E9 // Loop
+RETF
+
+
+
 16/02/2025
 
 Latest trial with LD A, R, LD A, S removed in response
@@ -17,6 +70,12 @@ when following paramsPlusN (6).
 
 By positioning the paramsGreaterThanN rule after paramsMinusN,
 the rule was completed by round 27.
+
+Restarted a trial with all the current features - intention
+is to leave it to run for up to three days, before doing
+further development work with new rules.
+
+Need end of job functionality. (Completion of all rules)
 
 11/02/2025
 
