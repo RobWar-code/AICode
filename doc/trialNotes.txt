@@ -13,7 +13,7 @@ that the maximum score attainable on the correct result is
 We can fix this by having 1 = <, 2 = =, 3 = > and thereby
 avoiding zeroes on the output. 
 
-The code required is something like:
+The output code required is something like:
 
 ie:
 LD A, IMM 2
@@ -49,7 +49,36 @@ DEC A
 JR NZ E9 // Loop
 RETF
 
+Points Arising
 
+As a general rule the required output data should not have
+more than 2 or 3 zeroes.
+
+Where the number of output values is small, the random output
+of numbers should not mask the logic required so the minimum
+number of same outputs in such samples should be about four or
+five and these should be scattered through the data so that they
+are best elucidated by logic.
+
+In the case of the paramsGreaterThanN function, it is suggested
+that the parameter inputs should be set to reflect these things.
+
+For the next trial, I have supplied the parameters to the 
+paramsGreaterThanN function directly, this time with five
+or six inputs scattered, which should provide the range outputs.
+I have also added the SL A and SR A instructions.
+
+Further Trials
+
+The trail with the original data was still stuck at score 9
+after 137 rounds.
+
+The trial with the data reached score 9.4367 by 61 rounds.
+So we have proven the general principle that sample input data
+is significant.
+
+The next attempt is to split the rule into two - first
+with paramsGreaterThanN then paramsCompareN
 
 16/02/2025
 

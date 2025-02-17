@@ -18,7 +18,7 @@ class InstructionSet {
         };
         this.callStack = []; 
         this.farCallStack = [];
-        this.numIns = 54;
+        this.numIns = 56;
         // Notes: Later we need to decide how the return communication with CFAR functions
         // should be performed.
         // multi-byte numbers are most significant byte first
@@ -481,9 +481,19 @@ class InstructionSet {
                     }
                 ]
             },
+            {
+                name: "SL A",
+                code: 40,
+                insLen: 1
+            },
+            {
+                name: "SR A",
+                code: 41,
+                insLen: 1
+            },
             {       
                 name: "CMP A, B",        // If equal, z flag set; if B > A carry flag set; else flags cleared
-                code: 40,
+                code: 42,
                 insLen: 1,
                 redundantPairs: [
                     {
@@ -494,120 +504,120 @@ class InstructionSet {
             },
             {
                 name: "JR", // Unconditional Jump Relative
-                code: 41,
+                code: 43,
                 insLen: 2
             },
             {
                 name: "JRZ",
-                code: 42,
+                code: 44,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "JRZ",
-                        code: 42
-                    }
-                ]
-            },
-            {
-                name: "JRNZ",
-                code: 43,
-                insLen: 2,
-                redundantPairs: [
-                    {
-                        name: "JRNZ",
-                        code: 43
-                    }
-                ]
-            },
-            {
-                name: "JRLZ",
-                code: 44,
-                insLen: 3,
-                redundantPairs: [
-                    {
-                        name: "JRLZ",
                         code: 44
                     }
                 ]
             },
             {
-                name: "JRC",
+                name: "JRNZ",
                 code: 45,
                 insLen: 2,
                 redundantPairs: [
                     {
-                        name: "JRC",
+                        name: "JRNZ",
                         code: 45
                     }
                 ]
             },
             {
-                name: "JRNC",
+                name: "JRLZ",
                 code: 46,
-                insLen: 2,
+                insLen: 3,
                 redundantPairs: [
                     {
-                        name: "JRNC",
+                        name: "JRLZ",
                         code: 46
                     }
                 ]
             },
             {
-                name: "JRLC",
+                name: "JRC",
                 code: 47,
-                insLen: 3,
+                insLen: 2,
                 redundantPairs: [
                     {
-                        name: "JRLC",
+                        name: "JRC",
                         code: 47
                     }
                 ]
             },
             {
-                name: "CALL",
+                name: "JRNC",
                 code: 48,
+                insLen: 2,
+                redundantPairs: [
+                    {
+                        name: "JRNC",
+                        code: 48
+                    }
+                ]
+            },
+            {
+                name: "JRLC",
+                code: 49,
+                insLen: 3,
+                redundantPairs: [
+                    {
+                        name: "JRLC",
+                        code: 49
+                    }
+                ]
+            },
+            {
+                name: "CALL",
+                code: 50,
                 insLen: 2
             },
             {
                 name: "CASM",              // Call the code at the SM marker
-                code: 49,
+                code: 51,
                 insLen: 2
             },
             {
                 name: "CFAR",              // Call Far
-                code: 50,
+                code: 52,
                 insLen: 5
             },
             {
                 name: "RET",
-                code: 51,
+                code: 53,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "RET",
-                        code: 51
+                        code: 53
                     }
                 ]
             },
             {
                 name: "RETF",               // Return from far call
-                code: 52,
+                code: 54,
                 insLen: 1,
                 redundantPairs: [
                     {
                         name: "RETF",
-                        code: 52
+                        code: 54
                     }
                 ]
             },
             {
                 name:"SM",              // Section Marker - no operation used for breeding (4 data bytes)
-                code: 53,
+                code: 55,
                 insLen: 2,
                 redundantPairs: [
                     {
                         name: "SM",
-                        code: 53
+                        code: 55
                     }
                 ]
             }
@@ -1055,6 +1065,40 @@ class InstructionSet {
                     ++IP;
                     break;
                 case 40:
+                    // SL A
+                    if (A & 0x80) {
+                        CF = 1
+                    }
+                    else {
+                        CF = 0
+                    }
+                    A = Math.floor(A * 2) & 255;
+                    if (A === 0) {
+                        ZF = 1;
+                    }
+                    else {
+                        ZF = 0;
+                    }
+                    ++IP;
+                    break;
+                case 41:
+                    // SR A
+                    if (A & 1) {
+                        CF = 1;
+                    }
+                    else {
+                        CF = 0;
+                    }
+                    A = Math.floor(A/2) & 255;
+                    if (A === 0) {
+                        ZF = 1;
+                    }
+                    else {
+                        ZF = 0;
+                    }
+                    ++IP;
+                    break;
+                case 42:
                     // CMP A, B
                     if (A < B) {
                         CF = 1;
@@ -1072,7 +1116,7 @@ class InstructionSet {
                     break;
                 // Jumps relative are taken from the byte preceding or the byte 
                 // following the jump instruction
-                case 41:
+                case 43:
                     // JR
                     pointer = IP;
                     ++IP;
@@ -1087,7 +1131,7 @@ class InstructionSet {
                         if (IP > 255) IP = 255;
                     }
                     break;
-                case 42:
+                case 44:
                     // JRZ
                     ++IP;
                     if (ZF) {
@@ -1106,7 +1150,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 43:
+                case 45:
                     // JRNZ
                     ++IP;
                     if (!ZF) {
@@ -1125,7 +1169,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 44:
+                case 46:
                     // JRLZ
                     if (ZF) {
                         ++IP;
@@ -1149,7 +1193,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 45:
+                case 47:
                     // JRC
                     ++IP;
                     if (CF) {
@@ -1168,7 +1212,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 46:
+                case 48:
                     // JRNC
                     ++IP;
                     if (!CF) {
@@ -1187,7 +1231,7 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 47:
+                case 49:
                     // JRLC
                     if (CF) {
                         ++IP;
@@ -1211,7 +1255,7 @@ class InstructionSet {
                         IP += 3;
                     }
                     break;
-                case 48:
+                case 50:
                     // CALL
                     ++IP;
                     pointer = memSpace[IP];
@@ -1219,7 +1263,7 @@ class InstructionSet {
                     this.callStack.push(IP);
                     IP = pointer;
                     break;
-                case 49:
+                case 51:
                     // CASM
                     ++IP;
                     value = memSpace[IP];
@@ -1232,11 +1276,11 @@ class InstructionSet {
                         ++IP;
                     }
                     break;
-                case 50:
+                case 52:
                     // CFAR - currently a NOOP
                     IP += 5;
                     break;
-                case 51:
+                case 53:
                     // RET
                     if (this.callStack.length > 0) {
                         pointer = this.callStack.pop();
@@ -1247,11 +1291,11 @@ class InstructionSet {
                         RETF = true;
                     }
                     break;
-                case 52:
+                case 54:
                     // RETF
                     RETF = true;
                     break;
-                case 53:
+                case 55:
                     // SM - used for marking blocks of code, NOOP
                     IP += 2;
                     break;

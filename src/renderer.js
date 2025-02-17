@@ -27,7 +27,7 @@ ipcRenderer.on("displayEntity", (event, data) => {
         processingCancelled = true;
         clearTimeout(processTimeout);
         document.getElementById('statusDiv').style.display = "block";
-        document.getElementById('statusPara').innerText = "Score Threshold Reached";
+        document.getElementById('statusPara').innerText = "Score Threshold Reached/Rules Completed";
     }
     entityDisplay.display(data);
 });

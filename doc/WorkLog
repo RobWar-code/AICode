@@ -4,6 +4,8 @@ Contents
     Jobs Done
 
 Jobs Due
+    * = completed and tested
+    + = completed not tested
 
     Possibly include duplication in monoclonal breed mutations
 
@@ -18,7 +20,7 @@ Jobs Due
     Consider the facility of adding code rules and still using the saved
     entities to resume.
 
-    Add a completion of all rules procedure.
+    + Add a completion of all rules procedure.
     
     * Pass the rule sequence num for seed rules to the execute (entity and instruction)
     functions and from there to the getOutputByteScore function.

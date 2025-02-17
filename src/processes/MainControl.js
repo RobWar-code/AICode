@@ -135,9 +135,21 @@ class MainControl {
                 console.log("checkRuleThreshold - score:", score, "sequenceNum:", this.ruleSequenceNum);
                 console.log("checkRuleThreshold - valuesOut:", entity.valuesOut);
                 console.log("Clearing best sets");
-                // Clear down all best sets to use only the seed rules or random
-                for (let i = 0; i < this.numBestSets; i++) {
-                    this.bestSets[i] = [];
+                if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
+                    // Clear down all best sets to use only the seed rules or random
+                    for (let i = 0; i < this.numBestSets; i++) {
+                        this.bestSets[i] = [];
+                    }
+                }
+                else {
+                    // Terminate the processing, display the best entity
+                    let terminateProcessing = true;
+                    entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
+                        this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
+                        this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
+                        this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
+                        this.seedRuleBreedCount, this.crossSetCount, this.currentCycle, this.numRounds, 
+                        currentRule, terminateProcessing);
                 }
                 this.ruleSequenceNum = rulesets.ruleSequenceNum;
                 rulesets.seedRuleSet = false;
