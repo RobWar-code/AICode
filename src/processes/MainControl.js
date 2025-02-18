@@ -306,7 +306,7 @@ class MainControl {
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    if (j === 0 && rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0 && Math.random() < 0.2) {
+                    if (j === 0 && rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0 && Math.random() < 0.5) {
                         breedMode = "seedRule";
                     }
                     else if (bestEntitySet.length < this.bestEntitySetMax) {

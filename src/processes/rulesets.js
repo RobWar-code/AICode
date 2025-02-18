@@ -149,53 +149,53 @@ const rulesets = {
         this.ruleFunction.push(this.paramsMinusN);
         this.byteFunction.push(this.byteParamsMinusN);
 
-        let scoreItem16 = {rule: "Params Greater Than N (12)", ruleNum: 16, skip: false, sequenceNum: 5,
-            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
-            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
-            paramsIn: [
-                [8,9,12,24,22,12,11,1,12,13,15,19,3,4,12,12],
-                [12,12,200,156,79,3,4,12,12,12,9,6,32,35,1,7]
-            ]
-        };
-        this.scoreList.push(scoreItem16);
-        this.ruleFunction.push(this.paramsGreaterThanN);
-        this.byteFunction.push(this.byteParamsGreaterThanN);
-
-        let scoreItem17 = {rule: "Params Compare N (12)", ruleNum: 17, skip: false, sequenceNum: 6,
-            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
-            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
-            paramsIn: [
-                [8,9,12,24,22,12,11,1,12,13,15,19,3,4,12,12],
-                [12,12,200,156,79,3,4,12,12,12,9,6,32,35,1,7]
-            ]
-        };
-        this.scoreList.push(scoreItem17);
-        this.ruleFunction.push(this.paramsCompareN);
-        this.byteFunction.push(this.byteParamsCompareN);
-
-        let scoreItem18 = {rule: "Params Times N (2)", ruleNum: 18, skip: false, sequenceNum: 7,
+        let scoreItem16 = {rule: "Params Times N (2)", ruleNum: 16, skip: false, sequenceNum: 5,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
             n: 2, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+        };
+        this.scoreList.push(scoreItem16);
+        this.ruleFunction.push(this.paramsTimesN)
+        this.byteFunction.push(this.byteParamsTimesN);
+
+        let scoreItem17 = {rule: "Params Times N (6)", ruleNum: 17, skip: false, sequenceNum: 6,
+            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
+            n: 6, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+        };
+        this.scoreList.push(scoreItem17);
+        this.ruleFunction.push(this.paramsTimesN)
+        this.byteFunction.push(this.byteParamsTimesN);
+
+        let scoreItem18 = {rule: "Params Times N (22)", ruleNum: 18, skip: false, sequenceNum: 7,
+            retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
+            n: 22, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
         };
         this.scoreList.push(scoreItem18);
         this.ruleFunction.push(this.paramsTimesN)
         this.byteFunction.push(this.byteParamsTimesN);
 
-        let scoreItem19 = {rule: "Params Times N (6)", ruleNum: 19, skip: false, sequenceNum: 8,
+        let scoreItem19 = {rule: "Params Greater Than N (12)", ruleNum: 19, skip: false, sequenceNum: 8,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
-            n: 6, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+            paramsIn: [
+                [8,9,12,24,22,12,11,1,12,13,15,19,3,4,12,12],
+                [12,12,200,156,79,3,4,12,12,12,9,6,32,35,1,7]
+            ]
         };
         this.scoreList.push(scoreItem19);
-        this.ruleFunction.push(this.paramsTimesN)
-        this.byteFunction.push(this.byteParamsTimesN);
+        this.ruleFunction.push(this.paramsGreaterThanN);
+        this.byteFunction.push(this.byteParamsGreaterThanN);
 
-        let scoreItem20 = {rule: "Params Times N (22)", ruleNum: 20, skip: false, sequenceNum: 9,
+        let scoreItem20 = {rule: "Params Compare N (12)", ruleNum: 20, skip: false, sequenceNum: 9,
             retain: false, score: 0, completionRound: -1, max: 4, startRoundNum: 84,
-            n: 22, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+            n: 12, outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+            paramsIn: [
+                [8,9,12,24,22,12,11,1,12,13,15,19,3,4,12,12],
+                [12,12,200,156,79,3,4,12,12,12,9,6,32,35,1,7]
+            ]
         };
         this.scoreList.push(scoreItem20);
-        this.ruleFunction.push(this.paramsTimesN)
-        this.byteFunction.push(this.byteParamsTimesN);
+        this.ruleFunction.push(this.paramsCompareN);
+        this.byteFunction.push(this.byteParamsCompareN);
 
         // Rules with interaction between parameters
         let scoreItem21 = {rule: "Add First Param", ruleNum: 21,

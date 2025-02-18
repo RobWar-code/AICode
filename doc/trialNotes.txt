@@ -10,6 +10,15 @@ This last problem may be due to the overuse of the
 seed-rule. The frequency of this has been adjusted 
 downward for the next trial.
 
+The trial got stuck on paramsTimes(N) 22 for over
+100 rounds. This is a substantial downgrade from
+earlier trials and may be due to the order of rules,
+the lowering of the seed rule trials or the addition
+of the SL A and SR A instructions.
+
+Try increasing the seed rule frequency and moving the
+comparison rules after the times rules.
+
 17/02/2025
 
 Having set the rule pass score to 9.9/10 we find that
