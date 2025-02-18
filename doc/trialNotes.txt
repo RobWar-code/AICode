@@ -1,3 +1,15 @@
+18/02/2025
+
+The paramsGreaterThanN rule took 11 rounds to complete
+The paramsCompareN rule took 131 rounds to complete
+However, the paramsTimesN (6) rule had only got to
+score 6.8 after 100 rounds, so some new factor has come 
+into play here.
+
+This last problem may be due to the overuse of the
+seed-rule. The frequency of this has been adjusted 
+downward for the next trial.
+
 17/02/2025
 
 Having set the rule pass score to 9.9/10 we find that
@@ -79,6 +91,14 @@ is significant.
 
 The next attempt is to split the rule into two - first
 with paramsGreaterThanN then paramsCompareN
+
+This trial took 11 rounds to complete the rule paramsGreaterThanN
+
+As general rule it is better from a practical point view not
+to allow testing to go beyond 45 - 60 rounds for an individual rule.
+If a rule reaches this without passing, it would be better to
+rework it in some way.
+
 
 16/02/2025
 

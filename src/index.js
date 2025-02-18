@@ -194,7 +194,12 @@ ipcMain.on("seedRuleListRequest", (event, data) => {
   let seedRulesLength = rulesets.seedRuleMemSpaces.length;
   if (seedRulesLength === 0) return;
   else {
-    mainWindow.webContents.send("seedRuleSelectorActivate", seedRulesLength);
+    let seedRules = [];
+    for (let i = 0; i < seedRulesLength; i++) {
+      let name = rulesets.getDescriptionFromSequence(i);
+      seedRules.push(name);
+    }
+    mainWindow.webContents.send("seedRuleSelectorActivate", seedRules);
   }  
 });
 

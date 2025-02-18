@@ -53,14 +53,14 @@ const seedDisplay = {
         }
     },
 
-    displaySeedRuleSelector(listLength) {
+    displaySeedRuleSelector(ruleList) {
         // Build the selection list
         const selector = document.getElementById("seedRuleSelector");
         selector.innerHTML = "";
-        for (let count = 0; count < listLength; count++) {
+        for (let count = 0; count < ruleList.length; count++) {
             const opt = document.createElement('option');
             opt.value = count;
-            opt.textContent = count;
+            opt.textContent = ruleList[count];
             selector.appendChild(opt);
         };
         // Display the seed selector div

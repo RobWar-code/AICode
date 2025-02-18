@@ -56,8 +56,8 @@ ipcRenderer.on("seedDisplayResults", (event, data) => {
     seedDisplay.displaySeedResults(data);
 });
 
-ipcRenderer.on("seedRuleSelectorActivate", (event, listLength) => {
-    seedDisplay.displaySeedRuleSelector(listLength);
+ipcRenderer.on("seedRuleSelectorActivate", (event, ruleList) => {
+    seedDisplay.displaySeedRuleSelector(ruleList);
 });
 
 ipcRenderer.on("displayRuleSelectionList", (event, ruleList) => {
@@ -88,11 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const traceButton = document.getElementById('traceButton');
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
+    const cancelLoadSeedButton = document.getElementById('cancelLoadSeedButton');
     const insertSeedForm = document.getElementById('insertSeedForm');
     const loadSeedRuleButton = document.getElementById('loadSeedRuleButton');
     const seedRuleSelectorForm = document.getElementById('seedRuleSelectorForm');
+    const cancelLoadSeedRuleButton = document.getElementById('cancelLoadSeedRuleButton');
     const ruleSelectionButton = document.getElementById('ruleSelectionButton');
     const ruleSelectorForm = document.getElementById('ruleSelectorForm');
+    const cancelRuleSelectionButton = document.getElementById('cancelRuleSelectionButton');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const testMonoclonalButton = document.getElementById('testMonoclonalButton');
@@ -170,6 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send("loadAndExecuteSeed", seedOption);
     });
 
+    cancelLoadSeedButton.addEventListener("click", (event) => {
+        document.getElementById("seedSelectionDiv").style.display = "none";
+    });
+
     insertSeedForm.addEventListener("submit", (event) => {
         event.preventDefault();
         let seedSetNum = document.getElementById("seedSetNumInput").value;
@@ -203,6 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send("loadAndExecuteSeedRule", seedRuleNum);
     });
 
+    cancelLoadSeedRuleButton.addEventListener("click", (event) => {
+        document.getElementById("seedRuleSelectionDiv").style.display = "none";
+    });
+
     ruleSelectionButton.addEventListener('click', (event) => {
         ipcRenderer.send("requestRuleSequenceList", 0);
         processingCancelled = true;
@@ -218,6 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let selectedRuleSequenceNum = parseInt(document.getElementById('ruleSelector').value);
         ipcRenderer.send("startSelectedRule", selectedRuleSequenceNum);
     });
+
+    cancelRuleSelectionButton.addEventListener("click", (event) => {
+        document.getElementById("ruleSelectionDiv").style.display = "none";
+    });
+
 
     saveButton.addEventListener('click', (event) => {
         ipcRenderer.send("saveSession", 0);

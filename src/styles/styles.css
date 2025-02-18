@@ -21,6 +21,15 @@ li {
     list-style: none;
 }
 
+.formDiv {
+    margin-top: 2px;
+    border: 2px solid black;
+}
+
+.lineForm {
+    display: inline-block;
+}
+
 /* Modals */
 .genModal {
     display: none;

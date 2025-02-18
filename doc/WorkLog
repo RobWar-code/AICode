@@ -18,10 +18,22 @@ Jobs Due
     Include a cancel option button for the load options.
 
     Consider the facility of adding code rules and still using the saved
-    entities to resume.
+    entities to resume. Note that the seed rule ID (name) would have to
+    be saved with the seed rule, and this would have to be recorded
+    in the list of seed programs.
+
+    * Add a Cancel Load Seed button
+
+    * Add a Cancel Load Seed Rule button
+
+    * Add a Cancel Select Rule button
 
     + Add a completion of all rules procedure.
+
+    * Add the rule paramsCompareN
     
+    * Add shift left SL A and shift right SR A
+
     * Pass the rule sequence num for seed rules to the execute (entity and instruction)
     functions and from there to the getOutputByteScore function.
 
