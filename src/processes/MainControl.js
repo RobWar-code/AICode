@@ -24,7 +24,7 @@ class MainControl {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.clearanceRound = 10;
+        this.clearanceRound = 15;
         this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
