@@ -16,6 +16,12 @@ solutions to catch-up with current ones.
 
 This trial is commenced at midday today.
 
+It took until round 20 to complete the rule addFirstParam.
+
+However it took only 2 rounds to complete the subsequent 
+subtractFirstParam
+
+
 18/02/2025
 
 The paramsGreaterThanN rule took 11 rounds to complete

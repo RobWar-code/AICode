@@ -3,6 +3,7 @@ Worked Examples and Strategies
 Contents
     Problem Space Background
     Ruleset Strategies
+        Selecting Rules
         General Approaches
         Possible Future Approaches
             Staged Introduction of Rules
@@ -55,6 +56,44 @@ Contents
 
     
 <h1>Ruleset Strategies
+
+<h2>Selecting Rules
+    19/02/2025
+
+    Having settled successfully on completing one rule at a time and
+    using seed from this rules for each new rule, the question becomes
+    what rules to select.
+
+    The initial aim is for the system to learn to interpret and execute
+    ASCII representations of arithmetic expressions, ie:
+        "a + b;"
+        "a / b;"
+
+    The initial rules involve performing a single arithmetic operation
+    on each of the input parameters.
+
+    Then follow the rules for arranging adjacent parameters.
+
+    Then follow the rules for performing arithmetic operations on adjacent
+    parameters.
+
+    Then follow the rules for performing arithmetic operations on adjacent
+    parameters using an ASCII operator prompt.
+
+    Then follow the rules for converting ASCII number strings 
+
+    The next rule due is to supply ASCII arithmetic instructions
+    on the input.
+
+    The current trial extends as far as the previous rule and should
+    be time tested for that purpose. (expected 4 to 5 days).
+
+    The following rule is to perform ASCII arithmetic expressions.
+
+
+
+
+
 
 <h2>General Approaches
     Step 1) Put values in the output
