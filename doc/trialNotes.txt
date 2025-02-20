@@ -21,6 +21,12 @@ It took until round 20 to complete the rule addFirstParam.
 However it took only 2 rounds to complete the subsequent 
 subtractFirstParam
 
+Halted the trial at round 124 having not completed the 
+multiplyByFirstParam rule. So inserted another rule
+for multiplication (2 and 4, 3 and 9) to divide up the task.
+
+New trial started.
+
 
 18/02/2025
 
