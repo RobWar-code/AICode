@@ -115,15 +115,6 @@ const dbTransactions = {
 
     async deleteOtherRecords(dbConnection, sessionId) {
 
-        // Delete Seed Rules
-        try {
-            const sql = 'DELETE FROM seed_rule WHERE session_id != ?';
-            const [results] = await dbConnection.execute(sql, [sessionId]);
-            console.log("Deleted old seed rules");
-        } catch (err) {
-            console.error('Error during DELETE seed rules operation:', err.message);
-        }
-
         // Delete Entities
         try {
             const sql = 'DELETE FROM entity WHERE session_id != ?';
@@ -180,7 +171,7 @@ const dbTransactions = {
         let seedRules;
         try {
             [seedRules] = await dbConnection.execute(
-                `SELECT * FROM seed_rule WHERE session_id = ${sessionId} ORDER BY rule_sequence_num`
+                `SELECT * FROM seed_rule ORDER BY rule_sequence_num`
             );
         }
         catch (error) {
@@ -199,8 +190,10 @@ const dbTransactions = {
         if (seedRules.length === 0) return true;
 
         let ruleSequenceNum = 0;
-        for (let seedRuleMemSpace of seedRules) {
-            let result = await this.saveSeedRule(dbConnection, sessionId, ruleSequenceNum, seedRuleMemSpace);
+        for (let seedRuleItem of seedRules) {
+            let ruleId = seedRuleItem.ruleId;
+            let seedRuleMemSpace = seedRuleItem.memSpace;
+            let result = await this.saveSeedRule(dbConnection, sessionId, ruleId, ruleSequenceNum, seedRuleMemSpace);
             if (!result) return false;
             ++ruleSequenceNum;
         }
@@ -211,22 +204,103 @@ const dbTransactions = {
 
     },
 
-    async saveSeedRule(dbConnection, sessionId, ruleSequenceNum, seedRuleMemSpace) {
+    async saveSeedRule(dbConnection, sessionId, ruleId, ruleSequenceNum, seedRuleMemSpace) {
         // Delete any existing record for this rule sequence number
-        sql = `DELETE FROM seed_rule WHERE rule_sequence_num = ${ruleSequenceNum}`;
+        sql = `DELETE FROM seed_rule WHERE rule_id = ${ruleId}`;
         await dbConnection.query(sql);
 
         let memSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
         try {
-            sql = "INSERT INTO seed_rule (session_id, rule_sequence_num, seed_rule_mem_space) VALUES (?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [sessionId, ruleSequenceNum, memSpaceStr]);
+            sql = "INSERT INTO seed_rule (session_id, rule_id, rule_sequence_num, seed_rule_mem_space) VALUES (?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [sessionId, ruleId, ruleSequenceNum, memSpaceStr]);
             return true;
         }
         catch (error) {
             console.error("Failed to insert seed_rule", error.message);
             throw error;
         }
+    },
+
+    async fetchSeedRuleList() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let seedList = [];
+        try {
+            let sql = "SELECT rule_id FROM seed_rule";
+            const [results] = await dbConnection.query(sql);
+
+            // Get the rule descriptions
+            if (results.length > 0) {
+                for (let row of results) {
+                    let seedListItem = {};
+                    let name = rulesets.getDescriptionFromRuleId(row.rule_id);
+                    seedListItem.ruleId = row.rule_id;
+                    seedListItem.name = name;
+                    seedList.push(seedListItem);
+                }
+            }
+            await dbConnection.end();
+            return seedList;
+        }
+        catch (error) {
+            console.error("fetchSeedRuleList: Could not read seed_rule table:", error.message);
+            throw error;
+        }
+    },
+
+    async insertRuleSeed(ruleSeedList) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+        
+        let seedList = rulesets.seedRuleMemSpaces;
+        for (let ruleId of ruleSeedList) {
+            // Check Whether already present
+            let found = false;
+            for (let item of seedList) {
+                if (item.ruleId === ruleId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Get the seed rule from the database
+                try {
+                    let sql = `SELECT seed_rule_mem_space FROM seed_rule WHERE rule_id = ${ruleId}`;
+                    let [results] = await dbConnection.query(sql);
+                    let item = {};
+                    item.ruleId = ruleId;
+                    let memSpace = this.stringToIntArray(results[0].seed_rule_mem_space);
+                    item.memSpace = memSpace;
+                    seedList.push(item);
+
+                }
+                catch (error) {
+                    console.error("insertRuleSeed: could not fetch ruleId", ruleId, error.message);
+                    throw error;
+                }
+            }
+        }
+        rulesets.seedRuleMemSpaces = seedList;
+
+        await dbConnection.end();
+
+    },
+
+    stringToIntArray(str) {
+        let a = [];
+        for (let i = 0; i < str.length; i++) {
+            a.push(str.charCodeAt(i));
+        }
+        return a;
     }
+
 
 }
 

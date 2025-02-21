@@ -59,8 +59,8 @@ const seedDisplay = {
         selector.innerHTML = "";
         for (let count = 0; count < ruleList.length; count++) {
             const opt = document.createElement('option');
-            opt.value = count;
-            opt.textContent = ruleList[count];
+            opt.value = ruleList[count].ruleId;
+            opt.textContent = ruleList[count].name;
             selector.appendChild(opt);
         };
         // Display the seed selector div

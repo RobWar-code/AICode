@@ -1,3 +1,10 @@
+20/02/2025
+
+The trial got stuck on second multiplyByFirstParam rule
+(3 and 9) for more than 300 rounds. Have introduced an 
+oddAndEvenParams rule, to see if this helps. Also introduced
+an additional multiply rule (6 and 5).
+
 19/02/2025
 
 The trial on the windows computer got stuck at score 9.75

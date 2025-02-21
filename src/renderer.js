@@ -4,6 +4,7 @@ const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"))
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
+const restoreRuleSeed = require(path.join(__dirname, '/display/restoreRuleSeed.js'));
 const testObj = require(path.join(__dirname, '/processes/testObj.js'));
 /*
 document.getElementById("button01").addEventListener("click", () => {
@@ -40,7 +41,7 @@ ipcRenderer.on("mainCycleCompleted", (event, data) => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
             ipcRenderer.send("activateMainProcess", 0);
-        }, 2000);
+        }, 3000);
     }
 });
 
@@ -54,6 +55,10 @@ ipcRenderer.on("displaySeedSelector", (event, nameList) => {
 
 ipcRenderer.on("seedDisplayResults", (event, data) => {
     seedDisplay.displaySeedResults(data);
+});
+
+ipcRenderer.on("displayRestoreRuleSeedSelection", (event, seedList) => {
+    restoreRuleSeed.displayModal(seedList);
 });
 
 ipcRenderer.on("seedRuleSelectorActivate", (event, ruleList) => {
@@ -93,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadSeedRuleButton = document.getElementById('loadSeedRuleButton');
     const seedRuleSelectorForm = document.getElementById('seedRuleSelectorForm');
     const cancelLoadSeedRuleButton = document.getElementById('cancelLoadSeedRuleButton');
+    const restoreRuleSeedButton = document.getElementById('restoreRuleSeedButton');
+    const restoreRuleSeedSelector = document.getElementById('restoreRuleSeedSelector');
+    const restoreRuleSeedSubmit = document.getElementById('restoreRuleSeedSubmit');
+    const restoreRuleSeedDismiss = document.getElementById('restoreRuleSeedDismiss')
     const ruleSelectionButton = document.getElementById('ruleSelectionButton');
     const ruleSelectorForm = document.getElementById('ruleSelectorForm');
     const cancelRuleSelectionButton = document.getElementById('cancelRuleSelectionButton');
@@ -206,12 +215,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     seedRuleSelectorForm.addEventListener('click', (event) => {
         event.preventDefault();
-        let seedRuleNum = document.getElementById('seedRuleSelector').value;
-        ipcRenderer.send("loadAndExecuteSeedRule", seedRuleNum);
+        let seedRuleId = document.getElementById('seedRuleSelector').value;
+        ipcRenderer.send("loadAndExecuteSeedRule", seedRuleId);
     });
 
     cancelLoadSeedRuleButton.addEventListener("click", (event) => {
         document.getElementById("seedRuleSelectionDiv").style.display = "none";
+    });
+
+    restoreRuleSeedButton.addEventListener("click", (event) => {
+        ipcRenderer.send('fetchSavedRuleSeedList', 0);
+    });
+
+    restoreRuleSeedSelector.addEventListener("change", (event) => {
+        restoreRuleSeed.insertSelection();
+    });
+
+    restoreRuleSeedSubmit.addEventListener("click", (event) => {
+        if (restoreRuleSeed.ruleSeedSet.length === 0) return;
+        ipcRenderer.send('insertRuleSeed', restoreRuleSeed.ruleSeedSet);
+        document.getElementById("restoreRuleSeedBackground").style.display = "none";
+    });
+
+    restoreRuleSeedDismiss.addEventListener("click", (event) => {
+        document.getElementById("restoreRuleSeedBackground").style.display = "none";
     });
 
     ruleSelectionButton.addEventListener('click', (event) => {

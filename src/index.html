@@ -43,6 +43,25 @@
       </div>
     </div>
 
+    <!-- Restore Rule Seed Modal-->
+    <div class="genModal" id="restoreRuleSeedBackground">
+      <div class="genModalForm" id="restoreRuleSeedMain">
+        <h2 class="heading">Restore Rule Seed</h2>
+        <div id="restoreRuleSeedSelectDiv">
+          Select Rules to Load: 
+          <select id="restoreRuleSeedSelector"></select>
+        </div>
+        <div id="restoreRuleSeedSelectionsDiv">
+          <p>Rule Seed Selected - Click Item to Remove</p>
+          <ul id="restoreRuleSeedSelectionsList">
+
+          </ul>
+          <button class="textButton" id="restoreRuleSeedSubmit">Submit Rules</button>
+          <button class="textButton" id="restoreRuleSeedDismiss">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Entity Description -->
     <div class="container-fluid" style="width: 90%">
       <div class="row" id="bestEntitySelectorDiv">
@@ -70,6 +89,7 @@
           <button class="textButton" id="traceButton">Trace</button>
           <button class="textButton" id="loadSeedButton">Load Seed</button>
           <button class="textButton" id="loadSeedRuleButton">Load Seed Rule</button>
+          <button class="textButton" id="restoreRuleSeedButton">Restore Rule Seed</button>
           <button class="textButton" id="ruleSelectionButton">Select Rule</button>
           <button class="textButton" id="saveButton">Save</button>
           <button class="textButton" id="loadButton">Load</button>

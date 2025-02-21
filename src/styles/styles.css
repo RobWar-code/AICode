@@ -178,6 +178,17 @@ li {
     overflow: auto;
 }
 
+/* Restore Rule Seed */
+#restoreRuleSeedBackground {
+    display: none;
+}
+
+#restoreRuleSeedSelectionsList {
+    background: white;
+    border: 1px solid black;
+    min-height: 10px;
+}
+
 /* Trace Window */
 #traceScoreListButton {
     display: none;

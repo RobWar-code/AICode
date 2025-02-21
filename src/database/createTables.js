@@ -50,6 +50,7 @@ async function createTables() {
     sql = "CREATE TABLE seed_rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "session_id INT,";
+    sql += "rule_id INT,";
     sql += "rule_sequence_num INT,";
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";

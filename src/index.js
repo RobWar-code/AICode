@@ -196,18 +196,30 @@ ipcMain.on("seedRuleListRequest", (event, data) => {
   else {
     let seedRules = [];
     for (let i = 0; i < seedRulesLength; i++) {
-      let name = rulesets.getDescriptionFromSequence(i);
-      seedRules.push(name);
+      let item = rulesets.seedRuleMemSpaces[i];
+      let ruleId = item.ruleId;
+      let name = rulesets.getDescriptionFromRuleId(ruleId);
+      seedRules.push({ruleId: ruleId, name:name});
     }
     mainWindow.webContents.send("seedRuleSelectorActivate", seedRules);
   }  
 });
 
-ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleNum) => {
-  let seedNum = parseInt(seedRuleNum);
+ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleId) => {
+  let seedNum = parseInt(seedRuleId);
   let seedDisplayData = program.loadAndExecuteSeedRule(seedNum);
   mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
 });
+
+ipcMain.on("fetchSavedRuleSeedList", async (event, data) => {
+  let seedList = await dbTransactions.fetchSeedRuleList();
+  mainWindow.webContents.send("displayRestoreRuleSeedSelection", seedList);
+});
+
+ipcMain.on('insertRuleSeed', (event, ruleSeedList) => {
+  dbTransactions.insertRuleSeed(ruleSeedList);
+});
+
 
 ipcMain.on("requestRuleSequenceList", (event, data) => {
   let ruleList = rulesets.fetchRuleSequenceList();

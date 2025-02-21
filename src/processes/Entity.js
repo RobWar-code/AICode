@@ -40,7 +40,13 @@ class Entity {
         this.oldParams = [];
 
         this.initialParamsListIndex = 0;
-        this.ruleParams = rulesets.getCurrentParamsIn();
+        if (ruleSequenceNum === null) {
+            this.ruleSequenceNum = rulesets.ruleSequenceNum;
+        }
+        else {
+            this.ruleSequenceNum = ruleSequenceNum;
+        }
+        this.ruleParams = rulesets.getParamsInFromRuleSequence(this.ruleSequenceNum);
         if (this.ruleParams === null) {
             this.initialParams = this.initialParamsList[0];
         }
@@ -62,12 +68,6 @@ class Entity {
         }
         else if (asRandom) {
             this.createRandomProgram();
-        }
-        if (ruleSequenceNum === null) {
-            this.ruleSequenceNum = rulesets.ruleSequenceNum;
-        }
-        else {
-            this.ruleSequenceNum = ruleSequenceNum;
         }
         // Breeding Parameters
         this.interbreedCycle = 5;
@@ -938,7 +938,12 @@ class Entity {
         displayData.params = this.oldParams;
         displayData.valuesOut = this.oldValuesOut;
 
-        displayData.initialParamsList = this.initialParamsList;
+        if (this.ruleParams === null) {
+            displayData.initialParamsList = this.initialParamsList;
+        }
+        else {
+            displayData.initialParamsList = this.ruleParams;
+        }
 
         // Registers
         displayData.registers = this.registers;

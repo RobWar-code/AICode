@@ -1,4 +1,5 @@
 const path = require('node:path');
+const { seedRuleMemSpaces } = require('./rulesets');
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
@@ -49,25 +50,46 @@ class MainControl {
     }
 
     async mainLoop() {
-        let thresholdReached = false;
-        let bestEntitySet = this.bestSets[this.bestSetNum];
-        bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
-        this.bestSets[this.bestSetNum] = bestEntitySet;
-        this.updateScoreHistory();
-        ++this.bestSetNum;
-        if (this.bestSetNum >= this.numBestSets) {
-            this.bestSetNum = 0;
-            this.saveBestScore();
-            ++this.numRounds;
-            await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
-            // Check for rule threshold reached
-            thresholdReached = this.checkRuleThreshold();
+        for (let i = 0; i < 2; i++) {
+            let thresholdReached = false;
+            let bestEntitySet = this.bestSets[this.bestSetNum];
+            bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
+            this.bestSets[this.bestSetNum] = bestEntitySet;
+            this.updateScoreHistory();
+            ++this.bestSetNum;
+            if (this.bestSetNum >= this.numBestSets) {
+                this.bestSetNum = 0;
+                this.saveBestScore();
+                ++this.numRounds;
+                await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
+                // Check for rule threshold reached
+                thresholdReached = this.checkRuleThreshold();
+            }
+            ++this.lapCounter;
+            if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
+                console.log("Clearance Round");
+                // Clearance Pass
+                this.restartSets();
+            }
         }
-        ++this.lapCounter;
-        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
-            console.log("Clearance Round");
-            // Clearance Pass
-            this.restartSets();
+
+        // Display Best Entity of current set
+        let endTime = Date.now();
+        let elapsedTime = endTime - this.startTime;
+        this.elapsedTime = elapsedTime;
+        elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
+        let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
+        let terminateProcessing = false;
+        let bestSetNum = this.bestSetNum - 1;
+        if (bestSetNum < 0) bestSetNum = 0;
+        if (this.bestSets[bestSetNum].length > 0) {
+            this.bestSets[bestSetNum][0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
+                this.ruleSequenceNum, this.randomCount, 
+                this.monoclonalInsCount, this.monoclonalByteCount,
+                this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+                this.interbreedInsMergeCount,
+                this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
+                this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
         }
     }
 
@@ -97,7 +119,8 @@ class MainControl {
         let highIndex = -1;
         for (let set of this.bestSets) {
             if (set.length > 0) {
-                let score = set[0].score;
+                let e = set[0];
+                let score = e.score;
                 if (score > highScore) {
                     highIndex = index;
                     highScore = score;
@@ -131,9 +154,6 @@ class MainControl {
             let score = entity.score;
             rulesets.seedRuleUpdate(memSpace, score, this.numRounds);
             if (rulesets.seedRuleSet) {
-                console.log("checkRuleThreshold - highIndex:", highIndex, "highScore:", highScore);
-                console.log("checkRuleThreshold - score:", score, "sequenceNum:", this.ruleSequenceNum);
-                console.log("checkRuleThreshold - valuesOut:", entity.valuesOut);
                 console.log("Clearing best sets");
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
                     // Clear down all best sets to use only the seed rules or random
@@ -306,7 +326,7 @@ class MainControl {
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    if (j === 0 && rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length === 0 && Math.random() < 0.5) {
+                    if (j === 0 && rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length < 10 && Math.random() < 0.5) {
                         breedMode = "seedRule";
                     }
                     else if (bestEntitySet.length < this.bestEntitySetMax) {
@@ -320,7 +340,7 @@ class MainControl {
 
                     if (breedMode === "seedRule") {
                         let r = Math.floor(Math.random() * rulesets.seedRuleMemSpaces.length);
-                        memSpace = rulesets.seedRuleMemSpaces[r];
+                        memSpace = rulesets.seedRuleMemSpaces[r].memSpace;
                         asRandom = false;
                         entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
                             this.cycleCounter, rulesets.ruleSequenceNum, this.numRounds, memSpace);
@@ -429,19 +449,7 @@ class MainControl {
             }
             ++this.cycleCounter;
         }
-        let endTime = Date.now();
-        let elapsedTime = endTime - this.startTime;
-        this.elapsedTime = elapsedTime;
-        elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
-        let terminateProcessing = false;
-        bestEntitySet[0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
-            this.ruleSequenceNum, this.randomCount, 
-            this.monoclonalInsCount, this.monoclonalByteCount,
-            this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-            this.interbreedInsMergeCount,
-            this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-            this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
+
         return bestEntitySet;
     }
 
@@ -482,22 +490,34 @@ class MainControl {
         return seedDisplayData;
     }
 
-    loadAndExecuteSeedRule(seedRuleNum) {
+    loadAndExecuteSeedRule(seedRuleId) {
         let insSet = new InstructionSet();
         // Fetch the seed rule program
-        let memSpace = rulesets.seedRuleMemSpaces[seedRuleNum].concat();
-        console.log("loadAndExecuteSeedRule - memSpace:", memSpace);
-        console.log("loadAndExecuteSeedRule - ruleNum:", seedRuleNum);
+        let found = false;
+        let memSpace = null;
+        for (let item of rulesets.seedRuleMemSpaces) {
+            if (item.ruleId === seedRuleId) {
+                memSpace = item.memSpace.concat();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            console.log("loadAndExecuteSeedRule - Seed Rule Not Matched:", seedRuleId);
+        }
+        let rule = rulesets.getRuleFromRuleId(seedRuleId);
+        let ruleSequenceNum = rule.sequenceNum;
+        console.log("loadAndExecuteSeedRule - ruleNum:", seedRuleId, "ruleSequenceNum:", ruleSequenceNum);
         let asRandom = false;
         let seeded = false;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
-            seedRuleNum, this.numRounds, memSpace);
+            ruleSequenceNum, this.numRounds, memSpace);
         this.seedEntity = entity;
         let memObj = entity.execute(0, 0);
         // Get the display details
         let seedProgram = {};
-        seedProgram.name = "Sequence Num: " + seedRuleNum;
-        let seedRuleDescription = rulesets.getDescriptionFromSequence(seedRuleNum);
+        seedProgram.name = "Rule Id: " + seedRuleId;
+        let seedRuleDescription = rulesets.getDescriptionFromRuleId(seedRuleId);
         seedProgram.description = seedRuleDescription;
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
         return seedDisplayData;
@@ -651,11 +671,24 @@ class MainControl {
         console.log("Entities Loaded");
 
         // Load the seed rules
-        rulesets.seedRuleMemSpaces = [];
         for (let item of seedRules) {
             let memStr = item.seed_rule_mem_space;
             let memArray = this.stringToIntArray(memStr);
-            rulesets.seedRuleMemSpaces.push(memArray);
+            let ruleId = item.rule_id;
+            // Search the existing seed rules
+            let found = false;
+            for (let item of rulesets.seedRuleMemSpaces) {
+                if (item.ruleId === ruleId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let item = {};
+                item.ruleId = ruleId;
+                item.memSpace = memArray;
+                rulesets.seedRuleMemSpaces.push(item);
+            }
         }
     }
 
