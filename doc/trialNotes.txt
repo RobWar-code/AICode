@@ -1,3 +1,19 @@
+22/02/2025
+
+Having introduced the additional multiplyByFirstParam rule,
+the trial completed the multiply rules by round 64. It
+then got stuck for over 250 rounds on the divide rule, so
+have now introduced additional divideByFirstParam rules
+(2,4; 3,6).
+
+Restore selected rule seed works correctly.
+
+Divide by first param (2,4) was completed in 3 rounds.
+
+The second divide by rule was at score 7.5 after 80 rounds.
+Introducing another rule (2, 3).
+
+
 20/02/2025
 
 The trial got stuck on second multiplyByFirstParam rule

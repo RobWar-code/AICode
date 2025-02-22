@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     haltProcessButton.addEventListener('click', (event) => {
         if (!processingCancelled) {
-            document.getElementById("haltProcessButton").innerText = "Restart";
+            document.getElementById("haltProcessButton").innerText = "Resume";
             clearTimeout(processTimeout);
         }
         else {
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     traceButton.addEventListener('click', (event) => {
         if (!traceActive) {
             processingCancelled = true;
-            document.getElementById("haltProcessButton").innerText = "Restart";
+            document.getElementById("haltProcessButton").innerText = "Resume";
             traceButton.innerText = "Trace Off"
             clearTimeout(processTimeout);
             ipcRenderer.send("startTrace", 0);
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSeedRuleButton.addEventListener('click', (event) => {
         ipcRenderer.send("seedRuleListRequest", 0);
         // Halt the on-going processing
-        document.getElementById("haltProcessButton").innerText = "Restart";
+        document.getElementById("haltProcessButton").innerText = "Resume";
         clearTimeout(processTimeout);
         processingCancelled = true;
     });

@@ -548,6 +548,12 @@ system is flagged to run until that rule has been completed.
 Once completed, processing is halted and the corresponding message is
 displayed on the user interface.
 
+##### Restore Rule Seed
+
+A facility is provided that allows for the selection of previously saved
+rule seed to be loaded back into memory for re-use during the breed and run
+cycles.
+
 ## Test Scripts
 
 For isolated function testing the test scripts are in the src/tests folder

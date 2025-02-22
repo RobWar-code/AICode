@@ -50,14 +50,14 @@ class MainControl {
     }
 
     async mainLoop() {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 6; i++) {
             let thresholdReached = false;
             let bestEntitySet = this.bestSets[this.bestSetNum];
             bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
             this.bestSets[this.bestSetNum] = bestEntitySet;
             this.updateScoreHistory();
 
-            if (i === 1) {
+            if (i === 5) {
                 // Display Best Entity of current set
                 let endTime = Date.now();
                 let elapsedTime = endTime - this.startTime;

@@ -15,9 +15,13 @@ Jobs Due
 
     Pass ExecutionCycle to the rulesets getScore method to trigger some rules
 
-    Include a cancel option button for the load options.
+    Export and Load JSON tables
 
-    Consider the facility of adding code rules and still using the saved
+    * Include the mainLoop actions in a loop, to improve processing times
+
+    * Include a cancel option button for the load options.
+
+    * Consider the facility of adding code rules and still using the saved
     entities to resume. Note that the seed rule ID (name) would have to
     be saved with the seed rule, and this would have to be recorded
     in the list of seed programs.
