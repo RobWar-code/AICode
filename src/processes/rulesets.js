@@ -7,8 +7,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 37,
-    maxRuleId: 36,
+    numRules: 39,
+    maxRuleId: 38,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
@@ -20,7 +20,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleCompletionRound: new Array(37).fill(-1),
+    ruleCompletionRound: new Array(39).fill(-1),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     seedRuleSet: false,
@@ -226,7 +226,7 @@ const rulesets = {
         this.ruleFunction.push(this.multiplyByFirstParam);
         this.byteFunction.push(this.byteMultiplyByFirstParam);
 
-        let scoreItem18 = {rule: "Divide by First Param", ruleId: 18,
+        let scoreItem18 = {rule: "Divide by First Param 1", ruleId: 18,
             retain: false, skip: false, sequenceNum: 7, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
@@ -236,7 +236,7 @@ const rulesets = {
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
                 ],
                 [
-                    5,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    4,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
                 ]
             ]
         };
@@ -244,26 +244,44 @@ const rulesets = {
         this.ruleFunction.push(this.divideByFirstParam);
         this.byteFunction.push(this.byteDivideByFirstParam);
 
-        let scoreItem19 = {rule: "Greater than First Param", ruleId: 19,
+        let scoreItem19 = {rule: "Divide by First Param 2", ruleId: 37,
             retain: false, skip: false, sequenceNum: 8, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             paramsIn: [
                 [
-                    20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                    3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
                 ],
                 [
-                    38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    6,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
                 ]
             ]
         };
         this.scoreList.push(scoreItem19);
-        this.ruleFunction.push(this.greaterThanFirstParam);
-        this.byteFunction.push(this.byteGreaterThanFirstParam);
+        this.ruleFunction.push(this.divideByFirstParam);
+        this.byteFunction.push(this.byteDivideByFirstParam);
 
-        let scoreItem20 = {rule: "Compare First Param", ruleId: 20,
+        let scoreItem20 = {rule: "Divide by First Param 3", ruleId: 38,
             retain: false, skip: false, sequenceNum: 9, 
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+            outBlockStart: 0, outBlockLen: 16,
+            inBlockStart: 0, inBlockLen: 16,
+            paramsIn: [
+                [
+                    5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                ],
+                [
+                    9,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                ]
+            ]
+        };
+        this.scoreList.push(scoreItem20);
+        this.ruleFunction.push(this.divideByFirstParam);
+        this.byteFunction.push(this.byteDivideByFirstParam);
+
+        let scoreItem21 = {rule: "Greater than First Param", ruleId: 19,
+            retain: false, skip: false, sequenceNum: 10, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
@@ -276,104 +294,122 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem20);
+        this.scoreList.push(scoreItem21);
+        this.ruleFunction.push(this.greaterThanFirstParam);
+        this.byteFunction.push(this.byteGreaterThanFirstParam);
+
+        let scoreItem22 = {rule: "Compare First Param", ruleId: 20,
+            retain: false, skip: false, sequenceNum: 11, 
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+            outBlockStart: 0, outBlockLen: 16,
+            inBlockStart: 0, inBlockLen: 16,
+            paramsIn: [
+                [
+                    20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                ],
+                [
+                    38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                ]
+            ]
+        };
+        this.scoreList.push(scoreItem22);
         this.ruleFunction.push(this.compareFirstParam);
         this.byteFunction.push(this.byteCompareFirstParam);
 
         // Rules with separate input and output pointers
-        let scoreItem21 = {rule: "Duplicate Params", ruleId: 21,
-            retain: false, skip: false, sequenceNum: 10, 
+        let scoreItem23 = {rule: "Duplicate Params", ruleId: 21,
+            retain: false, skip: false, sequenceNum: 12, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 8
         };
-        this.scoreList.push(scoreItem21);
+        this.scoreList.push(scoreItem23);
         this.ruleFunction.push(this.duplicateParams);
         this.byteFunction.push(this.byteDuplicateParams);
 
         // Rules relating adjacent parameters
-        let scoreItem22 = {rule: "Skip Adjacent Params 1", ruleId: 22,
-            retain: false, skip: false, sequenceNum: 11, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-            outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
-        };
-        this.scoreList.push(scoreItem22);
-        this.ruleFunction.push(this.skipAdjacentParams1);
-        this.byteFunction.push(this.byteSkipAdjacentParams1);
-
-        let scoreItem23 = {rule: "Skip Adjacent Params 2", ruleId: 23,
-            retain: false, skip: false, sequenceNum: 12, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-            outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
-        };
-        this.scoreList.push(scoreItem23);
-        this.ruleFunction.push(this.skipAdjacentParams2);
-        this.byteFunction.push(this.byteSkipAdjacentParams2);
-
-        let scoreItem24 = {rule: "Swap Adjacent Params", ruleId: 24,
+        let scoreItem24 = {rule: "Skip Adjacent Params 1", ruleId: 22,
             retain: false, skip: false, sequenceNum: 13, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 16
+            inBlockStart: 0, inBlockLen: 32
         };
         this.scoreList.push(scoreItem24);
-        this.ruleFunction.push(this.swapAdjacentParams);
-        this.byteFunction.push(this.byteSwapAdjacentParams);
+        this.ruleFunction.push(this.skipAdjacentParams1);
+        this.byteFunction.push(this.byteSkipAdjacentParams1);
 
-        let scoreItem25 = {rule: "Greater of Adjacent Params", ruleId: 25,
+        let scoreItem25 = {rule: "Skip Adjacent Params 2", ruleId: 23,
             retain: false, skip: false, sequenceNum: 14, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32
         };
         this.scoreList.push(scoreItem25);
-        this.ruleFunction.push(this.greaterOfAdjacentParams);
-        this.byteFunction.push(this.byteGreaterOfAdjacentParams);
+        this.ruleFunction.push(this.skipAdjacentParams2);
+        this.byteFunction.push(this.byteSkipAdjacentParams2);
 
-        let scoreItem26 = {rule: "Sort Adjacent Params", ruleId: 26,
+        let scoreItem26 = {rule: "Swap Adjacent Params", ruleId: 24,
             retain: false, skip: false, sequenceNum: 15, 
-            score: 0, completionRound: -1, max: 10, startRoundNum: 800,
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16
         };
         this.scoreList.push(scoreItem26);
-        this.ruleFunction.push(this.sortAdjacentParams);
-        this.byteFunction.push(this.byteSortAdjacentParams);
+        this.ruleFunction.push(this.swapAdjacentParams);
+        this.byteFunction.push(this.byteSwapAdjacentParams);
 
-        let scoreItem27 = {rule: "Add Adjacent Params", ruleId: 27,
+        let scoreItem27 = {rule: "Greater of Adjacent Params", ruleId: 25,
             retain: false, skip: false, sequenceNum: 16, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32
         };
         this.scoreList.push(scoreItem27);
-        this.ruleFunction.push(this.addAdjacentParams);
-        this.byteFunction.push(this.byteAddAdjacentParams);
+        this.ruleFunction.push(this.greaterOfAdjacentParams);
+        this.byteFunction.push(this.byteGreaterOfAdjacentParams);
 
-        let scoreItem28 = {rule: "Subtract Adjacent Params", ruleId: 28,
+        let scoreItem28 = {rule: "Sort Adjacent Params", ruleId: 26,
             retain: false, skip: false, sequenceNum: 17, 
+            score: 0, completionRound: -1, max: 10, startRoundNum: 800,
+            outBlockStart: 0, outBlockLen: 16,
+            inBlockStart: 0, inBlockLen: 16
+        };
+        this.scoreList.push(scoreItem28);
+        this.ruleFunction.push(this.sortAdjacentParams);
+        this.byteFunction.push(this.byteSortAdjacentParams);
+
+        let scoreItem29 = {rule: "Add Adjacent Params", ruleId: 27,
+            retain: false, skip: false, sequenceNum: 18, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32
         };
-        this.scoreList.push(scoreItem28);
+        this.scoreList.push(scoreItem29);
+        this.ruleFunction.push(this.addAdjacentParams);
+        this.byteFunction.push(this.byteAddAdjacentParams);
+
+        let scoreItem30 = {rule: "Subtract Adjacent Params", ruleId: 28,
+            retain: false, skip: false, sequenceNum: 19, 
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+            outBlockStart: 0, outBlockLen: 16,
+            inBlockStart: 0, inBlockLen: 32
+        };
+        this.scoreList.push(scoreItem30);
         this.ruleFunction.push(this.subtractAdjacentParams);
         this.byteFunction.push(this.byteSubtractAdjacentParams);
 
-        let scoreItem29 = {rule: "Multiply Adjacent Params", ruleId: 29, 
-            retain: false, skip: false, sequenceNum: 18, 
+        let scoreItem31 = {rule: "Multiply Adjacent Params", ruleId: 29, 
+            retain: false, skip: false, sequenceNum: 20, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, 
             inBlockStart: 0, inBlockLen: 32
         };
-        this.scoreList.push(scoreItem29);
+        this.scoreList.push(scoreItem31);
         this.ruleFunction.push(this.multiplyInitialParamsByEachother);
         this.byteFunction.push(this.byteMultiplyParams);
 
-        let scoreItem30 = {rule: "Divide Adjacent Params", ruleId: 30, 
-            retain: false, skip: false, sequenceNum: 19, 
+        let scoreItem32 = {rule: "Divide Adjacent Params", ruleId: 30, 
+            retain: false, skip: false, sequenceNum: 21, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 32,
@@ -388,12 +424,12 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem30);
+        this.scoreList.push(scoreItem32);
         this.ruleFunction.push(this.divideAdjacentParams);
         this.byteFunction.push(this.byteDivideAdjacentParams);
 
-        let scoreItem31 = {rule: "Use op to Convert Params", ruleId: 31,
-            retain: false, skip: false, sequenceNum: 20, 
+        let scoreItem33 = {rule: "Use op to Convert Params", ruleId: 31,
+            retain: false, skip: false, sequenceNum: 22, 
             score: 0, completionRound: -1, max: 20, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 0, inBlockLen: 96,
@@ -412,62 +448,62 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem31);
+        this.scoreList.push(scoreItem33);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
         let asciiParams1 = this.getASCIIParams(1);
-        let scoreItem32 = {rule: "Convert ASCII Numbers 1", ruleId: 32,
-            retain: false, skip: false, sequenceNum: 21, 
+        let scoreItem34 = {rule: "Convert ASCII Numbers 1", ruleId: 32,
+            retain: false, skip: false, sequenceNum: 23, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams1
         };
-        this.scoreList.push(scoreItem32);
+        this.scoreList.push(scoreItem34);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams2 = this.getASCIIParams(2);
-        let scoreItem33 = {rule: "Convert ASCII Numbers 2", ruleId: 33,
-            retain: false, skip: false, sequenceNum: 22, 
+        let scoreItem35 = {rule: "Convert ASCII Numbers 2", ruleId: 33,
+            retain: false, skip: false, sequenceNum: 24, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams2
         };
-        this.scoreList.push(scoreItem33);
+        this.scoreList.push(scoreItem35);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams3 = this.getASCIIParams(3);
-        let scoreItem34 = {rule: "Convert ASCII Numbers 2", ruleId: 34,
-            retain: false, skip: false, sequenceNum: 23, 
+        let scoreItem36 = {rule: "Convert ASCII Numbers 2", ruleId: 34,
+            retain: false, skip: false, sequenceNum: 25, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams3
         };
-        this.scoreList.push(scoreItem34);
+        this.scoreList.push(scoreItem36);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams4 = this.getASCIIParams(4);
-        let scoreItem35 = {rule: "Convert ASCII Numbers 2", ruleId: 35,
-            retain: false, skip: false, sequenceNum: 24, 
+        let scoreItem37 = {rule: "Convert ASCII Numbers 2", ruleId: 35,
+            retain: false, skip: false, sequenceNum: 26, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams4
         };
-        this.scoreList.push(scoreItem35);
+        this.scoreList.push(scoreItem37);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
-        this.diffScore = 36;
-        let scoreItem36 = {rule: "Difference Between Outputs", ruleId: 36, skip: true, 
+        this.diffScore = 38;
+        let scoreItem38 = {rule: "Difference Between Outputs", ruleId: 36, skip: true, 
             retain: true, score: 0, max: 1, startRoundNum: 0};
-        this.scoreList.push(scoreItem36);
+        this.scoreList.push(scoreItem38);
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
 

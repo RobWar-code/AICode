@@ -56,6 +56,27 @@ class MainControl {
             bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
             this.bestSets[this.bestSetNum] = bestEntitySet;
             this.updateScoreHistory();
+
+            if (i === 1) {
+                // Display Best Entity of current set
+                let endTime = Date.now();
+                let elapsedTime = endTime - this.startTime;
+                this.elapsedTime = elapsedTime;
+                elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
+                let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
+                let terminateProcessing = false;
+                if (this.bestSets[this.bestSetNum].length > 0) {
+                    this.bestSets[this.bestSetNum][0].display(this.mainWindow, this.bestSetNum, elapsedTime, 
+                        this.entityNumber, 
+                        this.ruleSequenceNum, this.randomCount, 
+                        this.monoclonalInsCount, this.monoclonalByteCount,
+                        this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+                        this.interbreedInsMergeCount,
+                        this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
+                        this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
+                }
+            }
+
             ++this.bestSetNum;
             if (this.bestSetNum >= this.numBestSets) {
                 this.bestSetNum = 0;
@@ -73,24 +94,6 @@ class MainControl {
             }
         }
 
-        // Display Best Entity of current set
-        let endTime = Date.now();
-        let elapsedTime = endTime - this.startTime;
-        this.elapsedTime = elapsedTime;
-        elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
-        let terminateProcessing = false;
-        let bestSetNum = this.bestSetNum - 1;
-        if (bestSetNum < 0) bestSetNum = 0;
-        if (this.bestSets[bestSetNum].length > 0) {
-            this.bestSets[bestSetNum][0].display(this.mainWindow, bestSetNum, elapsedTime, this.entityNumber, 
-                this.ruleSequenceNum, this.randomCount, 
-                this.monoclonalInsCount, this.monoclonalByteCount,
-                this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-                this.interbreedInsMergeCount,
-                this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-                this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
-        }
     }
 
     saveBestScore() {
