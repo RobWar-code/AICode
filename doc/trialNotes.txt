@@ -1,3 +1,34 @@
+23/02/2025
+
+divideByFirstParam 3 got stuck for about 400 rounds with
+the first params being (3, 6).
+
+Have now introduced a prior rule with params (4, 6) -
+ie: both even, one being a power of 2.
+
+This rule reached 11.3 after 238 rounds - still too
+long to be practical and subject to random number
+inserts rather than algorithmic products.
+
+If we use say 4 input parameter blocks rather than
+2 we reduce the chance of the system using ghost
+values rather than reading the first parameter,
+furthermore, we are more likely to get a general
+result for the operation rather than a program
+specialised for a particular number.
+
+A likely problem with this approach is that it
+would be trying to solve too much in a single
+pass.
+
+Since the appearance of a ghost parameter provides
+a partial solution, it is still worth generating.
+So perhaps the two approaches can be combined,
+using two parameter blocks of the first few rules
+and then more on the subsequent. This would allow
+the individual, partial solutions, to be merged
+into a single general solution.
+
 22/02/2025
 
 Having introduced the additional multiplyByFirstParam rule,

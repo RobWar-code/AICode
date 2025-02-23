@@ -49,14 +49,15 @@ class Entity {
         this.ruleParams = rulesets.getParamsInFromRuleSequence(this.ruleSequenceNum);
         if (this.ruleParams === null) {
             this.initialParams = this.initialParamsList[0];
+            this.numExecutions = this.initialParamsList.length;
         }
         else {
             this.initialParams = this.ruleParams[0];
+            this.numExecutions = this.ruleParams.length;
         }
         this.initialMemSpace = new Array(this.memLength).fill(0);
         this.codeFlags = new Array(this.memLength).fill(0);
         this.executionCount = 0;
-        this.numExecutions = 2;
         this.memSpace = new Array(this.memLength).fill(0);
         // Other Constants
         this.dataMaxValue = 255;
@@ -1044,6 +1045,7 @@ class Entity {
             this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
+        // Execution Cycle Completed
         if (execObj.RETF || this.registers.IP >= this.memLength || this.registers.IC >= this.instructionSet.maxIC) {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());

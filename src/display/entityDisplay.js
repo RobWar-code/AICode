@@ -60,8 +60,8 @@ const entityDisplay = {
             listParams(paramsDiv, paramsList, initialParams[i]);
         }
         // Parameter blocks
-        for (let i = 0; i < 2; i++) {
-            let num = (i + 1);
+        for (let i = 0; i < data.params.length; i++) {
+            let num = i;
             let divId = "inputParams" + num;
             let listId = "inputParamsList" + num;
             if (data.params.length > 0) {
@@ -69,8 +69,8 @@ const entityDisplay = {
             }
         }
         // Output Blocks
-        for (let i = 0; i < 2; i++) {
-            let num = i + 1;
+        for (let i = 0; i < data.valuesOut.length; i++) {
+            let num = i;
             let divId = "outputValues" + num;
             let listId = "outputValuesList" + num;
             if (data.valuesOut.length > 0) {

@@ -93,6 +93,11 @@ li {
     list-style-type: none;
 }
 
+.paramsRow {
+    padding: 4px;
+    border: 1px solid black;
+}
+
 /* Seed Selection */
 #seedSelectionDiv {
     display: none;
