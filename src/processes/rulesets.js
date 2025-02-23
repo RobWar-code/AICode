@@ -276,7 +276,7 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem19);
+        this.scoreList.push(scoreItem20);
         this.ruleFunction.push(this.divideByFirstParam);
         this.byteFunction.push(this.byteDivideByFirstParam);
 
