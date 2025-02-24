@@ -17,14 +17,16 @@ Jobs Due
 
     Export and Load JSON tables
 
-    Allow for more than two input parameter blocks in the rules
-        Adjust the entity execute number of execution cycles
+    Precede the divideBy rules by moduloFirstParam
+    
+    * Allow for more than two input parameter blocks in the rules
+        * Adjust the entity execute number of execution cycles
         to the number of input parameter blocks.
 
-        Adjust the main display to accomodate upto 6 input parameter
+        * Adjust the main display to accomodate upto 6 input parameter
         blocks
 
-        Adjust the display routines to accommodate the input parameter
+        * Adjust the display routines to accommodate the input parameter
         blocks
 
     * Include the mainLoop actions in a loop, to improve processing times
