@@ -1,3 +1,11 @@
+24/02/2025
+
+This time the system got stuck on divideBy (3,4).
+this is basically because of the difference between
+the divide methods for 3 and 4 using the SR A 
+instruction. If we remove the SR A and SL A instructions,
+likely it will use SUB A, B for the general method.
+
 23/02/2025
 
 divideByFirstParam 3 got stuck for about 400 rounds with
