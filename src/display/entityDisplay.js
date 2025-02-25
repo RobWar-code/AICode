@@ -1,5 +1,6 @@
 const entityDisplay = {
     currentData: null,
+    numDataDivs: 6,
 
     display(data) {
         if (!data) return;
@@ -8,7 +9,7 @@ const entityDisplay = {
         this.displayEntityCode(data.data, 0);
         this.displayEntityCode(data.data, 1);
         this.displayEntityRegisters(data);
-        this.displayDataValues(data, data.data, 1);
+        this.displayDataValues(data);
         return;
 
         function displayEntityDetails(data) {
@@ -50,30 +51,39 @@ const entityDisplay = {
         document.getElementById("regIC").innerText = data.registers.IC;
     },
 
-    displayDataValues(data, dataBlock, index) {
+    displayDataValues(data) {
         let initialParams = data.initialParamsList;
-        let dataIn = dataBlock[index].inputParams;
-        let dataOut = dataBlock[index].oldValuesOut;
-        for (let i = 0; i < initialParams.length; i++) {
+        for (let i = 0; i < this.numDataDivs; i++) {
             let paramsDiv = "initialParams" + i;
             let paramsList = "initialParamsList" + i;
-            listParams(paramsDiv, paramsList, initialParams[i]);
+            if (i >= initialParams.length) {
+                document.getElementById(paramsList).innerHTML = "";
+            }
+            else {
+                listParams(paramsDiv, paramsList, initialParams[i]);
+            }
         }
         // Parameter blocks
-        for (let i = 0; i < data.params.length; i++) {
+        for (let i = 0; i < this.numDataDivs; i++) {
             let num = i;
             let divId = "inputParams" + num;
             let listId = "inputParamsList" + num;
-            if (data.params.length > 0) {
+            if (i >= data.params.length) {
+                document.getElementById(listId).innerHTML = "";
+            }
+            else {
                 listDataBlocks(divId, listId, data.params[i]);
             }
         }
         // Output Blocks
-        for (let i = 0; i < data.valuesOut.length; i++) {
+        for (let i = 0; i < this.numDataDivs; i++) {
             let num = i;
             let divId = "outputValues" + num;
             let listId = "outputValuesList" + num;
-            if (data.valuesOut.length > 0) {
+            if (i >= data.valuesOut.length) {
+                document.getElementById(listId).innerHTML = "";
+            }
+            else {
                 listDataBlocks(divId, listId, data.valuesOut[i]);
             }
         }

@@ -855,11 +855,26 @@ const rulesets = {
 
     getCurrentMaxScore() {
         let maxScore = 0;
+        // Find the current rule to get the number of parameter inputs
+        let numInputParamBlocks = 2;
+        for (let rule of this.scoreList) {
+            if ("sequenceNum" in rule && !rule.skip && !rule.retain) {
+                if (rule.sequenceNum === this.ruleSequenceNum) {
+                    if ("paramsIn" in rule) {
+                        numInputParamBlocks = rule.paramsIn.length;
+                    }
+                    else {
+                        numInputParamBlocks = 2;
+                    }
+                }
+            }
+        }
+
         for (let rule of this.scoreList) {
             if ("sequenceNum" in rule && !rule.skip) {
                 if (rule.sequenceNum === this.ruleSequenceNum || 
                     (rule.sequenceNum <= this.ruleSequenceNum && rule.retain)) {
-                    maxScore += rule.max * 2;
+                    maxScore += rule.max * numInputParamBlocks;
                 }
             }
         }
