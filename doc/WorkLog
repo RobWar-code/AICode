@@ -19,6 +19,14 @@ Jobs Due
 
     Precede the divideBy rules by moduloFirstParam
     
+    On run selected rule, display "processing" from start
+
+    Re-incorporate the optimum instruction counter rule
+
+    * Fix display to allow for removal of fields without data
+
+    * Fix current max score to allow for number of rule param blocks
+
     * Allow for more than two input parameter blocks in the rules
         * Adjust the entity execute number of execution cycles
         to the number of input parameter blocks.

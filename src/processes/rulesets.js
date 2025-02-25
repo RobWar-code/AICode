@@ -50,8 +50,8 @@ const rulesets = {
         this.ruleFunction.push(this.reverseJR);
         this.byteFunction.push(null);
 
-        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: true,
-            score: 0, max: 1, startRoundNum: 800};
+        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
+            sequenceNum: 0, score: 0, max: 5, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
@@ -827,7 +827,8 @@ const rulesets = {
             paramsIn: paramsIn,
             valuesOut: valuesOut,
             IC: IC,
-            highestIP: highestIP
+            highestIP: highestIP,
+            sequenceNum: sequenceNum
         }
         let totalScore = 0;
 
@@ -1095,7 +1096,16 @@ const rulesets = {
     instructionCount(self, dataParams, ruleParams) {
         let IC = dataParams.IC;
 
-        let opt = 800;
+        let f = 0;
+        // Get initial params length
+        let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        if (!("paramsIn" in rule)) {
+            f = 16;
+        }
+        else {
+            f = rule.paramsIn[0].length;
+        }
+        let opt = 14 * f;
         let max = 2000;
         let min = 0;
         let score = self.doScore(opt, IC, max, min);
@@ -2355,7 +2365,7 @@ const rulesets = {
     },
 
     seedRuleUpdate(memSpace, score, roundNum) {
-        if ((score >= this.currentMaxScore * (9.9/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
+        if ((score >= this.currentMaxScore * (9/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             let seedRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
             let ruleId = item.ruleId;

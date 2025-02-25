@@ -999,7 +999,7 @@ class Entity {
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
                 this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
+                memObj.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
         }
         // Score the difference between the outputs of the passes

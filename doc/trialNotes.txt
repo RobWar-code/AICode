@@ -1,3 +1,23 @@
+25/02/2024
+The system got stuck on modulo (5,10), so have started
+a new trial with the essential numbers (2,3,4,5,6,7) as
+individual rules. If these work they will lead on to
+a combined trial.
+
+These things bring to mind one of the fundamental issues
+of what we are trying to accomplish - which is whether
+to tackle a problem as a direct mapping relationship
+or whether to apply an algorithmic function.
+
+Note also that algorithmic functions may also be sets
+of conditional mapping relationships.
+
+After a trial of 60 rounds, the modulo combination (5,6)
+reached a score 9.4/12
+
+Have re-introduced the Instruction Counter score to
+favour shorter (ie: algorithmic type) solutions.
+
 24/02/2025
 
 This time the system got stuck on divideBy (3,4).
