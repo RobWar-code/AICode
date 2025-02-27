@@ -614,6 +614,249 @@ class InstructionSet {
         ];
     }
 
+    getCodeFragment() {
+        const fragments = [
+            [
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: ["?"]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["?"]
+                }
+            ],
+            [
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    label: "mainloop",
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: ["?"]
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    label: "innerloop",
+                    freeform: 12
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "DEC B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF2] // innerloop
+                },
+                {
+                    ins: "POP A",
+                },
+                {
+                    ins: "DEC A",
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE7] // mainloop
+                }
+            ],
+            [
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [4] // call2
+                },
+                {
+                    ins: "CASM",
+                    data: [0] // routine1
+                },
+                {
+                    freeform: 8
+                },
+                {
+                    ins: "RETF"
+                },
+                {
+                    label: "call2",
+                    ins: "CASM",
+                    data: [1] // routine2
+                },
+                {
+                    freeform: 8
+                },
+                {
+                    ins: "RETF"
+                },
+                {
+                    ins: "SM",
+                    data: [0]
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    ins: "PUSH C"
+                },
+                {
+                    freeform: 12
+                },
+                {
+                    ins: "POP C"
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "POP A"
+                },
+                {
+                    ins: "RET"
+                },
+                {
+                    ins: "SM",
+                    data: [1]
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    ins: "PUSH C"
+                },
+                {
+                    freeform: 12
+                },
+                {
+                    ins: "POP C"
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "POP A"
+                },
+                {
+                    ins: "RET"
+                }
+            ],
+            [
+                {
+                    ins: "LD B, IMM",
+                    data: ["?"]
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    freeform: 10
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "DEC B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF2]
+                }
+            ],
+            [
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [16]
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    freeform: 8
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "DEC B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF0]
+                }
+            ]        
+        ];
+
+        // Select a fragment
+        let fragmentNum = Math.floor(Math.random() * fragments.length);
+        let fragment = fragments[fragmentNum];
+        // Convert the fragment to binary code
+        let codeBlock = [];
+        for (let ins of fragment) {
+            if ("freeform" in ins) {
+                let count = ins.freeform;
+                for (let i = 0; i < count; i++) {
+                    codeBlock.push(Math.floor(Math.random() * 256));
+                }
+            }
+            else {
+                let insItem = this.getInsItemFromIns(ins);
+                codeBlock.push(insItem.code);
+                if ("data" in ins) {
+                    let dataGiven = ins.data;
+                    if (insItem.insLen > 1) {
+                        // Add data bytes
+                        for (let i = 0; i < insItem.insLen - 1; i++) {
+                            if (dataGiven[i] === "?") {
+                                let v = Math.floor(Math.random() * 256);
+                                codeBlock.push(v);
+                            }
+                            else {
+                                codeBlock.push(dataGiven[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return codeBlock;
+    }
+
     execute(memSpace, codeFlags, initialParams, params, valuesOut, ruleSequenceNum, roundNum) {
         let IC = 0;
         let IP = 0;
@@ -1311,6 +1554,13 @@ class InstructionSet {
                 }
             }
         }
+    }
+
+    getInsItemFromIns(ins) {
+        let insObj= this.getInsCode(ins.ins);
+        let insCode = insObj.code;
+        let insItem = this.ins[insCode];
+        return insItem;
     }
 
     disassemble(data, offset, length) {

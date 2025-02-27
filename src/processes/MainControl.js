@@ -356,7 +356,7 @@ class MainControl {
                         let p1Entity = bestEntitySet[p1];
                         let p2Entity;
                         // Check for a mate from an alternative set
-                        if (Math.random() < 0.005) {
+                        if (Math.random() < 0.001) {
                             let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
                             let b = bestSetNum + r;
                             if (this.bestSets[b].length != 0) {

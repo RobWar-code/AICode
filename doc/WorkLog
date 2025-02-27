@@ -21,7 +21,11 @@ Jobs Due
     
     On run selected rule, display "processing" from start
 
-    Re-incorporate the optimum instruction counter rule
+    Include code fragments in the instruction set class and
+    insert them via random breed and monoclonalInsBreed
+        Include note on this in the README
+
+    * Re-incorporate the optimum instruction counter rule
 
     * Fix display to allow for removal of fields without data
 

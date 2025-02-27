@@ -51,7 +51,7 @@ const rulesets = {
         this.byteFunction.push(null);
 
         let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
-            sequenceNum: 0, score: 0, max: 5, startRoundNum: 800};
+            sequenceNum: 0, optICFactor:19, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
@@ -1105,7 +1105,17 @@ const rulesets = {
         else {
             f = rule.paramsIn[0].length;
         }
-        let opt = 14 * f;
+
+        // Get the optimum number of instructions
+        let numIns;
+        if ("optICFactor" in rule) {
+            numIns = rule.optICFactor;
+        }
+        else {
+            numIns = 14;
+        }
+
+        let opt = numIns * f;
         let max = 2000;
         let min = 0;
         let score = self.doScore(opt, IC, max, min);

@@ -104,12 +104,22 @@ class Entity {
     }
 
     createRandomProgram() {
+        const fragmentChance = 0.01;
         this.breedMethod = "Random";
         let numIns = this.instructionSet.numIns;
         let lastIns = -1;
         let checkArray = [];
         for (let i = 0; i < this.memLength; i++) {
-            if (i < 48) {
+            if (Math.random() < fragmentChance) {
+                let codeBlock = this.instructionSet.getCodeFragment();
+                let j = 0;
+                while (i < this.memLength && j < codeBlock.length) {
+                    this.initialMemSpace[i] = codeBlock[j];
+                    ++i;
+                    ++j;
+                }
+            }
+            else if (i < 60) {
                 let c = 4;
                 let n = 0;
 
@@ -375,7 +385,8 @@ class Entity {
         const transposeChance = 0.15;
         const replaceChance = 0.5;
         const insertChance = 0.75;
-        const deleteChance = 1.0;
+        const deleteChance = 0.995;
+        const codeFragmentChance = 1.0;
         let newCodeSegment = [];
         let oldInsLen = 0;
         let oldCodeItem = [];
@@ -453,8 +464,16 @@ class Entity {
                     }
                     i = oldi - 1; // Allow for the next instruction
                 }
-                else {
+                else if (hitType < deleteChance) {
                     // Delete - exclude the instruction
+                }
+                else {
+                    // Insert Code Fragment
+                    let codeBlock = this.instructionSet.getCodeFragment();
+                    let j = 0;
+                    while (newCodeSegment.length < this.memLength && j < codeBlock.length) {
+                        newCodeSegment.push(codeBlock[j]);
+                    }
                 }
                 lastNoChange = false;
             }

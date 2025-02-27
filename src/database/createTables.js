@@ -1,6 +1,7 @@
 const mysql = require('mysql2/promise');
 const dbConn = require('./dbConn.js');
 
+
 createTables();
 
 async function createTables() {
@@ -10,6 +11,8 @@ async function createTables() {
     }
 
     await clearTables(connection);
+
+    return;
 
     let sql = "DROP TABLE session";
     await connection.query(sql);
@@ -64,10 +67,10 @@ async function clearTables(connection) {
     sql = "DELETE FROM seed_rule";
     await connection.query(sql);
 
-    sql = "DELETE FROM entity";
-    await connection.query(sql);
+//    sql = "DELETE FROM entity";
+//    await connection.query(sql);
 
-    sql = "DELETE FROM session";
-    await connection.query(sql);
+//    sql = "DELETE FROM session";
+//    await connection.query(sql);
 
 }

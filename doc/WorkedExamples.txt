@@ -4,6 +4,8 @@ Contents
     Problem Space Background
     Ruleset Strategies
         Selecting Rules
+            Combining Rules
+        Code Fragment Candidates
         General Approaches
         Possible Future Approaches
             Staged Introduction of Rules
@@ -90,8 +92,81 @@ Contents
 
     The following rule is to perform ASCII arithmetic expressions.
 
+<h3>Combining Rules
+    Where we are attempting to combine solutions to specific instances
+    the system can either concatenate the prior solutions using
+    conditionals or rework the solutions into a simplified algorithm.
+    Here we inspect both options.
 
+    In the case of (two) concatenated solutions we need something like:
 
+    LoopNext:
+    LD A, (source value)
+    LD B, (test value)
+    CMP A, B
+    JRZ Action2
+    // Else 
+    Do the first solution
+    JR LoopNext
+    Action2:
+    JR LoopNext
+
+    So we can see that this operation requires 6 instructions.
+    We could reward the co-incidental combination
+        LD A, (C)
+        LD B, (IMM)
+        CMP A,B
+        JRZ
+
+    Or we could include such useful combinations as standard
+    potential inserts in the mutation/breed cycles. (code fragments)
+    from the instruction set class.
+
+<h2>Code Fragment Candidates
+
+    General purpose double loops are likely to be useful, consider:
+
+    [
+        {
+            ins: "LD A, IMM",
+            data: [16]
+        },
+        {
+            label: "mainloop",
+            ins: "PUSH A"
+        },
+        {
+            ins: "LD B, IMM",
+            data: [0]
+        },
+        {
+            ins: "PUSH B"
+        },
+        {
+            label: "innerloop",
+            freeform: 12
+        },
+        {
+            ins: "POP B"
+        }
+        {
+            ins: "DEC B"
+        },
+        {
+            ins: "JRNZ",
+            data: [0xF2] // innerloop
+        },
+        {
+            ins: "POP A",
+        },
+        {
+            ins: "DEC A",
+        },
+        {
+            ins: "JRNZ",
+            data: [0xE7] // mainloop
+        }
+    ]
 
 
 

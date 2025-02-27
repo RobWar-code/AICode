@@ -1,3 +1,13 @@
+26/02/2024
+
+Re-introducing the instruction count rule worked for
+the same set of rules as worked previously. But the
+system still gets stuck on the combined modulo (5,6).
+
+So the challenge here is to come-up with a more effective
+way to combine prior solutions. This is discussed in the
+WorkedExamples document.
+
 25/02/2024
 The system got stuck on modulo (5,10), so have started
 a new trial with the essential numbers (2,3,4,5,6,7) as
