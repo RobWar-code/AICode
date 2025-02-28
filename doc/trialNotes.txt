@@ -1,4 +1,23 @@
-26/02/2024
+27/02/2025
+
+Introduced code templates and fragments to the instruction
+set module. Part of the argument for this is that such combinations
+of code might arise by chance.
+
+Ran a trial with the templates and fragments, no noticeable
+difference to outcomes.
+
+The system has been stuck for a very protracted time on
+module (5,6) and this trial is now abandonned.
+
+The problem is to create rules in which the adaptive steps
+from on to another are sufficiently probabilistically
+small.
+
+Am adding the rules outputSeries and outputSeriesOfSeries 
+to aid the development of loops as seed for other problems.
+
+26/02/2025
 
 Re-introducing the instruction count rule worked for
 the same set of rules as worked previously. But the
@@ -8,7 +27,7 @@ So the challenge here is to come-up with a more effective
 way to combine prior solutions. This is discussed in the
 WorkedExamples document.
 
-25/02/2024
+25/02/2025
 The system got stuck on modulo (5,10), so have started
 a new trial with the essential numbers (2,3,4,5,6,7) as
 individual rules. If these work they will lead on to
