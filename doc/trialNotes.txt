@@ -1,3 +1,23 @@
+28/02/2025
+
+Added the rules outputSeries and outputSeriesOfSeries, which
+take their cue from the input parameters.
+
+Initial trial completed outputSeries in 4 rounds, but was
+still stuck on outputSeriesOfSeries after 140 rounds.
+
+Loosely, the things to consider are the transference of
+code learned for other problems and the complexity of
+a transform/innovation.
+
+Add another outputSeriesOfSeries rule with the repeat
+parameter set the same.
+
+The new outputSeriesOfSeries rule allows the system to
+reach score 21 in 45 rounds - faster than being without.
+But it remains to be seen whether it will complete
+the task in satisfactory time.
+
 27/02/2025
 
 Introduced code templates and fragments to the instruction
