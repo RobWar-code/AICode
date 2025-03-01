@@ -17,11 +17,13 @@ Jobs Due
 
     Export and Load JSON tables
 
-    Precede the divideBy rules by moduloFirstParam
-    
     On run selected rule, display "processing" from start
 
-    Include code fragments in the instruction set class and
+    * On the trace display, ensure the ruleset parameters are displayed.
+
+    * Precede the divideBy rules by moduloFirstParam
+    
+    * Include code fragments in the instruction set class and
     insert them via random breed and monoclonalInsBreed
         Include note on this in the README
 

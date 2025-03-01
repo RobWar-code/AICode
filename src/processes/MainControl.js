@@ -510,6 +510,7 @@ class MainControl {
         }
         let rule = rulesets.getRuleFromRuleId(seedRuleId);
         let ruleSequenceNum = rule.sequenceNum;
+        this.ruleSequenceNum = ruleSequenceNum;
         console.log("loadAndExecuteSeedRule - ruleNum:", seedRuleId, "ruleSequenceNum:", ruleSequenceNum);
         let asRandom = false;
         let seeded = false;

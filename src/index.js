@@ -158,6 +158,7 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
 ipcMain.on("activateMainProcess", () => {
   // reset the seeded program status
   program.seedEntity = null;
+  program.ruleSequenceNum = rulesets.ruleSequenceNum;
   
   program.mainLoop();
   mainWindow.webContents.send("mainCycleCompleted", 0);

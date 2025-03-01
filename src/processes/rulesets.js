@@ -126,12 +126,12 @@ const rulesets = {
 
         let scoreItem12 = {rule: "Output Series Of Series 1", ruleId: 51, retain: false, skip: false,
             sequenceNum: 2, score: 0, max: 5, startRoundNum: 800,
-            outBlockStart: 0, outBlockLen: 20,
+            outBlockStart: 0, outBlockLen: 64,
             paramsIn: [
-                [2,4,5],
-                [5,4,4],
-                [7,4,4],
-                [10,4,5]
+                [2,16,5],
+                [5,16,4],
+                [7,16,4],
+                [10,16,5]
             ]
         };
         this.scoreList.push(scoreItem12);

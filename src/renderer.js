@@ -251,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         document.getElementById("ruleSelectionDiv").style.display = "none";
         document.getElementById("haltProcessButton").innerText = "Halt Process";
+        document.getElementById("statusDiv").style.display = "block";
         document.getElementById("statusPara").innerText = "Processing...";
         processingCancelled = false;
         let selectedRuleSequenceNum = parseInt(document.getElementById('ruleSelector').value);

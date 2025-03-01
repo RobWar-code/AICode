@@ -26,6 +26,7 @@ const trace = {
         let asRandom = false;
         let seeded = false;
         let ruleSequenceNum = program.ruleSequenceNum;
+        console.log("trace start, ruleSequenceNum", ruleSequenceNum);
         let currentCycle = program.cycleCounter;
         // Create the trace entity
         let roundNum = traceEntity.roundNum;

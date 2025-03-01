@@ -1,3 +1,26 @@
+01/03/2025
+Even with the insertion of another seriesOfSeries rule
+the second did not complete in 160 rounds.
+
+The problems have the parameters
+1: [2,4,5], [5,4,4], [7,4,4], [10,4,5]
+2: [2,3,5], [5,5,4], [7,4,4], [10,4,5]
+
+The first parameter refers to the series interval,
+the second, the length of the series and the third
+the number of times the series is repeated.
+
+The first example (where the length of the series is the same) 
+is solved within 10 rounds.
+
+So the problem is getting the system to use the second parameter
+to control a loop rather than guessing.
+
+The main of the difficulty for adjusting is that the code uses
+repeat sections of code rather than loops. So if for example,
+we make the first seriesOfSeries 8 long rather than four, 
+we have a higher chance of a loop being selected.
+
 28/02/2025
 
 Added the rules outputSeries and outputSeriesOfSeries, which
@@ -14,9 +37,10 @@ Add another outputSeriesOfSeries rule with the repeat
 parameter set the same.
 
 The new outputSeriesOfSeries rule allows the system to
-reach score 21 in 45 rounds - faster than being without.
+reach score 21 in 40 rounds - faster than being without.
 But it remains to be seen whether it will complete
-the task in satisfactory time.
+the task in satisfactory time. Little progress at
+70 rounds.
 
 27/02/2025
 
