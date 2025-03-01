@@ -1,8 +1,11 @@
 const traceDisplay = {
     startDone: false,
+    fixedData: null,
 
     displayTrace(traceData) {
         if (traceData.start) {
+            this.fixedData = traceData.fixedData;
+
             // Display the fixed data
             document.getElementById('bestSetNum').innerText = traceData.fixedData.bestSetNum;
             document.getElementById('bestSetEntityNum').innerText = traceData.fixedData.bestSetEntityNum;
@@ -159,8 +162,23 @@ const traceDisplay = {
         html += "</ul>";
         document.getElementById('scoreListDiv').innerHTML = html;
         document.getElementById('totalScore').innerText = score;
-    }
+    },
 
+    displayExecutionSelector() {
+        document.getElementById('executionCountPara').style.display = "block";
+        let selector = document.getElementById('executionCountSelector');
+        selector.innerHTML = "";
+        let opt = document.createElement('option');
+        opt.value = null;
+        opt.textContent = "None Selected";
+        selector.appendChild(opt);
+        for (let i = 0; i < this.fixedData.initialParamsList.length; i++) {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;    
+            selector.appendChild(opt);
+        }
+    }
 }
 
 module.exports = traceDisplay;

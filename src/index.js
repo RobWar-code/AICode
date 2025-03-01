@@ -169,7 +169,12 @@ ipcMain.on("traceStep", (data) => {
 });
 
 ipcMain.on("traceStepRestart", (data) => {
-  trace.restart();
+  let executionCount = null;
+  trace.restart(executionCount);
+});
+
+ipcMain.on("traceRestart", (event, executionCount) => {
+  trace.restart(executionCount);
 });
 
 ipcMain.on("fetchDisplayHistory", () => {

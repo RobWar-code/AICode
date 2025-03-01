@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepPauseInput = document.getElementById('stepPause');
     const traceScoreListButton = document.getElementById('traceScoreListButton');
     const stepRestartButton = document.getElementById('stepRestartButton');
+    const jumpToExecutionCountButton = document.getElementById('jumpToExecutionCountButton');
+    const executionCountSelector = document.getElementById("executionCountSelector");
     const scoreListDismiss = document.getElementById('scoreListDismiss');
 
     window.electronAPI.onMessage("displayTrace", (traceData) => {
@@ -54,6 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
         stepPause = stepPauseInput.value;
     });
 
+    jumpToExecutionCountButton.addEventListener('click', (event) => {
+        window.nodeAPI.traceDisplay.displayExecutionSelector();
+    });
+
+    executionCountSelector.addEventListener('click', (event) => {
+        let executionCount = event.target.value;
+        if (executionCount === null) return;
+        document.getElementById('executionCountPara').style.display = "none";
+        window.electronAPI.sendMessage('traceRestart', parseInt(executionCount));
+    });
+
     traceScoreListButton.addEventListener('click', (event) => {
         window.nodeAPI.traceDisplay.displayScoreList(lastData);
     });
@@ -61,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     scoreListDismiss.addEventListener('click', (event) => {
         document.getElementById('scoreListBackground').style.display = "none";
     });
+
+
 });
 
 

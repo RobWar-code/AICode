@@ -17,7 +17,13 @@ Jobs Due
 
     Export and Load JSON tables
 
-    On run selected rule, display "processing" from start
+    Display the score and the execution count on trace window
+
+    Include a cancel button the trace select execution count panel
+
+    * Jump to execution cycle on trace window
+
+    * On run selected rule, display "processing" from start
 
     * On the trace display, ensure the ruleset parameters are displayed.
 

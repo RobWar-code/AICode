@@ -1038,10 +1038,11 @@ class Entity {
         return memObj;
     }
 
-    stepExecute(restart) {
+    stepExecute(restart, executionCount) {
         let executionEnded = false;
         if (restart) {
-            this.executionCount = 0;
+            this.executionCount = executionCount;
+            console.log("stepExecute restart executionCount:", executionCount);
             this.scoreObj = null;
             this.resetRegisters();
             this.copyMem(this.executionCount);
@@ -1070,7 +1071,7 @@ class Entity {
             this.oldParams.push(this.params.concat());
             this.scoreObj = rulesets.getScore(0, 0, this.instructionSet, 
                 this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                this.registers.IC, this.instructionSet.highestIP, this.roundNum);
+                this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += this.scoreObj.score;
             if (this.executionCount > 0) {
                 let s = rulesets.scoreOutputDiff(this.oldValuesOut);

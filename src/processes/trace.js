@@ -49,9 +49,14 @@ const trace = {
         this.stepExecute(traceWindow, this.entity, start);
     },
 
-    restart() {
+    restart(executionCount) {
+        console.log("Got to restart");
         let restart = true;
-        let stepData = this.entity.stepExecute(restart);
+        let currentExecutionCount = executionCount;
+        if (executionCount === null) {
+            currentExecutionCount = this.entity.executionCount;
+        }
+        let stepData = this.entity.stepExecute(restart, currentExecutionCount);
         stepData.start = false;
         stepData.fixedData = this.fixedData;
         this.traceWindow.webContents.send('displayTrace', stepData);
