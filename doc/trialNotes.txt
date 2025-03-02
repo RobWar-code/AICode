@@ -9,6 +9,16 @@ We can try weighing more in favour of efficiencies of
 code instructionCount. We can also include the highestIP
 rule to favour compact code.
 
+Having included the highestIP at 28. The system scored
+31.1 out of 44 after 165 rounds.
+
+What would be good to determine is whether this is a 
+logical/probabilistic trap or whether it is a statistical
+anomaly.
+
+On the next trial the number of best sets is increased
+from 48 to 64, the clearance pass from 15 to 20 and
+the number of process main loops decreased from
 01/03/2025
 Even with the insertion of another seriesOfSeries rule
 the second did not complete in 160 rounds.

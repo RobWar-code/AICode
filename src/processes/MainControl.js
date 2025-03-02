@@ -12,7 +12,7 @@ class MainControl {
         this.bestEntitySetMax = 40;
         this.bestEntitySetCount = 0;
         this.bestEntitySet = [];
-        this.numBestSets = 48;
+        this.numBestSets = 64;
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
@@ -25,7 +25,7 @@ class MainControl {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.clearanceRound = 15;
+        this.clearanceRound = 20;
         this.restartProportion = 0.6;
         this.cycleCounter = 0;
         this.numRounds = 0;
@@ -50,14 +50,15 @@ class MainControl {
     }
 
     async mainLoop() {
-        for (let i = 0; i < 6; i++) {
+        let mainCycle = 8
+        for (let i = 0; i < mainCycle; i++) {
             let thresholdReached = false;
             let bestEntitySet = this.bestSets[this.bestSetNum];
             bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
             this.bestSets[this.bestSetNum] = bestEntitySet;
             this.updateScoreHistory();
 
-            if (i === 5) {
+            if (i === mainCycle - 1) {
                 // Display Best Entity of current set
                 let endTime = Date.now();
                 let elapsedTime = endTime - this.startTime;
@@ -310,7 +311,7 @@ class MainControl {
     }
 
     processLoop(bestEntitySet, bestSetNum) {
-        const maxCycles = 10; // 15;
+        const maxCycles = 5; // 15;
         const maxBreedEntities = this.bestEntitySetMax / 2;
         const maxBreedActions = 32;
         const currentEntitySetMaxLen = 3;
