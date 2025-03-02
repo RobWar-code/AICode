@@ -1,3 +1,14 @@
+02/03/2025
+Ran trial with seriesOfSeries1 parameters:
+[2,16,5], [5,16,5], [7,16,5], [10,16,5]
+
+This achieved the target distributions of outputs, but
+not the instruction count score, because it had evolved
+the output result, rather than efficiencies of code.
+We can try weighing more in favour of efficiencies of
+code instructionCount. We can also include the highestIP
+rule to favour compact code.
+
 01/03/2025
 Even with the insertion of another seriesOfSeries rule
 the second did not complete in 160 rounds.

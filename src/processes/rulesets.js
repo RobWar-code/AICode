@@ -51,13 +51,13 @@ const rulesets = {
         this.byteFunction.push(null);
 
         let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
-            sequenceNum: 0, optICFactor:19, score: 0, max: 1, startRoundNum: 800};
+            sequenceNum: 0, optICFactor:19, score: 0, max: 3, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
 
-        let scoreItem4 = {rule: "Highest IP", ruleId: 4, skip: true,
-            score: 0, max: 1, startRoundNum: 800};
+        let scoreItem4 = {rule: "Highest IP", ruleId: 4, skip: false, retain: true,
+            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem4);
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);
@@ -1175,8 +1175,11 @@ const rulesets = {
         let IP = dataParams.highestIP;
         let maxIP = dataParams.memSpace.length;
 
-        let opt = Math.floor((maxIP + 1) * 0.8);
-        let max = maxIP + 1;
+        // Get the optimum highIP from the current rule
+        let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        let opt = 28;
+        if ("highIP" in rule) opt = rule.highIP;
+        let max = maxIP - 1;
         let min = 0;
         let score = self.doScore(opt, IP, max, min);
         return score;

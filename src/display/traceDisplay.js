@@ -17,6 +17,8 @@ const traceDisplay = {
             // Initial Code List
             this.displayInitialCode(traceData.fixedData.initialMemList);
         }
+        document.getElementById('lastScore').innerText = Math.floor(traceData.scoreObj.score * 10000)/10000;
+        document.getElementById('executionCount').innerText = traceData.executionCount;
         this.doRegisterList("prevReg", traceData.previousRegisters);
         this.doRegisterList("reg", traceData.registers);
         this.listDataBlocks('params', 'paramsList', traceData.params);
@@ -139,7 +141,7 @@ const traceDisplay = {
     },
 
     displayScoreList(data) {
-        if (data.scoreObj === null) return;
+        if (data.scoreObj.scoreList === null) return;
         document.getElementById('scoreListBackground').style.display = "block";
         let scoreList = data.scoreObj.scoreList;
         let score = data.scoreObj.score;

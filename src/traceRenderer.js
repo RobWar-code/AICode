@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const traceScoreListButton = document.getElementById('traceScoreListButton');
     const stepRestartButton = document.getElementById('stepRestartButton');
     const jumpToExecutionCountButton = document.getElementById('jumpToExecutionCountButton');
+    const executionCountDismiss = document.getElementById('executionCountDismiss');
     const executionCountSelector = document.getElementById("executionCountSelector");
     const scoreListDismiss = document.getElementById('scoreListDismiss');
 
@@ -66,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('executionCountPara').style.display = "none";
         window.electronAPI.sendMessage('traceRestart', parseInt(executionCount));
     });
+
+    executionCountDismiss.addEventListener('click', (event) => {
+        document.getElementById("executionCountPara").style.display = "none";
+    })
 
     traceScoreListButton.addEventListener('click', (event) => {
         window.nodeAPI.traceDisplay.displayScoreList(lastData);

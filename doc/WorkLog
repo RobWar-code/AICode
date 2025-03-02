@@ -17,9 +17,42 @@ Jobs Due
 
     Export and Load JSON tables
 
-    Display the score and the execution count on trace window
+    Consider which rules need highIP and optICFactor set
+    
+    + Add a completion of all rules procedure.
 
-    Include a cancel button the trace select execution count panel
+    Save and load the completion round for each rule
+
+    Include save scorelist for an entity?
+
+    Trace operation
+        Close the trace window from the main window
+
+        Include a close option on the trace window
+
+    Apply redundant pairs to monoclonal instruction insert/replace?
+
+    Do estimating for probabilities with samples etc.
+        Allow for multiple ways to solve the same issue
+
+    Consider why the system gets trapped in solutions so soon.
+
+    Overcome "cheating" in which the entity simply places the test/result byte into the output block
+        This might be overcome by making the tests sufficiently numerically steep?
+        Threshold minimum of steps?
+        Include the input argument(s) adjacent to the output result in the output data.
+        See weeding below
+
+    Weeding - removing sub-standard items from the best set
+
+    Continue the analysis
+
+Jobs Done
+    01/03/2025
+    
+    * Display the score and the execution count on trace window
+
+    * Include a cancel button the trace select execution count panel
 
     * Jump to execution cycle on trace window
 
@@ -69,23 +102,6 @@ Jobs Due
 
         Remove the surplus rule functions
 
-    + Add a completion of all rules procedure.
-
-
-    Save and load the completion round for each rule
-
-    Make all the rules use output from address 0 and input from address 0
-
-    Fix the paramsGreaterThanN issue -
-        This appears to have been caused by the program entities' use of the LD A, R
-        operation to obtain an output value that is, apparently, different in the
-        load seed rule operation, to the standard execute operation.
-
-        Have changed the rule to provide < = > values as output. Yet to be proved.
-
-        The problem persists - perhaps it has something to do with the rule implementation,
-        seeing that other seed rule operations appear to work well.
-
     * Add the rules:
         * paramsPlusN (n = 3, n = 6)
         * paramsPlusN (n = 3, n = 6)
@@ -95,31 +111,19 @@ Jobs Due
         * JRNZ
         * JRNC
 
-    Include save scorelist for an entity?
+    * Make all the rules use output from address 0 and input from address 0
 
-    Trace operation
-        Close the trace window from the main window
+    * Fix the paramsGreaterThanN issue -
+        This appears to have been caused by the program entities' use of the LD A, R
+        operation to obtain an output value that is, apparently, different in the
+        load seed rule operation, to the standard execute operation.
 
-        Include a close option on the trace window
+        Have changed the rule to provide < = > values as output. Yet to be proved.
 
-    Apply redundant pairs to monoclonal instruction insert/replace?
+        The problem persists - perhaps it has something to do with the rule implementation,
+        seeing that other seed rule operations appear to work well.
 
-    Do estimating for probabilities with samples etc.
-        Allow for multiple ways to solve the same issue
 
-    Consider why the system gets trapped in solutions so soon.
-
-    Overcome "cheating" in which the entity simply places the test/result byte into the output block
-        This might be overcome by making the tests sufficiently numerically steep?
-        Threshold minimum of steps?
-        Include the input argument(s) adjacent to the output result in the output data.
-        See weeding below
-
-    Weeding - removing sub-standard items from the best set
-
-    Continue the analysis
-
-Jobs Done
     18/02/2025
 
     * Add a Cancel Load Seed button

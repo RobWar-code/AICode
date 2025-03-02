@@ -83,7 +83,7 @@ class Entity {
         this.crossSetBreed = false;
 
         // Step Data
-        this.scoreObj = null;
+        this.scoreObj = {score: 0, scoreList: null};
     }
 
     resetRegisters() {
@@ -1043,7 +1043,7 @@ class Entity {
         if (restart) {
             this.executionCount = executionCount;
             console.log("stepExecute restart executionCount:", executionCount);
-            this.scoreObj = null;
+            this.scoreObj = {score: 0, scoreList: null};
             this.resetRegisters();
             this.copyMem(this.executionCount);
         }
@@ -1053,7 +1053,7 @@ class Entity {
         if (this.registers.IC === 0) {
             if (this.executionCount === 0) {
                 rulesets.initialise();
-                this.scoreObj = null;
+                this.scoreObj = {score: 0, scoreList: null};
             }
             this.resetRegisters();
             this.copyMem(this.executionCount);

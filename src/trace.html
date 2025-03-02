@@ -42,14 +42,20 @@
           <div id="entityDetails">
             <h2 class="text-center">Entity Description</h2>
             <div class="row">
-              <div class="col-sm-4">
-                <p class="entityPara"><span>Best Set Num: </span><span id="bestSetNum"></span></p>
+              <div class="col-sm-2">
+                <p class="entityPara">Best Set Num: <span id="bestSetNum"></span></p>
               </div>
-              <div class="col-sm-4">
-                <p class="entityPara"><span>Best Set Entity Num: </span><span id="bestSetEntityNum"></span></p>
+              <div class="col-sm-3">
+                <p class="entityPara">Best Set Entity Num: <span id="bestSetEntityNum"></span></p>
               </div>
-              <div class="col-sm-4">
-                <p class="entityPara"><span>Entity Id: </span><span id="entityId"></span></p>
+              <div class="col-sm-3">
+                <p class="entityPara">Entity Id: <span id="entityId"></span></p>
+              </div>
+              <div class="col-sm-2">
+                <p class="entityPara">Last Score: <span id="lastScore"></span></p>
+              </div>
+              <div class="col-sm-2">
+                <p class="entityPara">Execution Count: <span id="executionCount"></span></p>
               </div>
             </div>
           </div>
@@ -151,6 +157,7 @@
               <p id="executionCountPara">
                 Select Execution Count: 
                 <select id="executionCountSelector"></select>
+                <button id="executionCountDismiss">Cancel</button>
               </p>
             </div>
           </div>
