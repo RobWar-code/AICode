@@ -138,7 +138,7 @@ const rulesets = {
         this.ruleFunction.push(this.outputSeriesOfSeries);
         this.byteFunction.push(this.byteOutputSeriesOfSeries);
 
-        let scoreItem13 = {rule: "Output Series Of Series 1", ruleId: 51, retain: false, skip: false,
+        let scoreItem13 = {rule: "Output Series Of Series 2", ruleId: 51, retain: false, skip: false,
             sequenceNum: 3, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 64,
             paramsIn: [
@@ -152,14 +152,14 @@ const rulesets = {
         this.ruleFunction.push(this.outputSeriesOfSeries);
         this.byteFunction.push(this.byteOutputSeriesOfSeries);
 
-        let scoreItem14 = {rule: "Output Series Of Series 2", ruleId: 50, retain: false, skip: false,
+        let scoreItem14 = {rule: "Output Series Of Series 3", ruleId: 50, retain: false, skip: false,
             sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 20,
             paramsIn: [
-                [2,3,5],
-                [5,5,4],
-                [7,4,4],
-                [10,4,5]
+                [3,3,5],
+                [6,5,4],
+                [9,4,4],
+                [11,4,5]
             ]
         };
         this.scoreList.push(scoreItem14);

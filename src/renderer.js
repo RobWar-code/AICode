@@ -41,7 +41,7 @@ ipcRenderer.on("mainCycleCompleted", (event, data) => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
             ipcRenderer.send("activateMainProcess", 0);
-        }, 3000);
+        }, 4000);
     }
 });
 

@@ -18,8 +18,17 @@ anomaly.
 
 On the next trial the number of best sets is increased
 from 48 to 64, the clearance pass from 15 to 20 and
-the number of process main loops decreased from
+the number of process main loops decreased from 10
+to 5.
+
+Using this combination, the system reached 37 out of 44
+in 72 rounds. The first seriesOfSeries rule was completed
+on round 95, after 75 rounds. This satisfies this range
+of problems.
+
+
 01/03/2025
+
 Even with the insertion of another seriesOfSeries rule
 the second did not complete in 160 rounds.
 

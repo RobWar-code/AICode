@@ -12,7 +12,7 @@ class MainControl {
         this.bestEntitySetMax = 40;
         this.bestEntitySetCount = 0;
         this.bestEntitySet = [];
-        this.numBestSets = 64;
+        this.numBestSets = 80;
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
