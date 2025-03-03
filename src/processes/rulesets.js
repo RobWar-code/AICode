@@ -156,10 +156,10 @@ const rulesets = {
             sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 20,
             paramsIn: [
-                [3,3,5],
-                [6,5,4],
-                [9,4,4],
-                [11,4,5]
+                [3,12,5],
+                [6,4,4],
+                [9,7,4],
+                [11,3,5]
             ]
         };
         this.scoreList.push(scoreItem14);

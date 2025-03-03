@@ -23,8 +23,22 @@ to 5.
 
 Using this combination, the system reached 37 out of 44
 in 72 rounds. The first seriesOfSeries rule was completed
-on round 95, after 75 rounds. This satisfies this range
-of problems.
+on round 95, after 75 rounds.
+
+The system got suck on seriesOfSeries3, scoring 37 out of
+44 after about 400 rounds. It was stuck on the second parameter
+as 4.
+
+Have modified the first parameter to break-up patterns
+established by the prior run.
+    3: [3,3,5], [6,5,4], [9,4,4], [11,4,5]
+
+The basic problem is to get it to use a loop based on
+the second parameter. It may be better to use more
+widely spaced values for the second parameter,
+try:
+    3: [3,12,5], [6,4,4], [9,7,4], [11,3,5]
+
 
 
 01/03/2025
