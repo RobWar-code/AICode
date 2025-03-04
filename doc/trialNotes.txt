@@ -20,6 +20,12 @@ Decision is to try more small code fragments such as
 
 Using upto 5 instructions.
 
+Having added this feature, the system reached 32/44
+in 180 rounds, so this was not an improvement.
+
+Next-up increase the highIP for this rule to 42 to
+allow more scope for variation.
+
 
 03/03/2025
 The trial on the windows laptop reached 37 from 44

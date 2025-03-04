@@ -67,7 +67,10 @@ Contents
 
     Let's try small code fragments that may help produce large leaps in code
     progress.
-    
+
+    We have to bear in mind that it is code "solutions" that we are looking for,
+    rather than output results per se.
+        
 <h1>Ruleset Strategies
 
 <h2>Selecting Rules

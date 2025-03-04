@@ -153,7 +153,7 @@ const rulesets = {
         this.byteFunction.push(this.byteOutputSeriesOfSeries);
 
         let scoreItem14 = {rule: "Output Series Of Series 3", ruleId: 50, retain: false, skip: false,
-            sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
+            sequenceNum: 4, highIP: 42, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 20,
             paramsIn: [
                 [3,12,5],
