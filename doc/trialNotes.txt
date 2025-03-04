@@ -1,3 +1,33 @@
+04/03/2025
+The score on seriesOfSeries3 after 540 rounds is 34
+out of 44, on the windows PC.
+
+The score on seriesOfSeries1 after 160 rounds is 31
+out of 44 after 160 rounds, on the linux PC.
+
+Will leave for a few more hours to see if there is
+any improvement, whilst I attempt a rethink of the
+templates and fragments approach.
+
+One possibility is to reward the presence of certain
+instructions in the primary execution group (0 to 30).
+Discussion in WorkedExamples.
+
+Decision is to try more small code fragments such as
+    LDI A, (C)
+    INC C
+    ST (MEM), A
+
+Using upto 5 instructions.
+
+
+03/03/2025
+The trial on the windows laptop reached 37 from 44
+after 400 rounds on seriesOfSeries3.
+
+Have now set the number of best sets back to 64
+as allows more depth of searching in a given time.
+
 02/03/2025
 Ran trial with seriesOfSeries1 parameters:
 [2,16,5], [5,16,5], [7,16,5], [10,16,5]

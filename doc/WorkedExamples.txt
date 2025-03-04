@@ -2,6 +2,7 @@ Worked Examples and Strategies
 
 Contents
     Problem Space Background
+        Code Entrapments
     Ruleset Strategies
         Selecting Rules
             Combining Rules
@@ -55,7 +56,17 @@ Contents
     We note that number scattering is likely to be a very different solution
     to specific solutions, other than in the deployment of loops for series.
     
+<h2>Code Entrapments
 
+    A problem that arises in the rule/score approach for code-based evolution
+    is that code that scores well initially may require a very large probabilistic
+    leap to move on to the next stage. This is advantage of gradated scoring, rather
+    than flat hit and miss scoring. Of course, in this case it is the code
+    sequences that we are looking for, even though we are testing for the output
+    results.
+
+    Let's try small code fragments that may help produce large leaps in code
+    progress.
     
 <h1>Ruleset Strategies
 
