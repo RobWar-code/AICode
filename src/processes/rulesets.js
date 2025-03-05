@@ -1196,7 +1196,7 @@ const rulesets = {
         let memSpace = dataParams.memSpace;
         let instructionSet = dataParams.instructionSet;
     
-        let scanCodeLength = 42;
+        let scanCodeLength = 16;
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         let opt = 3;
         if ("optNumInputReads" in rule) {
