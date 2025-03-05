@@ -630,6 +630,30 @@ class InstructionSet {
             ],
             [
                 {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "INC C"
+                }
+            ],
+            [
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "INC C"
+                }
+            ],
+            [
+                {
                     ins: "LD A, (MEM)",
                     data: [200] 
                 },
@@ -643,6 +667,40 @@ class InstructionSet {
                 {
                     ins: "JRZ",
                     data: [0xF2]
+                }
+            ],
+            [
+                {
+                    ins: "LD A, (MEM)",
+                    data: [201] 
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "JRZ",
+                    data: [0xEA]
+                }
+            ],
+            [
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] 
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "JRZ",
+                    data: [0xE8]
                 }
             ],
             [
