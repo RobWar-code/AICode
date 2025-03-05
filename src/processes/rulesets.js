@@ -31,8 +31,8 @@ const rulesets = {
         this.ruleFunction = [];
         this.byteFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: true, 
-            score: 0, max: 4, startRoundNum: 800};
+        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
+            score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
@@ -62,7 +62,7 @@ const rulesets = {
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);
 
-        let scoreItem5 = {rule: "Number of Input Reads", ruleId: 53, skip: false, retain: true,
+        let scoreItem5 = {rule: "Number of Input Reads", ruleId: 53, skip: true, retain: true,
             sequenceNum: 0, score: 0, max: 2, startRoundNum: 0
         }
         this.scoreList.push(scoreItem5);
@@ -965,82 +965,58 @@ const rulesets = {
         let memSpace = dataParams.memSpace;
         insSet = [
             {
-                ins: "LDI A, (MEM)",
-                countOpt: 16,
-                distributionOpt: 16
-            },
-            {
-                ins: "SM",
-                countOpt: self.meanInsCount / 16,
-                distributionOpt: 16
-            },
-            {
-                ins: "CALL",
-                countOpt: 16,
-                distributionOpt: 8
-            },
-            {
-                ins: "CASM",
-                countOpt: 16,
-                distributionOpt: 8
-            },
-            {
-                ins: "JR",
-                countOpt: 8,
-                distributionOpt: 14
-            },
-            {
-                ins: "JRC",
-                countOpt: 8,
-                distributionOpt: 14
-            },
-            {
-                ins: "JRZ",
-                countOpt: 8,
-                distributionOpt: 14
-            },
-            {   
-                ins: "RET",
-                countOpt: self.meanInsCount / 16,
-                distributionOpt: 16
-
-            },
-            {
-                ins: "RETF",
+                ins: "LDI A, (C)",
                 countOpt: 3,
-                distributionOpt: (memSpace.length) / 3
+                scanStart: 0,
+                scanEnd: 16
+            },
+            {
+                ins: "JRNZ",
+                countOpt: 3,
+                scanStart: 24,
+                scanEnd: 42
             }
         ];
 
         let totalScore = 0;
 
+        let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         // Count of occurrences
         for (let insData of insSet) {
             let ins = insData.ins;
-            let count = instructionSet.countInsInMemSpace(memSpace, memSpace.length, ins);
+            // Check whether the rule defines the criteria
+            if ("insDistribution" in rule) {
+                let found = false;
+                for (let i = 0; i < rule.insDistribution.length; i++) {
+                    if (ins.ins === rule.insDistribution[i].ins) {
+                        found = true;
+                        insData = rule.insDistribution[i];
+                        ins = insData.ins;
+                        break;
+                    }
+                }
+            }
+            // Count the number of occurences of the instruction in the scan area
+            let p = insData.scanStart;
+            let count = 0;
+            while (p < insData.scanEnd) {
+                let code = memSpace[p];
+                let insItem = instructionSet.getInsDetails(code);
+                if (insItem.name === ins) ++count;
+                p += insItem.insLen;
+            }
+
             let opt = insData.countOpt;
-            let max = self.meanInsCount;
+            let max = insData.scanEnd - insData.scanStart;
             let min = 0;
             let score1 = self.doScore(opt, count, max, min);
             totalScore += score1;
-            if (isNaN(score1)) {
-                console.log("error in insDistribution first part", score1, count, max, opt);
-                break;
-            }
         }
-        let score = totalScore * 0.5 / insSet.length;
 
-        // Distributions
-        totalScore = 0;
-        for (let insData of insSet) {
-            let ins = insData.ins;
-            let opt = insData.distributionOpt;
-            let score1 = instructionSet.scoreDistribution(ins, opt, memSpace, memSpace.length);
-            totalScore += score1;
-        }
-        totalScore = totalScore/(2 * insSet.length);
-        score += totalScore;
-
+        let opt = insSet.length;
+        let max = opt;
+        let min = 0;
+        let score = self.doScore(opt, totalScore, max, min);
         return score;
     },
 
