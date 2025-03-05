@@ -32,7 +32,7 @@ const rulesets = {
         this.byteFunction = [];
 
         let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
-            score: 0, max: 2, startRoundNum: 800};
+            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
