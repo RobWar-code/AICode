@@ -1,3 +1,12 @@
+05/03/2025
+The system got stuck on the rule seriesOfSeries3 at 33/44 
+after 420 rounds. The code consists of a stochastic unconditional
+loop which makes a single reference to the input parameters
+
+This suggests that it would be useful to reward the number of
+parameter reads in the first block of code. So we include the
+rule numInputReads in the ruleset for the next trial.
+
 04/03/2025
 The score on seriesOfSeries3 after 540 rounds is 34
 out of 44, on the windows PC.
