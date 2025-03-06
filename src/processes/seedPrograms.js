@@ -51,6 +51,96 @@ const seedPrograms = {
             ]
         },
         {
+            name: "seriesOfSeries",
+            description: "seriesOfSeries solution",
+            program: [
+                {
+                    ins: "LDI A, (MEM)",
+                    data: [2]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    // Main Loop
+                    ins: "LDI A, (MEM)",
+                    data: [1]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    // Inner Loop
+                    ins: "LDI A, (MEM)",
+                    data: [0]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [201]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF3] // Inner Loop
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE0] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "trialOne",
             description: "Trial Seed Program",
             program: [

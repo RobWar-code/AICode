@@ -31,7 +31,7 @@ const rulesets = {
         this.ruleFunction = [];
         this.byteFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
+        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: true, retain: false, 
             sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
@@ -50,7 +50,8 @@ const rulesets = {
         this.ruleFunction.push(this.reverseJR);
         this.byteFunction.push(null);
 
-        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
+        // It would be better to do this rule as a rule specific estimate
+        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: true, retain: false,
             sequenceNum: 0, optICFactor:19, score: 0, max: 3, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
@@ -148,6 +149,7 @@ const rulesets = {
         let scoreItem13 = {rule: "Output Series Of Series 1", ruleId: 52, retain: false, skip: false,
             sequenceNum: 2, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 64,
+            optICFactor: 37,
             paramsIn: [
                 [2,16,5],
                 [5,16,5],
@@ -979,10 +981,16 @@ const rulesets = {
         let memSpace = dataParams.memSpace;
         insSet = [
             {
-                ins: "LDI A, (C)",
+                ins: "LDI A, (MEM)",
                 countOpt: 3,
                 scanStart: 0,
-                scanEnd: 16
+                scanEnd: 18
+            },
+            {
+                ins: "LDI A, (C)",
+                countOpt: 1,
+                scanStart: 0,
+                scanEnd: 18
             },
             {
                 ins: "JRNZ",

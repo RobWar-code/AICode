@@ -16,7 +16,10 @@ The trial excluding CALL statements reached 36.5/52 after
 212 rounds on seriesofSeries1, achieving 2 series out of 5.
 
 Have now included a futher fragment that represents loops
-more thoroughly.
+more thoroughly. This currently under trial.
+
+As a further approach we can write a script as seed and 
+insert when the relevant rule is reached.
 
 
 
