@@ -12,6 +12,13 @@ We could also have a rule to exclude CALL which was used
 to create a list of repeated block calls, in preference to
 controlled loops.
 
+The trial excluding CALL statements reached 36.5/52 after
+212 rounds on seriesofSeries1, achieving 2 series out of 5.
+
+Have now included a futher fragment that represents loops
+more thoroughly.
+
+
 
 05/03/2025
 The system got stuck on the rule seriesOfSeries3 at 33/44 

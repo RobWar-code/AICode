@@ -749,25 +749,77 @@ class InstructionSet {
                     data: [202]
                 },
                 {
-                    freeform: 6
+                    ins: "LD C, IMM",
+                    data: [0]
                 },
                 {
+                    // Main Loop
+                    ins: "LDI A, (MEM)",
+                    data: [1]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                { 
+                    ins: "ST (MEM), A",
+                    data: [203]
+                },
+                {
+                    // innerloop
                     ins: "LD A, (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "LD B, (MEM)",
                     data: [200]
                 },
                 {
-                    freeform: 6
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203]
+                },
+                {
+                    ins: "STO (C), A"
                 },
                 {
                     ins: "LD A, (MEM)",
                     data: [201]
                 },
                 {
-                    freeform: 6
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF1] // innerloop
                 },
                 {
                     ins: "LD A, (MEM)",
                     data: [202]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE4] // mainloop
+                },
+                {
+                    ins: "RETF"
                 }
             ],
             [
