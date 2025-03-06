@@ -120,10 +120,24 @@ const rulesets = {
         let scoreItem12 = {rule: "Output Series", ruleId: 11, retain: false, skip: false,
             sequenceNum: 1, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
+            insDistribution: [
+                {
+                    ins: "LDI A, (C)",
+                    countOpt: 2,
+                    scanStart: 0,
+                    scanEnd: 16
+                },
+                {
+                    ins: "JRNZ",
+                    countOpt: 2,
+                    scanStart: 24,
+                    scanEnd: 42
+                }
+            ],
             paramsIn: [
-                [2,16],
-                [5,16],
-                [7,16],
+                [2,8],
+                [5,12],
+                [7,5],
                 [10,16]
             ]
         };
@@ -974,6 +988,12 @@ const rulesets = {
                 ins: "JRNZ",
                 countOpt: 3,
                 scanStart: 24,
+                scanEnd: 42
+            },
+            {
+                ins: "CALL",
+                countOpt: 0,
+                scanStart: 0,
                 scanEnd: 42
             }
         ];

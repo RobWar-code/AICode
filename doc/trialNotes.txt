@@ -1,3 +1,18 @@
+06/03/2025
+Introduced more fragments and ran a trial of seriesOfSeries3
+on its own, to overcome the problem of seed contribuants
+causing early entrapment. Score is currently 38/52 with
+scattered output after 111 rounds. Leave this to reach 180
+rounds.
+
+Suggestion is to modify the other series so that they do
+not have a single value for a parameter, this should help
+to prevent "ghost" values and repetitions of code appearing.
+We could also have a rule to exclude CALL which was used
+to create a list of repeated block calls, in preference to
+controlled loops.
+
+
 05/03/2025
 The system got stuck on the rule seriesOfSeries3 at 33/44 
 after 420 rounds. The code consists of a stochastic unconditional

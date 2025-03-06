@@ -649,7 +649,8 @@ class InstructionSet {
                     data: [202]
                 },
                 {
-                    ins: "INC C"
+                    ins: "LD C, IMM",
+                    data: [0]
                 }
             ],
             [
