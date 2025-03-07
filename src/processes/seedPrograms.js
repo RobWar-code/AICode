@@ -20,6 +20,95 @@ const seedPrograms = {
             ]
         },
         {
+            name: "modulo first param",
+            description: "Find the modulus of each parameter using the first parameter",
+            program: [ 
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    // Main Loop
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202]
+                },
+                {
+                    // Calculation Loop
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [9], // Main Loop Back
+                },
+                {
+                    ins: "JRZ",
+                    data: [5], // Zero End
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "JR",
+                    data: [0xF6] // Calculation Loop
+                },
+                {
+                    // Zero End
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    // Main Loop Back
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE6] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "multiplyParamsByTwo",
             description: "Multiply input parameters by two",
             program: [

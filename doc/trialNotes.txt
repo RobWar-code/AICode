@@ -16,10 +16,18 @@ The trial excluding CALL statements reached 36.5/52 after
 212 rounds on seriesofSeries1, achieving 2 series out of 5.
 
 Have now included a futher fragment that represents loops
-more thoroughly. This currently under trial.
+more thoroughly. This is currently under trial. This made
+no significant difference.
 
 As a further approach we can write a script as seed and 
-insert when the relevant rule is reached.
+insert when the relevant rule is reached. We can justify
+this in terms of the projects processing goals only, in
+the building-up of example seed code to be used via
+permutation and combination in other situations.
+
+This approach has cleared the rules as far as part of
+the modulo rules. Will supply the modulo solution and
+insert it, as for seriesOfSeries.
 
 
 

@@ -5,7 +5,7 @@ const rulesets = require(path.join(__dirname, 'rulesets.js'));
 class InstructionSet {
     constructor() {
         this.stackStart = 255;
-        this.maxIC = 2000;
+        this.maxIC = 4000;
         this.maxIP = 255;
         this.highestIP = 0;
         this.registers = {
@@ -1527,7 +1527,7 @@ class InstructionSet {
                     ++IP;
                     pointer2 = memSpace[IP];
                     if (pointer2 & 0x80) {
-                        value = -(((~pointer2) & 255) + 2);
+                        value = -(((~pointer2) & 255) + 1);
                         IP = pointer + value;
                         if (IP < 0) IP = 0;
                     }
@@ -1609,7 +1609,7 @@ class InstructionSet {
                             if (IP < 0) IP = 0;
                         }
                         else {
-                            IP += pointer;
+                            IP += pointer + 1;
                             if (IP > 255) IP = 255;
                         }
                     }
@@ -1628,7 +1628,7 @@ class InstructionSet {
                             if (IP < 0) IP = 0;
                         }
                         else {
-                            IP += pointer;
+                            IP += pointer + 1;
                             if (IP > 255) IP = 255;
                         }
                     }
@@ -1641,7 +1641,7 @@ class InstructionSet {
                     if (CF) {
                         ++IP;
                         pointer = memSpace[IP];
-                        ++IP
+                        ++IP;
                         pointer2 = memSpace[IP];
                         if (pointer & 0x80) {
                             value = ~pointer & 255;
@@ -1652,7 +1652,7 @@ class InstructionSet {
                         }
                         else {
                             value = 256 * pointer + pointer2;
-                            IP + value;
+                            IP + value + 1;
                             if (IP > 255) IP = 255;
                         }
                     }
