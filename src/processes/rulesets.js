@@ -51,8 +51,8 @@ const rulesets = {
         this.byteFunction.push(null);
 
         // It would be better to do this rule as a rule specific estimate
-        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: true, retain: false,
-            sequenceNum: 0, optICFactor:19, score: 0, max: 3, startRoundNum: 800};
+        let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
+            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
@@ -104,7 +104,8 @@ const rulesets = {
         let scoreItem10 = {rule:"Values Out Match Initial Params", ruleId: 9, skip: false, sequenceNum: 0,
             retain: false, score: 0, completionRound: -1, max: 5,
             startRoundNum: 0,
-            outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16
+            outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+            highIC: 7 * 16 + 4 * 100
         };
         this.scoreList.push(scoreItem10);
         this.ruleFunction.push(this.valuesOutMatchInitialParams);
@@ -121,6 +122,7 @@ const rulesets = {
         let scoreItem12 = {rule: "Output Series", ruleId: 11, retain: false, skip: false,
             sequenceNum: 1, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
+            highIC: 7 * 16 + 5 * 100,
             insDistribution: [
                 {
                     ins: "LDI A, (C)",
@@ -150,6 +152,7 @@ const rulesets = {
             sequenceNum: 2, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 64,
             optICFactor: 37,
+            highIC: 9 * 16 * 5,
             paramsIn: [
                 [2,16,5],
                 [5,16,5],
@@ -164,6 +167,7 @@ const rulesets = {
         let scoreItem14 = {rule: "Output Series Of Series 2", ruleId: 51, retain: false, skip: false,
             sequenceNum: 3, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 64,
+            highIC: 9 * 16 * 5,
             paramsIn: [
                 [2,16,3],
                 [5,16,2],
@@ -178,6 +182,7 @@ const rulesets = {
         let scoreItem15 = {rule: "Output Series Of Series 3", ruleId: 50, retain: false, skip: false,
             sequenceNum: 4, highIP: 42, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 20,
+            highIC: 9 * 12 * 5,
             paramsIn: [
                 [3,12,5],
                 [6,4,4],
@@ -194,6 +199,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -212,6 +218,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     6,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -230,6 +237,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     1,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -248,6 +256,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 4 * 10 * 16 + 100 * 4, 
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -266,6 +275,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 6 * 10 * 16 + 100 * 4,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -284,6 +294,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 9 * 10 * 16 + 100 * 4,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -302,6 +313,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 50 * 9 * 16 + 100 * 4, 
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -320,6 +332,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 30 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -335,6 +348,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 20 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -350,6 +364,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 16 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     6,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -365,6 +380,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 15 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     7,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -380,6 +396,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 20 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -398,6 +415,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 33 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     10,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -423,6 +441,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 50 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -441,6 +460,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 50 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -459,6 +479,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 33 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -477,6 +498,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 50 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -501,6 +523,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 25 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     4,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -519,6 +542,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 33 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -537,6 +561,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 20 * 9 * 16 + 100 * 4,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -555,6 +580,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 16 * 8 + 100 * 4,
             paramsIn: [
                 [
                     20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -573,6 +599,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
+            highIC: 16 * 14 + 100 * 4,
             paramsIn: [
                 [
                     20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -591,7 +618,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 27, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 8
+            inBlockStart: 0, inBlockLen: 8,
+            highIC: 8 * 10 + 100 * 4,
         };
         this.scoreList.push(scoreItem38);
         this.ruleFunction.push(this.duplicateParams);
@@ -602,7 +630,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 28, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 8 + 100 * 4
         };
         this.scoreList.push(scoreItem39);
         this.ruleFunction.push(this.skipAdjacentParams1);
@@ -612,7 +641,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 29, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 8 + 100 * 4
         };
         this.scoreList.push(scoreItem40);
         this.ruleFunction.push(this.skipAdjacentParams2);
@@ -622,7 +652,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 30, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 16
+            inBlockStart: 0, inBlockLen: 16,
+            highIC: 16 * 10 + 100 * 4,
         };
         this.scoreList.push(scoreItem41);
         this.ruleFunction.push(this.swapAdjacentParams);
@@ -632,7 +663,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 31, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 12 + 100 * 4,
         };
         this.scoreList.push(scoreItem42);
         this.ruleFunction.push(this.greaterOfAdjacentParams);
@@ -642,7 +674,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 32, 
             score: 0, completionRound: -1, max: 10, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 16
+            inBlockStart: 0, inBlockLen: 16,
+            highIC: 16 * 15 + 100 * 4,
         };
         this.scoreList.push(scoreItem43);
         this.ruleFunction.push(this.sortAdjacentParams);
@@ -652,7 +685,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 33, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 9 + 100 * 4,
         };
         this.scoreList.push(scoreItem44);
         this.ruleFunction.push(this.addAdjacentParams);
@@ -662,7 +696,8 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 34, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 9 + 100 * 4
         };
         this.scoreList.push(scoreItem45);
         this.ruleFunction.push(this.subtractAdjacentParams);
@@ -1154,28 +1189,20 @@ const rulesets = {
 
     instructionCount(self, dataParams, ruleParams) {
         let IC = dataParams.IC;
+        let highestIC = dataParams.instructionSet.maxIC;
 
         let f = 0;
         // Get initial params length
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
-        if (!("paramsIn" in rule)) {
-            f = 16;
+        if (!("highIC" in rule)) {
+            f = rule.highIC;
         }
         else {
-            f = rule.paramsIn[0].length;
+            f = highestIC;
         }
 
-        // Get the optimum number of instructions
-        let numIns;
-        if ("optICFactor" in rule) {
-            numIns = rule.optICFactor;
-        }
-        else {
-            numIns = 14;
-        }
-
-        let opt = numIns * f;
-        let max = 2000;
+        let opt = f;
+        let max = highestIC;
         let min = 0;
         let score = self.doScore(opt, IC, max, min);
         return score;
