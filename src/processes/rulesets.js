@@ -477,7 +477,7 @@ const rulesets = {
         this.byteFunction.push(this.byteDivideByFirstParam);
 
         let scoreItem31 = {rule: "Divide by First Param 3", ruleId: 41,
-            retain: false, skip: false, sequenceNum: 30, 
+            retain: false, skip: false, sequenceNum: 20, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
