@@ -1,3 +1,28 @@
+08/03/2025
+
+System stuck on divideByFirstParam - so will write
+the seed for that and allow the system to proceed.
+
+The new envisioned goal is to provide code that the
+system gets stuck on and build-up a library of auto
+and human generated solutions that can be merged,
+mutated and permuted by the system to provide new 
+solutions.
+
+07/03/2025
+Removed the instructionCount rule from circulation.
+Results achieved much sooner in terms of rounds, 
+including seriesOfSeries3. Got stuck on modulo [5,6]
+rule.
+
+The new policy is to provide a seed program for every
+rule that gets stuck at 140 to 160 rounds. These
+seed programs can then contribute to the search for
+solutions in other cases.
+
+For the next trial modified the instructionCount rule
+and re-included it. Provided a seed for modulo rules.
+
 06/03/2025
 Introduced more fragments and ran a trial of seriesOfSeries3
 on its own, to overcome the problem of seed contribuants

@@ -442,6 +442,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 50 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -461,6 +462,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 50 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     2,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -480,6 +482,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 33 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -499,6 +502,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 50 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -524,6 +528,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 25 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     4,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -543,6 +548,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 33 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     3,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -562,6 +568,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 20 * 9 * 16 + 100 * 4,
+            highIP: 50,
             paramsIn: [
                 [
                     5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
@@ -1196,6 +1203,7 @@ const rulesets = {
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         if (!("highIC" in rule)) {
             f = rule.highIC;
+            if (f > highestIC) f = highestIC;
         }
         else {
             f = highestIC;
