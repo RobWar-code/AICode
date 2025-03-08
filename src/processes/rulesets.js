@@ -52,13 +52,13 @@ const rulesets = {
 
         // It would be better to do this rule as a rule specific estimate
         let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
-            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
+            sequenceNum: 0, score: 0, max: 1, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
 
         let scoreItem4 = {rule: "Highest IP", ruleId: 4, skip: false, retain: true,
-            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
+            sequenceNum: 0, score: 0, max: 1, startRoundNum: 800};
         this.scoreList.push(scoreItem4);
         this.ruleFunction.push(this.highestIPScore);
         this.byteFunction.push(null);

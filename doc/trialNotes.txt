@@ -9,6 +9,15 @@ and human generated solutions that can be merged,
 mutated and permuted by the system to provide new 
 solutions.
 
+It is worth noting that the divideByFirstParam
+rule reached a score of 15/20 achieving division
+by 2 on the first half od the problem in 577 rounds,
+proving that it was still capable of improving over
+time, but not within acceptable time frames on these
+resources. So we can see that we are engaged in either
+reducing the size of the probability field, or of
+speeding processing.
+
 07/03/2025
 Removed the instructionCount rule from circulation.
 Results achieved much sooner in terms of rounds, 
