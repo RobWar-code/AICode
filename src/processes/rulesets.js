@@ -461,7 +461,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 50 * 9 * 16 + 100 * 4,
+            highIC: 30 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
@@ -481,7 +481,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 33 * 9 * 16 + 100 * 4,
+            highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
@@ -501,7 +501,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 50 * 9 * 16 + 100 * 4,
+            highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
@@ -527,7 +527,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 25 * 9 * 16 + 100 * 4,
+            highIC: 13 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
@@ -547,7 +547,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 33 * 9 * 16 + 100 * 4,
+            highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
@@ -567,7 +567,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
-            highIC: 20 * 9 * 16 + 100 * 4,
+            highIC: 10 * 9 * 16 + 100 * 4,
             highIP: 60,
             paramsIn: [
                 [
