@@ -52,7 +52,7 @@ const rulesets = {
 
         // It would be better to do this rule as a rule specific estimate
         let scoreItem3 = {rule: "Instruction Counter", ruleId: 3, skip: false, retain: true,
-            sequenceNum: 0, score: 0, max: 1, startRoundNum: 800};
+            sequenceNum: 0, score: 0, max: 0.5, startRoundNum: 800};
         this.scoreList.push(scoreItem3);
         this.ruleFunction.push(this.instructionCount);
         this.byteFunction.push(null);
