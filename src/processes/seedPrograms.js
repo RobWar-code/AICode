@@ -116,6 +116,98 @@ const seedPrograms = {
             ]
         },
         {
+            name: "greaterThanAdjacentParam",
+            description: "Output the greater of the adjacent params from the input",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Main Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNC",
+                    data: [1] // Output Param (Second)
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    // Output Param
+                    ins: "LD C, (MEM)",
+                    data: [202], // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE7] // Process Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "inputLoop",
             description: "A seed program that reads the input parameters and passes them to the output",
             program: [
