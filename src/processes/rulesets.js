@@ -694,6 +694,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 9 + 100 * 4,
+            highIP: 36
         };
         this.scoreList.push(scoreItem44);
         this.ruleFunction.push(this.addAdjacentParams);
@@ -704,7 +705,8 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
-            highIC: 16 * 9 + 100 * 4
+            highIC: 16 * 9 + 100 * 4,
+            highIP: 36
         };
         this.scoreList.push(scoreItem45);
         this.ruleFunction.push(this.subtractAdjacentParams);
@@ -714,7 +716,9 @@ const rulesets = {
             retain: false, skip: false, sequenceNum: 35, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, 
-            inBlockStart: 0, inBlockLen: 32
+            inBlockStart: 0, inBlockLen: 32,
+            highIC: 16 * 18 + 100 * 4,
+            highIP: 36
         };
         this.scoreList.push(scoreItem46);
         this.ruleFunction.push(this.multiplyInitialParamsByEachother);
@@ -725,6 +729,8 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 32,
+            highIC: 16 * 18 + 100 * 4,
+            highIP: 36,
             paramsIn: [
                 [
                     10,2,  20,2, 36,9, 3,2,   12,0, 15,5,  60,12, 47,3,
@@ -740,11 +746,14 @@ const rulesets = {
         this.ruleFunction.push(this.divideAdjacentParams);
         this.byteFunction.push(this.byteDivideAdjacentParams);
 
+        // May need to break this into separate rules
         let scoreItem48 = {rule: "Use op to Convert Params", ruleId: 31,
             retain: false, skip: false, sequenceNum: 37, 
             score: 0, completionRound: -1, max: 20, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 0, inBlockLen: 96,
+            highIC: 5000,
+            highIP: 80,
             paramsIn: [
                 [
                     61,82,5,61,85,3,61,80,4,61,86,7,61,81,12,61,84,20,61,87,95,61,83,100, // 0:23 = a b

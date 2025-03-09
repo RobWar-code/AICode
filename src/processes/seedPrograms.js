@@ -1,6 +1,89 @@
 const seedPrograms = {
     programs: [
         {
+            name: "addAdjacentParams",
+            description: "Output the sum of adjacent parameters",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16] 
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Output Count
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {                    
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xEB] // Process Loop
+                },
+                {
+                    ins: "RETF"
+                }
+
+
+            ]
+        },
+        {
             name: "divideByFirstParam",
             description: "divide the inputs by the first parameter and output each result",
             program: [ 
