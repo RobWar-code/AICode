@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Gather form data
         const formData = new FormData(bestEntitySelector);
-        const bestSetNum = formData.get("bestSetNumInput");
-        const bestSetEntityNum = formData.get('bestSetEntityNumInput');
+        const bestSetNum = parseInt(formData.get("bestSetNumInput"));
+        const bestSetEntityNum = parseInt(formData.get('bestSetEntityNumInput'));
 
         // Call the appropriate routine
         doEntityDisplay(bestSetNum, bestSetEntityNum);
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     insertSeedForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        let seedSetNum = document.getElementById("seedSetNumInput").value;
+        let seedSetNum = parseInt(document.getElementById("seedSetNumInput").value);
         let valid = false;
         if (!isNaN(seedSetNum)) {
             if (seedSetNum >= 0 && globals.numBestSets > seedSetNum) {

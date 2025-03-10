@@ -529,10 +529,24 @@ class MainControl {
     }
 
     insertSeed(seedSetNum) {
+        let insSet = new InstructionSet();
+        seedSetNum = parseInt(seedSetNum);
         if (seedSetNum < 0 || this.numBestSets <= seedSetNum) return;
-        this.seedEntity.breedMethod = "Seeded";
+        let memSpace = this.seedEntity.initialMemSpace;
+        // Create a new entity from the seed entity
+        let asRandom = false;
+        let seeded = false;
+        console.log("Inserting seed entity, ruleSequenceNum", rulesets.ruleSequenceNum);
+        let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
+            rulesets.ruleSequenceNum, this.numRounds, memSpace);
+        this.ruleSequenceNum = rulesets.ruleSequenceNum;
+        entity.bestSetEntityNum = 0;
+        ++this.entityNumber;
+        entity.breedMethod = "Seeded";
         let a = [];
-        a.push(this.seedEntity);
+        // Re-execute to get score
+        entity.execute(0,0);
+        a.push(entity);
         this.bestSets[seedSetNum] = a;
     }
 

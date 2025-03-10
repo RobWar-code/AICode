@@ -18,6 +18,10 @@ Jobs Due
     Export and Load JSON tables
 
     Consider which rules need highIP and highIC set
+
+    * Problem with insert from load seed rule - probably entity rule sequence num
+
+    Possibly problem with rule multiply by adjacent param
     
     + Add a completion of all rules procedure.
 
