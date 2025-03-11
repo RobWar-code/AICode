@@ -21,6 +21,8 @@ Jobs Due
 
     * Problem with insert from load seed rule - probably entity rule sequence num
 
+    * Add subtract adjacent params seed program
+
     Possibly problem with rule multiply by adjacent param
     
     + Add a completion of all rules procedure.

@@ -82,6 +82,184 @@ const seedPrograms = {
             ]
         },
         {
+            name: "divideAdjacentParams",
+            description: "divide inputs by their adjacent parameters",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16] // Process Loop Counter
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Process Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [204] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "CLR (MEM)",
+                    data: [202] // Division Counter
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)" // Divisor
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [0]
+                },
+                {
+                    // Compare Divisor 0
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [5] // Continue Process
+                },
+                {
+                    // Update pointers after divisor zero
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    // Output 0, and loop back
+                    ins: "JR",
+                    data: [28] // Output Division Counter
+                },
+                {
+                    // Continue Process
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    // Calculation Loop
+                    ins: "LD A, (MEM)",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [17] // Division Complete
+                },
+                {
+                    ins: "JRZ",
+                    data: [10] // Final Division Count
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202], // Division Counter
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "JR",
+                    data: [0xF1], // Calculation Loop
+                },
+                {
+                    // Final Division Count
+                    ins: "LD A, (MEM)",
+                    data: [202] // Division Counter
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    // Division Complete
+                    ins: "LD A, (MEM)",
+                    data: [202] // Division Counter
+                },
+                {
+                    // Output Division Counter
+                    ins: "LD C, (MEM)",
+                    data: [204] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [204]
+                },
+                {
+                    // Next Process
+                    ins: "LD A, (MEM)",
+                    data: [200] // Process Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xC3] // Process Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "divideByFirstParam",
             description: "divide the inputs by the first parameter and output each result",
             program: [ 
