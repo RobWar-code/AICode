@@ -756,13 +756,13 @@ const rulesets = {
             highIP: 80,
             paramsIn: [
                 [
-                    61,82,5,61,85,3,61,80,4,61,86,7,61,81,12,61,84,20,61,87,95, // 0:23 = a b
+                    61,2,5,61,5,3,61,0,4,61,4,7,61,1,12,61,3,20,61,6,95, // 0:23 = a b
                     43,3,2,43,4,5,43,12,13,43,9,11,43,10,10,43,15,8,43,100,50,43,75,72,43,9,11, // 24:47 +
                     45,9,4,45,10,2,45,100,22,45,85,13,45,3,4,45,19,2, // 48:71 -
                     42,3,4,42,5,7,42,9,10,42,12,12,42,8,15,42,20,9,42,7,7,42,11,7,42,4,13,42,6,12 // 72:95 *    
                 ],
                 [
-                    61,81,5,61,84,3,61,82,4,61,86,7,61,83,12,61,85,20,61,80,95,61,87,100,61,90,5,61,89,7, // 0:23 = a b
+                    61,1,5,61,4,3,61,2,4,61,6,7,61,3,12,61,5,20,61,0,95,61,7,100,61,9,5,61,8,7, // 0:23 = a b
                     43,5,2,43,10,5,43,22,13,43,19,11,43,17,10,43,18,8, // 24:47 +
                     45,19,4,45,17,2,45,107,22,45,87,13,45,3,5,45,21,2,45,209,105, // 48:71 -
                     42,3,5,42,5,9,42,9,11,42,13,13,42,9,15,42,20,3,42,7,8,42,12,7,42,4,2 // 72:95 *
@@ -2367,32 +2367,27 @@ const rulesets = {
     },
 
     byteParamOperations(self, rule, value, address, initialParams, params, outputValues) {
-        let numCommandTypes = 4;
         let score = 255;
         let offset = address - rule.outBlockStart;
-        let required = 0;
-        if (offset < 8) {
-            // = a b rule
-            // Find the corresponding parameter command
-            let found = false;
-            for (let i = 0; i < rule.inBlockLen / numCommandTypes; i += 3) {
-                let a = initialParams[rule.inBlockStart + i + 1];
-                if (a === address) {
-                    required = initialParams[rule.inBlockStart + i + 2];
-                    found = true;
+        let inAddr = rule.inBlockStart;
+        let r;
+        // Check whether the address is in the range of the = operators
+        let isEqualOp = false;
+        for (let i = 0; i < initialParams.length; i += 3) {
+            let op = initialParams[i];
+            if (op === 61) {
+                let addr = initialParams[i + 1];
+                if (addr === address) {
+                    isEqualOp = true;
+                    r = initialParams[i + 2];
                     break;
                 }
             }
-            if (found) {
-                score = self.doByteScore(required, value);
-            }
         }
-        else {
-            let inAddr = rule.inBlockStart;
+        if (!isEqualOp) {
             let op = initialParams[inAddr + offset * 3];
             let a = initialParams[inAddr + offset * 3 + 1];
             let b = initialParams[inAddr + offset * 3 + 2];
-            let r;
             switch (op) {
                 case 43: // +
                     r = (a + b) & 255;
@@ -2404,11 +2399,13 @@ const rulesets = {
                     r = (a * b) & 255;
                     break;
                 default: 
-                    console.log("op error in paramOperations rule at:", i);
+                    console.log("op error in paramOperations rule at:", offset, op, address);
                     r = 0;
+                    throw "op error";
             }
-            score = self.doByteScore(r, value);
         }
+        score = self.doByteScore(r, value);
+    
         return score;
     },
 
