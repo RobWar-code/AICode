@@ -3,6 +3,9 @@ The trial of paramOperations rule got stuck at
 24/45 after 1 day's processing. So splitting
 the problem into smaller rules.
 
+Still stuck on simplfied rules, so provide further
+simplicity by add in the rules as individual examples.
+
 12/03/2025
 Trials have worked through all the rules upto
 paramOperations which is currently running at 45%
