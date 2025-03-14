@@ -1,3 +1,10 @@
+14/03/2025
+The system got stuck on the add paramOperations
+so have created the seed code for this. New trial
+running.
+
+The system is now working on the subtract paramOperations.
+
 13/03/2025
 The trial of paramOperations rule got stuck at
 24/45 after 1 day's processing. So splitting
@@ -5,6 +12,8 @@ the problem into smaller rules.
 
 Still stuck on simplfied rules, so provide further
 simplicity by add in the rules as individual examples.
+
+The = operation completed naturally
 
 12/03/2025
 Trials have worked through all the rules upto

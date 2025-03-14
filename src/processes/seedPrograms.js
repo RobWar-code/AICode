@@ -808,6 +808,118 @@ const seedPrograms = {
             ]
         },
         {
+            name: "subtractAdjacentParamOp",
+            description: "Subtract adjacent param as indicated by a + op",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16] // Main Loop Counter
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Main Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Output Pointer
+                },
+                {
+                    // Main Loop
+                    ins: "LDI A, (C)" // Op
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "LDI A, (C)" // First Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // First Param
+                },
+                {
+                    ins: "LDI A, (C)" // Second Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Second Param
+                },
+                {
+                    ins: "POP A" // Operator
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [45] // -
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [13] // Next Instruction
+                },
+                {
+                    ins: "PUSH C" // Input Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // First Param
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "POP C" // Input Pointer
+                },
+                {
+                    // Next Loop
+                    ins: "LD A, (MEM)",
+                    data: [200] // Main Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] 
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xDD] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "subtractAdjacentParams",
             description: "Output the difference of adjacent parameters",
             program: [

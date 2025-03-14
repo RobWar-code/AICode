@@ -50,7 +50,7 @@ class MainControl {
     }
 
     async mainLoop() {
-        let mainCycle = 8
+        let mainCycle = 4
         for (let i = 0; i < mainCycle; i++) {
             let thresholdReached = false;
             let bestEntitySet = this.bestSets[this.bestSetNum];
