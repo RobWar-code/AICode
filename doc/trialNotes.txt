@@ -1,9 +1,18 @@
+15/03/2025
+The subtract paramOperations completed, but the
+system got stuck on the multiply paramOperations
+rule, so am hand crafting that. Will also introduce
+a divide paramOperations rule and a modulo paramOperations
+rule.
+
 14/03/2025
 The system got stuck on the add paramOperations
 so have created the seed code for this. New trial
 running.
 
 The system is now working on the subtract paramOperations.
+This scored 10.9/15 after 140 rounds, so introduced the
+seed program and continued trial.
 
 13/03/2025
 The trial of paramOperations rule got stuck at

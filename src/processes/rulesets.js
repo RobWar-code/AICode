@@ -7,8 +7,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 61,
-    maxRuleId: 60,
+    numRules: 63,
+    maxRuleId: 62,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
@@ -20,7 +20,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleCompletionRound: new Array(61).fill(-1),
+    ruleCompletionRound: new Array(63).fill(-1),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     seedRuleSet: false,
@@ -812,6 +812,7 @@ const rulesets = {
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
+        // Multiply
         let scoreItem51 = {rule: "Use op to Convert Adjacent Params 4", ruleId: 60, 
             retain: false, skip: false, sequenceNum: 40, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
@@ -834,9 +835,54 @@ const rulesets = {
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
-
-        let scoreItem52 = {rule: "Use op to Convert Adjacent Params 5", ruleId: 54, 
+        // Modulo
+        let scoreItem52 = {rule: "Use op to Convert Adjacent Params 5", ruleId: 61, 
             retain: false, skip: false, sequenceNum: 41, 
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
+            inBlockLen: 48,
+            highIC: 16 * 14 * 16 + 100 * 4,
+            highIP: 85,
+            paramsIn: [
+                [
+                    37,5,2, 37,2,0, 37,30,7, 37,100,9, 37,40,6, 37,45,25, 37,15,4, 37,108,9,
+                    37,62,3, 37,87,5, 37,220,15, 37,96,6, 37,84,23, 37,31,7, 37,18,7, 37,13,5
+                ],
+                [
+                    37,9,2, 37,11,0, 37,203,20, 37,5,5, 37,108,10, 37,53,25, 37,8,9, 37,33,9,
+                    37,11,3, 37,10,5, 37,93,16, 37,7,7, 37,203,45, 37,29,7, 37,230,76, 37,66,25
+                ]
+            ]
+        };
+        this.scoreList.push(scoreItem52);
+        this.ruleFunction.push(this.paramOperations);
+        this.byteFunction.push(this.byteParamOperations);
+
+        // Divide
+        let scoreItem53 = {rule: "Use op to Convert Adjacent Params 6", ruleId: 62, 
+            retain: false, skip: false, sequenceNum: 42, 
+            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
+            inBlockLen: 48,
+            highIC: 16 * 14 * 16 + 100 * 4,
+            highIP: 85,
+            paramsIn: [
+                [
+                    47,5,2, 47,2,0, 47,30,7, 47,100,9, 47,40,6, 47,45,25, 47,15,4, 47,108,9,
+                    47,62,3, 47,87,5, 47,220,15, 47,96,6, 47,84,23, 47,31,7, 47,18,7, 47,13,5
+                ],
+                [
+                    47,9,2, 47,11,0, 47,203,20, 47,5,5, 47,108,10, 47,53,25, 47,8,9, 47,33,9,
+                    47,11,3, 47,10,5, 47,93,16, 47,7,7, 47,203,45, 47,29,7, 47,230,76, 47,66,25
+                ]
+            ]
+        };
+        this.scoreList.push(scoreItem53);
+        this.ruleFunction.push(this.paramOperations);
+        this.byteFunction.push(this.byteParamOperations);
+
+        let scoreItem54 = {rule: "Use op to Convert Adjacent Params 7", ruleId: 54, 
+            retain: false, skip: false, sequenceNum: 43, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
@@ -853,12 +899,12 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem52);
+        this.scoreList.push(scoreItem54);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
-        let scoreItem53 = {rule: "Use op to Convert Adjacent Params 6", ruleId: 55, 
-            retain: false, skip: false, sequenceNum: 42, 
+        let scoreItem55 = {rule: "Use op to Convert Adjacent Params 8", ruleId: 55, 
+            retain: false, skip: false, sequenceNum: 44, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
@@ -875,12 +921,12 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem53);
+        this.scoreList.push(scoreItem55);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
-        let scoreItem54 = {rule: "Use op to Convert Adjacent Params 7", ruleId: 56, 
-            retain: false, skip: false, sequenceNum: 43, 
+        let scoreItem56 = {rule: "Use op to Convert Adjacent Params 9", ruleId: 56, 
+            retain: false, skip: false, sequenceNum: 45, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
@@ -897,13 +943,13 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem54);
+        this.scoreList.push(scoreItem56);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
         // May need to break this into separate rules
-        let scoreItem55 = {rule: "Use op to Convert Adjacent Params 8", ruleId: 31,
-            retain: false, skip: false, sequenceNum: 44, 
+        let scoreItem57 = {rule: "Use op to Convert Adjacent Params 10", ruleId: 31,
+            retain: false, skip: false, sequenceNum: 46, 
             score: 0, completionRound: -1, max: 20, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 0, inBlockLen: 96,
@@ -924,62 +970,62 @@ const rulesets = {
                 ]
             ]
         };
-        this.scoreList.push(scoreItem55);
+        this.scoreList.push(scoreItem57);
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
 
         let asciiParams1 = this.getASCIIParams(1);
-        let scoreItem56 = {rule: "Convert ASCII Numbers 1", ruleId: 32,
-            retain: false, skip: false, sequenceNum: 45, 
+        let scoreItem58 = {rule: "Convert ASCII Numbers 1", ruleId: 32,
+            retain: false, skip: false, sequenceNum: 47, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams1
         };
-        this.scoreList.push(scoreItem56);
+        this.scoreList.push(scoreItem58);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams2 = this.getASCIIParams(2);
-        let scoreItem57 = {rule: "Convert ASCII Numbers 2", ruleId: 33,
-            retain: false, skip: false, sequenceNum: 46, 
+        let scoreItem59 = {rule: "Convert ASCII Numbers 2", ruleId: 33,
+            retain: false, skip: false, sequenceNum: 48, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams2
         };
-        this.scoreList.push(scoreItem57);
+        this.scoreList.push(scoreItem59);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams3 = this.getASCIIParams(3);
-        let scoreItem58 = {rule: "Convert ASCII Numbers 2", ruleId: 34,
-            retain: false, skip: false, sequenceNum: 47, 
+        let scoreItem60 = {rule: "Convert ASCII Numbers 2", ruleId: 34,
+            retain: false, skip: false, sequenceNum: 49, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams3
         };
-        this.scoreList.push(scoreItem58);
+        this.scoreList.push(scoreItem60);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         let asciiParams4 = this.getASCIIParams(4);
-        let scoreItem59 = {rule: "Convert ASCII Numbers 2", ruleId: 35,
-            retain: false, skip: false, sequenceNum: 48, 
+        let scoreItem61 = {rule: "Convert ASCII Numbers 2", ruleId: 35,
+            retain: false, skip: false, sequenceNum: 50, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             paramsIn: asciiParams4
         };
-        this.scoreList.push(scoreItem59);
+        this.scoreList.push(scoreItem61);
         this.ruleFunction.push(this.convertASCIINumbers);
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
-        this.diffScore = 60;
-        let scoreItem60 = {rule: "Difference Between Outputs", ruleId: 36, skip: true, 
+        this.diffScore = 62;
+        let scoreItem62 = {rule: "Difference Between Outputs", ruleId: 36, skip: true, 
             retain: true, score: 0, max: 1, startRoundNum: 0};
-        this.scoreList.push(scoreItem60);
+        this.scoreList.push(scoreItem62);
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
 
@@ -2507,6 +2553,14 @@ const rulesets = {
                     case 42: // *
                         r = (a * b) & 255;
                         break;
+                    case 37: // %
+                        if (b === 0) r = 0;
+                        else r = (a % b) & 255;
+                        break;
+                    case 47: // /
+                        if (b === 0) r = 0;
+                        else r = Math.floor(a / b) & 255;
+                        break;
                     default: 
                         console.log("op error in paramOperations rule at:", i, op, inAddr);
                         r = 0;
@@ -2554,6 +2608,14 @@ const rulesets = {
                     break;
                 case 42: // *
                     r = (a * b) & 255;
+                    break;
+                case 37: // %
+                    if (b === 0) r = 0;
+                    else r = (a % b) & 255;
+                    break;
+                case 47: // /
+                    if (b === 0) r = 0;
+                    else r = Math.floor(a / b) & 255;
                     break;
                 default: 
                     console.log("byteParamOperations: op error in paramOperations rule at:", i, addr, offset, op, address);

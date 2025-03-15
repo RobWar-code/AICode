@@ -687,6 +687,162 @@ const seedPrograms = {
             ]
         },
         {
+            name: "multiplyAdjacentParamOp",
+            description: "multiply adjacent params as indicated by a * op",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16] // Main Loop Counter
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Main Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Output Pointer
+                },
+                {
+                    // Main Loop
+                    ins: "LDI A, (C)" // Op
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "LDI A, (C)" // First Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // First Param
+                },
+                {
+                    ins: "LDI A, (C)" // Second Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Second Param
+                },
+                {
+                    ins: "POP A" // Operator
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [42] // *
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [13] // Next Instruction
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [204] // Total
+                },
+                {
+                    ins: "PUSH C" // Input Pointer
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [203] // Second Param
+                },
+                {
+                    // Addition Loop
+                    ins: "ST (MEM), B",
+                    data: [205] // Addition Counter
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [12] // Multiply Done
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [202] // First Param
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [204] // Total
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204] // Total
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [205] // Addition Counter
+                },
+                {
+                    ins: "DEC B"
+                },
+                {
+                    ins: "JR",
+                    data: [0xEF] // Addition Loop
+                },
+                {
+                    // Multiply Done
+                    ins: "LD A, (MEM)",
+                    data: [204] // Total
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "POP C" // Input Pointer
+                },
+                {
+                    // Next Loop
+                    ins: "LD A, (MEM)",
+                    data: [200] // Main Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] 
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xC9] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "multiplyParamsByTwo",
             description: "Multiply input parameters by two",
             program: [
@@ -809,7 +965,7 @@ const seedPrograms = {
         },
         {
             name: "subtractAdjacentParamOp",
-            description: "Subtract adjacent param as indicated by a + op",
+            description: "Subtract adjacent param as indicated by a - op",
             program: [
                 {
                     ins: "LD A, IMM",
