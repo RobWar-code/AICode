@@ -2,6 +2,7 @@ Worked Examples and Strategies
 
 Contents
     Problem Space Background
+        Review of Methodology
         Code Entrapments
     Ruleset Strategies
         Selecting Rules
@@ -55,7 +56,36 @@ Contents
 
     We note that number scattering is likely to be a very different solution
     to specific solutions, other than in the deployment of loops for series.
-    
+
+<h2>Review of Methodology
+    15/03/2025
+
+    To summarise the approach of the evolutionary method for problem solving
+    that is currently deployed, we can say that we are providing inputs that
+    must be matched to outputs using coincidental code sequences that are
+    scored depending on the match to the required outputs. Code sequences
+    are manipulated by various mutation methods and it is hoped that a score
+    incremental sequence of events gives rise to an adequate solution.
+
+    This approach is weak in the sense that coincidental matches to the
+    output requirements that score in the mid-range, may in fact require
+    lower probability adjustments to attain the solution than other
+    code sequences that could be used to approach the solution. This is basically
+    because the code sequences are both order and detail critical.
+
+    There is currently no "intelligence" in the ordering or selection of 
+    instructions for the code sequences.
+
+    It is currently hoped that by using successful and hand-written solutions
+    from a pool, more successful modification pathways can be found by the
+    random approach in the tackling of novel problems.
+
+    However, we note that the more sequences that there are in the pool, the lower
+    the probability of finding a useful prior sequence there will be.
+
+    The basic question behind this is: Can the system solve a general range of problems
+    without prior knowledge or bias?
+
 <h2>Code Entrapments
 
     A problem that arises in the rule/score approach for code-based evolution

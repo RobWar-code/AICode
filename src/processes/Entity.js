@@ -983,7 +983,7 @@ class Entity {
     doScore(bestSetHighScore, bestSetLowScore) {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
             this.instructionSet, this.initialMemSpace, 
-            this.initialParams, this.params, this.valuesOut, this.registers.IC, 
+            this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.registers.IC, 
             this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
         this.scoreList = scoreObj.scoreList;
@@ -1018,11 +1018,9 @@ class Entity {
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
                 this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                memObj.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
+                this.oldValuesOut, memObj.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
         }
-        // Score the difference between the outputs of the passes
-        // this.score += rulesets.scoreOutputDiff(this.oldValuesOut);
 
         if (typeof(memObj.A) != "number") memObj.A = 0;
         if (typeof(memObj.B) != "number") memObj.B = 0;
@@ -1070,14 +1068,9 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             this.scoreObj = rulesets.getScore(0, 0, this.instructionSet, 
-                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
+                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
                 this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += this.scoreObj.score;
-            if (this.executionCount > 0) {
-                let s = rulesets.scoreOutputDiff(this.oldValuesOut);
-                this.score += s;
-                this.scoreObj.score += s;
-            }
             ++this.executionCount;
             this.registers.IC = 0;
         }

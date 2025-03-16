@@ -19,11 +19,22 @@ Jobs Due
 
     Consider which rules need highIP and highIC set
 
+    Re-introduce/modify the scoreOutputDiff rule
+        Allow for the current rule sequence num to get the
+        outputBlockLength.
+
+        When calculating the max score, allow for the diffScore
+
+        Allow for the scoreOutputDiff rule to be run in the
+        same loop as the rest of the scores.
+
+        Remove the original scoreOutputDiff call.
+
     * Problem with insert from load seed rule - probably entity rule sequence num
 
     * Add subtract adjacent params seed program
 
-    Possibly problem with rule multiply by adjacent param
+    * Possibly problem with rule multiply by adjacent param
     
     + Add a completion of all rules procedure.
 

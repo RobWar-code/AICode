@@ -1023,10 +1023,10 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
 
         this.diffScore = 62;
-        let scoreItem62 = {rule: "Difference Between Outputs", ruleId: 36, skip: true, 
-            retain: true, score: 0, max: 1, startRoundNum: 0};
+        let scoreItem62 = {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
+            sequenceNum: 0, score: 0, max: 1, startRoundNum: 0};
         this.scoreList.push(scoreItem62);
-        this.ruleFunction.push(null);
+        this.ruleFunction.push(this.scoreOutputDiff);
         this.byteFunction.push(null);
 
         let maxScore = 0;
@@ -1137,7 +1137,7 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        codeFlags, initialParams, paramsIn, valuesOut, IC, highestIP, sequenceNum, roundNum) {
+        codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, IC, highestIP, sequenceNum, roundNum) {
 
         // Get the current maximum score
         this.currentMaxScore = this.getCurrentMaxScore();
@@ -1149,6 +1149,7 @@ const rulesets = {
             initialParams: initialParams,
             paramsIn: paramsIn,
             valuesOut: valuesOut,
+            entityOutputs: entityOutputs,
             IC: IC,
             highestIP: highestIP,
             sequenceNum: sequenceNum
@@ -1202,33 +1203,46 @@ const rulesets = {
                 }
             }
         }
+        // Allow for output difference
+        if (numInputParamBlocks > 1) {
+            let diffMax = this.scoreList[this.diffScore].max;
+            maxScore -= diffMax * (numInputParamBlocks - 1);
+        }
         return (maxScore);
     },
 
-    scoreOutputDiff(outputs) {
+    scoreOutputDiff(self, dataParams, ruleParams) {
+        let outputs = dataParams.entityOutputs;
+        // Get the number of input parameter blocks
+        let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        let numOutputBlocks = 2;
+        if ("paramsIn" in rule) {
+            numOutputBlocks = rule.paramsIn.length;
+        }
+
+        if (outputs.length < numOutputBlocks) {
+            let score = 0;
+            if (numOutputBlocks === 1) {
+                score = 1;
+            }
+            return score;
+        }
+
         let count = 0;
         let l = outputs.length;
-        for (let i = 0; i < outputs[0].length; i++) {
-            let v = outputs[0][i];
-            for (let j = 1; j < l; j++) {
-                if (i < outputs[j].length) {
-                    if (v != outputs[j][i]) {
-                        ++count;
-                        break;
-                    }
-                }
-            }
+        for (let i = 0; i < 64; i++) {
+            let a = outputs[0][i];
+            let b = outputs[1][i];
+            if (a != b) ++count;
         }
-        let opt = outputs[0].length;
+        let opt = 64;
         let max = opt;
         let min = 0;
-        let score = this.doScore(opt, count, max, min);
-        score = score * this.scoreList[this.diffScore].max;
-        this.scoreList[this.diffScore].score = score;
+        let score = self.doScore(opt, count, max, min);
         return score;
     },
 
-    insDistribution: function (self, dataParams, ruleParams) {
+    insDistribution (self, dataParams, ruleParams) {
         let instructionSet = dataParams.instructionSet;
         let memSpace = dataParams.memSpace;
         insSet = [

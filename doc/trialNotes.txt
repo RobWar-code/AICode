@@ -5,6 +5,14 @@ rule, so am hand crafting that. Will also introduce
 a divide paramOperations rule and a modulo paramOperations
 rule.
 
+The system reached a score of 11.4/15 on the modulo
+paramOperations rule. It is worth noting that the
+solution it evolved was a primarily blind pattern
+of numbers applied to both instances of the input
+data. So it is worth re-introducing the outputDifferent
+rule, to ensure that experimentation with the inputs
+takes place.
+
 14/03/2025
 The system got stuck on the add paramOperations
 so have created the seed code for this. New trial
