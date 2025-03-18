@@ -166,8 +166,10 @@ const entityDisplay = {
         document.getElementById('scoreList').remove();
         // Display the modal
         document.getElementById('scoreListBackground').style.display = "block";
+        console.log("Extracting score", data.scoreList[62].score);
         // Prepare the new list
-        let html = "<ul id='scoreList'>"
+        let html = "<ul id='scoreList'>";
+        let i = 0;
         for (let scoreItem of data.scoreList) {
             let outBlockStart = "";
             if ("outBlockStart" in scoreItem) {
@@ -183,7 +185,7 @@ const entityDisplay = {
                     completionRound = scoreItem.completionRound;
                 }
             }
-            let score = Math.floor(scoreItem.score * 10000) / 10000;
+            let score = Math.floor(data.ruleScores[i] * 10000) / 10000;
             html += "<li>";
             html += `<span id="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
             html += `<span id="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
@@ -193,6 +195,7 @@ const entityDisplay = {
             html += `<span id="scoreListMax" style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
             html += `<span id="scoreListCompletionRound" style="display: inline-block; width: 60px">${completionRound}</span>`;
             html += "</li>";
+            ++i;
         }
         html += "</ul>";
         document.getElementById('scoreListDiv').innerHTML = html;

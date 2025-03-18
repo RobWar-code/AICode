@@ -73,7 +73,7 @@ class Entity {
         // Breeding Parameters
         this.interbreedCycle = 5;
         this.score = 0;
-        this.scoreList = [];
+        this.ruleScores = [];
         let now = new Date();
         this.birthTime = Date.now();
         this.birthDateTime = `${now.toDateString()} ${now.toTimeString()}`;
@@ -933,7 +933,8 @@ class Entity {
         displayData.seedRuleBreedCount = seedRuleBreedCount;
         displayData.crossSetCount = crossSetCount;
         displayData.currentRule = currentRule;
-        displayData.scoreList = this.scoreList;
+        displayData.scoreList = rulesets.scoreList;
+        displayData.ruleScores = this.ruleScores;
 
         mainWindow.webContents.send('displayEntity', displayData);
 
@@ -986,8 +987,15 @@ class Entity {
             this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.registers.IC, 
             this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
-        this.scoreList = scoreObj.scoreList;
+        this.transferRuleScores(scoreObj.scoreList);
         return score;
+    }
+
+    transferRuleScores(scoreList) {
+        this.ruleScores = [];
+        for (let scoreItem of scoreList) {
+            this.ruleScores.push(scoreItem.score);
+        }
     }
     
     getMemData(n, memSpace) {
@@ -999,7 +1007,7 @@ class Entity {
     }        
 
     execute(bestSetHighScore, bestSetLowScore) {
-        rulesets.initialise();
+        rulesets.zeroScores();
         let memObj = null;
         let scoreObj = null;
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
@@ -1032,7 +1040,7 @@ class Entity {
         this.registers.SP = memObj.SP;
         this.registers.IP = memObj.IP;
         this.registers.IC = memObj.IC;
-        this.scoreList = scoreObj.scoreList;
+        this.transferRuleScores(scoreObj.scoreList);
         return memObj;
     }
 
@@ -1050,7 +1058,7 @@ class Entity {
         }
         if (this.registers.IC === 0) {
             if (this.executionCount === 0) {
-                rulesets.initialise();
+                rulesets.zeroScores();
                 this.scoreObj = {score: 0, scoreList: null};
             }
             this.resetRegisters();
@@ -1074,6 +1082,8 @@ class Entity {
             ++this.executionCount;
             this.registers.IC = 0;
         }
+        // Update the rule scores
+        this.transferRuleScores(this.scoreObj.scoreList);
         let insListObj = this.instructionSet.stepDisassemble(this.memSpace, this.instructionVisited, this.previousRegisters.IP);
         return {
             executionEnded:false,
@@ -1084,6 +1094,7 @@ class Entity {
             valuesOut: this.valuesOut,
             stepLine: insListObj.stepLine,
             insList: insListObj.insList,
+            ruleScores: this.ruleScores,
             scoreObj: this.scoreObj
         }
     }

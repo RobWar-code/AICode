@@ -93,6 +93,7 @@ class MainControl {
                 // Clearance Pass
                 this.restartSets();
             }
+            else if (thresholdReached && this.runningSingleRule) return;
         }
 
     }

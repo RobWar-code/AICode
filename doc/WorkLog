@@ -19,16 +19,24 @@ Jobs Due
 
     Consider which rules need highIP and highIC set
 
-    Re-introduce/modify the scoreOutputDiff rule
-        Allow for the current rule sequence num to get the
+    Separate the scorelist rule scores from the score data
+    
+    * Use predefined expected score outputs for scoring.
+
+    * Consider adjusting scoreOutputDiff so that it actually
+    counts the number of differences between the required outputs
+    and uses this for the optimum.
+
+    * Re-introduce/modify the scoreOutputDiff rule
+        * Allow for the current rule sequence num to get the
         outputBlockLength.
 
-        When calculating the max score, allow for the diffScore
+        * When calculating the max score, allow for the diffScore
 
-        Allow for the scoreOutputDiff rule to be run in the
+        * Allow for the scoreOutputDiff rule to be run in the
         same loop as the rest of the scores.
 
-        Remove the original scoreOutputDiff call.
+        * Remove the original scoreOutputDiff call.
 
     * Problem with insert from load seed rule - probably entity rule sequence num
 
