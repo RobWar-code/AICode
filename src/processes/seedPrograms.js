@@ -687,6 +687,180 @@ const seedPrograms = {
             ]
         },
         {
+            name: "moduloParamOperations",
+            description: "output the modulo of adjacent bytes denoted by the modulo char",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16] // Process Counter
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Next Op
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "LDI A, (C)" // Operator
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [37]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [4] // Do Modulo
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "JR",
+                    data: [24] // Skip Op
+                },
+                {
+                    // Do Modulo
+                    ins: "LDI A, (C)" // Remainder
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "LDI A, (C)" // Divisor
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [19] // Set Output Zero
+                },
+                {
+                    // Calculation Loop
+                    ins: "LD A, (MEM)",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [14] // Set Output Zero
+                },
+                {
+                    ins: "JRC",
+                    data: [14] // Set Output Value
+                },
+                {
+                    ins: "SUB A, B",
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Remainder
+                },
+                {
+                    ins: "JR",
+                    data: [0xF6] // Next Calculation
+                },
+                {
+                    // Skip Op
+                    ins: "LD A, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "JR",
+                    data: [10] // Next Process
+                },
+                {
+                    // Set Output Zero
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    // Set Output Value
+                    ins: "PUSH C"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "POP C" // Input Pointer
+                },
+                {
+                    // Next Process
+                    ins: "LD A, (MEM)",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xC6] // Process Loop
+                }
+            ]
+        },
+        {
             name: "multiplyAdjacentParamOp",
             description: "multiply adjacent params as indicated by a * op",
             program: [

@@ -1,3 +1,13 @@
+18/03/2025
+Readded output difference checking, with refinement
+of calculating the optimum from predetermined outputs.
+
+In the scoring for rules am now taking account of consecutive
+correct values from the start of the output to encourage
+serial processing.
+
+Trial on paramOperations - modulo now running.
+
 15/03/2025
 The subtract paramOperations completed, but the
 system got stuck on the multiply paramOperations

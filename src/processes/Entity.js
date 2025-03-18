@@ -1083,7 +1083,7 @@ class Entity {
             this.registers.IC = 0;
         }
         // Update the rule scores
-        this.transferRuleScores(this.scoreObj.scoreList);
+        if (this.scoreObj.scoreList != null) this.transferRuleScores(this.scoreObj.scoreList);
         let insListObj = this.instructionSet.stepDisassemble(this.memSpace, this.instructionVisited, this.previousRegisters.IP);
         return {
             executionEnded:false,
