@@ -40,6 +40,10 @@ const dbTransactions = {
 
         await this.deleteOtherRecords(dbConnection, sessionId);
 
+        if (resultOK) {
+            resultOK = await this.saveRules(dbConnection);
+        }
+
         await dbConnection.end();
 
         if (resultOK) {
@@ -179,6 +183,9 @@ const dbTransactions = {
         }
         await dbConnection.end();
 
+        // Rules
+        await this.loadRules();
+
         program.loadRestart(sessions[0], entities, seedRules);
 
         mainWindow.webContents.send("loadDone", 0);
@@ -218,6 +225,22 @@ const dbTransactions = {
         catch (error) {
             console.error("Failed to insert seed_rule", error.message);
             throw error;
+        }
+    },
+
+    async saveRules(dbConnection) {
+        sql = "DELETE FROM rule";
+        await dbConnection.query(sql);
+
+        for (let i = 0; i < rulesets.ruleCompletionRound.length; i++) {
+            try {
+                sql = "INSERT INTO rule (rule_num, completion_round) VALUES (?, ?)";
+                const [results] = await dbConnection.execute(sql, [i, rulesets.ruleCompletionRound[i]]);
+            }
+            catch (error) {
+                console.log("saveRules: Could not insert ruleCompletionRound[]:", i);
+                throw error.message;
+            }
         }
     },
 
@@ -291,6 +314,28 @@ const dbTransactions = {
 
         await dbConnection.end();
 
+    },
+
+    async loadRules() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let sql = "SELECT rule_num, completion_round FROM rule";
+        try {
+            [results] = await dbConnection.query(sql);
+            for (let item of results) {
+                rulesets.ruleCompletionRound[item.rule_num] = item.completion_round; 
+            }
+        }
+        catch (error) {
+            console.log("loadRules: Could not load rule data");
+            throw error;
+        }
+
+        await dbConnection.end();
     },
 
     stringToIntArray(str) {

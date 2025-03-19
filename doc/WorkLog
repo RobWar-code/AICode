@@ -19,30 +19,7 @@ Jobs Due
 
     Consider which rules need highIP and highIC set
 
-    Separate the scorelist rule scores from the score data
-    
-    * Use predefined expected score outputs for scoring.
-
-    * Consider adjusting scoreOutputDiff so that it actually
-    counts the number of differences between the required outputs
-    and uses this for the optimum.
-
-    * Re-introduce/modify the scoreOutputDiff rule
-        * Allow for the current rule sequence num to get the
-        outputBlockLength.
-
-        * When calculating the max score, allow for the diffScore
-
-        * Allow for the scoreOutputDiff rule to be run in the
-        same loop as the rest of the scores.
-
-        * Remove the original scoreOutputDiff call.
-
-    * Problem with insert from load seed rule - probably entity rule sequence num
-
-    * Add subtract adjacent params seed program
-
-    * Possibly problem with rule multiply by adjacent param
+    Do further analysis of scale of modifications to existing solutions
     
     + Add a completion of all rules procedure.
 
@@ -73,6 +50,39 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    19/03/2025
+    
+    * Check the completion round data for rules
+
+    * Add the completion round data for rules to the database
+
+    * Load/Save rule completion rounds
+
+    * Separate the scorelist rule scores from the score data
+    
+    * Use predefined expected score outputs for scoring.
+
+    * Consider adjusting scoreOutputDiff so that it actually
+    counts the number of differences between the required outputs
+    and uses this for the optimum.
+
+    * Re-introduce/modify the scoreOutputDiff rule
+        * Allow for the current rule sequence num to get the
+        outputBlockLength.
+
+        * When calculating the max score, allow for the diffScore
+
+        * Allow for the scoreOutputDiff rule to be run in the
+        same loop as the rest of the scores.
+
+        * Remove the original scoreOutputDiff call.
+
+    * Problem with insert from load seed rule - probably entity rule sequence num
+
+    * Add subtract adjacent params seed program
+
+    * Possibly problem with rule multiply by adjacent param
+
     01/03/2025
     
     * Display the score and the execution count on trace window

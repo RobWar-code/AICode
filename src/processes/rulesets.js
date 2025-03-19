@@ -33,7 +33,7 @@ const rulesets = {
         this.byteFunction = [];
         this.requiredOutputsFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: true, retain: false, 
+        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: true, retain: true, 
             sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
@@ -3411,6 +3411,7 @@ const rulesets = {
                     }
                     if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
                         this.ruleCompletionRound[index] = roundNum;
+                        console.log("seedRuleUpdate: - update rule completion round:", this.ruleCompletionRound[index]);
                     }
                 }
                 ++index;

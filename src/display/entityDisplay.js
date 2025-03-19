@@ -180,10 +180,8 @@ const entityDisplay = {
                 sequenceNum = scoreItem.sequenceNum;
             }
             let completionRound = "";
-            if ("completionRound" in scoreItem) {
-                if (scoreItem.completionRound > -1) {
-                    completionRound = scoreItem.completionRound;
-                }
+            if (data.ruleCompletionRound[i] > -1) {
+                completionRound = data.ruleCompletionRound[i];
             }
             let score = Math.floor(data.ruleScores[i] * 10000) / 10000;
             html += "<li>";

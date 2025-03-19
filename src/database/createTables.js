@@ -10,6 +10,7 @@ async function createTables() {
         console.log("createTables: problem with connection")
     }
 
+    /*
     await clearTables(connection);
 
     return;
@@ -58,19 +59,30 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
+    */
+
+    sql = "CREATE TABLE rule (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "rule_num INT,",
+    sql += "completion_round INT"
+    sql += ")";
+    await connection.query(sql);
 
     connection.end();
 }
 
 async function clearTables(connection) {
 
+    sql = "DELETE FROM rule",
+    await connection.query(sql);
+    
     sql = "DELETE FROM seed_rule";
     await connection.query(sql);
 
-//    sql = "DELETE FROM entity";
-//    await connection.query(sql);
+    sql = "DELETE FROM entity";
+    await connection.query(sql);
 
-//    sql = "DELETE FROM session";
-//    await connection.query(sql);
+    sql = "DELETE FROM session";
+    await connection.query(sql);
 
 }

@@ -935,6 +935,7 @@ class Entity {
         displayData.currentRule = currentRule;
         displayData.scoreList = rulesets.scoreList;
         displayData.ruleScores = this.ruleScores;
+        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
 
         mainWindow.webContents.send('displayEntity', displayData);
 
