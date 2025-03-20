@@ -840,8 +840,8 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, 
             inBlockStart: 0, inBlockLen: 32,
-            highIC: 16 * 18 + 100 * 4,
-            highIP: 36,
+            highIC: 16 * 18 * 20 + 100 * 4,
+            highIP: 80,
             paramsIn: [
                 [
                     2,3, 4,5, 9,10, 8,5, 18,10, 20,20, 32,4, 63,3,
@@ -863,7 +863,7 @@ const rulesets = {
             score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 32,
-            highIC: 16 * 18 + 100 * 4,
+            highIC: 16 * 18 * 25 + 100 * 4,
             highIP: 85,
             paramsIn: [
                 [
