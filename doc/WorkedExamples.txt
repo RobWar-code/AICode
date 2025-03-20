@@ -3,6 +3,7 @@ Worked Examples and Strategies
 Contents
     Problem Space Background
         Review of Methodology
+            Further Detailed Analysis
         Code Entrapments
     Ruleset Strategies
         Selecting Rules
@@ -85,6 +86,31 @@ Contents
 
     The basic question behind this is: Can the system solve a general range of problems
     without prior knowledge or bias?
+
+<h3>Further Detailed Analysis
+
+    Looking at the permutations/combinations of the instruction set,
+    we have it that given arrangements of code have the following
+    probabilities
+
+    5 Instructions (2 data): 1/(56^5 + 256^2) = 1/(550,797,312)
+
+    Given that this is the raw probability, let us assume that the
+    monte carlo method is 50% efficient, so then the probability is
+    
+    1/(3 * 56 + 56^2 + 256^2) = 1/68840
+
+    Consider 8 instructions with our variation of monte carlo:
+    1/(5 * 56 + 56^3 + 256^3) = 1/(16,953,112)
+
+    Assuming 3,000,000 trials per hour, we can see that an 8
+    instruction modification is likely to take an average of
+    about 2.5 hours.
+
+    Clearly it is exponentially in our time interests to keep the number
+    of modifications required from rule to rule to a minimum.
+
+    This suggests small step and branch in our selection of rules.
 
 <h2>Code Entrapments
 

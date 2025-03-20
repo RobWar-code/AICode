@@ -1,3 +1,11 @@
+19/03/2025
+
+paramOperations - divide reached 12/16 after about
+18 hours.
+
+Restarted the trials from scratch using the seed
+rules.
+
 18/03/2025
 Readded output difference checking, with refinement
 of calculating the optimum from predetermined outputs.
@@ -7,6 +15,8 @@ correct values from the start of the output to encourage
 serial processing.
 
 Trial on paramOperations - modulo now running.
+Seed for the modulo inserted. So trial proceeded
+to paramOperations - divide.
 
 15/03/2025
 The subtract paramOperations completed, but the
