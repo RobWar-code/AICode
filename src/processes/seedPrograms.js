@@ -372,6 +372,219 @@ const seedPrograms = {
             ]
         },
         {
+            name: "divideAdjacentParamsOp",
+            description: "Divide adjacent params lead by / op",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "CLR (MEM)",
+                    data: [203] // Subtraction Counter
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // Op
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [47] // "/" op
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [11] // Start Division
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "JR",
+                    data: [48] // Next Process
+                },
+                {
+                    // Start Division
+                    ins: "LDI A, (C)" // First Op number to be divided
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204] // Remainder
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [5] // Get Divisor
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "JR",
+                    data: [25] // Output Result
+                },
+                {
+                    // Get Divisor
+                    ins: "LDI A, (C)" // Second Param
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [15] // Output Result
+                },
+                {
+                    // Calculation Loop
+                    ins: "LD A, (MEM)",
+                    data: [204] // Remainder
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204] // Remainder
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203] // Division Counter
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Division Counter
+                },
+                {
+                    ins: "POP A"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNC",
+                    data: [0xF3] // Calculation Loop
+                },
+                {
+                    // Output Result
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203] // Division Counter
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Next Process
+                    ins: "LD A, (MEM)",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xB2] // Process Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "divideByFirstParam",
             description: "divide the inputs by the first parameter and output each result",
             program: [ 
