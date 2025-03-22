@@ -8,6 +8,250 @@ const Entity = require('../processes/Entity.js');
 const testRuleSets = {
     instructionSet: new InstructionSet(),
 
+    testExtractMemSpaceFragment: function () {
+        let codeSample1 = [
+            {
+                ins: "LD A, IMM",
+                data: [16]
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200] // Process Counter
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                // Process Loop
+                ins: "CLR (MEM)",
+                data: [203] // Subtraction Counter
+            },
+            {
+                ins: "LD C, (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LDI A, (C)" // Op
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201]
+            },
+            {
+                ins: "LD B, IMM",
+                data: [47] // "/" op
+            },
+            {
+                ins: "CMP A, B"
+            },
+            {
+                ins: "JRZ",
+                data: [11] // Start Division
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LD C, (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [202] // Output Pointer
+            },
+            {
+                ins: "JR",
+                data: [48] // Next Process
+            },
+            {
+                // Start Division
+                ins: "LDI A, (C)" // First Op number to be divided
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [204] // Remainder
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LD B, IMM",
+                data: [0]
+            },
+            {
+                ins: "CMP A, B"
+            },
+            {
+                ins: "JRNZ",
+                data: [5] // Get Divisor
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "JR",
+                data: [25] // Output Result
+            },
+            {
+                // Get Divisor
+                ins: "LDI A, (C)" // Second Param
+            },
+            {
+                ins: "SWP A, B"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LD A, IMM",
+                data: [0]
+            },
+            {
+                ins: "CMP A, B"
+            },
+            {
+                ins: "JRZ",
+                data: [15] // Output Result
+            },
+            {
+                // Calculation Loop
+                ins: "LD A, (MEM)",
+                data: [204] // Remainder
+            },
+            {
+                ins: "SUB A, B"
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [204] // Remainder
+            },
+            {
+                ins: "PUSH A"
+            },
+            {
+                ins: "LD A, (MEM)",
+                data: [203] // Division Counter
+            },
+            {
+                ins: "INC A"
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [203] // Division Counter
+            },
+            {
+                ins: "POP A"
+            },
+            {
+                ins: "CMP A, B"
+            },
+            {
+                ins: "JRNC",
+                data: [0xF3] // Calculation Loop
+            },
+            {
+                // Output Result
+                ins: "LD C, (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                ins: "LD A, (MEM)",
+                data: [203] // Division Counter
+            },
+            {
+                ins: "STO (C), A"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [202] // Output Pointer
+            },
+            {
+                // Next Process
+                ins: "LD A, (MEM)",
+                data: [200] // Process Counter
+            },
+            {
+                ins: "DEC A"
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200]
+            },
+            {
+                ins: "JRNZ",
+                data: [0xB2] // Process Loop
+            },
+            {
+                ins: "RETF"
+            }
+        ];
+
+        let memSpace = new Array(256).fill(0);
+        this.instructionSet.compileTestCode(codeSample1, memSpace);
+        let sectionList = [];
+        let sectionObj = rulesets.extractMemSpaceFragment(this.instructionSet, memSpace, sectionList);
+        if (!sectionObj.abandonned) {
+            let section = sectionObj.section;
+            let insList = this.instructionSet.disassemble(section, 0, section.length);
+            console.log("SECTION:");
+            let count = 0;
+            for (let op of insList) {
+                console.log(count, op.ins, op.data);
+                ++count;
+            }
+        }
+        else {
+            console.log("Extract Fragment Abandonned");
+        }
+
+        // Multiple Test
+        console.log("Loop Test")
+        sectionList = [];
+        for (let i = 0; i < 30; i++) {
+            let sectionObj = rulesets.extractMemSpaceFragment(this.instructionSet, memSpace, sectionList);
+            if (sectionObj.abandonned) {
+                console.log("Section Abandonned");
+            }
+            console.log("sectionList.length:", sectionList.length);
+        }
+        for (let item of sectionList) {
+            console.log("start:", item.start, "len:", item.len, "used:", item.used);
+        }
+    },
+
     testCountInsOccurrences: function () {
         // Test Script
         const testScript = this.getTestScript();
@@ -783,11 +1027,12 @@ const testByteRules = {
 }
 console.log("Got Here");
 
+testRuleSets.testExtractMemSpaceFragment();
 // testRuleSets.testCountInsOccurrences();
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();
 // testRuleSets.testMatchCASM();
-testRuleSets.testParamsGreaterThanN();
+// testRuleSets.testParamsGreaterThanN();
 // testRuleSets.testAddFirstParam();
 // testRuleSets.testDuplicateParams();
 // testRuleSets.testSkipAdjacentParams();
