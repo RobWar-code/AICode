@@ -61,13 +61,21 @@ async function createTables() {
     await connection.query(sql);
     */
 
+    /*
     sql = "CREATE TABLE rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "rule_num INT,",
     sql += "completion_round INT"
     sql += ")";
     await connection.query(sql);
+    */
 
+    sql = "CREATE TABLE seed_rule_fragment (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "fragment VARCHAR(128)";
+    sql += ")";
+    await connection.query(sql);
+    
     connection.end();
 }
 

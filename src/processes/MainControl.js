@@ -46,6 +46,7 @@ class MainControl {
         this.startTime = Date.now();
         this.elapsedTime = 0;
         this.previousElapsedTime = 0;
+        this.instructionSet = new InstructionSet;
         rulesets.initialise();
     }
 
@@ -157,7 +158,7 @@ class MainControl {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            rulesets.seedRuleUpdate(memSpace, score, this.numRounds);
+            rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
             if (rulesets.seedRuleSet) {
                 console.log("Clearing best sets");
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {

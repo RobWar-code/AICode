@@ -385,7 +385,8 @@ class Entity {
         const transposeChance = 0.15;
         const replaceChance = 0.5;
         const insertChance = 0.75;
-        const deleteChance = 0.995;
+        const deleteChance = 0.98;
+        const ruleSeedFragmentChance = 0.995;
         const codeFragmentChance = 1.0;
         let newCodeSegment = [];
         let oldInsLen = 0;
@@ -466,6 +467,26 @@ class Entity {
                 }
                 else if (hitType < deleteChance) {
                     // Delete - exclude the instruction
+                }
+                else if (hitType < ruleSeedFragmentChance) {
+                    // Get a fragment from the fragment list
+                    let fragmentList = rulesets.seedRuleFragments;
+                    if (fragmentList.length = 0) {
+                        // Delete ins - skip instruction
+                    }
+                    else {
+                        let len = fragmentList.len;
+                        let fragNum = Math.floor(Math.random() * len);
+                        let fragment = fragmentList[fragNum];
+                        for (let n of fragment) {
+                            if (newCodeSegment.length < this.memLength) {
+                                newCodeSegment.push(n);
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
                 }
                 else {
                     // Insert Code Fragment

@@ -1733,6 +1733,9 @@ class InstructionSet {
     }
 
     compileTestCode(testCode, memSpace) {
+        let createMemSpace = false;
+        if (memSpace.length === 0) createMemSpace = true;
+
         let ip = 0;
         for (let codeItem of testCode) {
             if ("at" in codeItem) {
@@ -1748,11 +1751,21 @@ class InstructionSet {
                     console.error("Invalid compiler code found at", codeItem.ins);
                 }
                 else {
-                    memSpace[ip] = codeDetails.code;
+                    if (createMemSpace) {
+                        memSpace.push(codeDetails.code);
+                    }
+                    else {
+                        memSpace[ip] = codeDetails.code;
+                    }
                     if (codeDetails.insLen > 1 && "data" in codeItem) {
                         let c = 1;
                         for (let n of codeItem["data"]) {
-                            memSpace[ip + c] = n;
+                            if (createMemSpace) {
+                                memSpace.push(n);
+                            }
+                            else {
+                                memSpace[ip + c] = n;
+                            }
                             ++c;
                         }
                     }

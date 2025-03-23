@@ -8,6 +8,1115 @@ const Entity = require('../processes/Entity.js');
 const testRuleSets = {
     instructionSet: new InstructionSet(),
 
+    testUpdateSeedRuleFragments: function () {
+        // Populate the seed rule list
+        let seedRules = [
+            {
+                name: "addAdjacentParamOp",
+                description: "Add adjacent param as indicated by a + op",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] // Main Loop Counter
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        // Main Loop
+                        ins: "LDI A, (C)" // Op
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "PUSH A"
+                    },
+                    {
+                        ins: "LDI A, (C)" // First Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202] // First Param
+                    },
+                    {
+                        ins: "LDI A, (C)" // Second Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Second Param
+                    },
+                    {
+                        ins: "POP A" // Operator
+                    },
+                    {
+                        ins: "LD B, IMM",
+                        data: [43] // +
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [13] // Next Instruction
+                    },
+                    {
+                        ins: "PUSH C" // Input Pointer
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [202] // First Param
+                    },
+                    {
+                        ins: "LD B, (MEM)",
+                        data: [203]
+                    },
+                    {
+                        ins: "ADD A, B"
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201]
+                    },
+                    {
+                        ins: "POP C" // Input Pointer
+                    },
+                    {
+                        // Next Loop
+                        ins: "LD A, (MEM)",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] 
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xDD] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
+                name: "addAdjacentParams",
+                description: "Output the sum of adjacent parameters",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] 
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Output Count
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        // Process Loop
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {                    
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ADD A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [202]
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [200]
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xEB] // Process Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
+                name: "divideAdjacentParams",
+                description: "divide inputs by their adjacent parameters",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] // Process Loop Counter
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Process Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [204] // Output Pointer
+                    },
+                    {
+                        // Process Loop
+                        ins: "CLR (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)" // Divisor
+                    },
+                    {
+                        ins: "PUSH B"
+                    },
+                    {
+                        ins: "LD B, IMM",
+                        data: [0]
+                    },
+                    {
+                        // Compare Divisor 0
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "POP B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [5] // Continue Process
+                    },
+                    {
+                        // Update pointers after divisor zero
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        // Output 0, and loop back
+                        ins: "JR",
+                        data: [28] // Output Division Counter
+                    },
+                    {
+                        // Continue Process
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        // Calculation Loop
+                        ins: "LD A, (MEM)",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRC",
+                        data: [17] // Division Complete
+                    },
+                    {
+                        ins: "JRZ",
+                        data: [10] // Final Division Count
+                    },
+                    {
+                        ins: "SUB A, B"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [202], // Division Counter
+                    },
+                    {
+                        ins: "INC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202]
+                    },
+                    {
+                        ins: "JR",
+                        data: [0xF1], // Calculation Loop
+                    },
+                    {
+                        // Final Division Count
+                        ins: "LD A, (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        ins: "INC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202]
+                    },
+                    {
+                        // Division Complete
+                        ins: "LD A, (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        // Output Division Counter
+                        ins: "LD C, (MEM)",
+                        data: [204] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [204]
+                    },
+                    {
+                        // Next Process
+                        ins: "LD A, (MEM)",
+                        data: [200] // Process Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xC3] // Process Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            }
+        ];
+
+        let count = 0;
+        for (let programItem of seedRules) {
+            let codeSection = programItem.program;
+            let memSpace = new Array(256).fill(0);
+            this.instructionSet.compileTestCode(codeSection, memSpace);
+            rulesets.seedRuleMemSpaces.push({ruleId: count, memSpace: memSpace});
+            count++;
+        }
+
+        // Add Some Samples to the fragment list
+        let fragments = [
+            [
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                }    
+            ],
+            [
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "CLR (MEM)",
+                    data: [203] // Subtraction Counter
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // Op
+                }    
+            ],
+            [
+                {
+                    ins: "LD B, IMM",
+                    data: [47] // "/" op
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [11] // Start Division
+                },
+                {
+                    ins: "INC C"
+                }
+            ]
+        ];
+
+        // Compile and insert the fragments into the ruleset fragment list
+        for (let fragmentCode of fragments) {
+            let fragment = [];
+            this.instructionSet.compileTestCode(fragmentCode, fragment);
+            rulesets.seedRuleFragments.push(fragment);
+        }
+        
+        // Set-up the test seed program
+        let seedCode = [
+            {
+                ins: "LD A, IMM",
+                data: [16] 
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200] // Output Count
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                ins: "SUB A, B"
+            },
+            {
+                // Process Loop
+                ins: "LD C, (MEM)",
+                data: [201] // Input Pointer
+            },
+            {                    
+                ins: "LDI A, (C)"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "SWP A, B"
+            },
+            {
+                ins: "LDI A, (C)"
+            },
+            {
+                ins: "ADD A, B"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LD C, (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                ins: "STO (C), A"
+            },
+            {
+                ins: "INC C"
+            },
+            {
+                ins: "ST (MEM), C",
+                data: [202]
+            },
+            {
+                ins: "ADD A, B"
+            },
+            {
+                ins: "LD A, (MEM)",
+                data: [200]
+            },
+            {
+                ins: "DEC A"
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200]
+            },
+            {
+                ins: "JRNZ",
+                data: [0xEB] // Process Loop
+            },
+            {
+                ins: "RETF"
+            }
+        ];
+
+        // Compile the seed code
+        let seedMemSpace = new Array(256).fill(0);
+        this.instructionSet.compileTestCode(seedCode, seedMemSpace);
+        console.log(seedMemSpace[0], seedMemSpace[1], seedMemSpace[2]);
+
+        // Do the test update of the fragment list using this seed
+        rulesets.updateSeedRuleFragments(this.instructionSet, seedMemSpace);
+
+        // Report the size of the fragment list
+        console.log("Num Fragments:", rulesets.seedRuleFragments.length);
+
+    },
+
+    testSearchRuleSeedForFragment: function () {
+        // Populate the seed rule list
+        let seedRules = [
+            {
+                name: "addAdjacentParamOp",
+                description: "Add adjacent param as indicated by a + op",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] // Main Loop Counter
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        // Main Loop
+                        ins: "LDI A, (C)" // Op
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "PUSH A"
+                    },
+                    {
+                        ins: "LDI A, (C)" // First Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202] // First Param
+                    },
+                    {
+                        ins: "LDI A, (C)" // Second Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Second Param
+                    },
+                    {
+                        ins: "POP A" // Operator
+                    },
+                    {
+                        ins: "LD B, IMM",
+                        data: [43] // +
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [13] // Next Instruction
+                    },
+                    {
+                        ins: "PUSH C" // Input Pointer
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [202] // First Param
+                    },
+                    {
+                        ins: "LD B, (MEM)",
+                        data: [203]
+                    },
+                    {
+                        ins: "ADD A, B"
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201]
+                    },
+                    {
+                        ins: "POP C" // Input Pointer
+                    },
+                    {
+                        // Next Loop
+                        ins: "LD A, (MEM)",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] 
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xDD] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
+                name: "addAdjacentParams",
+                description: "Output the sum of adjacent parameters",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] 
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Output Count
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        // Process Loop
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {                    
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ADD A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [202]
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [200]
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xEB] // Process Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
+                name: "divideAdjacentParams",
+                description: "divide inputs by their adjacent parameters",
+                program: [
+                    {
+                        ins: "LD A, IMM",
+                        data: [16] // Process Loop Counter
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Process Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [204] // Output Pointer
+                    },
+                    {
+                        // Process Loop
+                        ins: "CLR (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)" // Divisor
+                    },
+                    {
+                        ins: "PUSH B"
+                    },
+                    {
+                        ins: "LD B, IMM",
+                        data: [0]
+                    },
+                    {
+                        // Compare Divisor 0
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "POP B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [5] // Continue Process
+                    },
+                    {
+                        // Update pointers after divisor zero
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        // Output 0, and loop back
+                        ins: "JR",
+                        data: [28] // Output Division Counter
+                    },
+                    {
+                        // Continue Process
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        // Calculation Loop
+                        ins: "LD A, (MEM)",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRC",
+                        data: [17] // Division Complete
+                    },
+                    {
+                        ins: "JRZ",
+                        data: [10] // Final Division Count
+                    },
+                    {
+                        ins: "SUB A, B"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Remainder
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [202], // Division Counter
+                    },
+                    {
+                        ins: "INC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202]
+                    },
+                    {
+                        ins: "JR",
+                        data: [0xF1], // Calculation Loop
+                    },
+                    {
+                        // Final Division Count
+                        ins: "LD A, (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        ins: "INC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202]
+                    },
+                    {
+                        // Division Complete
+                        ins: "LD A, (MEM)",
+                        data: [202] // Division Counter
+                    },
+                    {
+                        // Output Division Counter
+                        ins: "LD C, (MEM)",
+                        data: [204] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [204]
+                    },
+                    {
+                        // Next Process
+                        ins: "LD A, (MEM)",
+                        data: [200] // Process Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xC3] // Process Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            }
+        ];
+
+        let count = 0;
+        for (let programItem of seedRules) {
+            let codeSection = programItem.program;
+            let memSpace = new Array(256).fill(0);
+            this.instructionSet.compileTestCode(codeSection, memSpace);
+            rulesets.seedRuleMemSpaces.push({ruleId: count, memSpace: memSpace});
+            count++;
+        }
+
+        // Set-up sample
+        let sectionCode = [
+            {
+                ins: "LD A, IMM",
+                data: [16] // Process Loop Counter
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200] // Process Loop Counter
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            }
+        ];
+
+        let section = [];
+        this.instructionSet.compileTestCode(sectionCode, section);
+
+        // Test the search function
+        let matched = rulesets.searchRuleSeedForFragment(section);
+        console.log("Search matched, expect true:", matched);
+
+
+        // Set-up sample
+        sectionCode = [
+            {
+                ins: "LD A, IMM",
+                data: [16] // Process Loop Counter
+            },
+            {
+                ins: "ST (MEM), A",
+                data: [200] // Process Loop Counter
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "ADD A, B"
+            }
+        ];
+
+        section = [];
+        this.instructionSet.compileTestCode(sectionCode, section);
+
+        // Test the search function
+        matched = rulesets.searchRuleSeedForFragment(section);
+        console.log("Search matched, expect false:", matched);
+    },
+
+    testGetSeedFragmentListed: function () {
+        // Set-up the fragments list
+        let fragments = [
+            [
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Process Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                }    
+            ],
+            [
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop
+                    ins: "CLR (MEM)",
+                    data: [203] // Subtraction Counter
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // Op
+                }    
+            ],
+            [
+                {
+                    ins: "LD B, IMM",
+                    data: [47] // "/" op
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [11] // Start Division
+                },
+                {
+                    ins: "INC C"
+                }
+            ]
+        ];
+
+        // Compile and insert the fragments into the ruleset fragment list
+        for (let fragmentCode of fragments) {
+            let fragment = [];
+            this.instructionSet.compileTestCode(fragmentCode, fragment);
+            rulesets.seedRuleFragments.push(fragment);
+        } 
+
+        // Get the fragment to search for
+        let testFragment1 = [
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                // Process Loop
+                ins: "CLR (MEM)",
+                data: [203] // Subtraction Counter
+            },
+            {
+                ins: "LD C, (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "LDI A, (C)" // Op
+            }    
+        ];
+
+        // Get the code for the test section
+        let section = [];
+        this.instructionSet.compileTestCode(testFragment1, section);
+
+        // Do the test search operation
+        let listed = rulesets.getSeedFragmentListed(section);
+        console.log("Section is listed:", listed);
+
+        // Do another section which should not be listed
+        let testFragment2 = [
+            {
+                ins: "CLR (MEM)",
+                data: [201] // Input Pointer
+            },
+            {
+                ins: "CLR (MEM)",
+                data: [202] // Output Pointer
+            },
+            {
+                // Process Loop
+                ins: "CLR (MEM)",
+                data: [203] // Subtraction Counter
+            },
+            {
+                ins: "LD C, (MEM)",
+                data: [201] // Input Pointer
+            }
+        ];
+
+        // Get the code for the test section
+        section = [];
+        this.instructionSet.compileTestCode(testFragment2, section);
+
+        // Do the test search operation
+        listed = rulesets.getSeedFragmentListed(section);
+        console.log("Section is listed:", listed);
+
+    },
+
     testExtractMemSpaceFragment: function () {
         let codeSample1 = [
             {
@@ -1027,7 +2136,10 @@ const testByteRules = {
 }
 console.log("Got Here");
 
-testRuleSets.testExtractMemSpaceFragment();
+testRuleSets.testUpdateSeedRuleFragments();
+// testRuleSets.testSearchRuleSeedForFragment();
+// testRuleSets.testGetSeedFragmentListed();
+// testRuleSets.testExtractMemSpaceFragment();
 // testRuleSets.testCountInsOccurrences();
 // testRuleSets.testCountInsDistribution();
 // testRuleSets.testValuesOutFromInitialParams();

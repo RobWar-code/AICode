@@ -17,7 +17,24 @@ Jobs Due
 
     Export and Load JSON tables
 
-    Consider which rules need highIP and highIC set
+    * Consider which rules need highIP and highIC set
+
+    * Modify valuesOutSet to score only in the range of the current required output
+        Set the opt to the number of non-zero outputs
+
+    Fix score list for load seed rule - also check score.
+
+    Introduce an extracted fragments function for monoclonalInsBreed, that
+        obtains common code fragments from the seed rules each time that
+        the seed rules are updated.
+        This will have to be a partial scan, as exhaustive scanning would
+        be too process intensive/time consuming.
+
+        Suggested is to take 50 samples at random from the source seed rule program,
+        and parse each against the existing seed rules for matches. The samples should
+        be between 3 and 14 instructions in length.
+
+        Update the README
 
     Do further analysis of scale of modifications to existing solutions
     

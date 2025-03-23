@@ -137,6 +137,20 @@ being operated once the previous is solved.
 The solution to each rule is saved as the system progresses.
 These solutions are used as random seed to each new rule.
 
+In addition to each solution being saved as it is completed,
+the new solution is parsed by a function that checks randomly 
+selected sections of the code against other seed programs
+to identify common fragments to re-use in program breeding
+(monoclonalInsBreed()).
+
+The program sections selected are between 3 and 16 bytes in
+length, with sections containing consecutive runs of three
+or more byte 0 instructions being skipped. These sections are 
+first compared to existing fragments to eliminate previously
+matched fragments. Then each of the rule seed programs is parsed
+as far as byte 200 for a match with the section. The search
+halts and the fragment is added if a match is found.
+
 ##### Code Distribution
 The most basic set of tests looks at distribution and frequency 
 of occurence of instructions in the entity set of instructions, 
@@ -533,8 +547,9 @@ is reset to general mode.
 
 As rules are completed, rule by rule, the highest scoring entity that
 reaches the threshold is recorded in the rulesets object. A user interface 
-is provided to allow these programs to be
-selected and viewed using the Seed Program interface.
+is provided to allow these programs to be selected and viewed using the 
+Seed Program interface.
+
 
 ##### Select Rule Option
 

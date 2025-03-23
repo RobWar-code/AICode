@@ -44,6 +44,10 @@ const dbTransactions = {
             resultOK = await this.saveRules(dbConnection);
         }
 
+        if (resultOK) {
+            resultOK = await this.saveFragments(dbConnection);
+        }
+
         await dbConnection.end();
 
         if (resultOK) {
@@ -186,6 +190,9 @@ const dbTransactions = {
         // Rules
         await this.loadRules();
 
+        // Seed Rule Fragments
+        await this.loadFragments();
+
         program.loadRestart(sessions[0], entities, seedRules);
 
         mainWindow.webContents.send("loadDone", 0);
@@ -229,7 +236,7 @@ const dbTransactions = {
     },
 
     async saveRules(dbConnection) {
-        sql = "DELETE FROM rule";
+        let sql = "DELETE FROM rule";
         await dbConnection.query(sql);
 
         for (let i = 0; i < rulesets.ruleCompletionRound.length; i++) {
@@ -242,6 +249,36 @@ const dbTransactions = {
                 throw error.message;
             }
         }
+
+        return true;
+    },
+
+    async saveFragments(dbConnection) {
+        let sql = "DELETE FROM seed_rule_fragment";
+        await dbConnection.query(sql);
+
+        let fragmentList = rulesets.seedRuleFragments;
+        for (let fragment of fragmentList) {
+            // Create the char representation
+            let frag = "";
+            for (let i = 0; i < fragment.length; i++) {
+                let v = fragment[i];
+                let c = String.fromCharCode(v);
+                frag += c;
+            }
+            // Insert into database
+            try {
+                sql = "INSERT INTO seed_rule_fragment (fragment) VALUES (?)";
+                const [results] = await dbConnection.execute(sql, [frag])
+            }
+            catch (error) {
+                console.error("saveFragments: Problem with insert fragment");
+                throw error;
+            }
+        }
+
+        console.log("Saved Seed Rule Fragments");
+        return true;
     },
 
     async fetchSeedRuleList() {
@@ -334,6 +371,26 @@ const dbTransactions = {
             console.log("loadRules: Could not load rule data");
             throw error;
         }
+
+        await dbConnection.end();
+    },
+
+    async loadFragments() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let fragmentList = [];
+        let sql = "SELECT fragment FROM seed_rule_fragment";
+        let [results] = await dbConnection.query(sql);
+        for (let row of results) {
+            let fragmentStr = row.fragment;
+            let fragment = this.stringToIntArray(fragmentStr);
+            fragmentList.push(fragment);
+        }
+        rulesets.seedRuleFragments = fragmentList;
 
         await dbConnection.end();
     },

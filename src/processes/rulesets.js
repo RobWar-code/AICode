@@ -24,6 +24,7 @@ const rulesets = {
     ruleCompletionRound: new Array(63).fill(-1),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
+    seedRuleFragments: [],
     seedRuleSet: false,
 
     initialise() {
@@ -1028,7 +1029,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
-            highIP: 85,
+            highIP: 100,
             paramsIn: [
                 [
                     61,5,2,   61,2,0, 61,3,20, 61,0,5,   61,4,100, 61,1,25,
@@ -1051,7 +1052,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
-            highIP: 85,
+            highIP: 100,
             paramsIn: [
                 [
                     43,200,3, 43,5,6, 43,7,9,  43,7,100, 43,17,4,  43,18,11, 43,17,29, 43,27,3, 43,101,2, 43,65,76,
@@ -1074,7 +1075,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 25 + 100 * 4,
-            highIP: 85,
+            highIP: 100,
             paramsIn: [
                 [
                     43,200,3, 43,5,6, 43,7,9,  43,7,100, 43,17,4,  43,18,11, 43,17,29, 43,27,3, 43,101,2, 43,65,76,
@@ -1098,7 +1099,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 0, inBlockLen: 96,
             highIC: 5000,
-            highIP: 96,
+            highIP: 120,
             paramsIn: [
                 [
                     61,2,5,61,5,3,61,0,4,61,4,7,61,1,12,61,3,20,61,6,95, // 0:23 = a b
@@ -1717,15 +1718,32 @@ const rulesets = {
 
     valuesOutSet(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let outBlockStart = ruleParams.outBlockStart;
-        let outBlockLen = ruleParams.outBlockLen;
+        let entityOutputs = dataParams.entityOutputs;
+
+        // Obtain the current sequential rule
+        let ruleSequenceNum = dataParams.sequenceNum;
+        let rule = self.getRuleFromSequence(ruleSequenceNum);
+        let outBlockLen = rule.outBlockLen;
+        let outBlockStart = rule.outBlockStart;
+        // Check whether required outputs present
+        let opt = outBlockLen;
+        if ("outputs" in rule) {
+            // Get the current required and entity ouputs
+            let p = entityOutputs.length - 1;
+            let output = rule.outputs[p];
+            outBlockLen = output.length;
+            // Count the number of non-zero values in the output
+            opt = 0;
+            for (let v of output) {
+                if (v != 0) ++opt;
+            }
+        }
 
         let count = 0;
         for (let i = outBlockStart; i < outBlockStart + outBlockLen; i++) {
             if (valuesOut[i] != 0) ++count;
         }
-        let opt = outBlockLen;
-        let max = opt;
+        let max = outBlockLen;
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
@@ -3124,7 +3142,7 @@ const rulesets = {
         let count = 0;
         for (let i = 0; i < outBlockLen; i++) {
             let op = initialParams[inAddr + i * 3];
-            if (op === 61) {
+            if (op === 61) { // =
                 let p = initialParams[inAddr + i * 3 + 1];
                 let q = initialParams[inAddr + i * 3 + 2];
                 let v = valuesOut[p];
@@ -3390,8 +3408,13 @@ const rulesets = {
         return score;
     },
 
-    seedRuleUpdate(memSpace, score, roundNum) {
+    seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         if ((score >= this.currentMaxScore * (9/10)) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
+            // Check for common program fragments
+            if (this.seedRuleMemSpaces.length > 1) {
+                this.updateSeedRuleFragments(instructionSet, memSpace);
+                console.log("Fragment list updated:", this.seedRuleFragments.length);
+            }
             let seedRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
             let ruleId = item.ruleId;
@@ -3400,6 +3423,7 @@ const rulesets = {
             seedRuleItem.memSpace = memSpace;
             this.seedRuleMemSpaces.push(seedRuleItem);
             this.seedRuleSet = true;
+
             ++this.ruleSequenceNum;
             // Get the new current rule number
             let index = 0;
@@ -3421,6 +3445,169 @@ const rulesets = {
         else {
             this.seedRuleSet = false;
         }
+    },
+
+    updateSeedRuleFragments(instructionSet, memSpace) {
+        const maxSections = 30;
+        let sectionList = [];
+
+        for (let i = 0; i < maxSections; i++) {
+            // Extract a section from the memspace
+            let sectionObj = this.extractMemSpaceFragment(instructionSet, memSpace, sectionList);
+            if (sectionObj.abandonned) {
+                break;
+            }
+            else {
+                let section = sectionObj.section;
+                // Check whether this section already exists in the fragment list
+                let sectionExists = this.getSeedFragmentListed(section);
+                if (!sectionExists) { 
+                    // Search the seed rules for this section
+                    let fragmentMatched = this.searchRuleSeedForFragment(section);
+                    if (fragmentMatched) {
+                        // Add it to the list of fragments
+                        this.seedRuleFragments.push(section);
+                    }
+                }
+            }
+        }
+    },
+
+    searchRuleSeedForFragment(section) {
+        let sectionMatched = false;
+        for (let ruleSeedItem of this.seedRuleMemSpaces) {
+            let seedMemSpace = ruleSeedItem.memSpace;
+            let p = 0;
+            while (!sectionMatched && p < seedMemSpace.length - section.length) {
+                if (seedMemSpace[p] === section[0]) {
+                    let codeFound = true;
+                    let p1 = p;
+                    let sp = 0;
+                    for (let i = 1; i < section.length; i++) {
+                        let v1 = seedMemSpace[p1 + i];
+                        let v2 = section[sp + i];
+                        if (v1 != v2) {
+                            codeFound = false;
+                            break;
+                        }
+                    }
+                    if (codeFound) {
+                        sectionMatched = true;
+                        break;
+                    }
+                }
+                ++p;
+            }
+            if (sectionMatched) break;
+        }
+        return sectionMatched;
+    },
+
+    getSeedFragmentListed(section) {
+        let sectionExists = false;
+        for (let listedSection of this.seedRuleFragments) {
+            if (listedSection.length === section.length) {
+                let found = true;
+                for (let i = 0; i < section.length; i++) {
+                    if (section[i] != listedSection[i]) {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found) {
+                    sectionExists = true;
+                    break;
+                }
+            }
+        }
+        return sectionExists;
+    },
+
+    extractMemSpaceFragment(instructionSet, memSpace, sectionList) {
+        let attemptCount = 0;
+        let maxAttempts = 16;
+        let sectionFound = false;
+        let section = [];
+        while (attemptCount < maxAttempts && !sectionFound) {
+            // Choose a segment start and length
+            section = [];
+            let sectionStart = Math.floor(Math.random() * 120);
+            let sectionLen = Math.floor(Math.random() * 14) + 3;
+            // Check the sectionList for already done
+            let sectionDone = false;
+            for (let sectionDetails of sectionList) {
+                if (sectionDetails.start === sectionStart && sectionDetails.len === sectionLen) {
+                    sectionDone = true;
+                    break;
+                }
+            }
+            if (sectionDone) {
+                ++attemptCount;
+            }
+            else {
+                sectionList.push({start: sectionStart, len: sectionLen, used: false})
+                // Extract the code section
+                // Advance to the start position
+                let insNum = 0;
+                let p = 0;
+                while (insNum < sectionStart) {
+                    let code = memSpace[p];
+                    let insItem = instructionSet.getInsDetails(code);
+                    p += insItem.insLen;
+                    ++insNum;
+                }
+                let sectionValid = true;
+                // Get the code Section
+                while (insNum < sectionStart + sectionLen) {
+                    let code = memSpace[p];
+                    let insItem = instructionSet.getInsDetails(code);
+                    if (insItem.name === "RETF") {
+                        sectionValid = false;
+                        break;
+                    }
+                    // Insert the instruction
+                    section.push(code);
+                    for(let i = 1; i < insItem.insLen; i++) {
+                        let d = memSpace[p + i];
+                        section.push(d);
+                    }
+                    p += insItem.insLen;
+                    ++insNum;
+                }
+                // Validate the section
+                if (sectionValid) {
+                    p = 0;
+                    let zeroCount = 0;
+                    let lastZero = false;
+                    while(sectionValid && p < section.length) {
+                        let c = section[p];
+                        if (c === 0) {
+                            if (lastZero) ++zeroCount;
+                            if (zeroCount >= 2) {
+                                sectionValid = false;
+                                break;
+                            }
+                            lastZero = true;
+                        }
+                        else {
+                            lastZero = false;
+                            zeroCount = 0;
+                        }
+                        ++p;
+                    }
+                }
+                if (!sectionValid) {
+                    ++attemptCount;
+                }
+                else {
+                    sectionFound = true;
+                    sectionList[sectionList.length - 1].used = true;
+                    break;
+                }
+            }
+        }
+        if (!sectionFound) return {abandonned: true, section: []};
+        return {abandonned: false, section: section};
     },
 
     getDescriptionFromSequence(sequenceNum) {
