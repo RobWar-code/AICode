@@ -471,7 +471,7 @@ class Entity {
                 else if (hitType < ruleSeedFragmentChance) {
                     // Get a fragment from the fragment list
                     let fragmentList = rulesets.seedRuleFragments;
-                    if (fragmentList.length = 0) {
+                    if (fragmentList.length === 0) {
                         // Delete ins - skip instruction
                     }
                     else {
