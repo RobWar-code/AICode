@@ -3558,7 +3558,7 @@ const rulesets = {
                 }
                 let sectionValid = true;
                 // Get the code Section
-                while (insNum < sectionStart + sectionLen) {
+                while (insNum < sectionStart + sectionLen && p < memSpace.length) {
                     let code = memSpace[p];
                     let insItem = instructionSet.getInsDetails(code);
                     if (insItem.name === "RETF") {
@@ -3572,6 +3572,12 @@ const rulesets = {
                         section.push(d);
                     }
                     p += insItem.insLen;
+                    if (p >= memSpace.length) {
+                        if (insNum < sectionStart + sectionLen) {
+                            sectionValid = false;
+                        }
+                        break;
+                    }
                     ++insNum;
                 }
                 // Validate the section

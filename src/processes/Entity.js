@@ -475,7 +475,7 @@ class Entity {
                         // Delete ins - skip instruction
                     }
                     else {
-                        let len = fragmentList.len;
+                        let len = fragmentList.length;
                         let fragNum = Math.floor(Math.random() * len);
                         let fragment = fragmentList[fragNum];
                         for (let n of fragment) {

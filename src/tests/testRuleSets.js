@@ -551,6 +551,9 @@ const testRuleSets = {
 
         // Report the size of the fragment list
         console.log("Num Fragments:", rulesets.seedRuleFragments.length);
+        for (let i = 0; i < rulesets.seedRuleFragments.length; i++) {
+            console.log("Fragment Length:", rulesets.seedRuleFragments[i].length);
+        }
 
     },
 
