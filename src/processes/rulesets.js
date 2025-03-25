@@ -7,8 +7,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 63,
-    maxRuleId: 62,
+    numRules: 64,
+    maxRuleId: 63,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
@@ -21,11 +21,12 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleCompletionRound: new Array(63).fill(-1),
+    ruleCompletionRound: new Array(64).fill(-1),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     seedRuleFragments: [],
     seedRuleSet: false,
+    executionScores: [],
 
     initialise() {
 
@@ -1172,10 +1173,18 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.diffScore = 62;
-        let scoreItem62 = {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
+        this.outputScoresItem = 62;
+        let scoreItem62 = {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
             sequenceNum: 0, score: 0, max: 1, startRoundNum: 0};
         this.scoreList.push(scoreItem62);
+        this.ruleFunction.push(this.outputScoresEqual);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.diffScore = 63;
+        let scoreItem63 = {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
+            sequenceNum: 0, score: 0, max: 1, startRoundNum: 0};
+        this.scoreList.push(scoreItem63);
         this.ruleFunction.push(this.scoreOutputDiff);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
@@ -1327,6 +1336,11 @@ const rulesets = {
         // Get the current maximum score
         this.currentMaxScore = this.getCurrentMaxScore();
 
+        // Reset the sequential rule execution scores
+        if (entityOutputs.length === 1) {
+            this.executionScores = [];
+        }
+
         let dataParams = {
             instructionSet: instructionSet,
             memSpace: memSpace,
@@ -1354,6 +1368,9 @@ const rulesets = {
                         }
                         if (isNaN(score)) {
                             console.log("getScore: Erroneous Score:", i);
+                        }
+                        if (!this.scoreList[i].retain) {
+                            this.executionScores.push(score);
                         }
                         score *= this.scoreList[i].max;
                         this.scoreList[i].score += score;
@@ -1429,12 +1446,67 @@ const rulesets = {
                 }
             }
         }
-        // Allow for output difference
+        // Allow for output difference and output scores equal
         if (numInputParamBlocks > 1) {
-            let diffMax = this.scoreList[this.diffScore].max;
+            let diffMax = this.scoreList[this.outputScoresItem].max;
+            maxScore -= diffMax * (numInputParamBlocks - 1);
+            diffMax = this.scoreList[this.diffScore].max;
             maxScore -= diffMax * (numInputParamBlocks - 1);
         }
         return (maxScore);
+    },
+
+    outputScoresEqual(self, dataParams, ruleParams) {
+        let score = 0;
+        let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        let numParamBlocks = 2;
+        if ("paramsIn" in rule) {
+            numParamBlocks = rule.paramsIn.length;
+        }
+        if (numParamBlocks === 1) {
+            score = 1;
+            return score;
+        }
+        if (dataParams.entityOutputs.length < numParamBlocks) {
+            score = 0;
+            return score;
+        }
+        // If the final output, compare the scores for each execution
+        // Get the average score
+        let sum = 0;
+        let low = 0;
+        let high = 0;
+        let i = 0;
+        for (let s of self.executionScores) {
+            if (i === 0 || s < low) {
+                low = s;
+            }
+            if (i === 0 || s > high) {
+                high = s;
+            }
+            sum += s;
+            ++i;
+        }
+        let ave = sum / self.executionScores.length;
+
+        // Get the standard deviation for the scores
+        // Get the sum of the squares of the variations
+        let devSum = 0
+        for (let n of self.executionScores) {
+            let dev = (n - ave) ** 2;
+            devSum += dev;
+        }
+        score = (1 - (devSum / self.executionScores.length) ** 0.5);
+        // Debug
+        if (score > 1) {
+            console.log("Dev Score:", score);
+            for (let i = 0; i < self.executionScores.length; i++) {
+                console.log("rule score:", self.executionScores[i]);
+            }
+            throw "outputScoresEqual: Score Problem";
+        }
+
+        return score;
     },
 
     scoreOutputDiff(self, dataParams, ruleParams) {

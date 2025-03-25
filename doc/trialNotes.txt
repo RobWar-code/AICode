@@ -1,3 +1,21 @@
+24/03/2025
+
+Added a feature of searching the seed rule programs
+for fragments in common with the rule just completed.
+These are then randomly incorporated into entity
+breeds by monoclonalInsBreed.
+
+Started the trial from scratch (at first rule) with
+this feature added. Have used one seed program
+so far (seriesOfseries), and the system is currently
+working on multiply by first param 2 (round 126).
+
+Note that is is sticking on variants that satisfy 
+half of the problem set, but not both. It would
+be worth pondering solutions to this form of
+deadlock. (Perhaps extra points for scoring equally
+in each trial execution cycle(input block)).
+
 19/03/2025
 
 paramOperations - divide reached 12/16 after about
