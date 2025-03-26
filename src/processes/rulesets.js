@@ -1175,7 +1175,7 @@ const rulesets = {
 
         this.outputScoresItem = 62;
         let scoreItem62 = {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
-            sequenceNum: 0, score: 0, max: 1, startRoundNum: 0};
+            sequenceNum: 0, score: 0, max: 2, startRoundNum: 0};
         this.scoreList.push(scoreItem62);
         this.ruleFunction.push(this.outputScoresEqual);
         this.byteFunction.push(null);

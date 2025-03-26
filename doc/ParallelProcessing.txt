@@ -1,0 +1,34 @@
+Parallel Processing - Initial Study 
+
+Contents
+    Introduction
+    Initial Set-up 
+
+<h1>Introduction
+
+    It is intended that the project be transferred onto
+    a multi-processor PC to enable parallel processing
+    for deeper searches of the probability field by the
+    system.
+
+    By consulting with chatGPT on the various possible
+    approaches for a node/electron application it was
+    decided that the main processing task should be
+    split-out to an independent app so that this can
+    be duplicated for parallel processing.
+
+<h1>Initial Set-up
+    The proposed system upon which the application is
+    to run is a hexacore PC running Windows-11, rather
+    than Linux. This is adequate because VS-Code and
+    Electron/MySql can operate on both Linux and Windows
+    environments.
+
+    It is necessary to install node and MySql and then
+    electron for the project, replacing the default
+    src directory created by that from AICode.
+    
+    A new project AICodeTwo should be created, initially
+    with the source code from AICode. This can be set-up
+    on GitHub.
+

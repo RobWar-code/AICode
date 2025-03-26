@@ -1,3 +1,16 @@
+26/03/2025
+
+The trial using fragments completed as far as moduloFirstParam6
+with a single manual insert (outputSeriesOfSeries).
+
+Have included the rule outputScoresEqual to encourage the
+use of inputs across input data trials. Current trial has
+reached 24/32 at rule outputSeriesOfSeries3 with no manual
+inserts by round 240.
+
+Consider increasing the max score for outputScoresEqual
+(currently 1).
+
 24/03/2025
 
 Added a feature of searching the seed rule programs
