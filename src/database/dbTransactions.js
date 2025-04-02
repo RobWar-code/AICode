@@ -395,6 +395,324 @@ const dbTransactions = {
         await dbConnection.end();
     },
 
+    async clearTransferEntitySet(bestSetNum) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+        try {
+            let sql = `DELETE FROM transfer_entity WHERE best_set_num = ${bestSetNum}`;
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("clearTransferEntitySet: Problem clearing entity set");
+            throw error;
+        }
+    },
+
+    async saveTransferEntity(bestSetNum, index, entityNumber, breedMethod, birthCycle, memSpace, finalMemSpace, oldValuesOut, oldParams, score) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        // Delete the previous transfer entity output blocks
+        try {
+            let sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${bestSetNum} AND best_set_inx = ${index}`;
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("saveTransferEntity: Could not delete transfer_entity_output", bestSetNum, index);
+            throw error;
+        }
+
+        // Delete the previous transfer entity parameter blocks
+        try {
+            let sql = `DELETE FROM transfer_entity_input WHERE best_set_num = ${bestSetNum} AND best_set_inx = ${index}`;
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("saveTransferEntity: Could not delete transfer_entity_input", bestSetNum, index);
+            throw error;
+        }
+
+        // Delete the previous transfer entity
+        try {
+            let sql = `DELETE FROM transfer_entity WHERE best_set_num = ${bestSetNum} AND inx = ${index}`;
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("saveTransferEntity: problem clearing entity");
+            throw error;
+        }
+
+        // Save the transfer Entity
+        // Prepare the memspace string
+        let memSpaceStr = this.intArrayToString(memSpace, memSpace.length);
+        let finalMemSpaceStr = this.intArrayToString(finalMemSpace, finalMemSpace.length);
+        let transferEntityId = null;
+
+        try {
+            let sql = "INSERT INTO transfer_entity (best_set_num, inx, entity_number, breed_method,"
+            sql += "creation_cycle, score, mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            [results] = await dbConnection.execute(sql, [bestSetNum, index, entityNumber, 
+                breedMethod, birthCycle, score, memSpaceStr, finalMemSpaceStr]);
+            transferEntityId = results.insertId;
+        }
+        catch (error) {
+            console.log("saveTransferEntity: problem inserting transfer entity", bestSetNum, index);
+            throw error;
+        }
+
+        // Save the transfer entity output blocks
+        await this.saveTransferEntityOutputs(dbConnection, transferEntityId, bestSetNum, index, oldValuesOut);
+
+        // Save the transfer entity input blocks
+        await this.saveTransferEntityInputs(dbConnection, transferEntityId, bestSetNum, index, oldParams);
+
+        await dbConnection.end();
+    },
+
+    async saveTransferEntityOutputs(dbConnection, transferEntityId, bestSetNum, index, oldValuesOut) {
+        let inx = 0;
+        for (let output of oldValuesOut) {
+            let outputStr = this.intArrayToString(output);
+            try {
+                sql = "INSERT INTO transfer_entity_output (transfer_entity_id, best_set_num, best_set_inx, ";
+                sql += "inx, output_block) VALUES (?, ?, ?, ?, ?)";
+                [results] = await dbConnection.execute(sql, [transferEntityId, bestSetNum, index, inx, outputStr]);
+            }
+            catch (error) {
+                console.log("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
+                throw error;
+            }
+            ++inx;
+        }
+    },
+
+    async saveTransferEntityInputs(dbConnection, transferEntityId, bestSetNum, index, oldParams) {
+        let inx = 0;
+        for (let input of oldParams) {
+            let inputStr = this.intArrayToString(input);
+            try {
+                sql = "INSERT INTO transfer_entity_input (transfer_entity_id, best_set_num, best_set_inx, ";
+                sql += "inx, input_block) VALUES (?, ?, ?, ?, ?)";
+                [results] = await dbConnection.execute(sql, [transferEntityId, bestSetNum, index, inx, inputStr]);
+            }
+            catch (error) {
+                console.log("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
+                throw error;
+            }
+            ++inx;
+        }
+    },
+
+    async fetchTransferEntities(bestSetNum) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        sql = `SELECT * FROM transfer_entity WHERE best_set_num = ${bestSetNum} ORDER BY inx`;
+        try {
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("fetchTransferEntities: problem using select statement");
+            throw error;
+        }
+
+        await dbConnection.end();
+        return results;
+
+    },
+
+    async fetchTransferEntityOutputs(bestSetNum, index) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let outputs = [];
+        let sql = `SELECT * FROM transfer_entity_output WHERE best_set_num = ${bestSetNum} AND best_set_inx = ${index}`;
+        sql += " ORDER BY inx";
+        try {
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("fetchTransferEntityOutputs: Could not collect transfer entity outputs", bestSetNum, index);
+            throw error;
+        }
+
+        for (let row of results) {
+            let outputStr = row.output_block;
+            let outputData = this.stringToIntArray(outputStr);
+            outputs.push(outputData); 
+        }
+
+        await dbConnection.end();
+
+        return outputs;
+    },
+
+    async fetchTransferEntityInputs(bestSetNum, index) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let inputs = [];
+        let sql = `SELECT * FROM transfer_entity_input WHERE best_set_num = ${bestSetNum} AND best_set_inx = ${index}`;
+        sql += " ORDER BY inx";
+        try {
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("fetchTransferEntityInputs: Could not collect transfer entity inputs", bestSetNum, index);
+            throw error;
+        }
+
+        for (let row of results) {
+            let inputStr = row.input_block;
+            let inputData = this.stringToIntArray(inputStr);
+            inputs.push(inputData); 
+        }
+
+        await dbConnection.end();
+
+        return outputs;
+    },
+
+    async fetchTransferBestEntitySet(setNum) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let sql = `SELECT * FROM transfer_entity WHERE best_set_num = ${setNum} ORDER BY inx`;
+        try {
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log('fetchTransferBestEntitySet: problem with select');
+            throw error;
+        }
+
+        await dbConnection.end();
+        return results;
+    },
+
+    async saveTransferEntitySet(setNum, set) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        // Clear the transfer entity outputs for this set
+        let sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${setNum}`;
+        [results] = await dbConnection.query(sql);
+
+        // Clear the transfer entity inputs for this set
+        sql = `DELETE FROM transfer_entity_input WHERE best_set_num = ${setNum}`;
+        [results] = await dbConnection.query(sql);
+
+        // Clear the transfer entities for this best set
+        sql = `DELETE FROM transfer_entity WHERE best_set_num = ${setNum}`;
+        [results] = await dbConnection.query(sql);
+
+        let index = 0;
+        for (let entity of set) {
+            let score = entity.score;
+            let entityNumber = entity.entityNumber;
+            let creationCycle = entity.birthCycle;
+            let breedMethod = entity.breedMethod;
+            let memSpace = entity.initialMemSpace;
+            let memStr = this.intArrayToString(memSpace, memSpace.length);
+            let finalMemSpace = entity.memSpace;
+            let finalMemStr = this.intArrayToString(finalMemSpace, finalMemSpace.length);
+            let transferEntityId = null;
+            try {
+                sql = "INSERT INTO transfer_entity (best_set_num, inx, score, entity_number,";
+                sql += "breed_method, creation_cycle, mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                [results] = await dbConnection.execute(sql, [setNum, index, score, 
+                    entityNumber, breedMethod, creationCycle, memStr, finalMemStr]);
+                transferEntityId = results.insertId;
+            }
+            catch (error) {
+                console.log('saveTransferEntitySet: Problem with insert');
+                throw error;
+            }
+
+            // Save the entity output blocks
+            await this.saveTransferEntityOutputs(dbConnection, transferEntityId, bestSetNum, index, entity.oldValuesOut);
+
+            // Save the transfer entity input blocks
+            await this.saveTransferEntityInputs(dbConnection, transferEntityId, bestSetNum, index, entity.oldParams);
+
+            ++index;
+        }
+
+        await dbConnection.end();
+    },
+
+    async saveBatchData(batchNum, batchData) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let sql = `DELETE FROM batch_data WHERE batch_num = ${batchNum}`;
+        [results] = await dbConnection.query(sql);
+
+        try {
+            sql = "INSERT INTO batch_data (batch_num, monoclonal_ins_count, monoclonal_byte_count, interbreed_count,";
+            sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, self_breed_count,";
+            sql += "seed_rule_breed_count, random_count, cross_set_count) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            [results] = await dbConnection.execute(sql, [batchNum, batchData.monoclonalInsCount, 
+                batchData.monoclonalByteCount, batchData.interbreedCount, batchData.interbreed2Count,
+                batchData.interbreedFlaggedCount, batchData.interbreedInsMergeCount,
+                batchData.selfBreedCount, batchData.seedRuleBreedCount, batchData.randomCount, 
+                batchData.crossSetCount
+            ]);
+        }
+        catch (error) {
+            console.log("saveBatchData: Problem with insert operation:", batchNum, batchData);
+            throw error;
+        }
+
+        await dbConnection.end();
+    },
+
+    async fetchBatchData(batchNum) {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        let sql = `SELECT * FROM batch_data WHERE batch_num = ${batchNum}`;
+        try {
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("fetchBatchData: Problem with select:", batchNum);
+            throw error;
+        }
+
+        await dbConnection.end();
+        return results;
+
+    },
+
     stringToIntArray(str) {
         let a = [];
         for (let i = 0; i < str.length; i++) {

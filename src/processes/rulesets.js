@@ -119,7 +119,15 @@ const rulesets = {
             retain: false, score: 0, completionRound: -1, max: 5,
             startRoundNum: 0,
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
-            highIC: 7 * 16 + 4 * 100
+            highIC: 7 * 16 + 4 * 100,
+            paramsIn: [
+                [
+                    0,9,18,57,202,109,81,56,14,17,34,67,83,76,20,21
+                ],
+                [
+                    4,96,75,254,108,91,84,20,21,45,76,14,17,35,36,110
+                ]
+            ]
         };
         this.scoreList.push(scoreItem10);
         this.ruleFunction.push(this.valuesOutMatchInitialParams);

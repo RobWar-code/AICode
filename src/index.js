@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
-const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
+const MainControlParallel = require(path.join(__dirname, './processes/MainControlParallel.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
 const rulesets = require(path.join(__dirname, "./processes/rulesets.js"))
@@ -31,7 +31,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
-    },
+    }
   });
 
   // and load the index.html of the app.
@@ -41,7 +41,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.once("did-finish-load", () => {
-    program = new MainControl(mainWindow);
+    program = new MainControlParallel(mainWindow);
     // Global Data
     let globalData = {numBestSets: program.numBestSets};
     mainWindow.webContents.send("setGlobals", globalData);
@@ -160,7 +160,7 @@ ipcMain.on("activateMainProcess", () => {
   program.seedEntity = null;
   program.ruleSequenceNum = rulesets.ruleSequenceNum;
   
-  program.mainLoop();
+  program.batchProcessLoop();
   mainWindow.webContents.send("mainCycleCompleted", 0);
 });
 
@@ -225,7 +225,6 @@ ipcMain.on("fetchSavedRuleSeedList", async (event, data) => {
 ipcMain.on('insertRuleSeed', (event, ruleSeedList) => {
   dbTransactions.insertRuleSeed(ruleSeedList);
 });
-
 
 ipcMain.on("requestRuleSequenceList", (event, data) => {
   let ruleList = rulesets.fetchRuleSequenceList();

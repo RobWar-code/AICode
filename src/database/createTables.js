@@ -10,12 +10,13 @@ async function createTables() {
         console.log("createTables: problem with connection")
     }
 
-    /*
+    let sql;
+
     await clearTables(connection);
 
-    return;
+    /*
 
-    let sql = "DROP TABLE session";
+    sql = "DROP TABLE session";
     await connection.query(sql);
 
     sql = "CREATE TABLE session (";
@@ -70,17 +71,80 @@ async function createTables() {
     await connection.query(sql);
     */
 
+    /*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "fragment VARCHAR(128)";
     sql += ")";
     await connection.query(sql);
-    
+    */
+
+    sql = "DROP TABLE transfer_entity";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE transfer_entity (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "best_set_num INT,";
+    sql += "inx INT,";
+    sql += "score FLOAT,";
+    sql += "entity_number INT,";
+    sql += "breed_method VARCHAR(64),";
+    sql += "creation_cycle INT,";
+    sql += "mem_space VARCHAR(256),";
+    sql += "final_mem_space VARCHAR(256)";
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE transfer_entity_output (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "transfer_entity_id INT,";
+    sql += "best_set_num INT,";
+    sql += "best_set_inx INT,"
+    sql += "inx INT,";
+    sql += "output_block VARCHAR(256)";
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE transfer_entity_input (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "transfer_entity_id INT,";
+    sql += "best_set_num INT,";
+    sql += "best_set_inx INT,"
+    sql += "inx INT,";
+    sql += "output_block VARCHAR(256)";
+    sql += ")";
+    await connection.query(sql);
+
+    /*
+    sql = "CREATE TABLE batch_data (";
+    sql += "batch_num INT,"
+    sql += "monoclonal_ins_count INT,";
+    sql += "monoclonal_byte_count INT,";
+    sql += "interbreed_count INT,";
+    sql += "interbreed2_count INT,";
+    sql += "interbreed_flagged_count INT,";
+    sql += "interbreed_ins_merge_count INT,";
+    sql += "self_breed_count INT,";
+    sql += "seed_rule_breed_count INT,";
+    sql += "random_count INT,";
+    sql += "cross_set_count INT";
+    sql += ")";
+    await connection.query(sql);
+    */
+
     connection.end();
 }
 
 async function clearTables(connection) {
+    let sql;
 
+    sql = "DELETE FROM batch_data";
+    await connection.query(sql);
+
+    sql = "DELETE FROM transfer_entity";
+    await connection.query(sql);
+
+    /*
     sql = "DELETE FROM rule",
     await connection.query(sql);
     
@@ -92,5 +156,6 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM session";
     await connection.query(sql);
+    */
 
 }

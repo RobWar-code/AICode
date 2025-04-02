@@ -3,6 +3,7 @@ Parallel Processing - Initial Study
 Contents
     Introduction
     Initial Set-up 
+    Adapt Existing Program to Multiprocessing
 
 <h1>Introduction
 
@@ -27,8 +28,23 @@ Contents
     It is necessary to install node and MySql and then
     electron for the project, replacing the default
     src directory created by that from AICode.
-    
-    A new project AICodeTwo should be created, initially
-    with the source code from AICode. This can be set-up
-    on GitHub.
 
+    1. Create the Projects directory
+    2. Install VS-Code
+    3. Connect-up to the AICode Project on GitHub
+    4. Pull the AICode project from GitHub
+        git pull origin main
+
+<h1>Adapt Existing Program to Multiprocessing
+
+    The idea here is to modify the existing program
+    to test for a single processor and adjust
+    for workerApp use accordingly.
+
+    Copy the MainControl.js file to WorkerApp.js ready
+    for adaptation.
+
+    Prepare the MainControl batch processing loop
+    function that checks the number of processors
+    available and sets the loop controls and display
+    intervals etc. accordingly.

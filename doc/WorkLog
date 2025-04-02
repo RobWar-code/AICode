@@ -26,8 +26,39 @@ Jobs Due
 
     Save only the entity data in the best sets
 
-    Modify the main loop so that the entity display operation
-    is performed by the main program instead of the entity function.
+    Do the analysis for the worker app to do the processing.
+        See ParallelProcessing.txt
+
+    Check the standalone MainControl file
+
+    Do the parallel processing modifications to the MainControlParallel file
+        * Write the routines for dispatching data to the workers
+        * Write the routine for starting-up the processes
+        * Write the routine for collecting the processed data
+        * Do the end of round routine - including best set shuffle
+        * Modify createTables to accommodate the transfer_entity table
+        * Allow for breed method in entity transfer details
+        * Collect batch data (ie: breed counts and cycleCounter)
+        * Sort-out Score History (end of span functions)
+        * Tidy-up the functions (remove redundant functions)
+        * check entityNumber and cycleCounter for spawn operation
+        entityNumber returned to main not valid -1
+        currentCycle returned to main is NaN
+        interbreedFlagged breeds is NaN
+        Entity outputData is missing
+        Entity inputData is missing
+
+    Do the workerApp.js modifications of the MainControl
+        * Main Program Section
+        * Fetch best sets
+        * Process Loop
+        * Transmit completed best sets
+        * Set-up batch data table
+        * Transmit breed counts - batch data 
+        * Remove Redundant Functions
+        * Check use of roundNum in Entity
+
+    Integrate the parallel processing module in index.js
 
     Include save scorelist for an entity?
 

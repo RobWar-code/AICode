@@ -1,4 +1,7 @@
 const path = require('node:path');
+const { spawn } = require('child_process');
+const { os } = require('os');
+
 const { seedRuleMemSpaces } = require('./rulesets');
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
@@ -6,7 +9,7 @@ const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
-class MainControl {
+class MainControlParallel {
     constructor (mainWindow) {
         this.mainWindow = mainWindow;
         this.bestEntitySetMax = 40;
@@ -48,62 +51,264 @@ class MainControl {
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
+        this.setupBatchProcessing();
+    }
+
+    setupBatchProcessing() {
+        // Get number of processors
+        // this.numCPUs = os.cpus().length;
+        this.numCPUs = 1;
+        // A batch is a group of best sets sent to an individual worker
+        // A span is a set of batches sent to a set of worker apps
+        // Spans are of equal length, other than, perhaps, the final span which has the
+        // the remnant entities.
+        this.bestSetsPerBatch = 8;
+        this.spanLength  = this.numCPUs * this.bestSetsPerBatch
+        this.numSpans = Math.floor(this.numBestSets / this.spanLength);
+        this.spanRemnant = this.numBestSets % this.spanLength;
+        this.finalNumBatches = 0;
+        this.finalBatchLength = 0;
+        if (this.spanRemnant != 0) {
+            this.numSpans += 1;
+            this.finalNumBatches = Math.floor(this.spanRemnant / this.bestSetsPerBatch);
+            this.finalBatchLength = this.spanRemnant % this.bestSetsPerBatch;
+            if (this.finalBatchLength > 0) {
+                ++this.finalNumBatches;
+            }
+        }
+        this.spanNum = 0;
+        this.spanStart = 0;
+        this.batchProcessCount = 0;
+
+        // Batch Process Constants
+        this.maxCycles = 5; // 15;
+        this.cyclesPerBatch = this.maxCycles * this.bestSetsPerBatch;
+        this.finalNumCycles = this.maxCycles * this.finalBatchLength;
+        this.cyclesPerSpan = this.spanLength
+        this.maxBreedEntities = this.bestEntitySetMax / 2;
+        this.maxBreedActions = 32;
+        this.entitiesPerProcess = this.maxCycles * this.maxBreedEntities * this.maxBreedActions * this.bestSetsPerBatch;
+        this.finalEntitiesPerProcess = this.maxCycles * this.maxBreedEntities * this.maxBreedActions * this.finalBatchLength;
     }
 
     async batchProcessLoop() {
-        // Get the number of processors
+        if (this.spanNum >= this.numSpans) {
+            doEndOfRoundOperations();
+        }
 
-        // Calculate the display cycle etc.
+        this.batchProcessCount = 0;
+        if (this.spanNum < this.numSpans - 1) {
+            this.numProcesses = this.numCPUs;
+        }
+        else {
+            if (this.spanRemnant > 0) {
+                this.numProcesses = this.finalNumBatches;
+            }
+            else {
+                this.numProcesses = this.numCPUs;
+            }
+        }
+
+        for (let processNum = 0; processNum < this.numProcesses; processNum++) {
+            // Transfer the best set entity data to the exchange tables
+            await this.sendEntityExchangeData(this.spanNum, this.numProcesses, processNum);
+            // Spawn the processes
+            this.spawnProcess(this.spanNum, this.numProcesses, processNum);
+        }
 
     }
 
-    async mainLoop() {
-        let mainCycle = 4
-        for (let i = 0; i < mainCycle; i++) {
-            let thresholdReached = false;
-            let bestEntitySet = this.bestSets[this.bestSetNum];
-            bestEntitySet = this.processLoop(bestEntitySet, this.bestSetNum);
-            this.bestSets[this.bestSetNum] = bestEntitySet;
-            this.updateScoreHistory();
+    spawnProcess(spanNum, numProcesses, processNum) {
+        let batchLength = this.bestSetsPerBatch;
+        if (spanNum === this.numSpans - 1 && processNum === numProcesses - 1 && this.finalBatchLength > 0) {
+            batchLength = this.finalBatchLength
+        }
+        let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
+        let batchCycle = processNum * this.cyclesPerBatch + this.cycleCounter;
+        let batchEntityNumber = processNum * this.entitiesPerProcess + this.entityNumber;
 
-            if (i === mainCycle - 1) {
-                // Display Best Entity of current set
-                let endTime = Date.now();
-                let elapsedTime = endTime - this.startTime;
-                this.elapsedTime = elapsedTime;
-                elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-                let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
-                let terminateProcessing = false;
-                if (this.bestSets[this.bestSetNum].length > 0) {
-                    this.bestSets[this.bestSetNum][0].display(this.mainWindow, this.bestSetNum, elapsedTime, 
-                        this.entityNumber, 
-                        this.ruleSequenceNum, this.randomCount, 
-                        this.monoclonalInsCount, this.monoclonalByteCount,
-                        this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-                        this.interbreedInsMergeCount,
-                        this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-                        this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
+        console.log("spawnProcess: batchCycle, batchEntityNumber", processNum, batchCycle, batchEntityNumber);
+        const worker = spawn("node", ["src/processes/workerApp.js", processNum, batchStart, batchLength, 
+            this.ruleSequenceNum, batchEntityNumber, batchCycle, this.roundNum]);
+
+        worker.stdout.on("data", (data) => {
+            console.log(`Worker ${processNum} stdout: ${data}`);
+        });
+    
+        worker.stderr.on("data", (data) => {
+            console.error(`Worker ${processNum} stderr: ${data}`);
+        });
+    
+        worker.on("exit", (code) => {
+            if (code === 0) {
+                ++this.batchProcessCount;
+                console.log ("Exited batch");
+                if (this.batchProcessCount >= this.numProcesses) {
+                    console.log("collecting batch process data");
+                    this.collectEntityData();
+                    this.collectBatchData();
+                    this.collectScoreHistory();
+                    // Update entityNumber and cycleCounter
+                    if (this.spanNum < this.numSpans - 1 || this.spanRemnant === 0) {
+                        this.entityNumber += this.entitiesPerProcess * this.numCPUs;
+                        this.cycleCounter += this.cyclesPerBatch * this.numCPUs;
+                    }
+                    else {
+                        this.entityNumber += this.entitiesPerProcess * (this.finalNumBatches - 1) + this.finalEntitiesPerProcess;
+                        this.cycleCounter += this.cyclesPerBatch * (this.finalNumBatches - 1) + this.finalBatchLength * this.maxCycles;
+                    }
                 }
             }
+            // console.log(`Worker ${process} exited with code ${code}`);
+        });
+    
+    }
 
-            ++this.bestSetNum;
-            if (this.bestSetNum >= this.numBestSets) {
-                this.bestSetNum = 0;
-                this.saveBestScore();
-                ++this.numRounds;
-                await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
-                // Check for rule threshold reached
-                thresholdReached = this.checkRuleThreshold();
-            }
-            ++this.lapCounter;
-            if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
-                console.log("Clearance Round");
-                // Clearance Pass
-                this.restartSets();
-            }
-            else if (thresholdReached && this.runningSingleRule) return;
+    async sendEntityExchangeData(spanNum, numProcesses, processNum) {
+        let batchLength = this.bestSetsPerBatch;
+        if (spanNum === this.numSpans - 1 && processNum === numProcesses - 1 && this.finalBatchLength > 0) {
+            batchLength = this.finalBatchLength;
         }
+        let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
+        for (let bestSetNum = batchStart; bestSetNum < batchStart + batchLength; bestSetNum++) {
+            // Clear this best set from the transfer entities
+            await dbTransactions.clearTransferEntitySet(bestSetNum);
+            // Insert the current entities
+            for (let i = 0; i < this.bestSets[bestSetNum].length; ++i) {
+                let entity = this.bestSets[bestSetNum][i];
+                await dbTransactions.saveTransferEntity(bestSetNum, i, entity.entityNumber, 
+                    entity.breedMethod, entity.birthCycle, entity.initialMemSpace, entity.memSpace,
+                    entity.oldValuesOut, entity.oldParams, entity.score);
+            }
+        }
+    }
 
+    // This is triggered by the exit event of the child processes.
+    // This is only called once all of the child processes are done
+    async collectEntityData() {
+        // Get the best set data
+        let setLen = this.spanLength;
+        if (this.spanNum === this.numSpans - 1) {
+            setLen = this.spanRemnant;
+        }
+        let setNum = this.spanStart;
+        while (setNum < this.spanStart + setLen && setNum < this.numBestSets) {
+            let entityDataSet = await dbTransactions.fetchTransferEntities(setNum);
+            if (entityDataSet != null) {
+                this.bestSets[setNum] = [];
+                let set = [];
+                let entityNum = 0;
+                for (let entityData of entityDataSet) {
+                    let memSpace = this.stringToIntArray(entityData.mem_space);
+                    let asRandom = false;
+                    let seeded = false;
+                    let entity = new Entity(entityData.entity_number, this.instructionSet, 
+                        asRandom, seeded, entityData.creation_cycle, this.ruleSequenceNum, this.roundNum, memSpace);
+                    entity.score = entityData.score;
+                    entity.breedMethod = entityData.breed_method;
+                    // Collect the final memSpace block
+                    let finalMemSpace = this.stringToIntArray(entityData.final_mem_space);
+                    entity.memSpace = finalMemSpace;
+                    // Collect the transfer entity output data
+                    let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(setNum, entityNum);
+                    entity.oldValuesOut = oldValuesOut;
+                    // Collect the transfer entity input data
+                    let oldParams = await dbTransactions.fetchTransferEntityInputs(setNum, entityNum);
+                    entity.oldParams = oldParams;
+                    set.push(entity);
+                    ++entityNum;
+                }
+                this.bestSets[setNum] = set;
+            }
+            ++setNum;
+        }
+        // Display the first entity of the span
+        let terminateProcessing = false;
+        let endTime = Date.now();
+        let elapsedTime = endTime - this.startTime;
+        this.elapsedTime = elapsedTime;
+        elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
+        this.bestSets[this.spanStart][0].display(this.mainWindow, this.spanStart, elapsedTime, 
+        this.entityNumber, 
+        this.ruleSequenceNum, this.randomCount, 
+        this.monoclonalInsCount, this.monoclonalByteCount,
+        this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+        this.interbreedInsMergeCount,
+        this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
+        this.cycleCounter, this.numRounds, this.ruleSequenceNum, terminateProcessing);
+
+        ++this.spanNum;
+        this.spanStart += setLen;
+        // This returns to the server event loop
+    }
+
+    async collectBatchData() {
+        let numBatches = this.numCPUs;
+        if (this.spanNum === this.numSpans - 1) {
+            numBatches = this.finalNumBatches;
+        }
+        for (let batchNum = 0; batchNum < numBatches; batchNum++) {
+            let results = await dbTransactions.fetchBatchData(batchNum);
+            if (results) {
+                this.monoclonalInsCount += results[0].monoclonal_ins_count;
+                this.monoclonalByteCount += results[0].monoclonal_byte_count;
+                this.interbreedCount += results[0].interbreed_count;
+                this.interbreed2Count += results[0].interbreed2_count;
+                this.interbreedFlaggedCount += results[0].interbreedFlaggedCount;
+                this.interbreedInsMergeCount += results[0].interbreed_ins_merge_count;
+                this.selfBreedCount += results[0].self_breed_count;
+                this.seedRuleBreedCount += results[0].seed_rule_breed_count;
+                this.randomCount += results[0].random_count;
+                this.crossSetCount += results[0].cross_set_count;
+            }
+        }
+    }
+
+    collectScoreHistory() {
+        let numEntitySets = this.spanLength;
+        if (this.spanNum === this.numSpans) {
+            numEntitySets = this.spanRemnant;
+        }
+        for (let i = this.spanStart; i < numEntitySets; i++) {
+            this.updateScoreHistory[i];
+        }
+    }
+
+    async doEndOfRoundOperations() {
+        this.saveBestScore();
+        ++this.numRounds;
+        await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
+        // Check for rule threshold reached
+        thresholdReached = this.checkRuleThreshold();
+    
+        ++this.lapCounter;
+        this.spanNum = 0;
+        this.spanStart = 0;
+        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
+            console.log("Clearance Round");
+            // Clearance Pass
+            this.restartSets();
+        }
+        else if (thresholdReached && this.runningSingleRule) return;
+        else {
+            this.shuffleSets();
+        }
+    }
+
+    shuffleSets() {
+        let numShuffles = Math.floor(this.numBestSets / 16);
+        for (let i = 0; i < numShuffles; i++) {
+            let same = true;
+            let a, b;
+            while (same) {
+                a = Math.floor(Math.random() * this.numBestSets);
+                b = Math.floor(Math.random() * this.numBestSets);
+                same = (a === b);
+            }
+            let set = this.bestSets[a];
+            this.bestSets[a] = this.bestSets[b];
+            this.bestSets[b] = set;
+        }
     }
 
     saveBestScore() {
@@ -301,189 +506,24 @@ class MainControl {
         }
     }
 
-    updateScoreHistory() {
-        if (this.bestSets[this.bestSetNum].length > 0) {
-            let score = this.bestSets[this.bestSetNum][0].score;
-            if (this.scoreHistory[this.bestSetNum].length < this.scoreHistoryMaxLen) {
-                let a = this.scoreHistory[this.bestSetNum].concat();
+    updateScoreHistory(bestSetNum) {
+        if (this.bestSets[bestSetNum].length > 0) {
+            let score = this.bestSets[bestSetNum][0].score;
+            if (this.scoreHistory[bestSetNum].length < this.scoreHistoryMaxLen) {
+                let a = this.scoreHistory[bestSetNum].concat();
                 a.push(score);
-                this.scoreHistory[this.bestSetNum] = a;
+                this.scoreHistory[bestSetNum] = a;
             }
             else {
-                let a = this.scoreHistory[this.bestSetNum].concat();
+                let a = this.scoreHistory[bestSetNum].concat();
                 a.splice(0, 1);
                 a.push(score);
-                this.scoreHistory[this.bestSetNum] = a;
+                this.scoreHistory[bestSetNum] = a;
             }
         }
-        ++this.scoreHistoryCounter[this.bestSetNum];
+        ++this.scoreHistoryCounter[bestSetNum];
     }
 
-    processLoop(bestEntitySet, bestSetNum) {
-        const maxCycles = 5; // 15;
-        const maxBreedEntities = this.bestEntitySetMax / 2;
-        const maxBreedActions = 32;
-        const currentEntitySetMaxLen = 3;
-        let insSet = new InstructionSet();
-        for (let cycle = 0; cycle < maxCycles; cycle++) {
-            for (let i = 0; i < maxBreedEntities; i++) {
-                let currentEntitySet = [];
-                for (let j = 0; j < maxBreedActions; j++) {
-                    // Create new entity
-                    let breedMode = "reproduction";
-                    let asRandom = true; 
-                    let seeded = false;
-                    let memSpace = null;
-                    let entity = null;
-                    let gotCrossMate = false;
-                    // Debug
-                    // bestEntitySet.length >= this.bestEntitySetMax
-                    // Determine whether random breed
-                    if (j === 0 && rulesets.seedRuleMemSpaces.length > 0 && bestEntitySet.length < 10 && Math.random() < 0.5) {
-                        breedMode = "seedRule";
-                    }
-                    else if (bestEntitySet.length < this.bestEntitySetMax) {
-                        breedMode = "random";
-                    }
-                    else {
-                        if (this.cycleCounter < this.bestEntitySetFullCycle[bestSetNum] + 20 && Math.random() < 0.5) {
-                            breedMode = "random";
-                        }
-                    }
-
-                    if (breedMode === "seedRule") {
-                        let r = Math.floor(Math.random() * rulesets.seedRuleMemSpaces.length);
-                        memSpace = rulesets.seedRuleMemSpaces[r].memSpace;
-                        asRandom = false;
-                        entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, rulesets.ruleSequenceNum, this.numRounds, memSpace);
-                        entity.breedMethod = "SeedRule";
-                    }
-                    else if (breedMode === "reproduction") {
-                        // Set-up for a breed operation 
-                        // select the parent entities
-                        let p1 = Math.floor(Math.random() * bestEntitySet.length);
-                        let p1Entity = bestEntitySet[p1];
-                        let p2Entity;
-                        // Check for a mate from an alternative set
-                        if (Math.random() < 0.001) {
-                            let r = this.chooseBestSetMate(this.crossSetRange, bestSetNum, this.numBestSets);
-                            let b = bestSetNum + r;
-                            if (this.bestSets[b].length != 0) {
-                                let e = Math.floor(Math.random() * this.bestSets[b].length);
-                                p2Entity = this.bestSets[b][e];
-                                gotCrossMate = true;
-                            }
-                        }
-                        if (!gotCrossMate){
-                            let p2 = -1;
-                            let found = false;
-                            if (bestEntitySet.length === 1) {
-                                p2 = 0;
-                            }
-                            else {
-                                while(!found) {
-                                    p2 = Math.floor(Math.random() * bestEntitySet.length);
-                                    if (p2 != p1) found = true;
-                                }
-                            }
-                            p2Entity = bestEntitySet[p2];
-                        }
-                        entity = p1Entity.breed(this.entityNumber, p2Entity, gotCrossMate, 
-                            this.cycleCounter, this.numRounds);
-                    }
-                    else {
-                        let seeded = false;
-                        // Seeding on first pass.
-                        // if (cycle === 0 && i === 0 && j === 0) seeded = true;
-                        entity = new Entity(this.entityNumber, insSet, asRandom, seeded, 
-                            this.cycleCounter, rulesets.ruleSequenceNum, this.numRounds, memSpace);
-                    }
-                    // Update breed method tallies
-                    switch (entity.breedMethod) {
-                        case "MonoclonalIns" :
-                            ++this.monoclonalInsCount;
-                            break;
-                        case "MonoclonalByte" :
-                            ++this.monoclonalByteCount;
-                            break;
-                        case "Interbreed" :
-                            ++this.interbreedCount;
-                            if (gotCrossMate) ++this.crossSetCount;
-                            break;
-                        case "Interbreed2" :
-                            ++this.interbreed2Count;
-                            if (gotCrossMate) ++this.crossSetCount;
-                            break;
-                        case "InterbreedFlagged" :
-                            ++this.interbreedFlaggedCount;
-                            if (gotCrossMate) ++this.crossSetCount;
-                            break;
-                        case "InterbreedInsMerge" :
-                            ++this.interbreedInsMergeCount;
-                            if (gotCrossMate) ++this.crossSetCount;
-                        case "Self-breed" :
-                            ++this.selfBreedCount;
-                            break;
-                        case "SeedRule" :
-                            ++this.seedRuleBreedCount;
-                            break;
-                        default:
-                            ++this.randomCount;
-                            break;
-                    }
-                    if (entity.crossSetBreed) ++this.crossSetCount;
-
-                    let bestSetHighScore, bestSetLowScore;
-                    if (this.bestEntitySet.length < 2) {
-                        bestSetHighScore = 0;
-                        bestSetLowScore = 0;
-                    }
-                    else {
-                        bestSetHighScore = bestEntitySet[0].score;
-                        bestSetLowScore = bestEntitySet[this.bestEntitySet.length - 1].score;
-                    }
-                    let memObj = entity.execute(bestSetHighScore, bestSetLowScore);
-                    // Check whether a rule set threshold was reached
-                    if (rulesets.seedRuleSet) {
-                        this.ruleSequenceNum = rulesets.ruleSequenceNum;
-                        rulesets.seedRuleSet = false;
-                    }
-                    // Add to current set
-                    currentEntitySet = this.addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, entity.score);
-                    ++this.entityNumber;
-                    // Debug
-                    testObj.firstEntityDone = true;
-                }
-                bestEntitySet = this.addEntitiesToBestSet(bestEntitySet, currentEntitySet, currentEntitySetMaxLen);
-                if (bestEntitySet.length >= this.bestEntitySetMax && this.bestEntitySetFullCycle[bestSetNum] === 0) {
-                    this.bestEntitySetFullCycle[bestSetNum] = this.cycleCounter;
-                }
-            }
-            ++this.cycleCounter;
-        }
-
-        return bestEntitySet;
-    }
-
-    chooseBestSetMate(crossSetRange, bestSetNum, numBestSets) {
-        let n = crossSetRange; // range of selection
-        let d = Math.floor(n/2);
-        if (bestSetNum < d) {
-            n = n - (d - bestSetNum);
-            d = bestSetNum;
-        }
-        else if (bestSetNum >= numBestSets - d) {
-            n = n - ((d + 1) - (numBestSets - bestSetNum));
-        }
-        let r = Math.floor(Math.random() * n) - d;
-        if (r === 0) {
-            if (bestSetNum - 1 < 0) r = 1;
-            else if (bestSetNum + 1 >= numBestSets) r = -1;
-            else r = (Math.floor(Math.random() * 2) * 2) - 1; 
-        }
-        return r;
-    }
 
     loadAndExecuteSeed(seedProgram) {
         let insSet = new InstructionSet();
@@ -557,99 +597,6 @@ class MainControl {
         entity.execute(0,0);
         a.push(entity);
         this.bestSets[seedSetNum] = a;
-    }
-
-    addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, score) {
-        let hasAcceptableScore = true;
-        let scorePosition = 0;
-        let newSet = [];
-        let found = false;
-        if (currentEntitySet.length === 0) {
-            newSet.push(entity);
-        }
-        else {
-            for (let j = 0; j < currentEntitySet.length; j++) {
-                if (score >= currentEntitySet[j].score && !found) {
-                    newSet.push(entity);
-                    found = true;
-                }
-                if (newSet.length < currentEntitySetMaxLen) {
-                    newSet.push(currentEntitySet[j]);
-                }
-            }
-            if (newSet.length < currentEntitySetMaxLen && !found) {
-                newSet.push(entity);
-            }
-        }
-        // Debug
-        /*
-        console.log("newSet score:", score);
-        for (let i = 0; i < newSet.length; i++) {
-            console.log(newSet[i].score);
-        }
-        console.log("-----------");
-        */
-        return newSet;
-    }
-
-    addEntitiesToBestSet(bestEntitySet, currentEntitySet) {
-        // Debug
-        /*
-        for (let i = 0; i < currentEntitySet.length; i++) {
-            console.log(currentEntitySet[i].score);
-        }
-        console.log("-----------------")
-        */
-        let score = 0;
-        let currentIndex = 0;
-        let bestIndex = 0;
-        let newSet = [];
-        if (bestEntitySet.length === 0) {
-            for (let i = 0; i < currentEntitySet.length; i++) {
-                currentEntitySet[i].bestSetEntityNum = i;
-                newSet.push(currentEntitySet[i]);
-            }
-        }
-        else {
-            let ended = false;
-            while (!ended) {
-                if (bestIndex < bestEntitySet.length && currentIndex < currentEntitySet.length) {
-                    let oldScore = bestEntitySet[bestIndex].score;
-                    let newScore = currentEntitySet[currentIndex].score;
-                    if (newScore > oldScore) {
-                        currentEntitySet[currentIndex].bestSetEntityNum = newSet.length;
-                        newSet.push(currentEntitySet[currentIndex]);
-                        ++currentIndex;
-                    }
-                    else if (newScore === oldScore) {
-                        // Skip if the same
-                        bestEntitySet[bestIndex].bestSetEntityNum = newSet.length;
-                        newSet.push(bestEntitySet[bestIndex]);
-                        ++bestIndex;
-                        ++currentIndex;
-                    }
-                    else {
-                        bestEntitySet[bestIndex].bestSetEntityNum = newSet.length;
-                        newSet.push(bestEntitySet[bestIndex]);
-                        ++bestIndex;
-                    }
-                }
-                else if (currentIndex >= currentEntitySet.length) {
-                    bestEntitySet[bestIndex].bestSetEntityNum = newSet.length;
-                    newSet.push(bestEntitySet[bestIndex]);
-                    ++bestIndex;
-                }
-                else {
-                    currentEntitySet[currentIndex].bestSetEntityNum = newSet.length;
-                    newSet.push(currentEntitySet[currentIndex]);
-                    ++currentIndex;
-                }
-                if (newSet.length >= this.bestEntitySetMax || (bestIndex >= bestEntitySet.length && currentIndex >= currentEntitySet.length)) {
-                    ended = true;
-                }
-            }
-        }
-        return newSet;
     }
 
     /**
@@ -761,4 +708,4 @@ class MainControl {
     }
 }
 
-module.exports = MainControl;
+module.exports = MainControlParallel;
