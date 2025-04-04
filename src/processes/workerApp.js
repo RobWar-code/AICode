@@ -35,6 +35,7 @@ class BatchProcess {
         this.numRounds = 0;
         this.entityNumber = entityNumber;
         this.ruleSequenceNum = ruleSequenceNum;
+        rulesets.ruleSequenceNum = ruleSequenceNum;
         this.runningSingleRule = false;
         this.runRuleNum = 0;
         this.monoclonalInsCount = 0;
@@ -47,7 +48,7 @@ class BatchProcess {
         this.seedRuleBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
-        this.instructionSet = new InstructionSet;
+        this.instructionSet = new InstructionSet();
         rulesets.initialise();
     }
 
@@ -62,7 +63,7 @@ class BatchProcess {
     async fetchBatchEntities() {
         for (let i = 0; i < this.numBestSets; i++) {
             let set = [];
-            bestSetNum = this.batchStart + i;
+            let bestSetNum = this.batchStart + i;
             let results = await dbTransactions.fetchTransferBestEntitySet(bestSetNum);
             if (results.length > 0) {
                 let entityNum = 0;
@@ -76,13 +77,26 @@ class BatchProcess {
                     let birthCycle = item.creation_cycle;
                     let asRandom = false;
                     let seeded = false;
-                    let entity = new Entity(entityNumber, instructionSet, asRandom, seeded, birthCycle, 
+                    let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, birthCycle, 
                         this.ruleSequenceNum, this.roundNum, memSpace);
+                    entity.birthTime = item.birth_time;
+                    entity.birthDateTime = item.birth_date_time;
+                    entity.roundNum = item.round_num;
+                    // Registers
+                    entity.registers.A = item.reg_a;
+                    entity.registers.B = item.reg_b;
+                    entity.registers.C = item.reg_c;
+                    entity.registers.CF = item.reg_cf;
+                    entity.registers.ZF = item.reg_zf;
+                    entity.registers.SP = item.reg_sp;
+                    entity.registers.IP = item.reg_ip;
+                    entity.registers.IC = item.reg_ic;
+                    // Final memSpace
                     entity.memSpace = finalMemSpace;
                     // Fetch the transfer entity outputs
                     let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(bestSetNum, entityNum);
                     entity.oldValuesOut = oldValuesOut;
-                    let oldParams = await dbTransactions.fetchTransferEntityInputs(this.bestSetNum, entityNum);
+                    let oldParams = await dbTransactions.fetchTransferEntityInputs(bestSetNum, entityNum);
                     entity.oldParams = oldParams;
                     entity.score = score;
                     set.push(entity);
@@ -97,6 +111,7 @@ class BatchProcess {
         for (let i = 0; i < this.numBestSets; i++) {
             let set = this.bestSets[i];
             let setNum = this.batchStart + i;
+            await dbTransactions.clearTransferEntitySet(setNum);
             await dbTransactions.saveTransferEntitySet(setNum, set);
         }
     }

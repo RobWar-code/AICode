@@ -89,7 +89,14 @@ const dbTransactions = {
                     ++count;
                 }
                 catch (err) {
-                    console.error("saveEntity: problem saving entity details");
+                    console.error("saveEntities: problem saving entity details");
+                    console.error("entityNum: ", entityNum);
+                    console.error("birthTime: ", birthTime);
+                    console.error("birthDateTime: ", birthDateTime);
+                    console.error("birthCycle: ", birthCycle);
+                    console.error("roundNum: ", roundNum);
+                    console.error("breedMethod: ", breedMethod);
+                    console.error("score: ", score);
                     throw err;
                 }
             }
@@ -401,17 +408,41 @@ const dbTransactions = {
             console.log ("Could not open db connection");
             return;
         }
+
+        let sql;
         try {
-            let sql = `DELETE FROM transfer_entity WHERE best_set_num = ${bestSetNum}`;
+            sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${bestSetNum}`;
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("clearTransferEntitySet - problem deleting output", bestSetNum);
+            throw error;
+        }
+
+        try {
+            sql = `DELETE FROM transfer_entity_input WHERE best_set_num = ${bestSetNum}`;
+            [results] = await dbConnection.query(sql); 
+        }
+        catch (error) {
+            console.log("clearTransferEntitySet - problem deleting input", bestSetNum);
+            throw error;
+        }
+
+        try {
+            sql = `DELETE FROM transfer_entity WHERE best_set_num = ${bestSetNum}`;
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
             console.log("clearTransferEntitySet: Problem clearing entity set");
             throw error;
         }
+
+        await dbConnection.end();
     },
 
-    async saveTransferEntity(bestSetNum, index, entityNumber, breedMethod, birthCycle, memSpace, finalMemSpace, oldValuesOut, oldParams, score) {
+    async saveTransferEntity(bestSetNum, index, entityNumber, breedMethod, birthTime, birthDateTime, birthCycle, 
+        roundNum, registers, memSpace, 
+        finalMemSpace, oldValuesOut, oldParams, score) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
             console.log ("Could not open db connection");
@@ -455,10 +486,14 @@ const dbTransactions = {
         let transferEntityId = null;
 
         try {
-            let sql = "INSERT INTO transfer_entity (best_set_num, inx, entity_number, breed_method,"
-            sql += "creation_cycle, score, mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO transfer_entity (best_set_num, inx, entity_number, breed_method,";
+            sql += "birth_time, birth_date_time, creation_cycle, round_num, score, reg_a, reg_b, reg_c, ";
+            sql += "reg_cf, reg_zf, reg_sp, reg_ip, reg_ic,";
+            sql += "mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [bestSetNum, index, entityNumber, 
-                breedMethod, birthCycle, score, memSpaceStr, finalMemSpaceStr]);
+                breedMethod, birthTime, birthDateTime, birthCycle, roundNum, score, registers.A, 
+                registers.B, registers.C, registers.CF,
+                registers.ZF, registers.SP, registers.IP, registers.IC, memSpaceStr, finalMemSpaceStr]);
             transferEntityId = results.insertId;
         }
         catch (error) {
@@ -585,7 +620,7 @@ const dbTransactions = {
 
         await dbConnection.end();
 
-        return outputs;
+        return inputs;
     },
 
     async fetchTransferBestEntitySet(setNum) {
@@ -631,8 +666,12 @@ const dbTransactions = {
         for (let entity of set) {
             let score = entity.score;
             let entityNumber = entity.entityNumber;
+            let birthTime = entity.birthTime;
+            let birthDateTime = entity.birthDateTime;
             let creationCycle = entity.birthCycle;
+            let roundNum = entity.roundNum;
             let breedMethod = entity.breedMethod;
+            let registers = entity.registers;
             let memSpace = entity.initialMemSpace;
             let memStr = this.intArrayToString(memSpace, memSpace.length);
             let finalMemSpace = entity.memSpace;
@@ -640,9 +679,13 @@ const dbTransactions = {
             let transferEntityId = null;
             try {
                 sql = "INSERT INTO transfer_entity (best_set_num, inx, score, entity_number,";
-                sql += "breed_method, creation_cycle, mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                sql += "breed_method, birth_time, birth_date_time, creation_cycle, round_num, ";
+                sql += "reg_a, reg_b, reg_c, reg_cf, reg_zf, reg_sp, reg_ip, reg_ic, ";
+                sql += "mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 [results] = await dbConnection.execute(sql, [setNum, index, score, 
-                    entityNumber, breedMethod, creationCycle, memStr, finalMemStr]);
+                    entityNumber, breedMethod, birthTime, birthDateTime, creationCycle, roundNum,
+                    registers.A, registers.B, registers.C, registers.CF, registers.ZF, 
+                    registers.SP, registers.IP, registers.IC, memStr, finalMemStr]);
                 transferEntityId = results.insertId;
             }
             catch (error) {
@@ -651,10 +694,10 @@ const dbTransactions = {
             }
 
             // Save the entity output blocks
-            await this.saveTransferEntityOutputs(dbConnection, transferEntityId, bestSetNum, index, entity.oldValuesOut);
+            await this.saveTransferEntityOutputs(dbConnection, transferEntityId, setNum, index, entity.oldValuesOut);
 
             // Save the transfer entity input blocks
-            await this.saveTransferEntityInputs(dbConnection, transferEntityId, bestSetNum, index, entity.oldParams);
+            await this.saveTransferEntityInputs(dbConnection, transferEntityId, setNum, index, entity.oldParams);
 
             ++index;
         }

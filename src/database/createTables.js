@@ -12,7 +12,7 @@ async function createTables() {
 
     let sql;
 
-    await clearTables(connection);
+    // await clearTables(connection);
 
     /*
 
@@ -89,10 +89,24 @@ async function createTables() {
     sql += "score FLOAT,";
     sql += "entity_number INT,";
     sql += "breed_method VARCHAR(64),";
+    sql += "birth_time BIGINT,";
+    sql += "birth_date_time VARCHAR(256),";
     sql += "creation_cycle INT,";
+    sql += "round_num INT,"
+    sql += "reg_a INT,";
+    sql += "reg_b INT,";
+    sql += "reg_c INT,";
+    sql += "reg_cf INT,";
+    sql += "reg_zf INT,";
+    sql += "reg_sp INT,";
+    sql += "reg_ip INT,";
+    sql += "reg_ic INT,";
     sql += "mem_space VARCHAR(256),";
     sql += "final_mem_space VARCHAR(256)";
     sql += ")";
+    await connection.query(sql);
+
+    sql = "DROP TABLE transfer_entity_output";
     await connection.query(sql);
 
     sql = "CREATE TABLE transfer_entity_output (";
@@ -105,17 +119,22 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    sql = "DROP TABLE transfer_entity_input";
+    await connection.query(sql);
+
     sql = "CREATE TABLE transfer_entity_input (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "transfer_entity_id INT,";
     sql += "best_set_num INT,";
     sql += "best_set_inx INT,"
     sql += "inx INT,";
-    sql += "output_block VARCHAR(256)";
+    sql += "input_block VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
 
-    /*
+    sql = "DROP TABLE batch_data";
+    await connection.query(sql);
+    
     sql = "CREATE TABLE batch_data (";
     sql += "batch_num INT,"
     sql += "monoclonal_ins_count INT,";
@@ -130,7 +149,6 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-    */
 
     connection.end();
 }
@@ -139,6 +157,12 @@ async function clearTables(connection) {
     let sql;
 
     sql = "DELETE FROM batch_data";
+    await connection.query(sql);
+
+    sql = "DELETE FROM transfer_entity_output";
+    await connection.query(sql);
+
+    sql = "DELETE FROM transfer_entity_input";
     await connection.query(sql);
 
     sql = "DELETE FROM transfer_entity";

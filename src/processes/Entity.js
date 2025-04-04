@@ -895,7 +895,7 @@ class Entity {
         return {pointer: p, block: insBlock};
     }
 
-    display(mainWindow, bestSetNum, elapsedTime, numTrials, ruleSequenceNum,
+    display(mainWindow, bestSetNum, bestSetEntityNum, elapsedTime, numTrials, ruleSequenceNum,
         randomCount, monoclonalInsCount, 
         monoclonalByteCount, interbreedCount, 
         interbreed2Count, interbreedFlaggedCount, 
@@ -930,7 +930,7 @@ class Entity {
         // Details
         displayData.terminateProcessing = terminateProcessing;
         displayData.bestSetNum = bestSetNum;
-        displayData.bestSetEntityNum = this.bestSetEntityNum;
+        displayData.bestSetEntityNum = bestSetEntityNum;
         displayData.numTrials = numTrials;
         displayData.currentCycle = currentCycle;
         displayData.numRounds = numRounds;
@@ -953,7 +953,7 @@ class Entity {
         displayData.selfBreedCount = selfBreedCount;
         displayData.seedRuleBreedCount = seedRuleBreedCount;
         displayData.crossSetCount = crossSetCount;
-        displayData.currentRule = currentRule;
+        displayData.currentRule = ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;
         displayData.ruleScores = this.ruleScores;
         displayData.ruleCompletionRound = rulesets.ruleCompletionRound;

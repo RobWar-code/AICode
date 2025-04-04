@@ -146,7 +146,7 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   let elapsedTime = program.elapsedTime / (3600 * 1000);
   let currentRule = rulesets.getDescriptionFromSequence(rulesets.ruleSequenceNum);
   let terminateProcessing = false;
-  entity.display(mainWindow, bestSetNum, elapsedTime, program.entityNumber, 
+  entity.display(mainWindow, bestSetNum, bestSetEntityNum, elapsedTime, program.entityNumber, 
     program.ruleSequenceNum, program.randomCount, 
     program.monoclonalInsCount, program.monoclonalByteCount, program.interbreedCount, 
     program.interbreed2Count, program.interbreedFlaggedCount, 

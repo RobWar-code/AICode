@@ -42,11 +42,14 @@ Jobs Due
         * Sort-out Score History (end of span functions)
         * Tidy-up the functions (remove redundant functions)
         * check entityNumber and cycleCounter for spawn operation
-        entityNumber returned to main not valid -1
-        currentCycle returned to main is NaN
-        interbreedFlagged breeds is NaN
-        Entity outputData is missing
-        Entity inputData is missing
+        * bestSetEntityNum returned to main not valid -1
+        * currentCycle returned to main is NaN
+        * interbreedFlagged breeds is NaN
+        * Entity outputData is missing
+        * Entity inputData is missing
+        * Message the main window once the batch is dispatched
+        * Message the main window once the batch has been processed
+        Include entity registers in the transfer table
 
     Do the workerApp.js modifications of the MainControl
         * Main Program Section
@@ -58,7 +61,13 @@ Jobs Due
         * Remove Redundant Functions
         * Check use of roundNum in Entity
 
-    Integrate the parallel processing module in index.js
+    * Integrate the parallel processing module in index.js
+
+    Max Score not set
+
+    Allow for batch processing in trace operations
+
+    Allow for elapsed time in batch processing
 
     Include save scorelist for an entity?
 

@@ -1,6 +1,6 @@
 const path = require('node:path');
 const { spawn } = require('child_process');
-const { os } = require('os');
+const os = require('os');
 
 const { seedRuleMemSpaces } = require('./rulesets');
 const Entity = require(path.join(__dirname, 'Entity.js'));
@@ -51,13 +51,13 @@ class MainControlParallel {
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
+        rulesets.currentMaxScore = rulesets.getCurrentMaxScore();
         this.setupBatchProcessing();
     }
 
     setupBatchProcessing() {
         // Get number of processors
-        // this.numCPUs = os.cpus().length;
-        this.numCPUs = 1;
+        this.numCPUs = os.cpus().length;
         // A batch is a group of best sets sent to an individual worker
         // A span is a set of batches sent to a set of worker apps
         // Spans are of equal length, other than, perhaps, the final span which has the
@@ -92,8 +92,9 @@ class MainControlParallel {
     }
 
     async batchProcessLoop() {
+        console.log("batchProcessLoop - numSpans:", this.numSpans, "spanNum:", this.spanNum);
         if (this.spanNum >= this.numSpans) {
-            doEndOfRoundOperations();
+            this.doEndOfRoundOperations();
         }
 
         this.batchProcessCount = 0;
@@ -115,7 +116,8 @@ class MainControlParallel {
             // Spawn the processes
             this.spawnProcess(this.spanNum, this.numProcesses, processNum);
         }
-
+        
+        this.mainWindow.webContents.send('batchDispatched', 0);
     }
 
     spawnProcess(spanNum, numProcesses, processNum) {
@@ -144,24 +146,30 @@ class MainControlParallel {
                 ++this.batchProcessCount;
                 console.log ("Exited batch");
                 if (this.batchProcessCount >= this.numProcesses) {
-                    console.log("collecting batch process data");
-                    this.collectEntityData();
-                    this.collectBatchData();
-                    this.collectScoreHistory();
-                    // Update entityNumber and cycleCounter
-                    if (this.spanNum < this.numSpans - 1 || this.spanRemnant === 0) {
-                        this.entityNumber += this.entitiesPerProcess * this.numCPUs;
-                        this.cycleCounter += this.cyclesPerBatch * this.numCPUs;
-                    }
-                    else {
-                        this.entityNumber += this.entitiesPerProcess * (this.finalNumBatches - 1) + this.finalEntitiesPerProcess;
-                        this.cycleCounter += this.cyclesPerBatch * (this.finalNumBatches - 1) + this.finalBatchLength * this.maxCycles;
-                    }
+                    this.batchDataCollection();
                 }
             }
             // console.log(`Worker ${process} exited with code ${code}`);
         });
     
+    }
+
+    async batchDataCollection() {
+        console.log("collecting batch process data");
+        await this.collectEntityData();
+        await this.collectBatchData();
+        this.collectScoreHistory();
+        // Update entityNumber and cycleCounter
+        if (this.spanNum < this.numSpans - 1 || this.spanRemnant === 0) {
+            this.entityNumber += this.entitiesPerProcess * this.numCPUs;
+            this.cycleCounter += this.cyclesPerBatch * this.numCPUs;
+        }
+        else {
+            this.entityNumber += this.entitiesPerProcess * (this.finalNumBatches - 1) + this.finalEntitiesPerProcess;
+            this.cycleCounter += this.cyclesPerBatch * (this.finalNumBatches - 1) + this.finalBatchLength * this.maxCycles;
+        }
+        this.mainWindow.webContents.send("batchProcessed", 0);
+
     }
 
     async sendEntityExchangeData(spanNum, numProcesses, processNum) {
@@ -170,6 +178,7 @@ class MainControlParallel {
             batchLength = this.finalBatchLength;
         }
         let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
+        console.log("sendEntityExchangeData - batchStart:", batchStart, "spanStart:", this.spanStart, "spanNum:", this.spanNum);
         for (let bestSetNum = batchStart; bestSetNum < batchStart + batchLength; bestSetNum++) {
             // Clear this best set from the transfer entities
             await dbTransactions.clearTransferEntitySet(bestSetNum);
@@ -177,7 +186,8 @@ class MainControlParallel {
             for (let i = 0; i < this.bestSets[bestSetNum].length; ++i) {
                 let entity = this.bestSets[bestSetNum][i];
                 await dbTransactions.saveTransferEntity(bestSetNum, i, entity.entityNumber, 
-                    entity.breedMethod, entity.birthCycle, entity.initialMemSpace, entity.memSpace,
+                    entity.breedMethod, entity.birthTime, entity.birthDateTime, 
+                    entity.birthCycle, entity.roundNum, entity.registers, entity.initialMemSpace, entity.memSpace,
                     entity.oldValuesOut, entity.oldParams, entity.score);
             }
         }
@@ -188,7 +198,7 @@ class MainControlParallel {
     async collectEntityData() {
         // Get the best set data
         let setLen = this.spanLength;
-        if (this.spanNum === this.numSpans - 1) {
+        if (this.spanNum === this.numSpans - 1 && this.spanRemnant > 0) {
             setLen = this.spanRemnant;
         }
         let setNum = this.spanStart;
@@ -205,7 +215,19 @@ class MainControlParallel {
                     let entity = new Entity(entityData.entity_number, this.instructionSet, 
                         asRandom, seeded, entityData.creation_cycle, this.ruleSequenceNum, this.roundNum, memSpace);
                     entity.score = entityData.score;
+                    entity.birthTime = entityData.birth_time;
+                    entity.birthDateTime = entityData.birth_date_time;
+                    entity.roundNum = entityData.round_num;
                     entity.breedMethod = entityData.breed_method;
+                    // Registers
+                    entity.registers.A = entityData.reg_a;
+                    entity.registers.B = entityData.reg_b;
+                    entity.registers.C = entityData.reg_c;
+                    entity.registers.CF = entityData.reg_cf;
+                    entity.registers.ZF = entityData.reg_zf;
+                    entity.registers.SP = entityData.reg_sp;
+                    entity.registers.IP = entityData.reg_ip;
+                    entity.registers.IC = entityData.reg_ic;
                     // Collect the final memSpace block
                     let finalMemSpace = this.stringToIntArray(entityData.final_mem_space);
                     entity.memSpace = finalMemSpace;
@@ -228,7 +250,9 @@ class MainControlParallel {
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        this.bestSets[this.spanStart][0].display(this.mainWindow, this.spanStart, elapsedTime, 
+        console.log("collectEntityData: numSpans:", this.numSpans, "spanStart:", this.spanStart, "set length:", 
+            this.bestSets[this.spanStart].length);
+        this.bestSets[this.spanStart][0].display(this.mainWindow, this.spanStart, 0, elapsedTime, 
         this.entityNumber, 
         this.ruleSequenceNum, this.randomCount, 
         this.monoclonalInsCount, this.monoclonalByteCount,
@@ -254,7 +278,7 @@ class MainControlParallel {
                 this.monoclonalByteCount += results[0].monoclonal_byte_count;
                 this.interbreedCount += results[0].interbreed_count;
                 this.interbreed2Count += results[0].interbreed2_count;
-                this.interbreedFlaggedCount += results[0].interbreedFlaggedCount;
+                this.interbreedFlaggedCount += results[0].interbreed_flagged_count;
                 this.interbreedInsMergeCount += results[0].interbreed_ins_merge_count;
                 this.selfBreedCount += results[0].self_breed_count;
                 this.seedRuleBreedCount += results[0].seed_rule_breed_count;
@@ -274,16 +298,17 @@ class MainControlParallel {
         }
     }
 
-    async doEndOfRoundOperations() {
-        this.saveBestScore();
-        ++this.numRounds;
-        await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
-        // Check for rule threshold reached
-        thresholdReached = this.checkRuleThreshold();
-    
-        ++this.lapCounter;
+    doEndOfRoundOperations() {
         this.spanNum = 0;
         this.spanStart = 0;
+        console.log("Got to doEndOfRoundOperations");
+        this.saveBestScore();
+        ++this.numRounds;
+        dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
+        // Check for rule threshold reached
+        let thresholdReached = this.checkRuleThreshold();
+    
+        ++this.lapCounter;
         if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
             console.log("Clearance Round");
             // Clearance Pass
@@ -357,7 +382,7 @@ class MainControlParallel {
                 let setNum = highIndex;
                 let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
                 let terminateProcessing = true;
-                entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
+                entity.display(this.mainWindow, setNum, 0, this.elapsedTime, this.numTrials,
                     this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
                     this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
                     this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
@@ -382,7 +407,7 @@ class MainControlParallel {
                 else {
                     // Terminate the processing, display the best entity
                     let terminateProcessing = true;
-                    entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
+                    entity.display(this.mainWindow, setNum, 0, this.elapsedTime, this.numTrials,
                         this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
                         this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
                         this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
@@ -703,8 +728,8 @@ class MainControlParallel {
         this.crossSetCount = 0;
         this.startTime = Date.now();
 
-        this.mainLoop();
-        this.mainWindow.webContents.send("mainCycleCompleted", 0);
+        this.setupBatchProcessing();
+        this.batchProcessLoop();
     }
 }
 

@@ -15,12 +15,32 @@ document.getElementById("button01").addEventListener("click", () => {
 */
 let processingCancelled = true;
 let processTimeout = null;
+let batchStatus = "not started";
 let traceActive = false;
 
 let globals = null;
 
 ipcRenderer.on("setGlobals", (event, data) => {
     globals = data;
+});
+
+ipcRenderer.on('batchDispatched', (event, data) => {
+    batchStatus = "batch span dispatched";
+    document.getElementById('statusDiv').style.display = "block";
+    document.getElementById('statusPara').innerText = batchStatus + " Processing";
+});
+
+ipcRenderer.on('batchProcessed', (event, data) => {
+    batchStatus = "batch span processed";
+    document.getElementById('statusDiv').style.display = "block";
+    document.getElementById('statusPara').innerText = batchStatus + " User Interface Active";
+    if (!processingCancelled && !testObj.testOperation) {
+        processTimeout = setTimeout(() => {
+            document.getElementById("statusDiv").style.display = "block";
+            document.getElementById("statusPara").innerText = "Processing...";
+            ipcRenderer.send("activateMainProcess", 0);
+        }, 5000);
+    }
 });
 
 ipcRenderer.on("displayEntity", (event, data) => {
