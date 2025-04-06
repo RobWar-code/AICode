@@ -438,6 +438,9 @@ class Entity {
                         }
                         if (full) break;
                     }
+                    // Determine the number of instructions to replace
+                    let r = Math.floor(Math.random() * codeItem.length);
+                    i += r;
                 }
                 else if (hitType < transposeChance && newCodeSegment.length > 0 && 
                     lastNoChange && (newCodeSegment.length + oldInsLen + insLen) <= this.memLength) {

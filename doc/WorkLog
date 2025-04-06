@@ -22,16 +22,22 @@ Jobs Due
     
     + Add a completion of all rules procedure.
 
+    Update the README with the parallel batch processing details
+
     Backup the projects folder on the USB.
 
     Save only the entity data in the best sets
 
-    Do the analysis for the worker app to do the processing.
+    * Do the analysis for the worker app to do the processing.
         See ParallelProcessing.txt
 
-    Check the standalone MainControl file
+    * Check the standalone MainControl file
 
-    Do the parallel processing modifications to the MainControlParallel file
+    Allow for seed rule programs in the batch processes
+
+    Allow for seed fragments in the batch processes
+
+    * Do the parallel processing modifications to the MainControlParallel file
         * Write the routines for dispatching data to the workers
         * Write the routine for starting-up the processes
         * Write the routine for collecting the processed data
@@ -49,9 +55,9 @@ Jobs Due
         * Entity inputData is missing
         * Message the main window once the batch is dispatched
         * Message the main window once the batch has been processed
-        Include entity registers in the transfer table
+        * Include entity registers in the transfer table
 
-    Do the workerApp.js modifications of the MainControl
+    * Do the workerApp.js modifications of the MainControl
         * Main Program Section
         * Fetch best sets
         * Process Loop
@@ -63,11 +69,11 @@ Jobs Due
 
     * Integrate the parallel processing module in index.js
 
-    Max Score not set
+    * Max Score not set
 
-    Allow for batch processing in trace operations
+    * Allow for elapsed time in batch processing
 
-    Allow for elapsed time in batch processing
+    Check trace operations with batch processing
 
     Include save scorelist for an entity?
 

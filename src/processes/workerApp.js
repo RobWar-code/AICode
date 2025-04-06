@@ -26,7 +26,7 @@ class BatchProcess {
         this.scoreHistoryMaxLen = 8;
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
-        this.crossSetRange = 7;
+        this.crossSetRange = 4;
         this.seedEntity = null;
         this.lapCounter = 0;
         this.clearanceRound = 20;
@@ -53,6 +53,10 @@ class BatchProcess {
     }
 
     async startProcess() {
+        // Load the seed rule and fragments
+        await dbTransactions.loadFragments();
+        rulesets.seedRuleMemSpaces = await dbTransactions.fetchSeedRuleList();
+        console.log("Seed Rule List:", rulesets.seedRuleMemSpaces.length);
         await this.fetchBatchEntities();
         console.log("Start Process: Entity Number", this.entityNumber);
         this.mainLoop();

@@ -79,8 +79,8 @@ async function createTables() {
     await connection.query(sql);
     */
 
-    sql = "DROP TABLE transfer_entity";
-    await connection.query(sql);
+    // sql = "DROP TABLE transfer_entity";
+    // await connection.query(sql);
 
     sql = "CREATE TABLE transfer_entity (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -106,8 +106,8 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    sql = "DROP TABLE transfer_entity_output";
-    await connection.query(sql);
+    // sql = "DROP TABLE transfer_entity_output";
+    // await connection.query(sql);
 
     sql = "CREATE TABLE transfer_entity_output (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -119,8 +119,8 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    sql = "DROP TABLE transfer_entity_input";
-    await connection.query(sql);
+    // sql = "DROP TABLE transfer_entity_input";
+    // await connection.query(sql);
 
     sql = "CREATE TABLE transfer_entity_input (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -132,8 +132,8 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    sql = "DROP TABLE batch_data";
-    await connection.query(sql);
+    // sql = "DROP TABLE batch_data";
+    // await connection.query(sql);
     
     sql = "CREATE TABLE batch_data (";
     sql += "batch_num INT,"

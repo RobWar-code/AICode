@@ -151,6 +151,24 @@ matched fragments. Then each of the rule seed programs is parsed
 as far as byte 200 for a match with the section. The search
 halts and the fragment is added if a match is found.
 
+##### Parallel Batch Processing
+
+The processing procedures for generating and trialing the
+entity programs are particularly suited to parallel processing.
+For this mode of operation, the set of bestsets is divided into
+groups of four entities each of which is transmitted to the child 
+process to perform the breeding and trialing etc. These batches then
+send back their results via the database to the main program.
+
+The number of batches produced is determined by the number of
+CPUs available. A group of batches distributed to CPUs in this
+way is known as a "span" internally.
+
+Because cross-set breeding is restricted to each batch, the best sets
+are shuffled a bit at the end of each round to spread the 
+facility to interbreed. Such batches are a bit like "islands" in
+the natural world.
+
 ##### Code Distribution
 The most basic set of tests looks at distribution and frequency 
 of occurence of instructions in the entity set of instructions, 

@@ -62,7 +62,7 @@ class MainControlParallel {
         // A span is a set of batches sent to a set of worker apps
         // Spans are of equal length, other than, perhaps, the final span which has the
         // the remnant entities.
-        this.bestSetsPerBatch = 8;
+        this.bestSetsPerBatch = 4;
         this.spanLength  = this.numCPUs * this.bestSetsPerBatch
         this.numSpans = Math.floor(this.numBestSets / this.spanLength);
         this.spanRemnant = this.numBestSets % this.spanLength;
@@ -77,6 +77,7 @@ class MainControlParallel {
             }
         }
         this.spanNum = 0;
+        this.lastSpanStart = 0;
         this.spanStart = 0;
         this.batchProcessCount = 0;
 
@@ -156,8 +157,8 @@ class MainControlParallel {
 
     async batchDataCollection() {
         console.log("collecting batch process data");
-        await this.collectEntityData();
         await this.collectBatchData();
+        await this.collectEntityData();
         this.collectScoreHistory();
         // Update entityNumber and cycleCounter
         if (this.spanNum < this.numSpans - 1 || this.spanRemnant === 0) {
@@ -204,8 +205,8 @@ class MainControlParallel {
         let setNum = this.spanStart;
         while (setNum < this.spanStart + setLen && setNum < this.numBestSets) {
             let entityDataSet = await dbTransactions.fetchTransferEntities(setNum);
+            this.bestSets[setNum] = [];
             if (entityDataSet != null) {
-                this.bestSets[setNum] = [];
                 let set = [];
                 let entityNum = 0;
                 for (let entityData of entityDataSet) {
@@ -250,18 +251,30 @@ class MainControlParallel {
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
         elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
-        console.log("collectEntityData: numSpans:", this.numSpans, "spanStart:", this.spanStart, "set length:", 
-            this.bestSets[this.spanStart].length);
-        this.bestSets[this.spanStart][0].display(this.mainWindow, this.spanStart, 0, elapsedTime, 
-        this.entityNumber, 
-        this.ruleSequenceNum, this.randomCount, 
-        this.monoclonalInsCount, this.monoclonalByteCount,
-        this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-        this.interbreedInsMergeCount,
-        this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-        this.cycleCounter, this.numRounds, this.ruleSequenceNum, terminateProcessing);
+        // Find the nearest non-empty best-set to the span start
+        let p = this.spanStart;
+        let allEmpty = true;
+        for (let i = 0; i < this.numBestSets; i++) {
+            if (this.bestSets[p].length > 0) {
+                allEmpty = false;
+                break;
+            }
+            ++p;
+            if (p >= this.numBestSets) p = 0;
+        }
 
+        if (!allEmpty) {
+            this.bestSets[p][0].display(this.mainWindow, this.spanStart, 0, elapsedTime, 
+            this.entityNumber, 
+            this.ruleSequenceNum, this.randomCount, 
+            this.monoclonalInsCount, this.monoclonalByteCount,
+            this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+            this.interbreedInsMergeCount,
+            this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
+            this.cycleCounter, this.numRounds, this.ruleSequenceNum, terminateProcessing);
+        }
         ++this.spanNum;
+        this.lastSpanStart = this.spanStart;
         this.spanStart += setLen;
         // This returns to the server event loop
     }
@@ -290,11 +303,11 @@ class MainControlParallel {
 
     collectScoreHistory() {
         let numEntitySets = this.spanLength;
-        if (this.spanNum === this.numSpans) {
+        if (this.spanNum === this.numSpans && this.spanRemnant > 0) {
             numEntitySets = this.spanRemnant;
         }
-        for (let i = this.spanStart; i < numEntitySets; i++) {
-            this.updateScoreHistory[i];
+        for (let i = 0; i < numEntitySets; i++) {
+            this.updateScoreHistory(i + this.lastSpanStart);
         }
     }
 
