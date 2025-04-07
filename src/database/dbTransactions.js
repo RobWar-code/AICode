@@ -360,6 +360,33 @@ const dbTransactions = {
 
     },
 
+    async fetchRuleSeeds() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.log ("Could not open db connection");
+            return;
+        }
+
+        try {
+            sql = "SELECT rule_id, seed_rule_mem_space FROM seed_rule";
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.log("fetchRuleSeeds: Problem with select");
+            throw error;
+        }
+
+        await dbConnection.end();
+        
+        rulesets.seedRuleMemSpaces = [];
+        for (let item of results) {
+            let entry = {};
+            entry.ruleId = item.rule_id;
+            entry.memSpace = this.stringToIntArray(item.seed_rule_mem_space);
+            rulesets.seedRuleMemSpaces.push(entry);
+        }
+    },
+
     async loadRules() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {

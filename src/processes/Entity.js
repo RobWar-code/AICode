@@ -945,7 +945,8 @@ class Entity {
         displayData.ruleSequenceNum = ruleSequenceNum;
         displayData.currentMaxScore = rulesets.currentMaxScore;
         displayData.maxScore = rulesets.maxScore;
-        displayData.elapsedTime = Math.floor(elapsedTime * 10000)/10000;
+        let etime = elapsedTime / (3600 * 1000);
+        displayData.elapsedTime = Math.floor(etime * 10000)/10000;
         displayData.randomCount = randomCount;
         displayData.monoclonalInsCount = monoclonalInsCount;
         displayData.monoclonalByteCount = monoclonalByteCount;

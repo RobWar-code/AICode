@@ -28,14 +28,48 @@ Jobs Due
 
     Save only the entity data in the best sets
 
+    Change the transfer batch in MainControlParallel to a complete set, rather than 
+    individual entities
+
+    Remove Test Monoclonal
+
+    Possibly set numCPUs to a maximum of 4, test on widows laptop, which allows for 8
+    and is currently operating at 10 rounds per hour.
+    
+    Check user interface during batch operations
+        * Display selected entity
+            * Check score list
+        Load seed rule
+        Load seed
+        Restore Rule Seed
+        Trace
+        Reconsider Halt Process
+        Select Rule
+
+    * Display Entity - other circumstances.
+        * On single rule completion
+        * On end of rules
+
+    * Prevent auto-display of entity when selection made?
+        No - use Halt Process before displaying specific entity
+
+    * Get Halt Processing working
+
+    * Consider score list for the entity on display - how to generate.
+        Save the score-list with the entity data or re-run the entity?
+        Save the the score-list is a substantial data/time over-head.
+        Score-list for the auto-display entity.
+        * Possibly - re-execute the auto-display entity.
+        Allow for the rule completion data.
+
     * Do the analysis for the worker app to do the processing.
         See ParallelProcessing.txt
 
     * Check the standalone MainControl file
 
-    Allow for seed rule programs in the batch processes
+    * Allow for seed rule programs in the batch processes
 
-    Allow for seed fragments in the batch processes
+    * Allow for seed fragments in the batch processes
 
     * Do the parallel processing modifications to the MainControlParallel file
         * Write the routines for dispatching data to the workers

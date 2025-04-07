@@ -39,7 +39,7 @@ ipcRenderer.on('batchProcessed', (event, data) => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
             ipcRenderer.send("activateMainProcess", 0);
-        }, 5000);
+        }, 10000);
     }
 });
 
@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelRuleSelectionButton = document.getElementById('cancelRuleSelectionButton');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
-    const testMonoclonalButton = document.getElementById('testMonoclonalButton');
 
     bestEntitySelector.addEventListener('submit', (event) => {
         event.preventDefault(); // Prevent the form from reloading the page
@@ -291,10 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadButton.addEventListener('click', (event) => {
         ipcRenderer.send("loadSession", 0);
-    });
-
-    testMonoclonalButton.addEventListener('click', (event) => {
-        ipcRenderer.send('openTestMonoclonal');
     });
 });
 

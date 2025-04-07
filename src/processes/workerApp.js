@@ -55,7 +55,7 @@ class BatchProcess {
     async startProcess() {
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
-        rulesets.seedRuleMemSpaces = await dbTransactions.fetchSeedRuleList();
+        await dbTransactions.fetchRuleSeeds();
         console.log("Seed Rule List:", rulesets.seedRuleMemSpaces.length);
         await this.fetchBatchEntities();
         console.log("Start Process: Entity Number", this.entityNumber);
