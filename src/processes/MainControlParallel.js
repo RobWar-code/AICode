@@ -185,14 +185,8 @@ class MainControlParallel {
         for (let bestSetNum = batchStart; bestSetNum < batchStart + batchLength; bestSetNum++) {
             // Clear this best set from the transfer entities
             await dbTransactions.clearTransferEntitySet(bestSetNum);
-            // Insert the current entities
-            for (let i = 0; i < this.bestSets[bestSetNum].length; ++i) {
-                let entity = this.bestSets[bestSetNum][i];
-                await dbTransactions.saveTransferEntity(bestSetNum, i, entity.entityNumber, 
-                    entity.breedMethod, entity.birthTime, entity.birthDateTime, 
-                    entity.birthCycle, entity.roundNum, entity.registers, entity.initialMemSpace, entity.memSpace,
-                    entity.oldValuesOut, entity.oldParams, entity.score);
-            }
+            // Save the entity set
+            await dbTransactions.saveTransferEntitySet(bestSetNum, this.bestSets[bestSetNum]);
         }
     }
 
@@ -387,7 +381,12 @@ class MainControlParallel {
 
         // Check for single rule run
         if (this.runningSingleRule) {
-            if (entity.score >= rulesets.currentMaxScore * (9/10)) {
+            let passMark = 0.9;
+            let rule = rulesets.getRuleFromSequence(rulesets.ruleSequenceNum);
+            if ("passScore" in rule) {
+                passMark = rule.passScore;
+            }
+            if (entity.score >= rulesets.currentMaxScore * passMark) {
                 let setNum = highIndex;
                 let terminateProcessing = true;
                 this.displayBestSetEntity(setNum, 0, terminateProcessing);
@@ -738,6 +737,7 @@ class MainControlParallel {
         let currentCycle = e1.birthCycle;
         let e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
             this.ruleSequenceNum, this.roundNum, memSpace);
+        e2.breedMethod = e1.breedMethod;
         e2.execute(0, 0);
         e2.display(this.mainWindow, setNum, entityIndex, this.elapsedTime, 
             this.entityNumber, 

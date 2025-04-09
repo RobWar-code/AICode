@@ -595,7 +595,7 @@ and require the functions and objects which they test.
 A test window is also included, currently used to check the monoclonal
 breeding.
 
-## Load/Save Operations
+## Database - Load/Save Operations
 
 The database system used by the app is MySql, node.js implementation.
 
@@ -645,4 +645,60 @@ Inserting each of these entities into their own best set.
 
 The seed rule memory spaces are also loaded and these are inserted into
 empty slots in the best sets as the program runs 
+
+### Parallel Batch Processing Tables
+
+Data is exchanged between the main program and its batch process
+child operations via the database transfer tables, these are follows:
+
+Table:transfer_entity
+- id INT AUTO_INCREMENT PRIMARY KEY
+- best_set_num INT
+- inx INT
+- score FLOAT
+- entity_number INT
+- breed_method VARCHAR(64)
+- birth_time BIGINT
+- birth_date_time VARCHAR(256)
+- creation_cycle INT
+- round_num INT"
+- reg_a INT
+- reg_b INT
+- reg_c INT
+- reg_cf INT
+- reg_zf INT
+- reg_sp INT
+- reg_ip INT
+- reg_ic INT
+- mem_space VARCHAR(256)
+- final_mem_space VARCHAR(256)
+
+Table: transfer_entity_output
+- id INT AUTO_INCREMENT PRIMARY KEY
+- transfer_entity_id INT
+- best_set_num INT
+- best_set_inx INT
+- inx INT
+- output_block VARCHAR(256)
+
+Table: transfer_entity_input
+- id INT AUTO_INCREMENT PRIMARY KEY
+- transfer_entity_id INT
+- best_set_num INT
+- best_set_inx INT
+- inx INT
+- input_block VARCHAR(256)
+    
+Table: batch_data
+- batch_num INT
+- batch_num monoclonal_ins_count INT
+- monoclonal_byte_count INT
+- interbreed_count INT
+- interbreed2_count INT
+- interbreed_flagged_count INT
+- interbreed_ins_merge_count INT
+- self_breed_count INT
+- seed_rule_breed_count INT
+- random_count INT
+- cross_set_count INT
 

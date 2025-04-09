@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     scoreListButton.addEventListener('click', (event) => {
+        console.log("Got to display score list");
         entityDisplay.displayScoreList();
     });
 

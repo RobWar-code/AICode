@@ -1,3 +1,14 @@
+09/04/2025
+Parallel Processing completed, no speed gain on the laptops,
+but ready for the use of a multi-core processing unit.
+
+The seed code for paramsOps contained an error, but this was
+corrected by the system after about 100 rounds.
+
+Pre-existing entity solutions were utilised efficiently.
+
+The trial continues on Param Operations 7
+
 31/03/2025
 Added seed to continuing trial, operation
     multiplyAdjacentParamOp

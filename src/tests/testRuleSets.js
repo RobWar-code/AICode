@@ -8,6 +8,13 @@ const Entity = require('../processes/Entity.js');
 const testRuleSets = {
     instructionSet: new InstructionSet(),
 
+    testBubbleSort: function() {
+        let a = [45,35,64,87,9,11,20,32,31,18,46,57,91,12,18];
+        console.log("Start:", a);
+        rulesets.bubbleSort2(a);
+        console.log("End:", a);
+    },
+
     testUpdateSeedRuleFragments: function () {
         // Populate the seed rule list
         let seedRules = [
@@ -1682,6 +1689,36 @@ const testRuleSets = {
 
     },
 
+    testParamOpsDivide: function () {
+        rulesets.initialise();
+
+        // Test the adjacent param operations divide operation.
+        let inputs = [
+            [
+                47,5,2, 47,2,0, 47,30,7, 47,100,9, 47,40,6, 47,45,25, 47,15,4, 47,108,9,
+                47,62,3, 47,87,5, 47,220,15, 47,96,6, 47,84,23, 47,31,7, 47,18,7, 47,13,5
+            ],
+            [
+                47,9,2, 47,11,0, 47,203,20, 47,5,5, 47,108,10, 47,53,25, 47,8,9, 47,33,9,
+                47,11,3, 47,10,5, 47,93,16, 47,7,7, 47,203,45, 47,29,7, 47,230,76, 47,66,25
+            ]
+        ];
+
+        let ruleIndex = 53;
+
+        // Check Score List Initialisation Output Data
+        console.log(rulesets.scoreList[ruleIndex].outputs);
+        let entityOutputs = [];
+        entityOutputs.push(rulesets.scoreList[ruleIndex].outputs[0]);
+        let ruleOutputs = rulesets.scoreList[ruleIndex].outputs;
+        let score = rulesets.getOutputComparisonScore(ruleOutputs, entityOutputs);
+        console.log("Test 1, expect 1:", score);
+        entityOutputs.push(rulesets.scoreList[ruleIndex].outputs[1]);
+        score = rulesets.getOutputComparisonScore(ruleOutputs, entityOutputs);
+        console.log("Test 2, expect 1:", score);
+
+    },
+
     testConvertASCIINumbers: function() {
         let ruleNum = 18;
         rulesets.initialise();
@@ -2139,7 +2176,11 @@ const testByteRules = {
 }
 console.log("Got Here");
 
-testRuleSets.testUpdateSeedRuleFragments();
+testRuleSets.testBubbleSort();
+
+// testRuleSets.testParamOpsDivide();
+
+// testRuleSets.testUpdateSeedRuleFragments();
 // testRuleSets.testSearchRuleSeedForFragment();
 // testRuleSets.testGetSeedFragmentListed();
 // testRuleSets.testExtractMemSpaceFragment();

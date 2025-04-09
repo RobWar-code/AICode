@@ -996,7 +996,9 @@ class Entity {
         displayData.registers = this.registers;
 
         // Score list
-        displayData.scoreList = this.scoreList;
+        displayData.scoreList = rulesets.scoreList;
+        displayData.ruleScores = this.ruleScores;
+        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
         displayData.score = Math.floor(this.score * 10000)/10000;
 
         // Details
