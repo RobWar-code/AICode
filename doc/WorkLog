@@ -19,15 +19,23 @@ Jobs Due
 
     Do further analysis of scale of modifications to existing entity solutions
     
-    Do a sort rule
-
     + Add a completion of all rules procedure. Untested
 
     Separate the display cycle data from the display entity data
     and then combine them in the main program entityDisplay rather
     than passing them as parameters to the entity object function.
 
-    Update the README with the batch transfer tables
+    * Update the README with the batch transfer tables
+
+    * Do a sort rule
+
+    * Do the lists of rule sample data for access by the entity programs
+
+    Provide the LDSI A, (C) and LDSO A, (C) instructions
+
+    Check the transfer of sample data for use by the sample instructions
+
+    Clear all of the tables and re-start trials with the LDSI and LDSO instructions
 
     Backup the projects folder on the USB.
 

@@ -1095,8 +1095,9 @@ class Entity {
         let {A, B, C, R, S, CF, ZF, SP, IP, IC} = this.registers;
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
         let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, 
-            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, this.roundNum);
+            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, rule, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         // Execution Cycle Completed

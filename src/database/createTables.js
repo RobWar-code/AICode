@@ -4,6 +4,8 @@ const dbConn = require('./dbConn.js');
 
 createTables();
 
+console.log ("Done");
+
 async function createTables() {
     const connection = await dbConn.openConnection();
     if (connection === null) {
@@ -12,7 +14,10 @@ async function createTables() {
 
     let sql;
 
-    // await clearTables(connection);
+    await clearTables(connection);
+
+    console.log("Tables Cleared");
+    return;
 
     /*
 
@@ -168,7 +173,6 @@ async function clearTables(connection) {
     sql = "DELETE FROM transfer_entity";
     await connection.query(sql);
 
-    /*
     sql = "DELETE FROM rule",
     await connection.query(sql);
     
@@ -180,6 +184,5 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM session";
     await connection.query(sql);
-    */
 
 }
