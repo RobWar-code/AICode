@@ -678,12 +678,12 @@ const dbTransactions = {
         }
 
         // Clear the transfer entity outputs for this set
-        let sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${setNum}`;
-        [results] = await dbConnection.query(sql);
+        // let sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${setNum}`;
+        // [results] = await dbConnection.query(sql);
 
         // Clear the transfer entity inputs for this set
-        sql = `DELETE FROM transfer_entity_input WHERE best_set_num = ${setNum}`;
-        [results] = await dbConnection.query(sql);
+        // sql = `DELETE FROM transfer_entity_input WHERE best_set_num = ${setNum}`;
+        // [results] = await dbConnection.query(sql);
 
         // Clear the transfer entities for this best set
         sql = `DELETE FROM transfer_entity WHERE best_set_num = ${setNum}`;
@@ -721,10 +721,10 @@ const dbTransactions = {
             }
 
             // Save the entity output blocks
-            await this.saveTransferEntityOutputs(dbConnection, transferEntityId, setNum, index, entity.oldValuesOut);
+            // await this.saveTransferEntityOutputs(dbConnection, transferEntityId, setNum, index, entity.oldValuesOut);
 
             // Save the transfer entity input blocks
-            await this.saveTransferEntityInputs(dbConnection, transferEntityId, setNum, index, entity.oldParams);
+            // await this.saveTransferEntityInputs(dbConnection, transferEntityId, setNum, index, entity.oldParams);
 
             ++index;
         }

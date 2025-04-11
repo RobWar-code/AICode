@@ -1,3 +1,14 @@
+10/04/2025
+The sortParams rule reached a score of only 11 after a day'S
+processing. Added the rule sortTriplets as a step.
+
+Added the instructions LDSI and LDSO, to allow the entities
+access to sample data input and output. The aim here is to
+allow the entities the possibility of evolving intelligent/
+responsive code.
+
+Started a new trial from scratch with a cleared database.
+
 09/04/2025
 Parallel Processing completed, no speed gain on the laptops,
 but ready for the use of a multi-core processing unit.

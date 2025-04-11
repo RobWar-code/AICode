@@ -25,17 +25,27 @@ Jobs Due
     and then combine them in the main program entityDisplay rather
     than passing them as parameters to the entity object function.
 
+    Consider reintroducing the serial processing mode for the single cpu laptops.
+    Which runs slightly faster than the parallel version. Put option in index.js
+
+    Consider dropping the transfer outputs/inputs tables as the entity programs are 
+    re-executed for display now.
+
+    Do the greaterOfThree rule
+
+    Update the README instruction set listing with the LDSI, LDSO instructions
+
     * Update the README with the batch transfer tables
 
     * Do a sort rule
 
     * Do the lists of rule sample data for access by the entity programs
 
-    Provide the LDSI A, (C) and LDSO A, (C) instructions
+    * Provide the LDSI A, (C) and LDSO A, (C) instructions
 
-    Check the transfer of sample data for use by the sample instructions
+    * Check the transfer of sample data for use by the sample instructions
 
-    Clear all of the tables and re-start trials with the LDSI and LDSO instructions
+    * Clear all of the tables and re-start trials with the LDSI and LDSO instructions
 
     Backup the projects folder on the USB.
 

@@ -56,7 +56,6 @@ ipcRenderer.on("displayEntity", (event, data) => {
 ipcRenderer.on("mainCycleCompleted", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "User-interaction Active";
-    /*
     if (!processingCancelled && !testObj.testOperation) {
         processTimeout = setTimeout(() => {
             document.getElementById("statusDiv").style.display = "block";
@@ -64,7 +63,6 @@ ipcRenderer.on("mainCycleCompleted", (event, data) => {
             ipcRenderer.send("activateMainProcess", 0);
         }, 5000);
     }
-    */
 });
 
 ipcRenderer.on("displayHistory", (event, data) => {

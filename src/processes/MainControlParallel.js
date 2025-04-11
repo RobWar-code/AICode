@@ -52,6 +52,7 @@ class MainControlParallel {
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
         dbTransactions.fetchRuleSeeds();
+        dbTransactions.loadFragments();
         rulesets.currentMaxScore = rulesets.getCurrentMaxScore();
         this.setupBatchProcessing();
     }
@@ -229,11 +230,11 @@ class MainControlParallel {
                     let finalMemSpace = this.stringToIntArray(entityData.final_mem_space);
                     entity.memSpace = finalMemSpace;
                     // Collect the transfer entity output data
-                    let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(setNum, entityNum);
-                    entity.oldValuesOut = oldValuesOut;
+                    // let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(setNum, entityNum);
+                    // entity.oldValuesOut = oldValuesOut;
                     // Collect the transfer entity input data
-                    let oldParams = await dbTransactions.fetchTransferEntityInputs(setNum, entityNum);
-                    entity.oldParams = oldParams;
+                    // let oldParams = await dbTransactions.fetchTransferEntityInputs(setNum, entityNum);
+                    // entity.oldParams = oldParams;
                     set.push(entity);
                     ++entityNum;
                 }

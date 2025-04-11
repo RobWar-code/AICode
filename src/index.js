@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const MainControlParallel = require(path.join(__dirname, './processes/MainControlParallel.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
@@ -21,6 +22,7 @@ let traceWindow = null;
 let program = null;
 let cancelled = false;
 let testWindow = null;
+let processMode = "serial";
 
 const createWindow = () => {
   // Create the browser window.
@@ -41,7 +43,12 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.once("did-finish-load", () => {
-    program = new MainControlParallel(mainWindow);
+    if (processMode === "serial") {
+      program = new MainControl(mainWindow);
+    }
+    else {
+      program = new MainControlParallel(mainWindow);
+    }
     // Global Data
     let globalData = {numBestSets: program.numBestSets};
     mainWindow.webContents.send("setGlobals", globalData);
@@ -152,7 +159,12 @@ ipcMain.on("activateMainProcess", () => {
   program.seedEntity = null;
   program.ruleSequenceNum = rulesets.ruleSequenceNum;
   
-  program.batchProcessLoop();
+  if (processMode === "serial") {
+    program.mainLoop();
+  }
+  else {
+    program.batchProcessLoop();
+  }
   mainWindow.webContents.send("mainCycleCompleted", 0);
 });
 

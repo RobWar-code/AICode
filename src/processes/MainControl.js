@@ -48,13 +48,8 @@ class MainControl {
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
-    }
-
-    async batchProcessLoop() {
-        // Get the number of processors
-
-        // Calculate the display cycle etc.
-
+        dbTransactions.fetchRuleSeeds();
+        dbTransactions.loadFragments();
     }
 
     async mainLoop() {
@@ -71,11 +66,10 @@ class MainControl {
                 let endTime = Date.now();
                 let elapsedTime = endTime - this.startTime;
                 this.elapsedTime = elapsedTime;
-                elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
                 let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
                 let terminateProcessing = false;
                 if (this.bestSets[this.bestSetNum].length > 0) {
-                    this.bestSets[this.bestSetNum][0].display(this.mainWindow, this.bestSetNum, elapsedTime, 
+                    this.bestSets[this.bestSetNum][0].display(this.mainWindow, this.bestSetNum, 0, elapsedTime, 
                         this.entityNumber, 
                         this.ruleSequenceNum, this.randomCount, 
                         this.monoclonalInsCount, this.monoclonalByteCount,

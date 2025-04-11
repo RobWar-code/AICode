@@ -98,10 +98,10 @@ class BatchProcess {
                     // Final memSpace
                     entity.memSpace = finalMemSpace;
                     // Fetch the transfer entity outputs
-                    let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(bestSetNum, entityNum);
-                    entity.oldValuesOut = oldValuesOut;
-                    let oldParams = await dbTransactions.fetchTransferEntityInputs(bestSetNum, entityNum);
-                    entity.oldParams = oldParams;
+                    // let oldValuesOut = await dbTransactions.fetchTransferEntityOutputs(bestSetNum, entityNum);
+                    // entity.oldValuesOut = oldValuesOut;
+                    // let oldParams = await dbTransactions.fetchTransferEntityInputs(bestSetNum, entityNum);
+                    // entity.oldParams = oldParams;
                     entity.score = score;
                     set.push(entity);
                     ++entityNum;
