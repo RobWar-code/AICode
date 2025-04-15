@@ -25,27 +25,13 @@ Jobs Due
     and then combine them in the main program entityDisplay rather
     than passing them as parameters to the entity object function.
 
-    Consider reintroducing the serial processing mode for the single cpu laptops.
-    Which runs slightly faster than the parallel version. Put option in index.js
+    Consider separating out the rule/seed option functions
+    into their own module from the main control object, rather
+    than repeating the functions in the serial and parallel
+    modules.
 
-    Consider dropping the transfer outputs/inputs tables as the entity programs are 
-    re-executed for display now.
-
-    Do the greaterOfThree rule
 
     Update the README instruction set listing with the LDSI, LDSO instructions
-
-    * Update the README with the batch transfer tables
-
-    * Do a sort rule
-
-    * Do the lists of rule sample data for access by the entity programs
-
-    * Provide the LDSI A, (C) and LDSO A, (C) instructions
-
-    * Check the transfer of sample data for use by the sample instructions
-
-    * Clear all of the tables and re-start trials with the LDSI and LDSO instructions
 
     Backup the projects folder on the USB.
 
@@ -77,6 +63,41 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    15/04/2025
+
+    * Resolve the hang-up problem with double click on Halt Process
+    whilst processing.
+
+    * Heap full problem after a few hours, may be to do with the
+    MainProcess module. Fix for both serial and parallel operations.
+        Only create the new mainProcess object at startup.
+    
+    * Remove the byte score reference from the instruction set.
+
+    * Separate the main processing loop into its own module so that
+    it can be shared between the parallel and serial
+    processing programs.
+
+    * Consider reintroducing the serial processing mode for the single cpu laptops.
+    Which runs slightly faster than the parallel version. Put option in index.js
+
+    * Consider dropping the transfer outputs/inputs tables as the entity programs are 
+    re-executed for display now.
+
+    * Do the greaterOfThree rule
+
+    * Update the README with the batch transfer tables
+
+    * Do a sort rule
+
+    * Do the lists of rule sample data for access by the entity programs
+
+    * Provide the LDSI A, (C) and LDSO A, (C) instructions
+
+    * Check the transfer of sample data for use by the sample instructions
+
+    * Clear all of the tables and re-start trials with the LDSI and LDSO instructions
+
     9/4/2025
 
     * Update the README with the parallel batch processing details

@@ -153,7 +153,7 @@ class MainControlParallel {
                     this.batchDataCollection();
                 }
             }
-            // console.log(`Worker ${process} exited with code ${code}`);
+            console.log(`Worker ${process} exited with code ${code}`);
         });
     
     }

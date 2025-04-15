@@ -1229,6 +1229,7 @@ class InstructionSet {
                     pointer = memSpace[IP];
                     valuesOut[pointer] = A;
                     // Get byte score
+                    /*
                     resultObj = rulesets.getOutputByteScore(A, pointer, initialParams, params, 
                         valuesOut, ruleSequenceNum, roundNum);
                     R = resultObj.totalScore;
@@ -1243,6 +1244,7 @@ class InstructionSet {
                         R = 0;
                         S = 0;
                     }
+                    */
                     ++IP;
                     break;
                 case 9:
@@ -1253,6 +1255,7 @@ class InstructionSet {
                 case 10:
                     // STO (C), A
                     valuesOut[C] = A;
+                    /*
                     // Get byte score
                     resultObj = rulesets.getOutputByteScore(A, C, initialParams, params, valuesOut, 
                         ruleSequenceNum, roundNum);
@@ -1268,6 +1271,7 @@ class InstructionSet {
                         R = 0;
                         S = 0;
                     }
+                    */
                     ++IP;
                     break;
                 case 11:

@@ -22,7 +22,7 @@ let traceWindow = null;
 let program = null;
 let cancelled = false;
 let testWindow = null;
-let processMode = "serial";
+let processMode = "parallel"; // serial or parallel
 
 const createWindow = () => {
   // Create the browser window.
@@ -160,12 +160,12 @@ ipcMain.on("activateMainProcess", () => {
   program.ruleSequenceNum = rulesets.ruleSequenceNum;
   
   if (processMode === "serial") {
-    program.mainLoop();
+    program.doProcess(program);
+    mainWindow.webContents.send("mainCycleCompleted", 0);
   }
   else {
     program.batchProcessLoop();
   }
-  mainWindow.webContents.send("mainCycleCompleted", 0);
 });
 
 ipcMain.on("traceStep", (data) => {

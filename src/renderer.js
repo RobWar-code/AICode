@@ -17,6 +17,7 @@ let processingCancelled = true;
 let processTimeout = null;
 let batchStatus = "not started";
 let traceActive = false;
+let processingMode = false;
 
 let globals = null;
 
@@ -34,10 +35,12 @@ ipcRenderer.on('batchProcessed', (event, data) => {
     batchStatus = "batch span processed";
     document.getElementById('statusDiv').style.display = "block";
     document.getElementById('statusPara').innerText = batchStatus + " User Interface Active";
+    processingMode = false;
     if (!processingCancelled && !testObj.testOperation) {
         processTimeout = setTimeout(() => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
+            processingMode = true;
             ipcRenderer.send("activateMainProcess", 0);
         }, 10000);
     }
@@ -56,10 +59,12 @@ ipcRenderer.on("displayEntity", (event, data) => {
 ipcRenderer.on("mainCycleCompleted", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "User-interaction Active";
+    processingMode = false;
     if (!processingCancelled && !testObj.testOperation) {
         processTimeout = setTimeout(() => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
+            processingMode = true;
             ipcRenderer.send("activateMainProcess", 0);
         }, 5000);
     }
@@ -163,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(processTimeout);
         }
         else {
+            if (processingMode) return;
+            processingMode = true;
             document.getElementById("haltProcessButton").innerText = "Halt Process";
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";

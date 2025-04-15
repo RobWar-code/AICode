@@ -1,3 +1,19 @@
+13/04/2025
+Trial continues on round 673.
+Seed insertions have been:
+    outputSeriesOfSeries
+    moduloFirstParam
+    divideFirstParam
+
+current rule is duplicateParams
+
+11/04/2025
+Reintroduced the serial processing mode, slightly faster on the
+windows laptop, slower on the Linux system.
+
+Trial now includes the greater of three rule and the sort triplets 
+rule. Will add seed as required.
+
 10/04/2025
 The sortParams rule reached a score of only 11 after a day'S
 processing. Added the rule sortTriplets as a step.
