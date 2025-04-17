@@ -1,3 +1,18 @@
+16/04/2025
+Inserted the seed program
+    greaterOfAdjacent params
+Which failed to reaced target after 800 rounds.
+
+15/04/2025
+Trial took 400 rounds to complete duplicate params
+this time, for some reason. It has now been on
+greater of adjacent params for 400 rounds, reaching
+a score of 13.5/18
+It is not yet clear why these should have taken
+so long this time, although the extended probability
+field due to the LDSI and LDSO instructions may
+be the main reason.
+
 13/04/2025
 Trial continues on round 673.
 Seed insertions have been:
