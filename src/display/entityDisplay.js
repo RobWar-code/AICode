@@ -52,6 +52,8 @@ const entityDisplay = {
     },
 
     displayDataValues(data) {
+        let displayGroupBy = parseInt(data.displayGroupBy);
+
         let initialParams = data.initialParamsList;
         for (let i = 0; i < this.numDataDivs; i++) {
             let paramsDiv = "initialParams" + i;
@@ -60,10 +62,19 @@ const entityDisplay = {
                 document.getElementById(paramsList).innerHTML = "";
             }
             else {
-                listParams(paramsDiv, paramsList, initialParams[i]);
+                listParams(paramsDiv, paramsList, initialParams[i], displayGroupBy);
             }
         }
         // Parameter blocks
+        if (data.params.length < 4) {
+            console.log("Got Here");
+            document.getElementById("inputsRow2").style.display = "none";
+            document.getElementById("outputsRow2").style.display = "none";
+        }
+        else {
+            document.getElementById("inputsRow2").style.display = "block";
+            document.getElementById("outputsRow2").style.display = "block";
+        }
         for (let i = 0; i < this.numDataDivs; i++) {
             let num = i;
             let divId = "inputParams" + num;
@@ -72,7 +83,7 @@ const entityDisplay = {
                 document.getElementById(listId).innerHTML = "";
             }
             else {
-                listDataBlocks(divId, listId, data.params[i]);
+                listDataBlocks(divId, listId, data.params[i], displayGroupBy);
             }
         }
         // Output Blocks
@@ -84,15 +95,15 @@ const entityDisplay = {
                 document.getElementById(listId).innerHTML = "";
             }
             else {
-                listDataBlocks(divId, listId, data.valuesOut[i]);
+                listDataBlocks(divId, listId, data.valuesOut[i], displayGroupBy);
             }
         }
 
-        function listParams(paramsDiv, paramsList, values) {
+        function listParams(paramsDiv, paramsList, values, displayGroupBy) {
             document.getElementById(paramsList).remove();
             let html = `<div id="${paramsList}">`;
             for (let i = 0; i < values.length; i++) {
-                let flag = (Math.floor(i / 4)) % 2;
+                let flag = (Math.floor(i / displayGroupBy)) % 2;
                 if (flag === 0) background = "#d0d0d0";
                 else background = "#00d0d0";
                 html += `<span style="background-color: ${background}">${values[i]} <span>`;
@@ -101,7 +112,7 @@ const entityDisplay = {
             document.getElementById(paramsDiv).innerHTML = html;
         } 
     
-        function listDataBlocks(paramsDiv, paramsList, values) {
+        function listDataBlocks(paramsDiv, paramsList, values, displayGroupBy) {
             document.getElementById(paramsList).remove();
             let html = `<div id="${paramsList}">`;
             for (let i = 0; i < values.length; i++) {
@@ -111,6 +122,9 @@ const entityDisplay = {
                     html += "<p style='margin-bottom: 1px;'>";
                     html += `<span style='display: inline-block; width: 30px;'>${offset})</span>`;
                 }
+                flag = Math.floor(i / displayGroupBy) % 2;
+                let background = "#C0C0C0";
+                if (flag === 1) background = "#00F0F0"; 
                 html += `<span style="background-color: ${background}">${values[i]} <span>`;
                 if (flag === 7) html += "</p>";
             }

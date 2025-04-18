@@ -1506,6 +1506,230 @@ const seedPrograms = {
             ]
         },
         {
+            name: "sortTriplets",
+            description: "Sort groups of three from the input data",
+            program: [
+                {
+                    ins: "LD A, IMM",
+                    data: [8] // Number of triplets 
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Triplet Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Triplet Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output pointer
+                },
+                {
+                    // Sort Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Triplet Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // First item
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)" // Second item
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "PUSH C"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "JRC",
+                    data: [7] // Swap
+                },
+                {
+                    // Output the two values
+                    ins: "SWP A, B" // A is first item
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B" // A is second item
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "JR",
+                    data: [5] // Third Byte
+                },
+                {
+                    // Swap:
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    // Third Byte:
+                    ins: "POP C" // Input Pointer
+                },
+                {
+                    ins: "SWP A, B" // B is highest of first two
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)" // Third Item
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNC",
+                    data: [20] // Output final two
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "STO (C), A" // Third item
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "STO (C), A" // Second Item
+                },
+                {
+                    // Compare the third item with the first
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LDO A, (C)" // 1st output item
+                },
+                {
+                    ins: "CMP A, B" // Compare the first output item with the new second item
+                },
+                {
+                    ins: "JRC",
+                    data: [15] // Order Correct
+                },
+                {
+                    // Swap the first for the third item (B)
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "JR",
+                    data: [8] // Order Correct
+                },
+                {
+                    // Output Final Two:
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B",
+                },
+                {
+                    ins: "STO (C), A",
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    // Order Correct:
+                    ins: "LD A, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [3]
+                },
+                {
+                    ins: "ADD A, B",
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Triplet Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xB7] // Sort Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "subtractAdjacentParamOp",
             description: "Subtract adjacent param as indicated by a - op",
             program: [

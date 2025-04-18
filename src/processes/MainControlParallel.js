@@ -446,7 +446,7 @@ class MainControlParallel {
         this.eliminateDuplicateScores(scoreList);
 
         // Eliminate duplicate score best set entries
-        this.eliminateDuplicateOutput();
+        // this.eliminateDuplicateOutput();
         
     }
 

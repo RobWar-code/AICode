@@ -1,3 +1,14 @@
+18/04/2025
+Trial at sortTriplets has taken 518 rounds
+to reach 19.7/28
+
+17/04/2025
+Removed the set clearance
+    eliminateDuplicateOuptuts
+operation, as this seemed counter-productive.
+Trial for greaterThan adjacent then completed in 
+about 50 rounds.
+
 16/04/2025
 Inserted the seed program
     greaterOfAdjacent params

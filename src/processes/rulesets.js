@@ -933,11 +933,12 @@ const rulesets = {
 
         let scoreItem45 = {rule: "Sort Triplets", ruleId: 65,
             retain: false, skip: false, sequenceNum: 34, 
-            score: 0, completionRound: -1, max: 10, startRoundNum: 800,
+            score: 0, displayGroupBy: 3, completionRound: -1, 
+            max: 10, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 18,
             inBlockStart: 0, inBlockLen: 18,
             highIC: 16 * 15 * 8,
-            highIP: 105,
+            highIP: 80,
             sampleIn: [17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17,21,9],
             sampleOut: [],
             paramsIn: [
@@ -1098,7 +1099,7 @@ const rulesets = {
 
         let scoreItem51 = {rule: "Use op to Convert Adjacent Params 1", ruleId: 57, 
             retain: false, skip: false, sequenceNum: 40, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
@@ -1127,7 +1128,7 @@ const rulesets = {
 
         let scoreItem52 = {rule: "Use op to Convert Adjacent Params 2", ruleId: 58, 
             retain: false, skip: false, sequenceNum: 41, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
@@ -1156,7 +1157,7 @@ const rulesets = {
 
         let scoreItem53 = {rule: "Use op to Convert Adjacent Params 3", ruleId: 59, 
             retain: false, skip: false, sequenceNum: 42, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
@@ -1186,7 +1187,8 @@ const rulesets = {
         // Multiply
         let scoreItem54 = {rule: "Use op to Convert Adjacent Params 4", ruleId: 60, 
             retain: false, skip: false, sequenceNum: 43, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy:3, 
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 * 16 + 100 * 4,
@@ -1216,7 +1218,8 @@ const rulesets = {
         // Modulo
         let scoreItem55 = {rule: "Use op to Convert Adjacent Params 5", ruleId: 61, 
             retain: false, skip: false, sequenceNum: 44, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 * 16 + 100 * 4,
@@ -1246,7 +1249,8 @@ const rulesets = {
         // Divide
         let scoreItem56 = {rule: "Use op to Convert Adjacent Params 6", ruleId: 62, 
             retain: false, skip: false, sequenceNum: 45, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 14 * 16,
@@ -1275,7 +1279,8 @@ const rulesets = {
 
         let scoreItem57 = {rule: "Use op to Convert Adjacent Params 7", ruleId: 54, 
             retain: false, skip: false, sequenceNum: 46, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
@@ -1304,7 +1309,8 @@ const rulesets = {
 
         let scoreItem58 = {rule: "Use op to Convert Adjacent Params 8", ruleId: 55, 
             retain: false, skip: false, sequenceNum: 47, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
@@ -1333,7 +1339,8 @@ const rulesets = {
 
         let scoreItem59 = {rule: "Use op to Convert Adjacent Params 9", ruleId: 56, 
             retain: false, skip: false, sequenceNum: 48, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 5, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
             inBlockLen: 48,
             highIC: 16 * 25 + 100 * 4,
@@ -1363,7 +1370,8 @@ const rulesets = {
         // May need to break this into separate rules
         let scoreItem60 = {rule: "Use op to Convert Adjacent Params 10", ruleId: 31,
             retain: false, skip: false, sequenceNum: 49, 
-            score: 0, completionRound: -1, max: 20, startRoundNum: 800, 
+            score: 0, completionRound: -1, displayGroupBy: 3,
+            max: 20, startRoundNum: 800, 
             outBlockStart: 0, outBlockLen: 32,
             inBlockStart: 0, inBlockLen: 96,
             highIC: 5000,
@@ -1417,7 +1425,8 @@ const rulesets = {
         let asciiParams2 = this.getASCIIParams(2);
         let scoreItem62 = {rule: "Convert ASCII Numbers 2", ruleId: 33,
             retain: false, skip: false, sequenceNum: 51, 
-            score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+            score: 0, completionRound: -1, displayGroupBy:3, 
+            max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             sampleIn: sampleASCII2,
@@ -1432,7 +1441,7 @@ const rulesets = {
 
         let sampleASCII3 = this.getASCIIParams(7);
         let asciiParams3 = this.getASCIIParams(3);
-        let scoreItem63 = {rule: "Convert ASCII Numbers 2", ruleId: 34,
+        let scoreItem63 = {rule: "Convert ASCII Numbers 3", ruleId: 34,
             retain: false, skip: false, sequenceNum: 52, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,
@@ -1449,7 +1458,7 @@ const rulesets = {
 
         let sampleASCII4 = this.getASCIIParams(8);
         let asciiParams4 = this.getASCIIParams(4);
-        let scoreItem64 = {rule: "Convert ASCII Numbers 2", ruleId: 35,
+        let scoreItem64 = {rule: "Convert ASCII Numbers 4", ruleId: 35,
             retain: false, skip: false, sequenceNum: 53, 
             score: 0, completionRound: -1, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 16,

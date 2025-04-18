@@ -300,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function doEntityDisplay(bestSetNum, bestSetEntityNum) {
+    console.log("doEntityDisplay - reached");
     ipcRenderer.send("bestSetEntityDisplay", {bestSetNum: bestSetNum, bestSetEntityNum: bestSetEntityNum});
 }
 

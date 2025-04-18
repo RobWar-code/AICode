@@ -30,8 +30,13 @@ Jobs Due
     than repeating the functions in the serial and parallel
     modules.
 
+    Do the sort triplets seed code
+    
+    * Only display the input and output block divs for the
+    number of parameter blocks, rather than six including
+    empty blocks.
 
-    Update the README instruction set listing with the LDSI, LDSO instructions
+    * Update the README instruction set listing with the LDSI, LDSO instructions
 
     Backup the projects folder on the USB.
 

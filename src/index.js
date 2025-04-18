@@ -22,7 +22,7 @@ let traceWindow = null;
 let program = null;
 let cancelled = false;
 let testWindow = null;
-let processMode = "parallel"; // serial or parallel
+let processMode = "serial"; // serial or parallel
 
 const createWindow = () => {
   // Create the browser window.

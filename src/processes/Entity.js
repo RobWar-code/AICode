@@ -962,6 +962,15 @@ class Entity {
         displayData.ruleScores = this.ruleScores;
         displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
 
+        // Get the display grouping for inputs and outputs
+        let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
+        if ("displayGroupBy" in rule) {
+            displayData.displayGroupBy = rule.displayGroupBy;
+        }
+        else {
+            displayData.displayGroupBy = 4;
+        }
+
         mainWindow.webContents.send('displayEntity', displayData);
 
         return;

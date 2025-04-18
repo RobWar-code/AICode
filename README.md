@@ -242,6 +242,12 @@ Instructions
 |                    |                    | LDI A, (C)                              |
 |                    | Read Output Area   | LDO A, (MEM)                            |
 |                    |                    | LDO A, (C)                              |
+|                    | Read Sample Input  | LDSI A, (C)                             |
+|                    | Read Sample Output | LDSO A, (C)                             |
+|                    | Get Input Length   | LDIL A                                  |
+|                    | Get Output Length  | LDOL A                                  |
+|                    | Sample Input Length| LSIL A                                  |
+|                    | Sample Output Len  | LSOL A                                  |
 |                    | ------------------ | --------------------------------------- |
 |                    | Write Code Area	  | ST (MEM), A                             |
 |                    |                    | ST (C), A                               |

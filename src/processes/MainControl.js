@@ -492,9 +492,32 @@ class MainControl {
         this.crossSetCount = 0;
         this.startTime = Date.now();
 
-        this.mainLoop();
+        this.doProcess();
         this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }
+
+    displayBestSetEntity(setNum, entityIndex, terminateProcessing) {
+        // Prepare and re-execute the entity
+        let e1 = this.bestSets[setNum][entityIndex];
+        let memSpace = e1.initialMemSpace;
+        let asRandom = false;
+        let seeded = false;
+        let currentCycle = e1.birthCycle;
+        let e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
+            this.ruleSequenceNum, this.roundNum, memSpace);
+        e2.breedMethod = e1.breedMethod;
+        e2.execute(0, 0);
+        e2.display(this.mainWindow, setNum, entityIndex, this.elapsedTime, 
+            this.entityNumber, 
+            this.ruleSequenceNum, this.randomCount, 
+            this.monoclonalInsCount, this.monoclonalByteCount,
+            this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
+            this.interbreedInsMergeCount,
+            this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
+            this.cycleCounter, this.numRounds, this.ruleSequenceNum, terminateProcessing);
+
+    }
+
 }
 
 module.exports = MainControl;
