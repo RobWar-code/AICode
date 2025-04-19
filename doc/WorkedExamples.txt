@@ -5,6 +5,7 @@ Contents
         Review of Methodology
             Further Detailed Analysis
         Code Entrapments
+        Approaches to Code Development
     Ruleset Strategies
         Selecting Rules
             Combining Rules
@@ -126,6 +127,24 @@ Contents
 
     We have to bear in mind that it is code "solutions" that we are looking for,
     rather than output results per se.
+
+<h2>Approaches to Code Development
+
+    The most likely approaches to the trialing and development of code
+    that might be incorporated into a system are:
+        Sequential Trials
+        Random Trials
+        Analytical Trials
+
+    Or hybrids between these approaches.
+
+    Sequential trials are generally not applicable because of the
+    scale of code combinations and permutations.
+
+    Random trials with scored performance and accumulated variations
+    provides a means of exploring a very large probability space,
+    although the time-scales involved may be very large.
+
         
 <h1>Ruleset Strategies
 

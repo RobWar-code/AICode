@@ -1,6 +1,7 @@
 18/04/2025
 Trial at sortTriplets has taken 518 rounds
 to reach 19.7/28
+Provided the seed program to complete this.
 
 17/04/2025
 Removed the set clearance

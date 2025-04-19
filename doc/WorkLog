@@ -21,16 +21,18 @@ Jobs Due
     
     + Add a completion of all rules procedure. Untested
 
-    Separate the display cycle data from the display entity data
+    Code Enhancement - Separate the display cycle data from the display entity data
     and then combine them in the main program entityDisplay rather
     than passing them as parameters to the entity object function.
 
-    Consider separating out the rule/seed option functions
+    Code Enhancement - Consider separating out the rule/seed option functions
     into their own module from the main control object, rather
     than repeating the functions in the serial and parallel
     modules.
 
-    Do the sort triplets seed code
+    Do a measured outputs different to inputs rule.
+    
+    * Do the sort triplets seed code
     
     * Only display the input and output block divs for the
     number of parameter blocks, rather than six including
