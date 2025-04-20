@@ -1506,6 +1506,215 @@ const seedPrograms = {
             ]
         },
         {
+            name: "sortInput",
+            description: "Sort the whole input in the output",
+            program: [
+                {
+                    ins: "LDIL A" // Input Length
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Input Counter
+                },
+                {
+                    ins: "LD C, IMM",
+                    data: [0]
+                },
+                {
+                    // Transfer Loop:
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Input Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF8] // Transfer Loop
+                },
+                {
+                    // Prepare for bubble sort
+                    ins: "CLR (MEM)",
+                    data: [200] // Bubble Up Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Bubble Down Pointer
+                },
+                {
+                    // Bubble Up Loop
+                    ins: "LD C, (MEM)",
+                    data: [200] // Bubble Up Pointer
+                },
+                {
+                    ins: "LDO A, (C)" // First Item
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDO A, (C)"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNC",
+                    data: [16], // Next Bubble Up
+                },
+                {
+                    // First Item is Higher
+                    ins: "DEC C"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    // Check For Bubble Down
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRZ",
+                    data: [8] // Next Bubble Up
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "LDO A, (C)" // Previous Item
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Bubble Down Pointer 
+                },
+                {
+                    ins: "JRNC",
+                    data: [12] // Bubble Down Loop
+                },
+                {
+                    // Next Bubble Up:
+                    ins: "LD A, (MEM)",
+                    data: [200] // Bubble up pointer
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xDE] // Bubble Up Loop
+                },
+                {
+                    ins: "RETF"
+                },
+                {
+                    // Bubble Down Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Bubble Down Pointer
+                },
+                {
+                    ins: "LDO A, (C)" // First Item
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LDO A, (C)" // Second Item
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [0xED] // Next Bubble Up
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    // Next Bubble Down:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Bubble Down Pointer
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xED] // Bubble Down Loop
+                },
+                {
+                    ins: "JR",
+                    data: [0xDF] // Next Bubble Up
+                }
+            ]
+        },
+        {
             name: "sortTriplets",
             description: "Sort groups of three from the input data",
             program: [

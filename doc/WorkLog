@@ -30,6 +30,8 @@ Jobs Due
     than repeating the functions in the serial and parallel
     modules.
 
+    Do the sort input seed program
+    
     * Exclude output input difference rule from certain of the rules as this
     really only works for a one to one correspondence.
     

@@ -1006,7 +1006,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 15 * 8,
-            highIP: 105,
+            highIP: 80,
             sampleIn: [45,46,12,19,164,84,23,17,96,98,99,12,10,11,13,14],
             sampleOut: [],
             paramsIn: [
