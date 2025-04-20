@@ -30,8 +30,15 @@ Jobs Due
     than repeating the functions in the serial and parallel
     modules.
 
-    Do a measured outputs different to inputs rule.
+    * Exclude output input difference rule from certain of the rules as this
+    really only works for a one to one correspondence.
     
+    * Do Sum of outputs rule
+
+    * Do output standard deviation rule
+
+    * Do a measured outputs different to inputs rule.
+
     * Do the sort triplets seed code
     
     * Only display the input and output block divs for the
