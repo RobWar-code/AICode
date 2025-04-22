@@ -1137,12 +1137,12 @@ class InstructionSet {
         let sampleOut = rule.sampleOut;
         let sampleInLength = rule.sampleIn.length;
         let sampleOutLength = rule.sampleOut.length;
-        let inputsLength = rule.paramsIn[0].length;
+        let inputsLength = initialParams.length;
         let outputsLength = rule.outputs[0].length;
 
         let ins = memSpace[IP];
         // Debug
-        if (isNaN(ins) || typeof ins === 'undefined') {
+        if (isNaN(ins)) {
             console.log("ExecuteIns - Invalid code:", ins, IP);
             ins = 0;
         }
@@ -1154,6 +1154,10 @@ class InstructionSet {
         let validIns = true;
         let RETF = false;
         if (ins < this.numIns) {
+            // Debug
+            if (typeof this.ins[ins] === 'undefined') {
+                console.log("executeIns: invalid ins -", this.ins[0], ins);
+            }
             // Check for complete instruction
             if (this.ins[ins].insLen + IP > this.maxIP) {
                 validIns = false;
@@ -1276,7 +1280,10 @@ class InstructionSet {
                     break;
                 case 11:
                     // LDSI A, (C)
-                    if (C >= sampleInLength) {
+                    if (sampleInLength === 0) {
+                        A = 0;
+                    }
+                    else if (C >= sampleInLength) {
                         A = 0;
                     }
                     else {
@@ -1286,7 +1293,10 @@ class InstructionSet {
                     break;
                 case 12:
                     // LDSO A, (C)
-                    if (C >= sampleOutLength) {
+                    if (sampleOutLength === 0) {
+                        A = 0;
+                    }
+                    else if (C >= sampleOutLength) {
                         A = 0;
                     }
                     else {
@@ -1800,7 +1810,20 @@ class InstructionSet {
         let p = 0;
         while (!found && p < memSpace.length) {
             let code = memSpace[p];
+            // Debug
+            if (typeof code === 'undefined') {
+                console.log("Find Marker: Errorneous Code", code, p);
+                console.log("memSpace:", memSpace)
+            }
+            else if (code < 0 || code > 255) {
+                console.log("findMarker: invalid code -", code, p);
+                console.log("memSpace:", memSpace)
+            }
             let insItem = this.getInsDetails(code);
+            // Debug
+            if (typeof insItem === 'undefined') {
+                console.log("findMarker: invalid code object", code, p, memSpace);
+            }
             if (insItem.name === "SM") {
                 let lbl = memSpace[p + 1];
                 if (lbl === value) {

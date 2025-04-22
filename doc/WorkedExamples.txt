@@ -9,6 +9,7 @@ Contents
     Ruleset Strategies
         Selecting Rules
             Combining Rules
+        Analytical Code
         Code Fragment Candidates
         General Approaches
         Possible Future Approaches
@@ -210,6 +211,29 @@ Contents
     Or we could include such useful combinations as standard
     potential inserts in the mutation/breed cycles. (code fragments)
     from the instruction set class.
+
+<h2>Analytical Code
+
+    The instruction set now includes the instructions:
+        LDSI A - load sample input byte
+        LDSO A - load sample output byte
+        LSIL A - load sample input length
+        LSOL A - load sample output length
+        LDIL A - load input length
+        LDOL A - load output length
+
+    In order to encourage analytical entity code that may
+    reduce the time required to produce solutions, we might
+    have a helper rule that tests for the presence of these
+    instructions, or we might have a principle rule that
+    scores the use of these, or both.
+
+    Examples of example data rules might be output: 
+        example input > example output
+        example input - example output
+
+    The code from these rules might then merge successfully
+    with later rules.
 
 <h2>Code Fragment Candidates
 

@@ -1,3 +1,22 @@
+21/04/2025
+
+20/04/2025
+Trial reached 19.4/24 after two days of processing
+on sortParams. Introduced the seed program.
+addAjacentParams was then completed quite quickly.
+subtractAdjacentParams completed rather suddenly
+after 320 rounds, having been stuck at 14/22 for
+a long time.
+
+The conclusion from this is that it can be worth
+waiting for upto about 400 rounds for a solution.
+This is currently about 15 hours.
+
+Had introduced the helper rules 
+    outputsDifferentToInputs
+    sumOfOutputs
+    outputStandardDeviation
+
 18/04/2025
 Trial at sortTriplets has taken 518 rounds
 to reach 19.7/28

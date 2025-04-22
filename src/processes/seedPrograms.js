@@ -2358,6 +2358,168 @@ const seedPrograms = {
                     ins: "RETF"
                 }
             ]
+        },
+        {
+            name: "testSampleIns",
+            description: "Test Sample Instructions",
+            program: [
+                {
+                    ins: "LSIL A"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LSOL A"
+                },
+                {
+                    ins: "STO (C), A" 
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDOL A"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [200] // Output Pointer
+                },
+                {
+                    // Output Sample Inputs
+                    ins: "CLR (MEM)",
+                    data: [201] // Sample Input Pointer
+                },
+                {
+                    ins: "LSIL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Input Counter
+                },
+                {
+                    // Sample Input Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Sample Input Pointer
+                },
+                {
+                    ins: "LDSI A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Sample Input Pointer
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [200] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [200] // Output Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // Sample Input Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Sample Input Counter
+                },
+                {
+                    ins: "JRNC",
+                    data: [0xEF], // Sample Input Loop
+                },
+                {
+                    // Output Sample Output
+                    ins: "CLR (MEM)",
+                    data: [201] // Sample Output Pointer
+                },
+                {
+                    ins: "LSOL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    // Sample Output Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Sample Output Pointer
+                },
+                {
+                    ins: "LDSO A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Sample Output Pointer
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [200] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [200] // Output Pointer
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // Sample Output Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202] // Sample Output Counter
+                },
+                {
+                    ins: "JRNC",
+                    data: [0xEF], // Sample Output Loop
+                },
+                {
+                    ins: "RETF"
+                }
+
+            ]
         }
     ],
 
