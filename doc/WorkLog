@@ -31,11 +31,15 @@ Jobs Due
     modules.
 
     Provide rules that make deliberate use of sample data, ie:
-        sample output minus sample input
-        sample output > sample input - remove debug code in instructionSet.
-        test for non-integer code in execute ins
-        Provide for more than one sample
+        sample input minus sample output
+        * sample output > sample input - remove debug code in instructionSet.
+        * test for non-integer code in execute ins
+        * Provide for more than one sample
 
+    Rationalise the modulo rules - always use two or more inputs
+
+    Reorganise scorelist
+    
     * Do the sort input seed program
     
     * Exclude output input difference rule from certain of the rules as this

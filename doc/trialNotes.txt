@@ -3,7 +3,11 @@ Got the sample reading rule sampleOutGreaterThanSampleIn
 working satisfactorily with two samples.
 
 On the windows laptop, seeded the multiplyAdjacentParams
-program after 
+program after several days processing. Hit bug with
+divideAdjacent params.
+
+Started the trial from scratch on the Windows laptop,
+including the sampleOutGreaterThanSampleIn rule.
 
 22/04/2025
 Added the sample out greater than sample in rule. Ran
