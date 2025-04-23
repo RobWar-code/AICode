@@ -1049,7 +1049,7 @@ class Entity {
         let scoreObj = null;
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
-            memObj = this.instructionSet.execute(this.memSpace, this.codeFlags, this.initialParams, 
+            memObj = this.instructionSet.execute(executionCount, this.memSpace, this.codeFlags, this.initialParams, 
                 this.params, this.valuesOut, this.ruleSequenceNum,
                 this.roundNum);
             // Fix invalid memspace codes
@@ -1105,7 +1105,7 @@ class Entity {
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
         let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
-        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, this.memSpace, 
+        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, executionCount, this.memSpace, 
             this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, rule, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;

@@ -34,6 +34,7 @@ Jobs Due
         sample output minus sample input
         sample output > sample input - remove debug code in instructionSet.
         test for non-integer code in execute ins
+        Provide for more than one sample
 
     * Do the sort input seed program
     

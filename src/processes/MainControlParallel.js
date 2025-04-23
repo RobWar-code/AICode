@@ -382,7 +382,7 @@ class MainControlParallel {
 
         // Check for single rule run
         if (this.runningSingleRule) {
-            let passMark = 0.9;
+            let passMark = 0.95;
             let rule = rulesets.getRuleFromSequence(rulesets.ruleSequenceNum);
             if ("passScore" in rule) {
                 passMark = rule.passScore;

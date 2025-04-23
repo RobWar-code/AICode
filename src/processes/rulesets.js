@@ -35,8 +35,8 @@ const rulesets = {
         this.byteFunction = [];
         this.requiredOutputsFunction = [];
 
-        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: true, retain: true, 
-            sequenceNum: 0, score: 0, max: 2, startRoundNum: 800};
+        let scoreItem0 = {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
+            sequenceNum: 0, score: 0, max: 1, startRoundNum: 0};
         this.scoreList.push(scoreItem0);
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
@@ -150,7 +150,7 @@ const rulesets = {
             startRoundNum: 0,
             outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
             highIC: 7 * 16 + 4 * 100,
-            sampleIn: [7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92],
+            sampleIn: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -181,13 +181,39 @@ const rulesets = {
             excludeHelperRules: [67],
             retain: false, score: 0, max: 5,
             startRoundNum: 800,
-            outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+            outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
             highIC: 12 * 16 + 5,
             highIP: 25,
-            sampleIn: [7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92],
-            sampleOut: [9,3,6,18,24,37,221,120,4,19,18,33,64,71,87,96],
-            paramsIn: [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]],
-            outputs: [[1,0,1,0,1,1,1,0,0,1,0,0,0,0,1,1]]
+            insDistribution: [
+                {
+                    ins: "LDSI A, (C)",
+                    countOpt: 1,
+                    scanStart: 0,
+                    scanEnd: 20
+                },
+                {
+                    ins: "LDSO A, (C)",
+                    countOpt: 1,
+                    scanStart: 0,
+                    scanEnd: 20
+                }
+            ],
+            sampleIn: [
+                [7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92],
+                [29,48,7,110,120,121,87,16,90,85,76,89,93,64,63,19]
+            ],
+            sampleOut: [
+                [9,3,6,18,24,37,221,120,4,19,18,33,64,71,87,96],
+                [30,46,6,111,123,119,98,17,88,83,77,91,90,63,65,18]
+            ],
+            paramsIn: [
+                [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]
+            ],
+            outputs: [
+                [1,0,1,0,1,1,1,0,0,1,0,0,0,0,1,1],
+                [1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,0]
+            ]
         };
         this.scoreList.push(scoreItem15);
         this.ruleFunction.push(this.sampleOutGreaterThanSampleIn);
@@ -213,7 +239,7 @@ const rulesets = {
                     scanEnd: 42
                 }
             ],
-            sampleIn: [3,4],
+            sampleIn: [[3,4]],
             sampleOut: [],
             paramsIn: [
                 [2,8],
@@ -234,7 +260,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 64,
             optICFactor: 37,
             highIC: 9 * 16 * 5,
-            sampleIn: [3,16,3],
+            sampleIn: [[3,16,3]],
             sampleOut: [],
             paramsIn: [
                 [2,16,5],
@@ -274,7 +300,7 @@ const rulesets = {
             sequenceNum: 5, highIP: 42, score: 0, max: 5, startRoundNum: 800,
             outBlockStart: 0, outBlockLen: 20,
             highIC: 9 * 12 * 5,
-            sampleIn: [4,10,3],
+            sampleIn: [[4,10,3]],
             sampleOut: [],
             paramsIn: [
                 [3,12,5],
@@ -294,7 +320,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 9 * 16 + 100 * 4,
-            sampleIn: [12,3,19,24,190,87,65,221,120,95,86,38,72,86,254,112],
+            sampleIn: [[12,3,19,24,190,87,65,221,120,95,86,38,72,86,254,112]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -317,7 +343,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 9 * 16 + 100 * 4,
-            sampleIn: [10,25,34,65,53,98,87,110,5,86,93,63,76,81,24,32],
+            sampleIn: [[10,25,34,65,53,98,87,110,5,86,93,63,76,81,24,32]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -340,7 +366,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 9 * 16 + 100 * 4,
-            sampleIn: [3,4,7,9,8,10,12,5,29,31,85,2,4,15,91,84],
+            sampleIn: [[3,4,7,9,8,10,12,5,29,31,85,2,4,15,91,84]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -363,7 +389,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 4 * 10 * 16 + 100 * 4,
-            sampleIn: [4,6,51,23,25,31,18,10,12,65,32,43,14,21,31,7],
+            sampleIn: [[4,6,51,23,25,31,18,10,12,65,32,43,14,21,31,7]],
             sampleOut: [], 
             paramsIn: [
                 [
@@ -386,7 +412,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 6 * 10 * 16 + 100 * 4,
-            sampleIn: [5,3,12,34,43,53,42,13,21,27,32,19,8,7,6,4],
+            sampleIn: [[5,3,12,34,43,53,42,13,21,27,32,19,8,7,6,4]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -409,7 +435,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 9 * 10 * 16 + 100 * 4,
-            sampleIn: [8,3,5,20,24,30,35,19,17,6,4,5,8,11,17,19],
+            sampleIn: [[8,3,5,20,24,30,35,19,17,6,4,5,8,11,17,19]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -431,7 +457,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 50 * 9 * 16 + 100 * 4,
-            sampleIn: [4,19,30,65,207,191,3,18,20,48,64,76,54,19,32,17],
+            sampleIn: [[4,19,30,65,207,191,3,18,20,48,64,76,54,19,32,17]],
             sampleOut: [], 
             paramsIn: [
                 [
@@ -453,7 +479,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 30 * 9 * 16 + 100 * 4,
-            sampleIn: [5,5,8,90,180,217,86,64,32,54,98,118,96,17,24,23],
+            sampleIn: [[5,5,8,90,180,217,86,64,32,54,98,118,96,17,24,23]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -473,7 +499,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 20 * 9 * 16 + 100 * 4,
-            sampleIn: [7,19,24,87,196,216,86,96,54,49,24,8,19,43,72,12],
+            sampleIn: [[7,19,24,87,196,216,86,96,54,49,24,8,19,43,72,12]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -493,7 +519,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 9 * 16 + 100 * 4,
-            sampleIn: [9,18,24,5,78,196,112,90,76,63,24,87,18,93,75,202],
+            sampleIn: [[9,18,24,5,78,196,112,90,76,63,24,87,18,93,75,202]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -513,7 +539,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 15 * 9 * 16 + 100 * 4,
-            sampleIn: [12,45,37,98,147,56,215,54,76,85,180,17,54,9,11,19],
+            sampleIn: [[12,45,37,98,147,56,215,54,76,85,180,17,54,9,11,19]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -533,7 +559,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 20 * 9 * 16 + 100 * 4,
-            sampleIn: [15,87,45,13,91,100,95,30,76,84,83,82,19,8,21,24],
+            sampleIn: [[15,87,45,13,91,100,95,30,76,84,83,82,19,8,21,24]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -556,7 +582,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 33 * 9 * 16 + 100 * 4,
-            sampleIn: [11,121,48,76,198,212,86,245,75,190,15,17,11,12,13,85],
+            sampleIn: [[11,121,48,76,198,212,86,245,75,190,15,17,11,12,13,85]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -586,7 +612,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 50 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [5,10,15,20,31,33,87,121,64,236,119,125,64,63,62,12],
+            sampleIn: [[5,10,15,20,31,33,87,121,64,236,119,125,64,63,62,12]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -610,7 +636,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 30 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [3,9,12,18,36,48,87,180,53,64,97,237,181,18,64,17],
+            sampleIn: [[3,9,12,18,36,48,87,180,53,64,97,237,181,18,64,17]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -634,7 +660,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [6,8,9,64,53,27,98,247,45,85,17,24,45,46,76,32],
+            sampleIn: [[6,8,9,64,53,27,98,247,45,85,17,24,45,46,76,32]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -658,7 +684,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [12,144,87,86,50,212,119,8,65,76,86,17,18,34,36,17],
+            sampleIn: [[12,144,87,86,50,212,119,8,65,76,86,17,18,34,36,17]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -688,7 +714,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 13 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [7,49,56,90,87,14,32,54,86,197,230,145,86,185,82,19],
+            sampleIn: [[7,49,56,90,87,14,32,54,86,197,230,145,86,185,82,19]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -712,7 +738,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [8,64,86,90,108,84,25,32,65,64,72,89,150,160,12,16],
+            sampleIn: [[8,64,86,90,108,84,25,32,65,64,72,89,150,160,12,16]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -736,7 +762,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 10 * 9 * 16 + 100 * 4,
             highIP: 60,
-            sampleIn: [7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43],
+            sampleIn: [[7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -759,7 +785,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 8 + 100 * 4,
-            sampleIn: [17,98,4,86,15,17,19,12,10,9,54,3,45,12,13,91],
+            sampleIn: [[17,98,4,86,15,17,19,12,10,9,54,3,45,12,13,91]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -782,7 +808,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 14 + 100 * 4,
-            sampleIn: [36,17,19,45,59,75,17,24,34,76,90,112,211,89,12,32],
+            sampleIn: [[36,17,19,45,59,75,17,24,34,76,90,112,211,89,12,32]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -808,7 +834,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 8,
             highIC: 8 * 10 + 100 * 4,
-            sampleIn: [2,7,9,19,108,43,22,17],
+            sampleIn: [[2,7,9,19,108,43,22,17]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -834,10 +860,10 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 8 + 100 * 4,
-            sampleIn: [
+            sampleIn: [[
                 17,16,90,34,76,65,39,86,12,45,97,112,86,19,87,17,
                 23,65,87,83,67,73,19,29,32,54,12,90,198,74,86,61
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -864,10 +890,10 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 8 + 100 * 4,
-            sampleIn: [
+            sampleIn: [[
                 43,54,76,81,17,19,21,40,80,120,256,103,96,75,81,84,
                 23,24,25,26,18,30,90,40,50,121,212,170,86,64,79,18
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -892,7 +918,7 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 10 + 100 * 4,
-            sampleIn: [87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57],
+            sampleIn: [[87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57]],
             sampleOut:[],
             paramsIn: [
                 [
@@ -917,10 +943,10 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 16,
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 12 + 100 * 4,
-            sampleIn: [
+            sampleIn: [[
                 37,17,86,86,85,32,64,17,90,110,87,65,87,88,109,110,
                 43,87,65,76,94,83,52,18,91,111,86,83,87,19,106,201
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -947,10 +973,10 @@ const rulesets = {
             outBlockStart: 0, outBlockLen: 8,
             inBlockStart: 0, inBlockLen: 24,
             highIC: 8 * 18,
-            sampleIn: [
+            sampleIn: [[
                 37,17,86,86,85,32,64,17,90,110,87,65,87,88,109,110,
                 43,87,65,76,94,83,52,18
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -976,7 +1002,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 15,
             highIP: 85,
-            sampleIn: [17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17],
+            sampleIn: [[17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1001,7 +1027,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 18,
             highIC: 16 * 15 * 8,
             highIP: 80,
-            sampleIn: [17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17,21,9],
+            sampleIn: [[17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17,21,9]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1025,7 +1051,7 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 16,
             highIC: 16 * 15 * 8,
             highIP: 80,
-            sampleIn: [45,46,12,19,164,84,23,17,96,98,99,12,10,11,13,14],
+            sampleIn: [[45,46,12,19,164,84,23,17,96,98,99,12,10,11,13,14]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1051,10 +1077,10 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 9 + 100 * 4,
             highIP: 36,
-            sampleIn: [
+            sampleIn: [[
                 4,5,8,9,90,91,103,12,76,76,87,87,54,12,17,19,
                 4,3,90,109,76,87,16,15,97,17,3,3,8,7,11,12,
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1083,10 +1109,10 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 9 + 100 * 4,
             highIP: 36,
-            sampleIn: [
+            sampleIn: [[
                 8,9,87,43,54,25,23,13,8,9,78,76,87,14,100,10,
                 76,65,87,85,85,87,54,17,15,8,9,6,7,7,19,12
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1114,10 +1140,10 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 32,
             highIC: 16 * 18 * 20 + 100 * 4,
             highIP: 80,
-            sampleIn: [
+            sampleIn: [[
                 3,2,4,5,6,4,89,2,86,3,86,2,12,2,13,3,
                 43,3,32,5,76,2,19,6,21,4,45,3,16,0,17,1
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1145,10 +1171,10 @@ const rulesets = {
             inBlockLen: 32,
             highIC: 16 * 18 * 25 + 100 * 4,
             highIP: 85,
-            sampleIn: [
+            sampleIn: [[
                 56,3,32,4,9,0,8,2,76,21,63,9,87,7,140,20,
                 43,8,40,8,76,17,78,9,144,12,46,19,82,2,14,7
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1176,10 +1202,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
             highIP: 65,
-            sampleIn: [
+            sampleIn: [[
                 61,7,8, 61,9,7, 61,0,9, 61,2,4, 61,3,11, 61,12,90, 61,10,56, 61,11,16,
                 61,8,19, 61,4,12, 61,13,86, 61,15,45, 61,6,15, 61,5,14, 61,1,65, 61,9,11
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1207,10 +1233,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
             highIP: 65,
-            sampleIn: [
+            sampleIn: [[
                 43,7,4, 43,19,18, 43,9,7, 43,4,109, 43,6,89, 43,91,92, 43,7,6, 43,8,9,
                 43,11,18, 43,56,14, 43,17,19, 43,78,105, 43,23,5, 43,27,9, 43,87,3, 43,8,11
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1238,10 +1264,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 + 100 * 4,
             highIP: 65,
-            sampleIn: [
+            sampleIn: [[
                 45,9,11, 45,8,2, 45,7,3, 45,9,11, 45,12,10, 45,108,106, 45,87,81, 45,65,32,
                 45,8,7, 45,79,34, 45,87,65, 45,65,32, 45,217,111, 45,89,18, 45,19,11, 45,7,2
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1271,10 +1297,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 * 16 + 100 * 4,
             highIP: 85,
-            sampleIn: [
+            sampleIn: [[
                 42,2,3, 42,4,5, 42,0,9, 42,11,10, 42,21,4, 42,45,5, 42,48,6, 42,3,5,
                 42,6,5, 42,11,9, 42,90,2, 42,65,3, 42,6,24, 42,8,7, 42,9,10, 42,8,4
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1304,10 +1330,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 * 16 + 100 * 4,
             highIP: 85,
-            sampleIn: [
+            sampleIn: [[
                 37,3,2, 37,9,3, 37,0,7, 37,96,78, 37,80,5, 37,87,17, 37,4,2, 37,18,5,
                 37,56,15, 37,112,16, 37,209,3, 37,76,86, 37,54,7, 37,12,4, 37,16,8, 37,19,21 
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1337,10 +1363,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 14 * 16,
             highIP: 85,
-            sampleIn: [
+            sampleIn: [[
                 47,6,3, 47,9,0, 47,81,9, 47,90,10, 47,18,5, 47,27,3, 47,76,18, 47,87,8,
                 47,9,4, 47,101,10, 47,90,8, 47,21,25, 47,76,4, 47,24,6, 47,42,7, 47,87,9
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1369,10 +1395,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
             highIP: 100,
-            sampleIn: [
+            sampleIn: [[
                 61,5,2, 61,7,9, 61,2,3, 61,6,8, 61,0,19, 61,1,89, 61,4,7, 61,3,97,
                 43,17,9, 43,2,3, 43,5,6, 43,8,9, 43,21,45, 43,108,109, 43,87,15, 43,89,10
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1401,10 +1427,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 18 + 100 * 4,
             highIP: 100,
-            sampleIn: [
+            sampleIn: [[
                 43,200,10, 43,26,87, 43,18,9, 43,98,54, 43,76,87,
                 45,100,10, 45,4,3, 45,9,2, 45,96,4, 45,97,13, 45,73,63, 45,90,17, 45,91,81, 45,97,11, 45,96,10, 45,13,12
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1433,10 +1459,10 @@ const rulesets = {
             inBlockLen: 48,
             highIC: 16 * 25 + 100 * 4,
             highIP: 100,
-            sampleIn: [
+            sampleIn: [[
                 43,3,4, 43,64,6, 43,76,9, 43,87,10, 43,12,11, 43,65,4,
                 42,65,5, 42,32,3, 42,10,8, 42,15,6, 42,17,15, 42,42,4, 42,6,7, 42,5,7, 42,98,2, 42,23,6
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1466,12 +1492,12 @@ const rulesets = {
             inBlockStart: 0, inBlockLen: 96,
             highIC: 5000,
             highIP: 120,
-            sampleIn: [
+            sampleIn: [[
                 61,4,5, 61,6,8, 61,5,10, 61,0,9, 61,3,19, 61,2,18, 61,1,24,
                 43,5,1, 43,9,10, 43,11,12, 43,90,91, 43,81,5, 43,76,5, 43,87,18, 43,19,11, 43,18,15,
                 45,8,3, 45,6,5, 45,4,6, 45,11,9, 45,90,61, 45,97,13,
                 42,2,3, 42,4,4, 42,11,11, 42,19,10, 42,25,11, 42,25,10, 42,67,4, 42,15,9, 42,17,3, 42,18,1
-            ],
+            ]],
             sampleOut: [],
             paramsIn: [
                 [
@@ -1611,10 +1637,8 @@ const rulesets = {
         for (let i = 0; i < this.scoreList.length; i++) {
             if (this.requiredOutputsFunction[i] != null) {
                 // Get sample outputs
-                let sampleList = [];
-                sampleList.push(this.scoreList[i].sampleIn);
-                let sampleOut = this.requiredOutputsFunction[i](this, sampleList);
-                this.scoreList[i].sampleOut = sampleOut[0];
+                let sampleOut = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn);
+                this.scoreList[i].sampleOut = sampleOut;
 
                 // Get actual outputs
                 let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].paramsIn);
@@ -1721,7 +1745,7 @@ const rulesets = {
         }
         else {
             let outputs = insertAsciiStrings(set1);
-            return outputs;
+            return [outputs];
         }
 
         function insertAsciiStrings(set) {
@@ -2013,51 +2037,17 @@ const rulesets = {
     insDistribution (self, dataParams, ruleParams) {
         let instructionSet = dataParams.instructionSet;
         let memSpace = dataParams.memSpace;
-        insSet = [
-            {
-                ins: "LDI A, (MEM)",
-                countOpt: 3,
-                scanStart: 0,
-                scanEnd: 18
-            },
-            {
-                ins: "LDI A, (C)",
-                countOpt: 1,
-                scanStart: 0,
-                scanEnd: 18
-            },
-            {
-                ins: "JRNZ",
-                countOpt: 3,
-                scanStart: 24,
-                scanEnd: 42
-            },
-            {
-                ins: "CALL",
-                countOpt: 0,
-                scanStart: 0,
-                scanEnd: 42
-            }
-        ];
 
         let totalScore = 0;
 
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        if (!("insDistribution" in rule)) {
+            return 1;
+        }
+        let insSet = rule.insDistribution;
         // Count of occurrences
         for (let insData of insSet) {
             let ins = insData.ins;
-            // Check whether the rule defines the criteria
-            if ("insDistribution" in rule) {
-                let found = false;
-                for (let i = 0; i < rule.insDistribution.length; i++) {
-                    if (ins.ins === rule.insDistribution[i].ins) {
-                        found = true;
-                        insData = rule.insDistribution[i];
-                        ins = insData.ins;
-                        break;
-                    }
-                }
-            }
             // Count the number of occurences of the instruction in the scan area
             let p = insData.scanStart;
             let count = 0;
@@ -2544,7 +2534,7 @@ const rulesets = {
             let d = (v - mean) ** 2;
             sumDev += d;
         }
-        let stdDev = (sumDev * 1/numItems) ** 0.5;
+        let stdDev = (sumDev / numItems) ** 0.5;
         return stdDev;
     },
 
@@ -3794,6 +3784,7 @@ const rulesets = {
                 let v;
                 if (b === 0) v = 0;
                 else v = (Math.floor(a/b)) & 255;
+                output.push(v);
             }
             outputList.push(output);
         }
@@ -4163,7 +4154,7 @@ const rulesets = {
     },
 
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
-        let passMark = 0.9;
+        let passMark = 0.95;
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
             passMark = rule.passScore;

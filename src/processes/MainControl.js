@@ -138,10 +138,11 @@ class MainControl {
         // Check whether the score threshold has been reached
         let set = this.bestSets[highIndex];
         let entity = set[0];
+        let passScore = 0.95;
 
         // Check for single rule run
         if (this.runningSingleRule) {
-            if (entity.score >= rulesets.currentMaxScore * (9/10)) {
+            if (entity.score >= rulesets.currentMaxScore * passScore) {
                 let setNum = highIndex;
                 let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
                 let terminateProcessing = true;

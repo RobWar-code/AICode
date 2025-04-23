@@ -1,4 +1,17 @@
-21/04/2025
+23/04/2025
+Got the sample reading rule sampleOutGreaterThanSampleIn
+working satisfactorily with two samples.
+
+On the windows laptop, seeded the multiplyAdjacentParams
+program after 
+
+22/04/2025
+Added the sample out greater than sample in rule. Ran
+short trial, but the code produced was simply a procedure
+for outputting the pattern of 0 and 1 at random.
+
+Will add a refinement to the rule to check for LDSI and
+LDSO statements.
 
 20/04/2025
 Trial reached 19.4/24 after two days of processing
