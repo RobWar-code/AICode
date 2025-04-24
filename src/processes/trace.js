@@ -46,6 +46,7 @@ const trace = {
         this.fixedData.initialMemList = this.entity.instructionSet.disassemble(memSpace, 0, this.entity.memLength);
 
         let start = true;
+        this.executionCount = 0;
         this.stepExecute(traceWindow, this.entity, start);
     },
 
@@ -69,7 +70,8 @@ const trace = {
 
     stepExecute(traceWindow, entity, start) {
         let restart = false;
-        let stepData = entity.stepExecute(restart);
+        let stepData = entity.stepExecute(restart, this.executionCount);
+        this.executionCount = entity.executionCount;
         stepData.start = start;
         stepData.fixedData = this.fixedData;
         traceWindow.webContents.send('displayTrace', stepData);
