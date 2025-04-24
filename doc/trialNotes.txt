@@ -1,3 +1,12 @@
+24/04/2025
+The code now includes the sampleInMinusSampleOut rule.
+The trial for the sampleOutGreaterThanSampleIn rule
+completed after about 330 rounds, however, it
+involved no comparison operation, simply producing
+a sequence of 1's and 0's that matched the output
+requirements. So restarting the trial with a preference
+to include the CMP A, B op.
+
 23/04/2025
 Got the sample reading rule sampleOutGreaterThanSampleIn
 working satisfactorily with two samples.

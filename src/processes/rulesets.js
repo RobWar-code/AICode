@@ -212,6 +212,12 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
                     }
                 ],
                 sampleIn: [
