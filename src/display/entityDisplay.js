@@ -54,6 +54,15 @@ const entityDisplay = {
     displayDataValues(data) {
         let displayGroupBy = parseInt(data.displayGroupBy);
 
+        // Sample Data
+        let sampleInList = data.sampleIn;
+        let sampleOutList = data.sampleOut;
+        let colElem1 = document.getElementById("sampleInCol");
+        displaySampleData("in", sampleInList, colElem1);
+        let colElem2 = document.getElementById("sampleOutCol");
+        displaySampleData("out", sampleOutList, colElem2);
+
+        // Initial Params
         let initialParams = data.initialParamsList;
         for (let i = 0; i < this.numDataDivs; i++) {
             let paramsDiv = "initialParams" + i;
@@ -99,6 +108,19 @@ const entityDisplay = {
             }
         }
 
+        function displaySampleData(direction, list, colElem) {
+            colElem.innerHTML = "";
+            let html = "";
+            let index = 0;
+            for (let dataArray of list) {
+                html += "<div style='border: 1px solid green'>";
+                html += doDataBlocks("sample_" + direction + index, dataArray, data.displayGroupBy);
+                html += "</div>";
+                ++index;
+            }
+            colElem.innerHTML = html;
+        }
+
         function listParams(paramsDiv, paramsList, values, displayGroupBy) {
             document.getElementById(paramsList).remove();
             let html = `<div id="${paramsList}">`;
@@ -114,6 +136,11 @@ const entityDisplay = {
     
         function listDataBlocks(paramsDiv, paramsList, values, displayGroupBy) {
             document.getElementById(paramsList).remove();
+            let html = doDataBlocks(paramsList, values, displayGroupBy);
+            document.getElementById(paramsDiv).innerHTML = html;
+        }
+
+        function doDataBlocks(paramsList, values, displayGroupBy) {
             let html = `<div id="${paramsList}">`;
             for (let i = 0; i < values.length; i++) {
                 let flag = i % 8;
@@ -129,8 +156,9 @@ const entityDisplay = {
                 if (flag === 7) html += "</p>";
             }
             html += "</div>";
-            document.getElementById(paramsDiv).innerHTML = html;
+            return html;
         }
+    
     },
 
     displayEntityCode(codeBlock, index) {

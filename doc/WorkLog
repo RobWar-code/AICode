@@ -30,16 +30,28 @@ Jobs Due
     than repeating the functions in the serial and parallel
     modules.
 
-    Provide rules that make deliberate use of sample data, ie:
-        sample input minus sample output
-        * sample output > sample input - remove debug code in instructionSet.
-        * test for non-integer code in execute ins
-        * Provide for more than one sample
 
     Rationalise the modulo rules - always use two or more inputs
 
     Reorganise scorelist
     
+    Do the sampleInMinusSampleOut seed rule
+
+    Provide a breedFromSeed method to allow for cases where there are
+    only minor program differences between required and previous rules
+    which would nonetheless score low on trial.
+
+    * Display the sample data
+        * Main Display
+        * Trace Display
+        Seed Display
+
+    * Provide rules that make deliberate use of sample data, ie:
+        * sample input minus sample output
+        * sample output > sample input - remove debug code in instructionSet.
+        * test for non-integer code in execute ins
+        * Provide for more than one sample
+
     * Do the sort input seed program
     
     * Exclude output input difference rule from certain of the rules as this

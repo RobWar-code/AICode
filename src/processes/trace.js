@@ -1,6 +1,7 @@
 const path = require('node:path');
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
+const rulesets = require(path.join(__dirname, 'rulesets.js'));
 
 const trace = {
     entityNum: 0,
@@ -34,6 +35,12 @@ const trace = {
             ruleSequenceNum, roundNum, memSpace);
         // Save the fixed data
         this.fixedData = {};
+        let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
+        let displayGroupBy = 4;
+        if ("displayGroupBy" in rule) displayGroupBy = 4;
+        this.fixedData.displayGroupBy = displayGroupBy;
+        this.fixedData.sampleIn = rule.sampleIn;
+        this.fixedData.sampleOut = rule.sampleOut;
         this.fixedData.entityNumber = this.entity.entityNumber;
         this.fixedData.bestSetNum = this.bestSetNum;
         this.fixedData.bestSetEntityNum = this.bestSetEntityNum;

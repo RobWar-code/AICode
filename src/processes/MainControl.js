@@ -70,14 +70,8 @@ class MainControl {
         let currentRule = rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         let terminateProcessing = false;
         if (this.bestSets[startBestSetNum].length > 0) {
-            this.bestSets[startBestSetNum][0].display(this.mainWindow, startBestSetNum, 0, elapsedTime, 
-                this.entityNumber, 
-                this.ruleSequenceNum, this.randomCount, 
-                this.monoclonalInsCount, this.monoclonalByteCount,
-                this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-                this.interbreedInsMergeCount,
-                this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-                this.cycleCounter, this.numRounds, currentRule, terminateProcessing);
+            let terminateProcessing = false;
+            this.displayEntity(null, startBestSetNum, 0, terminateProcessing);
         }
         ++this.lapCounter;
         let thresholdReached = false;
@@ -146,13 +140,7 @@ class MainControl {
                 let setNum = highIndex;
                 let currentRule = rulesets.getDescriptionFromSequence(this.runRuleNum);
                 let terminateProcessing = true;
-                entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
-                    this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
-                    this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
-                    this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
-                    this.seedRuleBreedCount, this.crossSetCount, this.currentCycle, this.numRounds, 
-                    currentRule, terminateProcessing
-                );
+                this.displayEntity(null, setNum, 0, terminateProcessing);
                 return true;
             }
         }
@@ -171,12 +159,7 @@ class MainControl {
                 else {
                     // Terminate the processing, display the best entity
                     let terminateProcessing = true;
-                    entity.display(this.mainWindow, setNum, this.elapsedTime, this.numTrials,
-                        this.ruleSequenceNum, this.randomCount, this.monoclonalInsCount,
-                        this.monoclonalByteCount, this.interbreedCount, this.interbreed2Count,
-                        this.interbreedFlaggedCount, this.interbreedInsMergeCount, this.selfBreedCount,
-                        this.seedRuleBreedCount, this.crossSetCount, this.currentCycle, this.numRounds, 
-                        currentRule, terminateProcessing);
+                    this.displayEntity(null, setNum, 0, terminateProcessing);
                 }
                 this.ruleSequenceNum = rulesets.ruleSequenceNum;
                 rulesets.seedRuleSet = false;
@@ -497,26 +480,71 @@ class MainControl {
         this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }
 
-    displayBestSetEntity(setNum, entityIndex, terminateProcessing) {
+    /**
+     * 
+     * @param {*} entity  - if null, use the setNum and entity index
+     * @param {*} setNum 
+     * @param {*} entityIndex 
+     * @param {*} terminateProcessing 
+     */
+    displayEntity(entity, setNum, entityIndex, terminateProcessing) {
         // Prepare and re-execute the entity
-        let e1 = this.bestSets[setNum][entityIndex];
-        let memSpace = e1.initialMemSpace;
-        let asRandom = false;
-        let seeded = false;
-        let currentCycle = e1.birthCycle;
-        let e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
-            this.ruleSequenceNum, this.roundNum, memSpace);
-        e2.breedMethod = e1.breedMethod;
+        let e2;
+        if (entity === null) {
+            let e1 = this.bestSets[setNum][entityIndex];
+            let memSpace = e1.initialMemSpace;
+            let asRandom = false;
+            let seeded = false;
+            let currentCycle = e1.birthCycle;
+            e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
+                this.ruleSequenceNum, this.roundNum, memSpace);
+            e2.breedMethod = e1.breedMethod;
+        }
+        else {
+            e2 = entity;
+        }
         e2.execute(0, 0);
-        e2.display(this.mainWindow, setNum, entityIndex, this.elapsedTime, 
-            this.entityNumber, 
-            this.ruleSequenceNum, this.randomCount, 
-            this.monoclonalInsCount, this.monoclonalByteCount,
-            this.interbreedCount, this.interbreed2Count, this.interbreedFlaggedCount, 
-            this.interbreedInsMergeCount,
-            this.selfBreedCount, this.seedRuleBreedCount, this.crossSetCount, 
-            this.cycleCounter, this.numRounds, this.ruleSequenceNum, terminateProcessing);
+        let displayData = e2.display(setNum, entityIndex);
 
+        // Sample Data
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        displayData.sampleIn = rule.sampleIn;
+        displayData.sampleOut = rule.sampleOut;
+
+        // Details
+        displayData.terminateProcessing = terminateProcessing;
+        displayData.numTrials = this.entityNumber;
+        displayData.currentCycle = this.cycleCounter;
+        displayData.numRounds = this.numRounds;
+        displayData.ruleSequenceNum = this.ruleSequenceNum;
+        displayData.currentMaxScore = rulesets.currentMaxScore;
+        displayData.maxScore = rulesets.maxScore;
+        let etime = this.elapsedTime / (3600 * 1000);
+        displayData.elapsedTime = Math.floor(etime * 10000)/10000;
+        displayData.randomCount = this.randomCount;
+        displayData.monoclonalInsCount = this.monoclonalInsCount;
+        displayData.monoclonalByteCount = this.monoclonalByteCount;
+        displayData.interbreedCount = this.interbreedCount;
+        displayData.interbreed2Count = this.interbreed2Count;
+        displayData.interbreedFlaggedCount = this.interbreedFlaggedCount;
+        displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
+        displayData.selfBreedCount = this.selfBreedCount;
+        displayData.seedRuleBreedCount = this.seedRuleBreedCount;
+        displayData.crossSetCount = this.crossSetCount;
+        displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
+        displayData.scoreList = rulesets.scoreList;
+        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
+
+        // Get the display grouping for inputs and outputs
+        if ("displayGroupBy" in rule) {
+            displayData.displayGroupBy = rule.displayGroupBy;
+        }
+        else {
+            displayData.displayGroupBy = 4;
+        }
+
+        this.mainWindow.webContents.send('displayEntity', displayData);
+        
     }
 
 }

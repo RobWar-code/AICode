@@ -898,12 +898,7 @@ class Entity {
         return {pointer: p, block: insBlock};
     }
 
-    display(mainWindow, bestSetNum, bestSetEntityNum, elapsedTime, numTrials, ruleSequenceNum,
-        randomCount, monoclonalInsCount, 
-        monoclonalByteCount, interbreedCount, 
-        interbreed2Count, interbreedFlaggedCount, 
-        interbreedInsMergeCount, selfBreedCount, seedRuleBreedCount,
-        crossSetCount, currentCycle, numRounds, currentRule, terminateProcessing) {
+    display(bestSetNum, bestSetEntityNum) {
         let displayData = {};
         // Code, parameters and memory output
         let dataSection = [];
@@ -931,49 +926,16 @@ class Entity {
         displayData.registers = this.registers;
 
         // Details
-        displayData.terminateProcessing = terminateProcessing;
         displayData.bestSetNum = bestSetNum;
         displayData.bestSetEntityNum = bestSetEntityNum;
-        displayData.numTrials = numTrials;
-        displayData.currentCycle = currentCycle;
-        displayData.numRounds = numRounds;
         displayData.birthCycle = this.birthCycle;
         displayData.entityNumber = this.entityNumber;
         displayData.creationTime = this.birthDateTime;
         displayData.breedMethod = this.breedMethod;
         displayData.score = Math.floor(this.score * 10000)/10000;
-        displayData.ruleSequenceNum = ruleSequenceNum;
-        displayData.currentMaxScore = rulesets.currentMaxScore;
-        displayData.maxScore = rulesets.maxScore;
-        let etime = elapsedTime / (3600 * 1000);
-        displayData.elapsedTime = Math.floor(etime * 10000)/10000;
-        displayData.randomCount = randomCount;
-        displayData.monoclonalInsCount = monoclonalInsCount;
-        displayData.monoclonalByteCount = monoclonalByteCount;
-        displayData.interbreedCount = interbreedCount;
-        displayData.interbreed2Count = interbreed2Count;
-        displayData.interbreedFlaggedCount = interbreedFlaggedCount;
-        displayData.interbreedInsMergeCount = interbreedInsMergeCount;
-        displayData.selfBreedCount = selfBreedCount;
-        displayData.seedRuleBreedCount = seedRuleBreedCount;
-        displayData.crossSetCount = crossSetCount;
-        displayData.currentRule = ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(ruleSequenceNum);
-        displayData.scoreList = rulesets.scoreList;
         displayData.ruleScores = this.ruleScores;
-        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
 
-        // Get the display grouping for inputs and outputs
-        let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
-        if ("displayGroupBy" in rule) {
-            displayData.displayGroupBy = rule.displayGroupBy;
-        }
-        else {
-            displayData.displayGroupBy = 4;
-        }
-
-        mainWindow.webContents.send('displayEntity', displayData);
-
-        return;
+        return displayData;
 
     }
 
@@ -991,6 +953,14 @@ class Entity {
         }
         displayData.data = dataSection;
 
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        let displayGroupBy = 4;
+        if ("displayGroupBy" in rule) {
+            displayGroupBy = rule.displayGroupBy;
+        }
+        displayData.displayGroupBy = rule.displayGroupBy;
+        displayData.sampleIn = rule.sampleIn;
+        displayData.sampleOut = rule.sampleOut;
         displayData.params = this.oldParams;
         displayData.valuesOut = this.oldValuesOut;
 

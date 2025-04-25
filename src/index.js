@@ -149,9 +149,9 @@ ipcMain.on("bestSetEntityDisplay", (event, bestSetObj) => {
   trace.bestSetEntityNum = bestSetEntityNum;
   if (bestSetEntityNum >= program.bestSets[bestSetNum].length || bestSetNum >= program.numBestSets) return;
   // Display the entity
-  console.log("displayBestSetEntity:", bestSetNum, bestSetEntityNum);
+  console.log("bestSetEntityDisplay:", bestSetNum, bestSetEntityNum);
   let terminateProcessing = false;
-  program.displayBestSetEntity(bestSetNum, bestSetEntityNum, terminateProcessing);
+  program.displayEntity(null, bestSetNum, bestSetEntityNum, terminateProcessing);
 });
 
 ipcMain.on("activateMainProcess", () => {

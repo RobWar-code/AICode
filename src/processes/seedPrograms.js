@@ -1416,6 +1416,69 @@ const seedPrograms = {
             ]
         },
         {
+            name: "sampleInMinusSampleOut",
+            description: "Output whether the sampleOut items are greater than sampleIn",
+            program: [
+                {
+                    ins: "LSIL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Process Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDSO A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LDSI A, (C)"
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    // Next Item:
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xF3] // Process Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "sampleOutGreaterThanSampleIn",
             description: "Output whether the sampleOut items are greater than sampleIn",
             program: [

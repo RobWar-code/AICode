@@ -248,7 +248,7 @@ const rulesets = {
                 excludeHelperRules: [67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
                 highIC: 12 * 16 + 5,
                 highIP: 25,
                 insDistribution: [
@@ -279,7 +279,7 @@ const rulesets = {
                 ],
                 outputs: [
                     [23,2,1,0,2,255,4,70,16,3,1,2,255,8,18,3],
-                    [3,2,1,255,63,2,1,1,254,2,19,17,3,1,4,1]
+                    [3,2,1,255,63,2,254,16,2,2,19,17,3,1,4,1]
                 ]
             }
         );
@@ -2727,10 +2727,11 @@ const rulesets = {
         let sampleOut = ruleParams.sampleOut;
         let count = 0;
         let index = 0;
-        for (v1 of sampleIn) {
+        for (let v1 of sampleIn) {
             let v2 = sampleOut[index];
             let v3 = valuesOut[index];
-            if (v3 === v1 - v2) ++count;
+            let v4 = (v1 - v2) & 255;
+            if (v3 === v4) ++count;
             ++index;
         }
         let opt = sampleIn.length;

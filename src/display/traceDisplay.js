@@ -11,6 +11,14 @@ const traceDisplay = {
             document.getElementById('bestSetEntityNum').innerText = traceData.fixedData.bestSetEntityNum;
             document.getElementById('entityId').innerText = traceData.fixedData.entityNumber;
 
+            // Sample Data
+            let sampleInList = traceData.fixedData.sampleIn;
+            let sampleOutList = traceData.fixedData.sampleOut;
+            let colElem1 = document.getElementById("sampleInCol");
+            this.displaySampleData("in", sampleInList, colElem1, traceData.fixedData.displayGroupBy);
+            let colElem2 = document.getElementById("sampleOutCol");
+            this.displaySampleData("out", sampleOutList, colElem2, traceData.fixedData.displayGroupBy);
+
             // Initial Parameters
             this.displayInitialParams(traceData.fixedData.initialParamsList);
 
@@ -21,8 +29,8 @@ const traceDisplay = {
         document.getElementById('executionCount').innerText = traceData.executionCount;
         this.doRegisterList("prevReg", traceData.previousRegisters);
         this.doRegisterList("reg", traceData.registers);
-        this.listDataBlocks('params', 'paramsList', traceData.params);
-        this.listDataBlocks('outputValues', 'outputValuesList', traceData.valuesOut);
+        this.listDataBlocks('params', 'paramsList', traceData.params, traceData.fixedData.displayGroupBy);
+        this.listDataBlocks('outputValues', 'outputValuesList', traceData.valuesOut, traceData.fixedData.displayGroupBy);
         this.displayActiveCode(traceData.insList, traceData.stepLine);
     },
 
@@ -104,8 +112,26 @@ const traceDisplay = {
         }
     },
 
-    listDataBlocks(paramsDiv, paramsList, values) {
+    displaySampleData(direction, list, colElem, displayGroupBy) {
+        colElem.innerHTML = "";
+        let html = "";
+        let index = 0;
+        for (let dataArray of list) {
+            html += "<div style='border: 1px solid green'>";
+            html += this.doDataBlocks("sample_" + direction + index, dataArray, displayGroupBy);
+            html += "</div>";
+            ++index;
+        }
+        colElem.innerHTML = html;
+    },
+
+    listDataBlocks(paramsDiv, paramsList, values, displayGroupBy) {
         document.getElementById(paramsList).remove();
+        let html = this.doDataBlocks(paramsList, values, displayGroupBy);
+        document.getElementById(paramsDiv).innerHTML = html;
+    },
+
+    doDataBlocks(paramsList, values, displayGroupBy) {
         let html = `<div id="${paramsList}">`;
         for (let i = 0; i < values.length; i++) {
             let flag = i % 8;
@@ -114,11 +140,14 @@ const traceDisplay = {
                 html += "<p style='margin-bottom: 1px;'>";
                 html += `<span style='display: inline-block; width: 30px;'>${offset})</span>`;
             }
-            html += `<span>${values[i]} <span>`;
+            flag = Math.floor(i / displayGroupBy) % 2;
+            let background = "#C0C0C0";
+            if (flag === 1) background = "#00F0F0"; 
+            html += `<span style="background-color: ${background}">${values[i]} <span>`;
             if (flag === 7) html += "</p>";
         }
         html += "</div>";
-        document.getElementById(paramsDiv).innerHTML = html;
+        return html;
     },
 
     doCodeScroll(stepLine, numIns) {
