@@ -2,6 +2,11 @@
 The trial to complete the sampleOutGreaterThanSampleIn
 rule ran for 607 rounds and reached 21.4/24
 
+Inserted seed for sampleOutGreaterThanSampleIn.
+Was stuck on sampleInMinusSampleOut, but this
+was due to a bug in the rule. When fixed, this
+completed in 2 rounds.
+
 24/04/2025
 The code now includes the sampleInMinusSampleOut rule.
 The trial for the sampleOutGreaterThanSampleIn rule

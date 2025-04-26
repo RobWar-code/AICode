@@ -350,7 +350,7 @@ const rulesets = {
                 sequenceNum: 5, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
                 highIC: 9 * 16 * 5,
-                sampleIn: [3,15,3],
+                sampleIn: [[3,15,3]],
                 sampleOut: [],
                 paramsIn: [
                     [2,16,3],

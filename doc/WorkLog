@@ -21,9 +21,6 @@ Jobs Due
     
     + Add a completion of all rules procedure. Untested
 
-    Code Enhancement - Separate the display cycle data from the display entity data
-    and then combine them in the main program entityDisplay rather
-    than passing them as parameters to the entity object function.
 
     Code Enhancement - Consider separating out the rule/seed option functions
     into their own module from the main control object, rather
@@ -34,17 +31,52 @@ Jobs Due
     Rationalise the modulo rules - always use two or more inputs
 
     Reorganise scorelist
-    
-    Do the sampleInMinusSampleOut seed rule
 
-    Provide a breedFromSeed method to allow for cases where there are
-    only minor program differences between required and previous rules
-    which would nonetheless score low on trial.
+
+    Backup the projects folder on the USB.
+
+    Change the transfer batch in MainControlParallel to a complete set, rather than 
+    individual entities
+
+    Include save scorelist for an entity?
+
+    Check-out end of selected seed rule
+    
+    Trace operation
+        Close the trace window from the main window
+
+        Include a close option on the trace window
+
+    Apply redundant pairs to monoclonal instruction insert/replace?
+
+    Do estimating for probabilities with samples etc.
+        Allow for multiple ways to solve the same issue
+
+    Consider why the system gets trapped in solutions so soon.
+
+    Overcome "cheating" in which the entity simply places the test/result byte into the output block
+        This might be overcome by making the tests sufficiently numerically steep?
+        Threshold minimum of steps?
+        Include the input argument(s) adjacent to the output result in the output data.
+        See weeding below
+
+    Weeding - removing sub-standard items from the best set
+
+    Continue the analysis
+
+Jobs Done
+    25/04/2025
+        
+    * Do the sampleInMinusSampleOut seed rule
+
+    * Code Enhancement - Separate the display cycle data from the display entity data
+    and then combine them in the main program entityDisplay rather
+    than passing them as parameters to the entity object function.
 
     * Display the sample data
         * Main Display
         * Trace Display
-        Seed Display
+        * Seed Display
 
     * Provide rules that make deliberate use of sample data, ie:
         * sample input minus sample output
@@ -71,36 +103,6 @@ Jobs Due
 
     * Update the README instruction set listing with the LDSI, LDSO instructions
 
-    Backup the projects folder on the USB.
-
-    Change the transfer batch in MainControlParallel to a complete set, rather than 
-    individual entities
-
-    Include save scorelist for an entity?
-
-    Trace operation
-        Close the trace window from the main window
-
-        Include a close option on the trace window
-
-    Apply redundant pairs to monoclonal instruction insert/replace?
-
-    Do estimating for probabilities with samples etc.
-        Allow for multiple ways to solve the same issue
-
-    Consider why the system gets trapped in solutions so soon.
-
-    Overcome "cheating" in which the entity simply places the test/result byte into the output block
-        This might be overcome by making the tests sufficiently numerically steep?
-        Threshold minimum of steps?
-        Include the input argument(s) adjacent to the output result in the output data.
-        See weeding below
-
-    Weeding - removing sub-standard items from the best set
-
-    Continue the analysis
-
-Jobs Done
     15/04/2025
 
     * Resolve the hang-up problem with double click on Halt Process
