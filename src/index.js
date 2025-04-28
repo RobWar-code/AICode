@@ -5,9 +5,14 @@ const MainControlParallel = require(path.join(__dirname, './processes/MainContro
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
 const rulesets = require(path.join(__dirname, "./processes/rulesets.js"))
+const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
+const {databaseType, processMode} = require(path.join(__dirname, 'AICodeConfig.js'));
+let dbConn;
+if (databaseType === "sqlite") {
+  dbConn = require(path.join(__dirname, './database/dbConnSqlite.js'));
+}
 const dbTransactions = require(path.join(__dirname, './database/dbTransactions.js'));
 
-const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -22,7 +27,7 @@ let traceWindow = null;
 let program = null;
 let cancelled = false;
 let testWindow = null;
-let processMode = "serial"; // serial or parallel
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -48,6 +53,9 @@ const createWindow = () => {
     }
     else {
       program = new MainControlParallel(mainWindow);
+    }
+    if (databaseType === 'sqlite') {
+      dbConn.openConnection();
     }
     // Global Data
     let globalData = {numBestSets: program.numBestSets};
@@ -127,6 +135,10 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
+  if (databaseType === 'sqlite') {
+    dbConn.close();
+  }
+  
   if (process.platform !== 'darwin') {
     app.quit();
   }

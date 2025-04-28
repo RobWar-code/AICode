@@ -40,7 +40,17 @@ Jobs Due
 
     Include save scorelist for an entity?
 
-    Check-out end of selected seed rule
+    Check-out end of selected rule
+
+    Do configuration module for sqlite/mysql and serial/parallel
+        Do the related adaptations.
+        
+    * Incorporate sqlite as a database alternative
+        * do the connection with a wrapper object that maps onto the mysql access functions
+        * do the createSqliteTables.js app
+        * include a database flag to use to open and close the sqlite database in index.js
+        * modify the include on dbTransactions for sqlite.
+        * include a database flag to use to open and close the sqlite database in workerApp.js
     
     Trace operation
         Close the trace window from the main window

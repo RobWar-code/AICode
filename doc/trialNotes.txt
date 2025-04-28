@@ -1,3 +1,14 @@
+27/05/2025
+Trial running on windows laptop is at round 876
+doing modulo first param 6. The seed entity programs
+have been:
+    sampleOutGreaterThanSampleIn
+    seriesOfSeries
+
+Have allowed for a sqlite database on the development
+system, which appears to run quite a bit faster,
+especially noticeable in parallel processing mode.
+
 25/05/2025
 The trial to complete the sampleOutGreaterThanSampleIn
 rule ran for 607 rounds and reached 21.4/24

@@ -603,7 +603,15 @@ breeding.
 
 ## Database - Load/Save Operations
 
-The database system used by the app is MySql, node.js implementation.
+The database system used by the app is either MySql or sqlite3, node.js 
+implementations.
+
+To set-up for sqlite:
+    In index.js require the file database/dbConnSqlite.js, rather than
+    database/dbConn.js
+    Set the global varable databaseType to "sqlite"
+    In dbTransactions.js file require the file database/dbConnSqlite.js
+
 
 The save and load options are included on the main display window.
 

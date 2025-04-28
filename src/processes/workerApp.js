@@ -4,8 +4,12 @@ const MainProcess = require(path.join(__dirname, 'MainProcess.js'));
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
+const {databaseType} = require(path.join(__dirname, '../AICodeConfig.js'));
+let dbConn;
+if (databaseType === "sqlite") {
+    dbConn = require(path.join(__dirname,'../database/dbConnSqlite.js'));
+}
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
-const testObj = require(path.join(__dirname, 'testObj'));
 
 // See Main Program for the start up
 
@@ -56,6 +60,7 @@ class BatchProcess {
     }
 
     async startProcess() {
+        await dbConn.openConnection();
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
@@ -64,8 +69,9 @@ class BatchProcess {
         console.log("Start Process: Entity Number", this.entityNumber);
         let mainProcess = new MainProcess(rulesets);
         mainProcess.mainLoop(this);
-        this.transferBatchEntities();
-        this.transferBatchData(this.batchNum);
+        await this.transferBatchEntities();
+        await this.transferBatchData(this.batchNum);
+        await dbConn.close();
     }
 
     async fetchBatchEntities() {

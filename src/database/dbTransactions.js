@@ -1,7 +1,14 @@
 const mysql = require('mysql2/promise');
 const path = require('node:path');
-const dbConn = require(path.join(__dirname, 'dbConn.js'));
 const rulesets = require(path.join(__dirname, '../processes/rulesets.js'));
+const {databaseType} = require(path.join(__dirname, '../AICodeConfig.js'));
+let dbConn;
+if (databaseType === "sqlite") {
+    dbConn = require(path.join(__dirname, 'dbConnSqlite.js'));
+}
+else {
+    dbConn = require(path.join(__dirname, "dbConn.js"));
+}
 
 const dbTransactions = {
     async saveSession(mainWindow, program, ruleSequenceNum) {

@@ -93,3 +93,6 @@ out/
 
 # Application
 src/database/dbConn.js
+
+# Database
+src/database/database.db 
