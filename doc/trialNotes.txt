@@ -1,3 +1,17 @@
+29/05/2025
+Occasional crashes with promises problem with sqlite, 
+could try increasing the timeout for a fresh write 
+attempt.
+
+28/05/2025
+Trial on windows laptop hung-up an invalid value (256)
+in skipAdjacentParams2 sample data.
+
+New code allowing for sqlite downloaded from git.
+
+Has currently reached skipAdjacentParams1 on round 1224.
+continuing.
+
 27/05/2025
 Trial running on windows laptop is at round 876
 doing modulo first param 6. The seed entity programs

@@ -169,6 +169,9 @@ are shuffled a bit at the end of each round to spread the
 facility to interbreed. Such batches are a bit like "islands" in
 the natural world.
 
+To select between parallel and serial modes of operation, set
+the processMode property in AICodeConfig.js
+
 ##### Code Distribution
 The most basic set of tests looks at distribution and frequency 
 of occurence of instructions in the entity set of instructions, 
@@ -607,11 +610,8 @@ The database system used by the app is either MySql or sqlite3, node.js
 implementations.
 
 To set-up for sqlite:
-    In index.js require the file database/dbConnSqlite.js, rather than
-    database/dbConn.js
-    Set the global varable databaseType to "sqlite"
-    In dbTransactions.js file require the file database/dbConnSqlite.js
-
+    In the config file src/AICodeConfig.js, set the databaseType property
+    to "sqlite"
 
 The save and load options are included on the main display window.
 

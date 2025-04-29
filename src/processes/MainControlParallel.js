@@ -60,7 +60,8 @@ class MainControlParallel {
     setupBatchProcessing() {
         // Get number of processors
         this.numCPUs = os.cpus().length;
-        if (this.numCPUs > 2) this.numCPUs = 2;
+        console.log("Num cpus", this.numCPUs);
+
         // A batch is a group of best sets sent to an individual worker
         // A span is a set of batches sent to a set of worker apps
         // Spans are of equal length, other than, perhaps, the final span which has the

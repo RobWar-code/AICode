@@ -5,6 +5,7 @@ const { open } = require('sqlite');
 const dbConn = {
     connection: null,
     lastWrite: Promise.resolve(), // <- added to serialize writes
+    lastRead: Promise.resolve(),
 
     async openConnection() {
         // Open once for the app
@@ -29,7 +30,7 @@ const dbConn = {
         }
         // Choose between .run() (no result) or .all() (getting results)
         if (sql.trim().toUpperCase().startsWith('SELECT')) {
-            let results = await this.connection.all(sql, params);
+            let results = await this._serializeRead(() => this.connection.all(sql, params));
             // To match mysql response
             return [results, undefined];
         } else {
@@ -45,7 +46,7 @@ const dbConn = {
         const firstWord = sql.trim().split(' ')[0].toUpperCase();
         if (firstWord === 'SELECT') {
             // If you want always multiple rows, use all()
-            let results = await this.connection.all(sql, params);
+            let results = await this._serializeRead(() => this.connection.all(sql, params));
             return [results, undefined];
         } else {
             // For INSERT/UPDATE/DELETE, use run()
@@ -82,7 +83,7 @@ const dbConn = {
 
     async _serializeWrite(writeFn) {
         const maxRetries = 5;
-        const retryDelay = 100; // milliseconds
+        const retryDelay = 200; // milliseconds
     
         const attempt = async (retryCount) => {
             try {
@@ -104,6 +105,32 @@ const dbConn = {
             throw err;
         });
         return this.lastWrite;
+    },
+    
+    async _serializeRead(readFn) {
+        const maxRetries = 5;
+        const retryDelay = 200; // milliseconds
+    
+        const attempt = async (retryCount) => {
+            try {
+                return await readFn();
+            } catch (err) {
+                if (err && err.code === 'SQLITE_BUSY' && retryCount < maxRetries) {
+                    console.warn(`Read busy, retrying... attempt ${retryCount + 1}`);
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                    return attempt(retryCount + 1);
+                } else {
+                    throw err;
+                }
+            }
+        };
+    
+        this.lastRead = this.lastRead.then(() => attempt(0)).catch(err => {
+            console.error('Read error:', err);
+            throw err;
+        });
+    
+        return this.lastRead;
     }
     
 }
