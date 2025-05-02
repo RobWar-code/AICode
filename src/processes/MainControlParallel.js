@@ -61,6 +61,7 @@ class MainControlParallel {
         // Get number of processors
         this.numCPUs = os.cpus().length;
         console.log("Num cpus", this.numCPUs);
+        this.numCPUs = 4;
 
         // A batch is a group of best sets sent to an individual worker
         // A span is a set of batches sent to a set of worker apps
