@@ -42,8 +42,15 @@ Jobs Due
 
     Check-out end of selected rule
 
+    Add start processing at specified rule option
+
+    Add search for a number rule
+    
+    * Install AICode and associated products on the new trial system
+        use git restore mainControlParallel.js
+
     * Do configuration module for sqlite/mysql and serial/parallel
-        Do the related adaptations.
+        * Do the related adaptations.
 
     * Incorporate sqlite as a database alternative
         * do the connection with a wrapper object that maps onto the mysql access functions

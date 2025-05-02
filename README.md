@@ -1,6 +1,6 @@
 # Explorations in Evolutionary Developments
 
-## Set-up And Installation
+## Setup And Installation
 Pull the project from RobWar-code/AICode - git pull origin main
 Install node
 Install Electron
@@ -14,8 +14,179 @@ Create the ai_code database in MySql
 
 Run the node program src/database/createTables.js
 
+### Installation on new windows 11 system
+1. Install VS Code (Visual Studio Code)
+Steps:
+Go to: https://code.visualstudio.com/
+
+Click Download for Windows and run the installer.
+
+During installation:
+
+Check "Add to PATH" (important!)
+
+Optionally check "Register Code as an editor for supported file types"
+
+Launch VS Code after installation.
+
+✅ 2. Install Node.js and npm
+Steps:
+Go to: https://nodejs.org/
+
+Choose the LTS (Long Term Support) version for stability.
+
+Run the installer.
+
+During installation:
+
+Make sure "npm package manager" and "Add to PATH" are selected.
+
+In the windows apps menu, select Terminal
+from the options choose run as administrator
+in the shell run
+- set-ExecutionPolicy Bypass
+
+Confirm installation:
+
+bash
+Copy
+Edit
+node -v
+npm -v
+(Run these in Command Prompt or Terminal in VS Code)
+
+✅ 3. Install Git
+Steps:
+Go to: https://git-scm.com/
+
+Download and run the Windows installer.
+
+During setup:
+
+Choose default options unless you have specific preferences.
+
+Recommended: Use Git from the command line and also from 3rd-party software.
+
+Choose Visual Studio Code as the default editor.
+
+Confirm installation:
+
+bash
+Copy
+Edit
+git --version
+✅ 4. Clone Your AICode Project Repository (if already on GitHub or similar)
+Steps:
+Open Terminal or Git Bash.
+
+Clone the repository (replace with your actual repo URL):
+
+bash
+Copy
+Edit
+git clone https://github.com/your-username/aicode-project.git
+cd into the project folder:
+
+bash
+Copy
+Edit
+cd aicode-project
+✅ 5. Install Electron (for Node Modules)
+You can install Electron globally or as a dev dependency inside your project.
+
+Inside project folder:
+bash
+Copy
+Edit
+npm init -y  # if package.json doesn't exist yet
+npm install electron --save-dev
+✅ 6. Install MySQL (Server and CLI Client)
+Steps:
+Download installer from: https://dev.mysql.com/downloads/installer/
+
+Choose the MySQL Installer for Windows (Community Edition).
+
+Install:
+
+MySQL Server
+
+MySQL Workbench (optional GUI)
+
+During setup:
+
+Set root password.
+
 On Windows, the mysql server program file is found at
     "c:\Program Files\MySQL\MySql Server 8.0\bin"
+
+Add MySQL to Windows PATH (usually automatic).
+
+Confirm:
+
+bash
+Copy
+Edit
+mysql -u root -p
+✅ 7. Install SQLite (CLI and Library)
+Steps:
+Go to: https://www.sqlite.org/download.html
+
+Under Precompiled Binaries for Windows, download:
+
+sqlite-tools-win32-x86-xxxxxxx.zip
+
+Extract and place sqlite3.exe in a directory in your PATH (e.g., C:\sqlite).
+
+Add that directory to your system PATH:
+
+Start > "Environment Variables" > Edit PATH > Add folder.
+
+Confirm:
+
+bash
+Copy
+Edit
+sqlite3
+
+✅ 8. Allow for local changes to the configuration file
+
+git update-index --assume-unchanged AICodeConfig.js
+
+To cancel this later use
+
+git update-index --no-assume-unchanged AICodeConfig.js
+
+✅ 9. Set-up the databases
+
+mysql:
+Run mysql -u UserName -p
+- create database ai_code;
+- quit;
+
+Go to the database directory
+- cd src/database
+- node createTables.js
+
+sqlite:
+Go to the project root directory, run
+- node src/database/createSqliteTables.js
+
+If you modify these create table files you will need to
+allow for this in the next git pull origin main otherwise
+you can restore them to the original forms
+
+git restore src/database/createTables.js
+git restore src/database/createSqliteTables.js
+
+If you alter other files temporarily (ie: mainControlParallel.js) use
+the git restore operation before doing git pull origin main
+
+
+
+
+
+
+
 
 ## Background
 

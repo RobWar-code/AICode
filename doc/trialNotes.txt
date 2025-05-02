@@ -1,3 +1,30 @@
+02/05/2025
+Inserted one seed program
+    seriesOfSeries
+Trial has now reached moduloFirstParam6 at round 908.
+
+01/05/2025
+AICode system set-up on the new multi-core trial computer
+first speed test, 
+
+    sqlite, serial: 25 rounds per hour (25% gain)
+    sqlite, parallel: 42 rounds per hour (100% gain)
+
+With the trial on the new system sampleOutGreaterThanSampleIn
+was solved in 137 rounds. This is the first time that that
+rule has been successfully solved. Need to verify code.
+
+The sampleInMinusSampleOut rule took 180 rounds to complete.
+
+
+30/05/2025
+The trial on the windows laptop reached 29/36 on
+sort triplets after 2361 rounds. Upto this point
+the only seeded programs were
+    sampleOutGreaterThanSampleIn
+    seriesOfSeries
+    divideByFirstParam
+
 29/05/2025
 Occasional crashes with promises problem with sqlite, 
 could try increasing the timeout for a fresh write 
