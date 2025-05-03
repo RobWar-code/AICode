@@ -44,7 +44,9 @@ Jobs Due
 
     Add start processing at specified rule option
 
-    Add search for a number rule
+    Add search for sets of three numbers rule
+
+    * Add search for a number rule
     
     * Install AICode and associated products on the new trial system
         use git restore mainControlParallel.js

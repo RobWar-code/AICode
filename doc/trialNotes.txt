@@ -3,6 +3,12 @@ Inserted one seed program
     seriesOfSeries
 Trial has now reached moduloFirstParam6 at round 908.
 
+Seeded moduloFirstParam at about round 1250
+
+Introduced a new rule findNumbers
+
+Seeded divideByFirstParam
+
 01/05/2025
 AICode system set-up on the new multi-core trial computer
 first speed test, 
