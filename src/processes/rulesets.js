@@ -1125,6 +1125,14 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                insDistribution: [
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    }
+                ],
                 highIC: 16 * 15,
                 highIP: 85,
                 sampleIn: [
@@ -2381,7 +2389,7 @@ const rulesets = {
         let opt = f;
         let max = highestIC;
         let min = 0;
-        let score = self.doScore(opt, IC, max, min);
+        let score = self.doScore2(opt, IC, max);
         return score;
 
     },
@@ -2392,11 +2400,10 @@ const rulesets = {
 
         // Get the optimum highIP from the current rule
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
-        let opt = 28;
+        let opt = 35;
         if ("highIP" in rule) opt = rule.highIP;
         let max = maxIP - 1;
-        let min = 0;
-        let score = self.doScore(opt, IP, max, min);
+        let score = self.doScore2(opt, IP, max);
         return score;
     },
 
@@ -4405,6 +4412,23 @@ const rulesets = {
             else {
                 score = 1 - x/(max - opt);
             }
+        }
+        return score;
+    },
+
+    /**
+     * In this case treat the minimum as 0, and score anything UPTO the optimum as 1
+     * @param {*} opt 
+     * @param {*} actual 
+     * @param {*} max 
+     */
+    doScore2: function(opt, actual, max) {
+        let score;
+        if (actual <= opt) {
+            score = 1;
+        }
+        else {
+            score = 1 - ((actual - opt) / (max - opt));
         }
         return score;
     },

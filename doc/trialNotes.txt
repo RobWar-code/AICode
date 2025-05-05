@@ -1,3 +1,11 @@
+05/05/2025
+Trial has reached rule findNumbers which
+it has trialed for 140 rounds.
+
+04/05/2025
+Inserted seed
+    greaterOfAdjacentParams
+
 02/05/2025
 Inserted one seed program
     seriesOfSeries
