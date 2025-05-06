@@ -1145,7 +1145,7 @@ const rulesets = {
                 paramsIn: [
                     [
                         45,3,2,56,48,6,8,9,98,109,46,15,124,47,23,16,
-                        56,109,3,8,45,9,2,47,98,15,109,124,23,16,48,6
+                        56,109,3,8,45,9,2,47,98,15,46,124,23,16,48,6
                     ],
                     [
                         2,1,7,9,18,23,201,222,206,195,87,47,25,45,43,42,
@@ -2373,7 +2373,7 @@ const rulesets = {
 
     instructionCount(self, dataParams, ruleParams) {
         let IC = dataParams.IC;
-        let highestIC = dataParams.instructionSet.maxIC;
+        let highestIC = dataParams.instructionSet.maxIC + 1;
 
         let f = 0;
         // Get initial params length
@@ -2388,7 +2388,6 @@ const rulesets = {
 
         let opt = f;
         let max = highestIC;
-        let min = 0;
         let score = self.doScore2(opt, IC, max);
         return score;
 

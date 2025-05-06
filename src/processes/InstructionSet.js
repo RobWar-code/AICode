@@ -18,7 +18,7 @@ class InstructionSet {
         };
         this.callStack = []; 
         this.farCallStack = [];
-        this.numIns = 60;
+        this.numIns = 62;
         // Notes: Later we need to decide how the return communication with CFAR functions
         // should be performed.
         // multi-byte numbers are most significant byte first
@@ -519,7 +519,7 @@ class InstructionSet {
             {
                 name: "SR A",
                 code: 47,
-                insLen: 2
+                insLen: 1
             },
             {       
                 name: "CMP A, B",        // If equal, z flag set; if B > A carry flag set; else flags cleared
@@ -1633,8 +1633,8 @@ class InstructionSet {
                     break;
                 case 47:
                     // SR A
-                    A = A % 2;
-                    if (A != 0) {
+                    let x = A % 2;
+                    if (x != 0) {
                         CF = 1;
                     }
                     else {
