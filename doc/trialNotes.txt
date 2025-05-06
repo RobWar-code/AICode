@@ -2,6 +2,10 @@
 Trial has reached rule findNumbers which
 it has trialed for 140 rounds.
 
+Stuck on findNumbers at 25/36. Modified the findNumbers
+rule to include insDistribution for CMP A, B
+Re-run at round 3948
+
 04/05/2025
 Inserted seed
     greaterOfAdjacentParams

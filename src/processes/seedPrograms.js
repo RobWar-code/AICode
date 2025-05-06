@@ -700,6 +700,15 @@ const seedPrograms = {
             ]
         },
         {
+            name: "findNumbers",
+            description: "Output the positions of the first set of numbers in the second",
+            program: [
+                {
+                    //
+                }
+            ]
+        },
+        {
             name: "greaterThanAdjacentParam",
             description: "Output the greater of the adjacent params from the input",
             program: [
