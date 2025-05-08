@@ -7,8 +7,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 78,
-    maxRuleId: 77,
+    numRules: 79,
+    maxRuleId: 78,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
@@ -21,7 +21,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleCompletionRound: new Array(78).fill(-1),
+    ruleCompletionRound: new Array(79).fill(-1),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     seedRuleFragments: [],
@@ -872,7 +872,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Get Numbers Greater than First", ruleId: 76,
-                retain: false, skip: false, sequenceNum: 28, 
+                retain: false, skip: false, sequenceNum: 27, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -904,7 +904,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Get Numbers Less than First", ruleId: 77,
-                retain: false, skip: false, sequenceNum: 29, 
+                retain: false, skip: false, sequenceNum: 28, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -935,8 +935,40 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getNumbersLessThanFirstRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Extract Even Numbers", ruleId: 74,
+            {rule: "Get Numbers Between First Two", ruleId: 78,
                 retain: false, skip: false, sequenceNum: 29, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 10 * 9 * 16 + 100 * 4,
+                highIP: 60,
+                sampleIn: [
+                    [
+                        40,60,87,90,52,17,21,34,57,45,98,47,119,54,81,45,
+                        1,3,58,59,48,78,92,42,41,18,59,51,41,79,44,46,99
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        20,50,25,11,37,3,45,200,128,36,45,29,47,52,16,55,
+                        22,108,40,55,42,44,37,43,101,124,16,27,30,250,240,18
+                    ],
+                    [
+                        50,90,53,67,9,8,72,186,215,76,77,80,22,38,62,64,
+                        16,19,12,105,75,73,24,64,72,51,203,205,62,67,18,69
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getNumbersBetweenFirstTwoRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Extract Even Numbers", ruleId: 74,
+                retain: false, skip: false, sequenceNum: 30, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -968,7 +1000,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Extract Odd Numbers", ruleId: 75,
-                retain: false, skip: false, sequenceNum: 30, 
+                retain: false, skip: false, sequenceNum: 31, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1000,7 +1032,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Greater than First Param", ruleId: 19,
-                retain: false, skip: false, sequenceNum: 31, 
+                retain: false, skip: false, sequenceNum: 32, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1024,7 +1056,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Compare First Param", ruleId: 20,
-                retain: false, skip: false, sequenceNum: 32, 
+                retain: false, skip: false, sequenceNum: 33, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1051,7 +1083,7 @@ const rulesets = {
             {rule: "Duplicate Params", ruleId: 21,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 33, 
+                sequenceNum: 34, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 8,
@@ -1078,7 +1110,7 @@ const rulesets = {
             {rule: "Skip Adjacent Params 1", ruleId: 22,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 34, 
+                sequenceNum: 35, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1109,7 +1141,7 @@ const rulesets = {
             {rule: "Skip Adjacent Params 2", ruleId: 23,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 35, 
+                sequenceNum: 36, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1138,7 +1170,8 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Swap Adjacent Params", ruleId: 24,
-                retain: false, skip: false, sequenceNum: 36, 
+                retain: false, skip: false, 
+                sequenceNum: 37, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1164,7 +1197,7 @@ const rulesets = {
             {rule: "Greater of Adjacent Params", ruleId: 25,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 37, 
+                sequenceNum: 38, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1195,7 +1228,7 @@ const rulesets = {
             {rule: "Greater of Three", ruleId: 66,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 38, 
+                sequenceNum: 39, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 8,
                 inBlockStart: 0, inBlockLen: 24,
@@ -1225,7 +1258,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Sort Adjacent Params", ruleId: 26,
                 retain: false, skip: false, 
-                sequenceNum: 39, 
+                sequenceNum: 40, 
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1251,7 +1284,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Find Numbers", ruleId: 72,
                 retain: false, skip: false, 
-                sequenceNum: 40, 
+                sequenceNum: 41, 
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1292,7 +1325,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Find Number Triplets", ruleId: 73,
                 retain: false, skip: false, 
-                sequenceNum: 41, 
+                sequenceNum: 42, 
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 8,
                 inBlockStart: 0, inBlockLen: 48,
@@ -1325,7 +1358,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Sort Triplets", ruleId: 65,
                 retain: false, skip: false, 
-                sequenceNum: 42, 
+                sequenceNum: 43, 
                 score: 0, displayGroupBy: 3, completionRound: -1, 
                 max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 18,
@@ -1352,7 +1385,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Sort Params", ruleId: 64,
                 retain: false, skip: false, 
-                sequenceNum: 43, 
+                sequenceNum: 44, 
                 score: 0, completionRound: -1, max: 5, passScore: 0.8, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1379,7 +1412,7 @@ const rulesets = {
             {rule: "Add Adjacent Params", ruleId: 27,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 44, 
+                sequenceNum: 45, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1411,7 +1444,7 @@ const rulesets = {
             {rule: "Subtract Adjacent Params", ruleId: 28,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 45, 
+                sequenceNum: 46, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1443,7 +1476,7 @@ const rulesets = {
             {rule: "Multiply Adjacent Params", ruleId: 29, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 46, 
+                sequenceNum: 47, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, 
                 inBlockStart: 0, inBlockLen: 32,
@@ -1475,7 +1508,7 @@ const rulesets = {
             {rule: "Divide Adjacent Params", ruleId: 30, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 47, 
+                sequenceNum: 48, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 32,
@@ -1507,7 +1540,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 1", ruleId: 57, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 48, 
+                sequenceNum: 49, 
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
@@ -1539,7 +1572,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 2", ruleId: 58, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 49, 
+                sequenceNum: 50, 
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
@@ -1571,7 +1604,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 3", ruleId: 59, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 50, 
+                sequenceNum: 51, 
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
@@ -1604,7 +1637,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 4", ruleId: 60, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 51, 
+                sequenceNum: 52, 
                 score: 0, completionRound: -1, displayGroupBy:3, 
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1638,7 +1671,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 5", ruleId: 61, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 52, 
+                sequenceNum: 53, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1672,7 +1705,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 6", ruleId: 62, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 53, 
+                sequenceNum: 54, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1705,7 +1738,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 7", ruleId: 54, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 54, 
+                sequenceNum: 55, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1738,7 +1771,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 8", ruleId: 55, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 55, 
+                sequenceNum: 56, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1771,7 +1804,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 9", ruleId: 56, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 56, 
+                sequenceNum: 57, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
@@ -1805,7 +1838,7 @@ const rulesets = {
             {rule: "Use op to Convert Adjacent Params 10", ruleId: 31,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 57, 
+                sequenceNum: 58, 
                 score: 0, completionRound: -1, displayGroupBy: 3,
                 max: 20, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 32,
@@ -1846,7 +1879,7 @@ const rulesets = {
             {rule: "Convert ASCII Numbers 1", ruleId: 32,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 58, 
+                sequenceNum: 59, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1866,7 +1899,7 @@ const rulesets = {
             {rule: "Convert ASCII Numbers 2", ruleId: 33,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 59, 
+                sequenceNum: 60, 
                 score: 0, completionRound: -1, displayGroupBy:3, 
                 max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -1887,7 +1920,7 @@ const rulesets = {
             {rule: "Convert ASCII Numbers 3", ruleId: 34,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 60, 
+                sequenceNum: 61, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1907,7 +1940,7 @@ const rulesets = {
             {rule: "Convert ASCII Numbers 4", ruleId: 35,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
-                sequenceNum: 61, 
+                sequenceNum: 62, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1921,7 +1954,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 76;
+        this.outputScoresItem = 77;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 sequenceNum: 0, score: 0, max: 2, startRoundNum: 0
@@ -1931,7 +1964,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 77;
+        this.diffScore = 78;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 sequenceNum: 0, score: 0, max: 1, startRoundNum: 0
@@ -3459,6 +3492,20 @@ const rulesets = {
             let n = inputs[0];
             for (let v of inputs) {
                 if (v < n) output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getNumbersBetweenFirstTwoRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let n1 = inputs[0];
+            let n2 = inputs[1];
+            for (let v of inputs) {
+                if (v > n1 && n2 > v) output.push(v);
             }
             outputList.push(output);
         }
