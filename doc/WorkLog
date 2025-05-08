@@ -44,7 +44,9 @@ Jobs Due
 
     Add start processing at specified rule option
 
-    Fix LOAD best sets restart from rule beginning (saved best set data lost)
+    * Add extract numbers greater/less than first
+
+    * Fix LOAD best sets restart from rule beginning (saved best set data lost)
 
     * Add extract even/odd rules
 
