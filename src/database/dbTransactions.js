@@ -29,7 +29,7 @@ const dbTransactions = {
             sql += "VALUES (?, ?, ?, ?, ?)";
             const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, 
                 elapsedTime, program.entityNumber, ruleSequenceNum]);
-            console.log ("session saved");
+            console.log ("session saved -id", results.insertId);
             sessionId = results.insertId;
         }
         catch (err) {
@@ -183,7 +183,7 @@ const dbTransactions = {
             [entities] = await dbConnection.execute(
                 `SELECT * FROM entity WHERE session_id = ${sessionId}`
             );
-            console.log('loaded entities');
+            console.log('loaded entities - entities length', entities.length, sessionId);
         } catch (err) {
             console.error('Error retrieving most recent record:', err.message);
             throw err;

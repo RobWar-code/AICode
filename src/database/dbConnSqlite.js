@@ -75,7 +75,10 @@ const dbConn = {
         // Helper to run the write operation
         if (sql.trim().startsWith('INSERT') || sql.trim().startsWith('UPDATE') || sql.trim().startsWith('DELETE') || sql.trim().startsWith('CREATE') || sql.trim().startsWith('DROP')) {
             const result = await this.connection.run(sql, params);
-            return [result, undefined]; // Match the [results, undefined] format
+            if (sql.trim().startsWith('INSERT')) {
+                result.insertId = result.lastID;
+            }
+            return result; // Match the [results, undefined] format
         } else {
             throw new Error('Unknown write operation');
         }

@@ -44,7 +44,11 @@ Jobs Due
 
     Add start processing at specified rule option
 
-    Add search for sets of three numbers rule
+    Fix LOAD best sets restart from rule beginning (saved best set data lost)
+
+    * Add extract even/odd rules
+
+    * Add search for sets of three numbers rule
 
     * Add search for a number rule
     

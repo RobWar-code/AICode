@@ -548,7 +548,6 @@ class MainControlParallel {
         ++this.scoreHistoryCounter[bestSetNum];
     }
 
-
     loadAndExecuteSeed(seedProgram) {
         let insSet = new InstructionSet();
         // Compile the seed program

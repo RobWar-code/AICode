@@ -5,6 +5,9 @@ to reach 36/49, suggesting that the earlier modulo solutions were
 not strictly algorithmic. Perhaps 4 execution cycle examples for
 a rule are necessary (as in the case of modulo 7)?
 
+Added the Extract odd/even rules.
+
+Seeded the trial with modulo first param.
 
 06/05/2025
 Recommenced trial from scratch, including SR A and SL A 
