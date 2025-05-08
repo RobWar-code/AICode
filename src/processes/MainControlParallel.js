@@ -15,7 +15,7 @@ class MainControlParallel {
         this.bestEntitySetMax = 40;
         this.bestEntitySetCount = 0;
         this.bestEntitySet = [];
-        this.numBestSets = 64;
+        this.numBestSets = 72;
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
@@ -59,9 +59,8 @@ class MainControlParallel {
 
     setupBatchProcessing() {
         // Get number of processors
-        this.numCPUs = os.cpus().length;
+        this.numCPUs = os.cpus().length / 2;
         console.log("Num cpus", this.numCPUs);
-        this.numCPUs = 4;
 
         // A batch is a group of best sets sent to an individual worker
         // A span is a set of batches sent to a set of worker apps

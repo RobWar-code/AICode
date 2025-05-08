@@ -1,5 +1,8 @@
+08/05/2025
+Trial completed divide by first param 2 after 660 rounds.
+
 07/05/2025
-Trail has run without seeding as far as moduloFirstParam7,
+Trial has run without seeding as far as moduloFirstParam7,
 755 rounds so far. Modulo7 has required about 100 rounds
 to reach 36/49, suggesting that the earlier modulo solutions were
 not strictly algorithmic. Perhaps 4 execution cycle examples for
