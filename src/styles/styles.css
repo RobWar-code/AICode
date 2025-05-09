@@ -102,6 +102,11 @@ li {
     border: 1px solid black;
 }
 
+/* Start Rule Selection */
+#startRuleDiv {
+    display: none;
+}
+
 /* Seed Selection */
 #seedSelectionDiv {
     display: none;

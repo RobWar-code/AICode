@@ -448,6 +448,16 @@ class MainControl {
         return a;
     }
 
+    startAtRule(ruleSequenceNum) {
+        console.log("ruleSequenceNum:", ruleSequenceNum);
+        this.ruleSequenceNum = ruleSequenceNum;
+        rulesets.ruleSequenceNum = ruleSequenceNum;
+        this.bestSetNum = 0;
+        this.bestSets = new Array(this.numBestSets).fill([]);
+        this.doProcess();
+        this.mainWindow.webContents.send("mainCycleCompleted", 0);
+    }
+
     startSelectedRule(ruleNum) {
         this.ruleSequenceNum = ruleNum;
         rulesets.ruleSequenceNum = ruleNum;

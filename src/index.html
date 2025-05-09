@@ -86,6 +86,7 @@
           <button class="textButton" id="scoreListButton">Score List</button>
           <button class="textButton" id="scoreHistoryButton">Score History</button>
           <button class="textButton" id="haltProcessButton">Start Process</button>
+          <button class="textButton" id="startAtRuleButton">Start At Rule</button>
           <button class="textButton" id="traceButton">Trace</button>
           <button class="textButton" id="loadSeedButton" title="Load a crafted seed entity">Load Seed</button>
           <button class="textButton" id="loadSeedRuleButton" title="Load seed rule from memory">Load Seed Rule</button>
@@ -93,6 +94,18 @@
           <button class="textButton" id="ruleSelectionButton">Select Rule</button>
           <button class="textButton" id="saveButton">Save</button>
           <button class="textButton" id="loadButton">Load</button>
+        </div>
+      </div>
+
+      <!-- Start Rule Selection -->
+      <div class="row" id="startRuleDiv">
+        <div class="col formDiv">
+          <form class="lineForm" id="startRuleSelectorForm">
+            <label for="startRuleSelector">Select Start Rule: </label>
+            <select id="startRuleSelector" name="startRuleSelector"></select>
+            <button type="submit" class="textButton">Submit</button>
+          </form>
+          <button class="textButton" id="cancelStartRuleButton">Cancel</button>
         </div>
       </div>
 

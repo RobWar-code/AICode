@@ -180,6 +180,15 @@ ipcMain.on("activateMainProcess", () => {
   }
 });
 
+ipcMain.on("fetchStartRuleList", (data) => {
+  let ruleList = rulesets.fetchRuleSequenceList();
+  mainWindow.webContents.send("displayStartRuleList", ruleList);
+})
+
+ipcMain.on("startAtRule", (event, ruleSequenceNum) => {
+  program.startAtRule(ruleSequenceNum);
+});
+
 ipcMain.on("traceStep", (data) => {
   trace.nextStep();
 });

@@ -697,6 +697,16 @@ class MainControlParallel {
         return a;
     }
 
+    startAtRule(ruleSequenceNum) {
+        console.log("ruleSequenceNum:", ruleSequenceNum);
+        this.ruleSequenceNum = ruleSequenceNum;
+        rulesets.ruleSequenceNum = ruleSequenceNum;
+        this.bestSetNum = 0;
+        this.bestSets = new Array(this.numBestSets).fill([]);
+        this.setupBatchProcessing();
+        this.batchProcessLoop();
+    }
+
     startSelectedRule(ruleNum) {
         this.ruleSequenceNum = ruleNum;
         rulesets.ruleSequenceNum = ruleNum;

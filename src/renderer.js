@@ -1,6 +1,7 @@
 const {ipcRenderer, ipcMain} = require("electron");
 const path = require('node:path');
 const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"));
+const startRuleDisplay = require(path.join(__dirname, "/display/startRuleDisplay.js"));
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
@@ -70,6 +71,10 @@ ipcRenderer.on("mainCycleCompleted", (event, data) => {
     }
 });
 
+ipcRenderer.on("displayStartRuleList", (event, ruleList) => {
+    startRuleDisplay.displayRuleSelector(ruleList);
+});
+
 ipcRenderer.on("displayHistory", (event, data) => {
     scoreHistory.displayHistory(data);
 });
@@ -115,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHistoryButton = document.getElementById('scoreHistoryButton');
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
     const haltProcessButton = document.getElementById('haltProcessButton');
+    const startAtRuleButton = document.getElementById('startAtRuleButton');
+    const startRuleSelectorForm = document.getElementById('startRuleSelectorForm');
     const traceButton = document.getElementById('traceButton');
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
@@ -177,6 +184,23 @@ document.addEventListener('DOMContentLoaded', () => {
             ipcRenderer.send("activateMainProcess", 0);
         }
         processingCancelled = !processingCancelled;
+    });
+
+    startAtRuleButton.addEventListener('click', (event) => {
+        document.getElementById("startRuleDiv").style.display = "block";
+        ipcRenderer.send("fetchStartRuleList", 0)
+    });
+
+    startRuleSelectorForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let sequenceNum = parseInt(document.getElementById("startRuleSelector").value);
+        document.getElementById("startRuleDiv").style.display = "none";
+        processingCancelled = false;
+        processingMode = true;
+        document.getElementById("haltProcessButton").innerText = "Halt Process";
+        document.getElementById("statusDiv").style.display = "block";
+        document.getElementById("statusPara").innerText = "Processing...";
+        ipcRenderer.send("startAtRule", sequenceNum); 
     });
 
     traceButton.addEventListener('click', (event) => {
