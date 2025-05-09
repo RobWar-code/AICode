@@ -876,6 +876,14 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                insDistribution: [
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    }
+                ],
                 highIC: 10 * 9 * 16 + 100 * 4,
                 highIP: 60,
                 sampleIn: [
@@ -908,6 +916,14 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                insDistribution: [
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    }
+                ],
                 highIC: 10 * 9 * 16 + 100 * 4,
                 highIP: 60,
                 sampleIn: [

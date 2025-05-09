@@ -4,6 +4,8 @@ Trial completed divide by first param 2 after 660 rounds.
 Changed the number of best sets to 72 and the numCPUs on
 the trial machine to 6.
 
+Seeded divide by first param 3 after 350 rounds.
+
 07/05/2025
 Trial has run without seeding as far as moduloFirstParam7,
 755 rounds so far. Modulo7 has required about 100 rounds
