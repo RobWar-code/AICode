@@ -919,10 +919,125 @@ const rulesets = {
         this.byteFunction.push(this.byteCompareFirstParam);
         this.requiredOutputsFunction.push(this.getCompareFirstParamRequiredOutputs);
 
+        // Rules with separate input and output pointers
+        this.scoreList.push(
+            {rule: "Duplicate Params", ruleId: 21,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                sequenceNum: 29, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 8 * 10 + 100 * 4,
+                sampleIn: [[2,7,9,19,108,43,22,17]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        9,25,27,33,38,100,96,75
+                    ],
+                    [
+                        11,21,13,108,225,217,18,15
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.duplicateParams);
+        this.byteFunction.push(this.byteDuplicateParams);
+        this.requiredOutputsFunction.push(this.getDuplicateParamsRequiredOutputs);
+
+        // Rules relating adjacent parameters
+        this.scoreList.push(
+            {rule: "Skip Adjacent Params 1", ruleId: 22,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                sequenceNum: 30, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 8 + 100 * 4,
+                sampleIn: [[
+                    17,16,90,34,76,65,39,86,12,45,97,112,86,19,87,17,
+                    23,65,87,83,67,73,19,29,32,54,12,90,198,74,86,61
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        1,7,12,8,11,96,91,10,16,84,101,105,90,58,202,201,
+                        202,11,34,56,32,87,9,18,95,93,92,34,37,81,17,22
+                    ],
+                    [
+                        4,9,11,15,89,63,62,80,93,30,65,78,35,36,107,209,
+                        201,17,19,40,78,79,85,53,42,39,70,16,17,105,111,112
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.skipAdjacentParams1);
+        this.byteFunction.push(this.byteSkipAdjacentParams1);
+        this.requiredOutputsFunction.push(this.getSkipAdjacentParams1RequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Skip Adjacent Params 2", ruleId: 23,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                sequenceNum: 31, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 8 + 100 * 4,
+                sampleIn: [[
+                    43,54,76,81,17,19,21,40,80,120,255,103,96,75,81,84,
+                    23,24,25,26,18,30,90,40,50,121,212,170,86,64,79,18
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        1,16,96,74,108,212,220,15,90,96,98,101,73,65,45,35,
+                        2,4,16,58,98,76,85,61,17,25,86,92,18,46,74,57,
+                    ],
+                    [
+                        3,19,47,90,81,31,87,91,26,103,222,67,87,62,35,97,
+                        4,16,90,19,17,21,23,24,89,84,167,189,29,218,17,16
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.skipAdjacentParams2);
+        this.byteFunction.push(this.byteSkipAdjacentParams2);
+        this.requiredOutputsFunction.push(this.getSkipAdjacentParams2RequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Swap Adjacent Params", ruleId: 24,
+                retain: false, skip: false, 
+                sequenceNum: 32, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 10 + 100 * 4,
+                sampleIn: [[87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57]],
+                sampleOut:[],
+                paramsIn: [
+                    [
+                        1,5,6,9,18,90,49,57,86,178,202,85,54,72,19,21
+                    ],
+                    [
+                        9,10,56,23,43,23,90,17,110,76,228,234,146,18,19,21
+                    ]
+                ], 
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.swapAdjacentParams);
+        this.byteFunction.push(this.byteSwapAdjacentParams);
+        this.requiredOutputsFunction.push(this.getSwapAdjacentParamsRequiredOutputs);
+
         this.scoreList.push(
             {rule: "Get Numbers Greater than First", ruleId: 76,
                 retain: false, skip: false, 
-                sequenceNum: 29, 
+                sequenceNum: 33, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -969,7 +1084,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Get Numbers Less than First", ruleId: 77,
                 retain: false, skip: false, 
-                sequenceNum: 30, 
+                sequenceNum: 34, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1010,7 +1125,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Get Numbers Between First Two", ruleId: 78,
                 retain: false, skip: false, 
-                sequenceNum: 31, 
+                sequenceNum: 35, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1051,7 +1166,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Extract Even Numbers", ruleId: 74,
                 retain: false, skip: false, 
-                sequenceNum: 32, 
+                sequenceNum: 36, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1084,7 +1199,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Extract Odd Numbers", ruleId: 75,
                 retain: false, skip: false, 
-                sequenceNum: 33, 
+                sequenceNum: 37, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1113,121 +1228,6 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getExtractOddNumbersRequiredOutputs);
-
-        // Rules with separate input and output pointers
-        this.scoreList.push(
-            {rule: "Duplicate Params", ruleId: 21,
-                retain: false, skip: false, 
-                excludeHelperRules: [67],
-                sequenceNum: 34, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 8,
-                highIC: 8 * 10 + 100 * 4,
-                sampleIn: [[2,7,9,19,108,43,22,17]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        9,25,27,33,38,100,96,75
-                    ],
-                    [
-                        11,21,13,108,225,217,18,15
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.duplicateParams);
-        this.byteFunction.push(this.byteDuplicateParams);
-        this.requiredOutputsFunction.push(this.getDuplicateParamsRequiredOutputs);
-
-        // Rules relating adjacent parameters
-        this.scoreList.push(
-            {rule: "Skip Adjacent Params 1", ruleId: 22,
-                retain: false, skip: false, 
-                excludeHelperRules: [67],
-                sequenceNum: 35, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 8 + 100 * 4,
-                sampleIn: [[
-                    17,16,90,34,76,65,39,86,12,45,97,112,86,19,87,17,
-                    23,65,87,83,67,73,19,29,32,54,12,90,198,74,86,61
-                ]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        1,7,12,8,11,96,91,10,16,84,101,105,90,58,202,201,
-                        202,11,34,56,32,87,9,18,95,93,92,34,37,81,17,22
-                    ],
-                    [
-                        4,9,11,15,89,63,62,80,93,30,65,78,35,36,107,209,
-                        201,17,19,40,78,79,85,53,42,39,70,16,17,105,111,112
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.skipAdjacentParams1);
-        this.byteFunction.push(this.byteSkipAdjacentParams1);
-        this.requiredOutputsFunction.push(this.getSkipAdjacentParams1RequiredOutputs);
-
-        this.scoreList.push(
-            {rule: "Skip Adjacent Params 2", ruleId: 23,
-                retain: false, skip: false, 
-                excludeHelperRules: [67],
-                sequenceNum: 36, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 8 + 100 * 4,
-                sampleIn: [[
-                    43,54,76,81,17,19,21,40,80,120,255,103,96,75,81,84,
-                    23,24,25,26,18,30,90,40,50,121,212,170,86,64,79,18
-                ]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        1,16,96,74,108,212,220,15,90,96,98,101,73,65,45,35,
-                        2,4,16,58,98,76,85,61,17,25,86,92,18,46,74,57,
-                    ],
-                    [
-                        3,19,47,90,81,31,87,91,26,103,222,67,87,62,35,97,
-                        4,16,90,19,17,21,23,24,89,84,167,189,29,218,17,16
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.skipAdjacentParams2);
-        this.byteFunction.push(this.byteSkipAdjacentParams2);
-        this.requiredOutputsFunction.push(this.getSkipAdjacentParams2RequiredOutputs);
-
-        this.scoreList.push(
-            {rule: "Swap Adjacent Params", ruleId: 24,
-                retain: false, skip: false, 
-                sequenceNum: 37, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 10 + 100 * 4,
-                sampleIn: [[87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57]],
-                sampleOut:[],
-                paramsIn: [
-                    [
-                        1,5,6,9,18,90,49,57,86,178,202,85,54,72,19,21
-                    ],
-                    [
-                        9,10,56,23,43,23,90,17,110,76,228,234,146,18,19,21
-                    ]
-                ], 
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.swapAdjacentParams);
-        this.byteFunction.push(this.byteSwapAdjacentParams);
-        this.requiredOutputsFunction.push(this.getSwapAdjacentParamsRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Greater of Adjacent Params", ruleId: 25,

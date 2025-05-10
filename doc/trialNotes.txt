@@ -1,3 +1,9 @@
+10/05/2025
+Trial system failed to complete rule getNumbersGreaterThanFirst
+after 600 rounds, added rule modification insDistribution: CMP A, B; JRC.
+Changed the order of rules so that rule greaterThanFirstParam and
+compareFirstParam precede. 
+
 09/05/2025
 Trial system failed to complete rule getNumbersGreaterThanFirst
 after 600 round, added rule modification insDistribution: CMP A, B 
