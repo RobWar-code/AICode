@@ -831,6 +831,101 @@ const seedPrograms = {
             ]
         },
         {
+            name: "getNumbersGreaterThanFirst",
+            description: "Output those input numbers which are greater than the first",
+            program: [
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Input Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // Comparator Value
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    // Main Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [8] // Next Input
+                },
+                {
+                    ins: "JRZ",
+                    data: [6] // Next Input
+                },
+                {
+                    // Output byte
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    // Next Input
+                    ins: "LD A, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Input Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE8] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "greaterThanAdjacentParam",
             description: "Output the greater of the adjacent params from the input",
             program: [

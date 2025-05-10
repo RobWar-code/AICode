@@ -42,9 +42,11 @@ Jobs Due
 
     Check-out end of selected rule
 
-    Add start processing at specified rule option
-
     Add powers of numbers rule
+
+    Add seed program for get numbers greater than first param
+
+    * Add start processing at specified rule option
 
     * Add get numbers between first two rule
     

@@ -2,6 +2,11 @@
 Trial system failed to complete rule getNumbersGreaterThanFirst
 after 600 round, added rule modification insDistribution: CMP A, B 
 
+Trial on getNumbersGreaterThanFirst still failed, so have add the
+option to start at a specified rule and restarted the rule from
+scratch with the insDistribution: CMP A, B set.
+
+
 08/05/2025
 Trial completed divide by first param 2 after 660 rounds.
 

@@ -871,8 +871,58 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Get Numbers Greater than First", ruleId: 76,
+            {rule: "Greater than First Param", ruleId: 19,
                 retain: false, skip: false, sequenceNum: 27, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 8 + 100 * 4,
+                sampleIn: [[17,98,4,86,15,17,19,12,10,9,54,3,45,12,13,91]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                    ],
+                    [
+                        38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.greaterThanFirstParam);
+        this.byteFunction.push(this.byteGreaterThanFirstParam);
+        this.requiredOutputsFunction.push(this.getGreaterThanFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Compare First Param", ruleId: 20,
+                retain: false, skip: false, 
+                sequenceNum: 28, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 14 + 100 * 4,
+                sampleIn: [[36,17,19,45,59,75,17,24,34,76,90,112,211,89,12,32]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                    ],
+                    [
+                        38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.compareFirstParam);
+        this.byteFunction.push(this.byteCompareFirstParam);
+        this.requiredOutputsFunction.push(this.getCompareFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Get Numbers Greater than First", ruleId: 76,
+                retain: false, skip: false, 
+                sequenceNum: 29, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -884,8 +934,8 @@ const rulesets = {
                         scanEnd: 20
                     }
                 ],
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 16 * 20 + 100,
+                highIP: 40,
                 sampleIn: [
                     [
                         60,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -912,7 +962,8 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Get Numbers Less than First", ruleId: 77,
-                retain: false, skip: false, sequenceNum: 28, 
+                retain: false, skip: false, 
+                sequenceNum: 30, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -924,8 +975,8 @@ const rulesets = {
                         scanEnd: 20
                     }
                 ],
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 16 * 20 + 100,
+                highIP: 40,
                 sampleIn: [
                     [
                         60,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -952,12 +1003,21 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Get Numbers Between First Two", ruleId: 78,
-                retain: false, skip: false, sequenceNum: 29, 
+                retain: false, skip: false, 
+                sequenceNum: 31, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                insDistribution: [
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    }
+                ],
+                highIC: 16 * 24 + 100,
+                highIP: 50,
                 sampleIn: [
                     [
                         40,60,87,90,52,17,21,34,57,45,98,47,119,54,81,45,
@@ -984,7 +1044,8 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Extract Even Numbers", ruleId: 74,
-                retain: false, skip: false, sequenceNum: 30, 
+                retain: false, skip: false, 
+                sequenceNum: 32, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
@@ -1016,7 +1077,8 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Extract Odd Numbers", ruleId: 75,
-                retain: false, skip: false, sequenceNum: 31, 
+                retain: false, skip: false, 
+                sequenceNum: 33, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32,
                 inBlockStart: 0, inBlockLen: 16,
@@ -1045,54 +1107,6 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getExtractOddNumbersRequiredOutputs);
-
-        this.scoreList.push(
-            {rule: "Greater than First Param", ruleId: 19,
-                retain: false, skip: false, sequenceNum: 32, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 8 + 100 * 4,
-                sampleIn: [[17,98,4,86,15,17,19,12,10,9,54,3,45,12,13,91]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
-                    ],
-                    [
-                        38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.greaterThanFirstParam);
-        this.byteFunction.push(this.byteGreaterThanFirstParam);
-        this.requiredOutputsFunction.push(this.getGreaterThanFirstParamRequiredOutputs);
-
-        this.scoreList.push(
-            {rule: "Compare First Param", ruleId: 20,
-                retain: false, skip: false, sequenceNum: 33, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 14 + 100 * 4,
-                sampleIn: [[36,17,19,45,59,75,17,24,34,76,90,112,211,89,12,32]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        20,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
-                    ],
-                    [
-                        38,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.compareFirstParam);
-        this.byteFunction.push(this.byteCompareFirstParam);
-        this.requiredOutputsFunction.push(this.getCompareFirstParamRequiredOutputs);
 
         // Rules with separate input and output pointers
         this.scoreList.push(
