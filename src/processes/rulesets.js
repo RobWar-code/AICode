@@ -932,6 +932,12 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
                     }
                 ],
                 highIC: 16 * 20 + 100,
