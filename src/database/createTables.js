@@ -1,5 +1,5 @@
 const mysql = require('mysql2/promise');
-const dbConn = require('./dbConn.js');
+const dbConn = require('./dbConnSqlite.js');
 
 
 createTables();
@@ -17,7 +17,7 @@ async function createTables() {
     await clearTables(connection);
 
     console.log("Tables Cleared");
-    return;
+//   return;
 
     /*
 
@@ -82,7 +82,7 @@ async function createTables() {
     sql += "fragment VARCHAR(128)";
     sql += ")";
     await connection.query(sql);
-    */
+    
 
     // sql = "DROP TABLE transfer_entity";
     // await connection.query(sql);
@@ -137,8 +137,9 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    // sql = "DROP TABLE batch_data";
-    // await connection.query(sql);
+    */
+    sql = "DROP TABLE batch_data";
+    await connection.query(sql);
     
     sql = "CREATE TABLE batch_data (";
     sql += "batch_num INT,"
@@ -150,6 +151,7 @@ async function createTables() {
     sql += "interbreed_ins_merge_count INT,";
     sql += "self_breed_count INT,";
     sql += "seed_rule_breed_count INT,";
+    sql += "seed_template_breed_count INT,"
     sql += "random_count INT,";
     sql += "cross_set_count INT";
     sql += ")";
@@ -164,6 +166,7 @@ async function clearTables(connection) {
     sql = "DELETE FROM batch_data";
     await connection.query(sql);
 
+    /*
     sql = "DELETE FROM transfer_entity_output";
     await connection.query(sql);
 
@@ -184,5 +187,5 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM session";
     await connection.query(sql);
-
+    */
 }

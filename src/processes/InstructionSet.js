@@ -765,108 +765,6 @@ class InstructionSet {
                     ins: "LDI A, (C)"
                 },
                 {
-                    ins: "ST (MEM), A",
-                    data: [200]
-                },
-                {
-                    ins: "INC C"
-                },
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [201]
-                },
-                {
-                    ins: "INC C"
-                },
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [202]
-                },
-                {
-                    ins: "LD C, IMM",
-                    data: [0]
-                },
-                {
-                    // Main Loop
-                    ins: "LDI A, (MEM)",
-                    data: [1]
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [201]
-                },
-                {
-                    ins: "LD A, IMM",
-                    data: [0]
-                },
-                { 
-                    ins: "ST (MEM), A",
-                    data: [203]
-                },
-                {
-                    // innerloop
-                    ins: "LD A, (MEM)",
-                    data: [203]
-                },
-                {
-                    ins: "LD B, (MEM)",
-                    data: [200]
-                },
-                {
-                    ins: "ADD A, B"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [203]
-                },
-                {
-                    ins: "STO (C), A"
-                },
-                {
-                    ins: "LD A, (MEM)",
-                    data: [201]
-                },
-                {
-                    ins: "DEC A"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [201]
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xF1] // innerloop
-                },
-                {
-                    ins: "LD A, (MEM)",
-                    data: [202]
-                },
-                {
-                    ins: "DEC A"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [202]
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xE4] // mainloop
-                },
-                {
-                    ins: "RETF"
-                }
-            ],
-            [
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
                     ins: "LD B, IMM",
                     data: ["?"]
                 },
@@ -1071,36 +969,59 @@ class InstructionSet {
         // Select a fragment
         let fragmentNum = Math.floor(Math.random() * fragments.length);
         let fragment = fragments[fragmentNum];
+        let codeBlock = this.compileCodeFragmentOrTemplate(fragment);
+        return codeBlock;
+    }
+
+    compileCodeFragmentOrTemplate(fragment) {
         // Convert the fragment to binary code
         let codeBlock = [];
         for (let ins of fragment) {
             if ("freeform" in ins) {
                 let count = ins.freeform;
                 for (let i = 0; i < count; i++) {
-                    codeBlock.push(Math.floor(Math.random() * 256));
-                }
-            }
-            else {
-                let insItem = this.getInsItemFromIns(ins);
-                codeBlock.push(insItem.code);
-                if ("data" in ins) {
-                    let dataGiven = ins.data;
+                    let code = Math.floor(Math.random() * 256);
+                    codeBlock.push(code);
+                    let insItem = this.getInsDetails(code);
                     if (insItem.insLen > 1) {
-                        // Add data bytes
-                        for (let i = 0; i < insItem.insLen - 1; i++) {
-                            if (dataGiven[i] === "?") {
-                                let v = Math.floor(Math.random() * 256);
-                                codeBlock.push(v);
-                            }
-                            else {
-                                codeBlock.push(dataGiven[i]);
-                            }
+                        for (let i = 1; i < insItem.insLen; i++) {
+                            codeBlock.push(Math.floor(Math.random() * 256));
                         }
                     }
                 }
             }
+            else if (typeof ins.ins === 'object') { // ie: array
+                let insName = ins.ins[Math.floor(Math.random() * ins.ins.length)];
+                let tempIns = {...ins};
+                tempIns.ins = insName;
+                this.compileIns(tempIns, codeBlock);
+            }
+            else {
+                this.compileIns(ins, codeBlock);
+            }
         }
+
         return codeBlock;
+    }
+
+    compileIns(ins, codeBlock) {
+        let insItem = this.getInsItemFromIns(ins);
+        codeBlock.push(insItem.code);
+        if ("data" in ins) {
+            let dataGiven = ins.data;
+            if (insItem.insLen > 1) {
+                // Add data bytes
+                for (let i = 0; i < insItem.insLen - 1; i++) {
+                    if (dataGiven[i] === "?") {
+                        let v = Math.floor(Math.random() * 256);
+                        codeBlock.push(v);
+                    }
+                    else {
+                        codeBlock.push(dataGiven[i]);
+                    }
+                }
+            }
+        }
     }
 
     execute(executionCycle, memSpace, codeFlags, initialParams, params, valuesOut, ruleSequenceNum, roundNum) {

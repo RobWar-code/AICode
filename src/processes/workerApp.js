@@ -53,6 +53,7 @@ class BatchProcess {
         this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
         this.seedRuleBreedCount = 0;
+        this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
         this.instructionSet = new InstructionSet();
@@ -140,6 +141,7 @@ class BatchProcess {
             interbreedInsMergeCount: this.interbreedInsMergeCount,
             selfBreedCount: this.selfBreedCount,
             seedRuleBreedCount: this.seedRuleBreedCount,
+            seedTemplateBreedCount: this.seedTemplateBreedCount,
             randomCount: this.randomCount,
             crossSetCount: this.crossSetCount
         };

@@ -752,12 +752,13 @@ const dbTransactions = {
         try {
             sql = "INSERT INTO batch_data (batch_num, monoclonal_ins_count, monoclonal_byte_count, interbreed_count,";
             sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, self_breed_count,";
-            sql += "seed_rule_breed_count, random_count, cross_set_count) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql += "seed_rule_breed_count, seed_template_breed_count, random_count, cross_set_count) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [batchNum, batchData.monoclonalInsCount, 
                 batchData.monoclonalByteCount, batchData.interbreedCount, batchData.interbreed2Count,
                 batchData.interbreedFlaggedCount, batchData.interbreedInsMergeCount,
-                batchData.selfBreedCount, batchData.seedRuleBreedCount, batchData.randomCount, 
+                batchData.selfBreedCount, batchData.seedRuleBreedCount, batchData.seedTemplateBreedCount,
+                batchData.randomCount, 
                 batchData.crossSetCount
             ]);
         }

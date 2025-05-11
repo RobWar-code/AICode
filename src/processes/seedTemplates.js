@@ -1,0 +1,123 @@
+const path = require('node:path');
+const InstructionSet = require(path.join(__dirname, "InstructionSet"));
+
+const seedTemplates = {
+
+    instructionSet: new InstructionSet(),
+
+    getSeedTemplate() {
+        /* Template Instruction Layout
+            {
+                freeform: n // the number of freeform (random) instructions
+
+                or
+
+                ins: "ins" or ["ins1", "ins2", ...] as alternatives
+                data: [n, n ..] or ["?"] for a random value
+            }
+        */
+                 
+        templates = [
+            {
+                name: "firstParamExtractLoop",
+                description: "Loop with separate i/o pointers using first param", 
+                template: [
+                    {
+                        ins: "LDIL A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201]
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        // Main Loop
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201]
+                    },
+                    {
+                        // Perform Operation A, B
+                        ins: ["CMP A, B", "SUB A, B", "OR A, B", "AND A, B"]
+                    },
+                    {
+                        ins: ["JRZ", "JRC", "JRNZ", "JRNC"],
+                        data: ["?"]
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [200] // Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: ["?"] // mainloop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]    
+            }
+        ];
+
+        // Choose a template
+        let t = Math.floor(Math.random() * templates.length);
+        let codeItem = templates[t].template;
+        let codeBlock = this.instructionSet.compileCodeFragmentOrTemplate(codeItem);
+        let memSpace = new Array(256).fill(0);
+        let index = 0;
+        for (let code of codeBlock) {
+            memSpace[index] = code;
+            ++index;
+        }
+        return memSpace;
+    }
+}
+
+module.exports = seedTemplates;

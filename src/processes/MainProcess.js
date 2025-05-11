@@ -1,5 +1,6 @@
 const path = require('node:path');
 const Entity = require(path.join(__dirname, 'Entity.js'));
+const seedTemplates = require(path.join(__dirname, 'seedTemplates.js'));
 
 class MainProcess {
     constructor(rulesets) {
@@ -35,7 +36,12 @@ class MainProcess {
                     // Determine whether random breed
                     if (j === 0 && this.rulesets.seedRuleMemSpaces.length > 0 && 
                         bestEntitySet.length < 10 && Math.random() < 0.5) {
-                        breedMode = "seedRule";
+                        if (Math.random() < 0.7) {
+                            breedMode = "seedRule";
+                        }
+                        else {
+                            breedMode = "seedTemplate";
+                        }
                     }
                     else if (bestEntitySet.length < self.bestEntitySetMax) {
                         breedMode = "random";
@@ -48,6 +54,13 @@ class MainProcess {
                         entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
                             self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
                         entity.breedMethod = "SeedRule";
+                    }
+                    else if (breedMode === "seedTemplate") {
+                        memSpace = seedTemplates.getSeedTemplate();
+                        asRandom = false;
+                        entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
+                            self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                        entity.breedMethod = "SeedTemplate";
                     }
                     else if (breedMode === "reproduction") {
                         // Set-up for a breed operation 
@@ -117,6 +130,9 @@ class MainProcess {
                             break;
                         case "SeedRule" :
                             ++self.seedRuleBreedCount;
+                            break;
+                        case "SeedTemplate" :
+                            ++self.seedTemplateBreedCount;
                             break;
                         default:
                             ++self.randomCount;

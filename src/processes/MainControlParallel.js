@@ -44,6 +44,7 @@ class MainControlParallel {
         this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
         this.seedRuleBreedCount = 0;
+        this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
         this.startTime = Date.now();
@@ -287,6 +288,7 @@ class MainControlParallel {
                 this.interbreedInsMergeCount += results[0].interbreed_ins_merge_count;
                 this.selfBreedCount += results[0].self_breed_count;
                 this.seedRuleBreedCount += results[0].seed_rule_breed_count;
+                this.seedTemplateBreedCount += results[0].seed_template_breed_count;
                 this.randomCount += results[0].random_count;
                 this.crossSetCount += results[0].cross_set_count;
             }
@@ -789,6 +791,8 @@ class MainControlParallel {
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
         displayData.selfBreedCount = this.selfBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
+        console.log("displayEntity: this.seedTemplateBreedCount", this.seedTemplateBreedCount);
+        displayData.seedTemplateBreedCount = this.seedTemplateBreedCount;
         displayData.crossSetCount = this.crossSetCount;
         displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;

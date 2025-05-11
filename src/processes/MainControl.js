@@ -44,6 +44,7 @@ class MainControl {
         this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
         this.seedRuleBreedCount = 0;
+        this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
         this.startTime = Date.now();
@@ -540,6 +541,7 @@ class MainControl {
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
         displayData.selfBreedCount = this.selfBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
+        displayData.seedTemplateBreedCount = this.seedTemplateBreedCount;
         displayData.crossSetCount = this.crossSetCount;
         displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;
