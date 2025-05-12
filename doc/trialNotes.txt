@@ -1,3 +1,17 @@
+12/05/2025
+Seeded getNumbersGreaterThanFirst.
+
+The rule getNumbersLessThanFirst was still stuck on
+the scoring system after 200 rounds, despite the presence
+of the getNumbersGreaterThanFirst seed. This is basically
+because the scoring is primarily output based not code
+based. See an analysis of this in WorkedExamples.txt
+
+11/05/2025
+Added template seeding to system. Resumed trial on
+getNumbersGreaterThanFirst. Reached 23/26 after 600
+rounds.
+
 10/05/2025
 Trial system failed to complete rule getNumbersGreaterThanFirst
 after 600 rounds, added rule modification insDistribution: CMP A, B; JRC.

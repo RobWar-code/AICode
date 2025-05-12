@@ -328,7 +328,7 @@ class MainControlParallel {
     }
 
     shuffleSets() {
-        let numShuffles = Math.floor(this.numBestSets / 16);
+        let numShuffles = 2;
         for (let i = 0; i < numShuffles; i++) {
             let same = true;
             let a, b;

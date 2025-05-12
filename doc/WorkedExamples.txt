@@ -4,6 +4,7 @@ Contents
     Problem Space Background
         Review of Methodology
             Further Detailed Analysis
+        Analysis of Code Scoring
         Code Entrapments
         Approaches to Code Development
     Ruleset Strategies
@@ -113,6 +114,15 @@ Contents
     of modifications required from rule to rule to a minimum.
 
     This suggests small step and branch in our selection of rules.
+
+<h2>Analysis of Code Scoring
+    The advantage of having rule(s) that score the actual entity code
+    is that they bear on the pathway to the solution and may suggest 
+    solutions independently of the outputs. If, for example we have
+    the solution to getNumbersGreaterThanFirst and are then seeking
+    getNumbersLessThanFirst, we note that the code requirements for
+    each are very similar, despite the outputs being so different.
+
 
 <h2>Code Entrapments
 
