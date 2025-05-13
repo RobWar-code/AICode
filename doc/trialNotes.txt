@@ -7,6 +7,9 @@ of the getNumbersGreaterThanFirst seed. This is basically
 because the scoring is primarily output based not code
 based. See an analysis of this in WorkedExamples.txt
 
+Still only 20.4/26 after 400 rounds on getNumbersGreaterThanFirst.
+Adjusted set shuffle to 2 to encourage more variation of solutions.
+
 11/05/2025
 Added template seeding to system. Resumed trial on
 getNumbersGreaterThanFirst. Reached 23/26 after 600

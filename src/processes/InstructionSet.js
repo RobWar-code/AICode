@@ -658,45 +658,18 @@ class InstructionSet {
         const fragments = [
             [
                 {
-                    ins: "LDI A, (C)"
+                    ins: "LDIL A"
                 },
                 {
                     ins: "ST (MEM), A",
-                    data: [200]
-                },
-                {
-                    ins: "INC C"
+                    data: [200] // Input Loop Counter
                 }
             ],
             [
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [201]
-                },
-                {
-                    ins: "INC C"
-                }
-            ],
-            [
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [202]
-                },
-                {
-                    ins: "LD C, IMM",
-                    data: [0]
-                }
-            ],
-            [
+                // Decrement Main Loop Counter
                 {
                     ins: "LD A, (MEM)",
-                    data: [200] 
+                    data: [200]
                 },
                 {
                     ins: "DEC A"
@@ -706,264 +679,56 @@ class InstructionSet {
                     data: [200]
                 },
                 {
-                    ins: "JRZ",
-                    data: [0xF2]
+                    ins: "JRNZ",
+                    data: ["?"]
                 }
             ],
             [
                 {
-                    ins: "LD A, (MEM)",
-                    data: [201] 
-                },
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                }
+            ],
+            [
                 {
-                    ins: "DEC A"
-                },
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                }
+            ],
+            [
+                // Fetch Input
                 {
-                    ins: "ST (MEM), A",
+                    ins: "LD C, (MEM)",
                     data: [201]
                 },
                 {
-                    ins: "JRZ",
-                    data: [0xEA]
-                }
-            ],
-            [
-                {
-                    ins: "LD A, (MEM)",
-                    data: [202] 
-                },
-                {
-                    ins: "DEC A"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [202]
-                },
-                {
-                    ins: "JRZ",
-                    data: [0xE8]
-                }
-            ],
-            [
-                {
-                    ins: "LD A, (MEM)",
-                    data: [201]
-                },
-                {
-                    ins: "SWP A, B"
-                },
-                {
-                    ins: "LD A, (MEM)",
-                    data: [202]
-                },
-                {
-                    ins: "ADD A, B"
-                }
-            ],
-            [
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "LD B, IMM",
-                    data: ["?"]
-                },
-                {
-                    ins: "CMP A, B"
-                },
-                {
-                    ins: "JRZ",
-                    data: ["?"]
-                }
-            ],
-            [
-                {
-                    ins: "LD A, IMM",
-                    data: [16]
-                },
-                {
-                    label: "mainloop",
-                    ins: "PUSH A"
-                },
-                {
-                    ins: "LD B, IMM",
-                    data: ["?"]
-                },
-                {
-                    ins: "PUSH B"
-                },
-                {
-                    label: "innerloop",
-                    freeform: 12
-                },
-                {
-                    ins: "POP B"
-                },
-                {
-                    ins: "DEC B"
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xF2] // innerloop
-                },
-                {
-                    ins: "POP A",
-                },
-                {
-                    ins: "DEC A",
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xE7] // mainloop
-                }
-            ],
-            [
-                {
-                    ins: "CMP A, B"
-                },
-                {
-                    ins: "JRNZ",
-                    data: [4] // call2
-                },
-                {
-                    ins: "CASM",
-                    data: [0] // routine1
-                },
-                {
-                    freeform: 8
-                },
-                {
-                    ins: "RETF"
-                },
-                {
-                    label: "call2",
-                    ins: "CASM",
-                    data: [1] // routine2
-                },
-                {
-                    freeform: 8
-                },
-                {
-                    ins: "RETF"
-                },
-                {
-                    ins: "SM",
-                    data: [0]
-                },
-                {
-                    ins: "PUSH A"
-                },
-                {
-                    ins: "PUSH B"
-                },
-                {
-                    ins: "PUSH C"
-                },
-                {
-                    freeform: 12
-                },
-                {
-                    ins: "POP C"
-                },
-                {
-                    ins: "POP B"
-                },
-                {
-                    ins: "POP A"
-                },
-                {
-                    ins: "RET"
-                },
-                {
-                    ins: "SM",
-                    data: [1]
-                },
-                {
-                    ins: "PUSH A"
-                },
-                {
-                    ins: "PUSH B"
-                },
-                {
-                    ins: "PUSH C"
-                },
-                {
-                    freeform: 12
-                },
-                {
-                    ins: "POP C"
-                },
-                {
-                    ins: "POP B"
-                },
-                {
-                    ins: "POP A"
-                },
-                {
-                    ins: "RET"
-                }
-            ],
-            [
-                {
-                    ins: "LD B, IMM",
-                    data: ["?"]
-                },
-                {
-                    ins: "PUSH B"
-                },
-                {
-                    freeform: 10
-                },
-                {
-                    ins: "POP B"
-                },
-                {
-                    ins: "DEC B"
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xF2]
-                }
-            ],
-            [
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    ins: "ST (MEM), A",
-                    data: [200]
-                },
-                {
-                    ins: "LD B, IMM",
-                    data: [16]
-                },
-                {
-                    ins: "PUSH B"
-                },
-                {
-                    ins: "LD B, (MEM)",
-                    data: [200]
-                },
-                {
-                    ins: "LDI A, (C)"
-                },
-                {
-                    freeform: 8
+                    ins: "LD A, (C)"
                 },
                 {
                     ins: "INC C"
                 },
                 {
-                    ins: "POP B"
-                },
-                {
-                    ins: "DEC B"
-                },
-                {
-                    ins: "JRNZ",
-                    data: [0xF0]
+                    ins: "ST (MEM), C",
+                    data: [201]
                 }
-            ]        
+            ],
+            [
+                // Send Output
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                }
+            ]
         ];
 
         // Select a fragment

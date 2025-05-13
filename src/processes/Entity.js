@@ -385,8 +385,8 @@ class Entity {
         const transposeChance = 0.15;
         const replaceChance = 0.5;
         const insertChance = 0.75;
-        const deleteChance = 0.98;
-        const ruleSeedFragmentChance = 0.995;
+        const deleteChance = 0.97;
+        const ruleSeedFragmentChance = 0.985;
         const codeFragmentChance = 1.0;
         let newCodeSegment = [];
         let oldInsLen = 0;
