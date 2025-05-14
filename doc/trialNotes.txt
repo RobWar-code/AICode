@@ -14,11 +14,15 @@ This trial reached 20.4/26 after 216 rounds
 Increase the clearance round to 25 (from 20) and the restart proportion 
 to 0.7 (from 0.6). Also increased the insDistribution score to 2.
 
-Part of the reason why this rule may be failing is that the solution
+Solved getNumbersLessThanFirst in 3 rounds
+
+Part of the reason why this rule may have been failing is that the solution
 values already exist in the input data and therefore have a higher
 chance of appearing in the output, blocking the pathways to a 
 correct solution. We might be able to allow for this with a special
 type of scoring applied to this type of rule.
+
+Score at 22.8/28 on getNumbersBetweenFirstAndSecond after 48 rounds.
 
 12/05/2025
 Seeded getNumbersGreaterThanFirst.

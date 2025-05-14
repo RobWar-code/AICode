@@ -1132,7 +1132,7 @@ const rulesets = {
                 insDistribution: [
                     {
                         ins: "CMP A, B",
-                        countOpt: 1,
+                        countOpt: 2,
                         scanStart: 0,
                         scanEnd: 20
                     }
