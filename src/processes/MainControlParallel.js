@@ -28,8 +28,8 @@ class MainControlParallel {
         this.crossSetRange = 7;
         this.seedEntity = null;
         this.lapCounter = 0;
-        this.clearanceRound = 20;
-        this.restartProportion = 0.6;
+        this.clearanceRound = 25;
+        this.restartProportion = 0.7;
         this.cycleCounter = 0;
         this.numRounds = 0;
         this.entityNumber = 0;

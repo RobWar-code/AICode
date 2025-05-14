@@ -37,7 +37,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
-                sequenceNum: 0, score: 0, max: 1, startRoundNum: 0}
+                sequenceNum: 0, score: 0, max: 2, startRoundNum: 0}
         );
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
