@@ -46,6 +46,34 @@ Jobs Due
 
     Add powers of numbers rules
 
+    Continue trials of code fragments and insDistribution
+            
+    Trace operation
+        Close the trace window from the main window
+
+        Include a close option on the trace window
+
+    Apply redundant pairs to monoclonal instruction insert/replace?
+
+    Do estimating for probabilities with samples etc.
+        Allow for multiple ways to solve the same issue
+
+    Consider why the system gets trapped in solutions so soon.
+
+    Overcome "cheating" in which the entity simply places the test/result byte into the output block
+        This might be overcome by making the tests sufficiently numerically steep?
+        Threshold minimum of steps?
+        Include the input argument(s) adjacent to the output result in the output data.
+        See weeding below
+
+    Weeding - removing sub-standard items from the best set
+
+    Continue the analysis
+
+Jobs Done
+
+    15/05/2025
+    
     * Add seed templates
 
     * Add seed program for get numbers greater than first param
@@ -77,30 +105,7 @@ Jobs Due
         * modify the include on dbTransactions for sqlite.
         * include a database flag to use to open and close the sqlite database in workerApp.js
         Allow for database busy in sqlite database read operations.
-            
-    Trace operation
-        Close the trace window from the main window
 
-        Include a close option on the trace window
-
-    Apply redundant pairs to monoclonal instruction insert/replace?
-
-    Do estimating for probabilities with samples etc.
-        Allow for multiple ways to solve the same issue
-
-    Consider why the system gets trapped in solutions so soon.
-
-    Overcome "cheating" in which the entity simply places the test/result byte into the output block
-        This might be overcome by making the tests sufficiently numerically steep?
-        Threshold minimum of steps?
-        Include the input argument(s) adjacent to the output result in the output data.
-        See weeding below
-
-    Weeding - removing sub-standard items from the best set
-
-    Continue the analysis
-
-Jobs Done
     25/04/2025
         
     * Do the sampleInMinusSampleOut seed rule

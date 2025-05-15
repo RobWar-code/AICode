@@ -35,7 +35,7 @@ class MainProcess {
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
                     if (j === 0 && this.rulesets.seedRuleMemSpaces.length > 0 && 
-                        bestEntitySet.length < 10 && Math.random() < 0.5) {
+                        bestEntitySet.length < 20 && Math.random() < 0.5) {
                         if (Math.random() < 0.7) {
                             breedMode = "seedRule";
                         }
