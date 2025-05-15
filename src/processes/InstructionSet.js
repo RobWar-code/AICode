@@ -728,6 +728,39 @@ class InstructionSet {
                     ins: "ST (MEM), C",
                     data: [202]
                 }
+            ],
+            [
+                {
+                    // Save first input
+                    ins: "LDI A, (MEM)",
+                    data: [0]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Constant 1
+                }
+            ],
+            [
+                {
+                    ins: "LDI A, (MEM)",
+                    data: [1]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204]
+                }
+            ],
+            [
+                {
+                    ins: "LD B, (MEM)",
+                    data: [203]
+                }
+            ],
+            [
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204]
+                }
             ]
         ];
 

@@ -1135,6 +1135,23 @@ const rulesets = {
                         countOpt: 2,
                         scanStart: 0,
                         scanEnd: 20
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1, 
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "JRZ",
+                        countOpt: 2,
+                        scanStart: 20
+                    },
+                    {
+                        ins: "JRNC",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 25
                     }
                 ],
                 highIC: 16 * 24 + 100,
