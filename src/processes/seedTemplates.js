@@ -124,7 +124,7 @@ const seedTemplates = {
                         data: [202] // Output Pointer
                     },
                     {
-                        ins: "LDO A, (MEM)",
+                        ins: "LDI A, (MEM)",
                         data: [0] // Param 1
                     },
                     {
@@ -132,7 +132,7 @@ const seedTemplates = {
                         data: [203] // Param 1
                     },
                     {
-                        ins: "LDO A, (MEM)",
+                        ins: "LDI A, (MEM)",
                         data: [1]
                     },
                     {
@@ -151,7 +151,7 @@ const seedTemplates = {
                         ins: "INC C"
                     },
                     {
-                        ins: "ST (MEM), A",
+                        ins: "ST (MEM), C",
                         data: [201]
                     },
                     {

@@ -6,6 +6,10 @@ Trial on getNumbersBetweenFirstTwo reached 24.3/28 after
 Added JRNC/C/Z to insDistribution for the rule and added
 fragments for accessing the first two input bytes.
 
+Got to 22/28 after 380 rounds.
+
+Added a template for the rule and restarted.
+
 14/05/2025
 Modified the code fragments set and increased the frequency of
 selecting them in monoclonalInsBreed. Left the trial to run

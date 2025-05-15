@@ -831,6 +831,127 @@ const seedPrograms = {
             ]
         },
         {
+            name: "getNumbersBetweenFirstTwo",
+            description: "Output the input numbers that lie between the first two",
+            program: [
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "LDI A, (MEM)",
+                    data: [0] // Param 1
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Param 1
+                },
+                {
+                    ins: "LDI A, (MEM)",
+                    data: [1]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204]
+                },
+                {
+                    // Main Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNC",
+                    data: [16] // Next Item
+                },
+                {
+                    ins: "JRZ",
+                    data: [14] // Next Item
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [204]
+                },
+                {
+                    ins: "CMP A, B",
+                },
+                {
+                    ins: "JRC",
+                    data: [9] // Next Item
+                },
+                {
+                    ins: "JRZ",
+                    data: [7] // Next Item
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    // Next Item:
+                    ins: "LD A, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xDF] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "getNumbersGreaterThanFirst",
             description: "Output those input numbers which are greater than the first",
             program: [

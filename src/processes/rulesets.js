@@ -1134,28 +1134,29 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 2,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 30
                     },
                     {
                         ins: "JRC",
                         countOpt: 1, 
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 30
                     },
                     {
                         ins: "JRZ",
                         countOpt: 2,
-                        scanStart: 20
+                        scanStart: 0,
+                        scanEnd: 30
                     },
                     {
                         ins: "JRNC",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 25
+                        scanEnd: 30
                     }
                 ],
                 highIC: 16 * 24 + 100,
-                highIP: 50,
+                highIP: 60,
                 sampleIn: [
                     [
                         40,60,87,90,52,17,21,34,57,45,98,47,119,54,81,45,
@@ -1165,7 +1166,7 @@ const rulesets = {
                 sampleOut: [],
                 paramsIn: [
                     [
-                        20,50,25,11,37,3,45,200,128,36,45,29,47,52,16,55,
+                        20,50,25,11,37,3,45,200,128,36,45,29,47,52,16,48,
                         22,108,40,55,42,44,37,43,101,124,16,27,30,250,240,18
                     ],
                     [
@@ -2452,37 +2453,36 @@ const rulesets = {
         let instructionSet = dataParams.instructionSet;
         let memSpace = dataParams.memSpace;
 
-        let totalScore = 0;
-
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         if (!("insDistribution" in rule)) {
             return 1;
         }
         let insSet = rule.insDistribution;
+        let countMax = 0;
+        let count = 0;
         // Count of occurrences
         for (let insData of insSet) {
             let ins = insData.ins;
             // Count the number of occurences of the instruction in the scan area
             let p = insData.scanStart;
-            let count = 0;
+            let itemCount = 0;
             while (p < insData.scanEnd) {
                 let code = memSpace[p];
                 let insItem = instructionSet.getInsDetails(code);
-                if (insItem.name === ins) ++count;
+                if (insItem.name === ins && itemCount < insData.countOpt) {
+                    ++count;
+                    ++itemCount;
+                }
                 p += insItem.insLen;
             }
 
-            let opt = insData.countOpt;
-            let max = insData.scanEnd - insData.scanStart;
-            let min = 0;
-            let score1 = self.doScore(opt, count, max, min);
-            totalScore += score1;
+            countMax += insData.countOpt;
         }
 
-        let opt = insSet.length;
+        let opt = countMax;
         let max = opt;
         let min = 0;
-        let score = self.doScore(opt, totalScore, max, min);
+        let score = self.doScore(opt, count, max, min);
         return score;
     },
 
