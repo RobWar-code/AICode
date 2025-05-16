@@ -839,6 +839,10 @@ class InstructionSet {
                 {
                     ins: "JRNZ",
                     data: [0xE9] // Comparison Loop
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [205]
                 }
             ]
         ];
