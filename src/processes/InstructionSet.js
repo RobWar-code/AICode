@@ -761,6 +761,85 @@ class InstructionSet {
                     ins: "LD B, (MEM)",
                     data: [204]
                 }
+            ],
+            [
+                // For set of inputs in two parts
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "SR A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [205]
+                }
+            ],
+            [
+                {
+                    // Comparison Loop
+                    ins: "LD C, (MEM)",
+                    data: [205]
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [205] // Secondary input pointer
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [9]
+                },
+                {
+                    ins: "SWP A, C"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    ins: "JR",
+                    data: ["?"] // Next Number
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [205]
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xE9] // Comparison Loop
+                }
             ]
         ];
 

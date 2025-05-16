@@ -1,3 +1,12 @@
+16/05/2025
+
+After the addition of some new fragments and a fix to the
+insDistribution of the getNumbersBetweenFirstTwo rule, the
+trial completed after 120 rounds and went on to complete
+as far as rule findNumbers after 440 rounds.
+
+Currently on findNumbers for 100 rounds.
+
 15/05/2025
 
 Trial on getNumbersBetweenFirstTwo reached 24.3/28 after
