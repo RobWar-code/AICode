@@ -1347,7 +1347,7 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 30
                     }
                 ],
                 highIC: 16 * 15,
