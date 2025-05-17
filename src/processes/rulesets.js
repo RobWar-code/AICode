@@ -1417,6 +1417,26 @@ const rulesets = {
                 max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 18,
                 inBlockStart: 0, inBlockLen: 18,
+                insDistribution: [
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 2,
+                        scanStart: 5,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "JRNC",
+                        countOpt: 2,
+                        scanStart: 5,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd: 40
+                    }
+                ],
                 highIC: 16 * 15 * 8,
                 highIP: 80,
                 sampleIn: [[17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17,21,9]],

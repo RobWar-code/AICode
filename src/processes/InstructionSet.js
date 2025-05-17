@@ -655,6 +655,7 @@ class InstructionSet {
     }
 
     getCodeFragment() {
+        // See seedTemplates.js for object format
         const fragments = [
             [
                 {
@@ -844,8 +845,45 @@ class InstructionSet {
                     ins: "ST (MEM), A",
                     data: [205]
                 }
+            ],
+            [
+                // Divide input length by 3
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "LD B, IMM",
+                    dataRange: [2,12]
+                },
+                {
+                    ins: "LD C, IMM",
+                    data: [0]
+                },
+                {
+                    // Divide Loop
+                    ins: "INC C"
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: [3] // Got product
+                },
+                {
+                    ins: "JRNC",
+                    data: [0xFC] // Divide Loop
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    // Got Product:
+                    ins: "ST (MEM), C",
+                    data: [200] // Main Loop Counter
+                }
             ]
-        ];
+        ]; // end of fragments
 
         // Select a fragment
         let fragmentNum = Math.floor(Math.random() * fragments.length);
@@ -870,6 +908,10 @@ class InstructionSet {
                         }
                     }
                 }
+            }
+            else if ("noops" in ins) {
+                let numNoops = ins.noops;
+                codeBlock = new Array(numNoops).fill(255);
             }
             else if (typeof ins.ins === 'object') { // ie: array
                 let insName = ins.ins[Math.floor(Math.random() * ins.ins.length)];
@@ -902,6 +944,18 @@ class InstructionSet {
                     }
                 }
             }
+        }
+        else if ("dataRange" in ins) {
+            let a = ins.dataRange[0];
+            let b = ins.dataRange[1];
+            if (b < a) {
+                let c = b;
+                let b = a;
+                let a = c;
+            }
+            let r = b - a + 1;
+            let n = Math.floor(Math.random() * r) + a;
+            codeBlock.push(n);
         }
     }
 

@@ -12,8 +12,13 @@ const seedTemplates = {
 
                 or
 
+                noops: n // Number of noop instructions
+
+                or
+
                 ins: "ins" or ["ins1", "ins2", ...] as alternatives
-                data: [n, n ..] or ["?"] for a random value
+                data: [n, n ..] or ["?"] for a random value or
+                dataRange: [a, b]
             }
         */
                  
