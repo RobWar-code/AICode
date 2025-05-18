@@ -882,6 +882,40 @@ class InstructionSet {
                     ins: "ST (MEM), C",
                     data: [200] // Main Loop Counter
                 }
+            ],
+            [
+                // Section of sort triplets
+                {
+                    // Sort Loop:
+                    ins: "LD C, (MEM)",
+                    data: [201] // Triplet Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // First item
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)" // Second item
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "PUSH C"
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "JRC",
+                    data: [7] // Swap
+                }
             ]
         ]; // end of fragments
 
