@@ -343,6 +343,11 @@ the natural world.
 To select between parallel and serial modes of operation, set
 the processMode property in AICodeConfig.js
 
+The transfer of data between the main control process and the
+worker apps can either be via the database or via the file system
+as json files. This option can be set using the workerDataTransfer 
+property in AICodeConfig.js.
+
 ##### Code Distribution
 The most basic set of tests looks at distribution and frequency 
 of occurence of instructions in the entity set of instructions, 

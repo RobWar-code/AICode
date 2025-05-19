@@ -43,7 +43,7 @@ ipcRenderer.on('batchProcessed', (event, data) => {
             document.getElementById("statusPara").innerText = "Processing...";
             processingMode = true;
             ipcRenderer.send("activateMainProcess", 0);
-        }, 10000);
+        }, 6000);
     }
 });
 

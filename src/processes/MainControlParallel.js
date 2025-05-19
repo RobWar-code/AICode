@@ -7,6 +7,8 @@ const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
+const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
+const {databaseType, processMode, workerDataTransfer} = require(path.join(__dirname, '../AICodeConfig.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class MainControlParallel {
@@ -118,7 +120,14 @@ class MainControlParallel {
 
         for (let processNum = 0; processNum < this.numProcesses; processNum++) {
             // Transfer the best set entity data to the exchange tables
-            await this.sendEntityExchangeData(this.spanNum, this.numProcesses, processNum);
+            if (workerDataTransfer === "database") {
+                // Send via database
+                await this.sendEntityExchangeData(this.spanNum, this.numProcesses, processNum);
+            }
+            else {
+                // Send via file system
+                await this.sendFSEntityExchangeData(this.spanNum, this.numProcesses, processNum);
+            }
             // Spawn the processes
             this.spawnProcess(this.spanNum, this.numProcesses, processNum);
         }
@@ -171,8 +180,14 @@ class MainControlParallel {
             this.entityNumber += this.entitiesPerProcess * (this.finalNumBatches - 1) + this.finalEntitiesPerProcess;
             this.cycleCounter += this.cyclesPerBatch * (this.finalNumBatches - 1) + this.finalBatchLength * this.maxCycles;
         }
-        await this.collectBatchData();
-        await this.collectEntityData();
+        if (workerDataTransfer === 'database') {
+            await this.collectBatchData();
+            await this.collectEntityData();
+        }
+        else {
+            await this.collectFSBatchData();
+            await this.collectFSEntityData();
+        }
         this.collectScoreHistory();
         this.mainWindow.webContents.send("batchProcessed", 0);
 
@@ -191,6 +206,18 @@ class MainControlParallel {
             // Save the entity set
             await dbTransactions.saveTransferEntitySet(bestSetNum, this.bestSets[bestSetNum]);
         }
+    }
+
+    async sendFSEntityExchangeData(spanNum, numProcesses, processNum) {
+        let batchLength = this.bestSetsPerBatch;
+        if (spanNum === this.numSpans - 1 && processNum === numProcesses - 1 && this.finalBatchLength > 0) {
+            batchLength = this.finalBatchLength;
+        }
+        let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
+        console.log("sendFSEntityExchangeData - batchStart:", batchStart, "spanStart:", 
+            this.spanStart, "spanNum:", this.spanNum, "processNum:", processNum);
+        await fsTransactions.clearTransferEntitySet(processNum);
+        await fsTransactions.saveTransferEntitySet(this.bestSets, batchStart, batchLength, processNum);
     }
 
     // This is triggered by the exit event of the child processes.
@@ -245,7 +272,40 @@ class MainControlParallel {
             ++setNum;
         }
         // Display the first entity of the span
-        let terminateProcessing = false;
+        let endTime = Date.now();
+        let elapsedTime = endTime - this.startTime;
+        this.elapsedTime = elapsedTime;
+        elapsedTime = (elapsedTime + this.previousElapsedTime) / (3600 * 1000);
+        // Find the nearest non-empty best-set to the span start
+        let p = this.spanStart;
+        let allEmpty = true;
+        for (let i = 0; i < this.numBestSets; i++) {
+            if (this.bestSets[p].length > 0) {
+                allEmpty = false;
+                break;
+            }
+            ++p;
+            if (p >= this.numBestSets) p = 0;
+        }
+
+        if (!allEmpty) {
+            let terminateProcessing = false;
+            this.displayEntity(null, p, 0, terminateProcessing);
+        }
+        ++this.spanNum;
+        this.lastSpanStart = this.spanStart;
+        this.spanStart += setLen;
+        // This returns to the server event loop
+    }
+
+    async collectFSEntityData() {
+        let setLen = this.spanLength;
+        if (this.spanNum === this.numSpans - 1 && this.spanRemnant > 0) {
+            setLen = this.spanRemnant;
+        }
+        await fsTransactions.fetchSpanEntities(this.numProcesses, this.spanStart, 
+            this.bestSets, this.ruleSequenceNum, this.instructionSet);
+        // Display the first entity of the span
         let endTime = Date.now();
         let elapsedTime = endTime - this.startTime;
         this.elapsedTime = elapsedTime;
@@ -292,6 +352,27 @@ class MainControlParallel {
                 this.randomCount += results[0].random_count;
                 this.crossSetCount += results[0].cross_set_count;
             }
+        }
+    }
+
+    async collectFSBatchData() {
+        let numBatches = this.numCPUs;
+        if (this.spanNum === this.numSpans - 1) {
+            numBatches = this.finalNumBatches;
+        }
+        for (let i = 0; i < numBatches; i++) {
+            let batchData = await fsTransactions.fetchBatchData(i);
+            this.monoclonalInsCount += batchData.monoclonalInsCount;
+            this.monoclonalByteCount += batchData.monoclonalByteCount;
+            this.interbreedCount += batchData.interbreedCount;
+            this.interbreed2Count += batchData.interbreed2Count;
+            this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
+            this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
+            this.selfBreedCount += batchData.selfBreedCount;
+            this.seedRuleBreedCount += batchData.seedRuleBreedCount;
+            this.seedTemplateBreedCount += batchData.seedTemplateBreedCount;
+            this.randomCount += batchData.randomCount;
+            this.crossSetCount += batchData.crossSetCount;
         }
     }
 

@@ -2,6 +2,10 @@
 
 sortTriplets had not completed after 580 rounds. (30/38)
 
+Add part of the sort solution as a fragment. Completed
+after 380 rounds.
+
+
 17/05/2025
 
 find Number Triplets completed after 390 rounds.

@@ -4,12 +4,13 @@ const MainProcess = require(path.join(__dirname, 'MainProcess.js'));
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
-const {databaseType} = require(path.join(__dirname, '../AICodeConfig.js'));
+const {databaseType, processMode, workerDataTransfer} = require(path.join(__dirname, '../AICodeConfig.js'));
 let dbConn;
 if (databaseType === "sqlite") {
     dbConn = require(path.join(__dirname,'../database/dbConnSqlite.js'));
 }
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
+const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
 
 // See Main Program for the start up
 
@@ -66,12 +67,23 @@ class BatchProcess {
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
         console.log("Seed Rule List:", rulesets.seedRuleMemSpaces.length);
-        await this.fetchBatchEntities();
+        if (workerDataTransfer === 'database') {
+            await this.fetchBatchEntities();
+        }
+        else {
+            await this.fetchFSBatchEntities();
+        }
         console.log("Start Process: Entity Number", this.entityNumber);
         let mainProcess = new MainProcess(rulesets);
         mainProcess.mainLoop(this);
-        await this.transferBatchEntities();
-        await this.transferBatchData(this.batchNum);
+        if (workerDataTransfer === 'database') {
+            await this.transferBatchEntities();
+            await this.transferBatchData(this.batchNum);
+        }
+        else {
+            await this.transferFSBatchEntities();
+            await this.transferFSBatchData(this.batchNum);
+        }
         await dbConn.close();
     }
 
@@ -122,6 +134,27 @@ class BatchProcess {
         }
     }
 
+    async fetchFSBatchEntities() {
+        let batchSet = await fsTransactions.fetchBatchEntitySet(this.batchNum);
+        for (let i = 0; i < batchSet.length; i++) {
+            let set = [];
+            for (let j = 0; j < batchSet[i].length; j++) {
+                let item = batchSet[i][j];
+                let asRandom = false;
+                let seeded = false;
+                let entity = new Entity(item.entityNumber, this.instructionSet, asRandom, seeded, item.birthCycle, 
+                    this.ruleSequenceNum, this.roundNum, item.initialMemSpace);
+                entity.memSpace = item.memSpace;
+                entity.birthTime = item.birth_time;
+                entity.birthDateTime = item.birth_date_time;
+                entity.registers = item.registers;
+                entity.score = item.score;
+                set.push(entity);
+            }
+            this.bestSets[i] = set;
+        }
+    }
+
     async transferBatchEntities() {
         for (let i = 0; i < this.numBestSets; i++) {
             let set = this.bestSets[i];
@@ -129,6 +162,11 @@ class BatchProcess {
             await dbTransactions.clearTransferEntitySet(setNum);
             await dbTransactions.saveTransferEntitySet(setNum, set);
         }
+    }
+
+    async transferFSBatchEntities() {
+        await fsTransactions.clearTransferEntitySet(this.batchNum);
+        await fsTransactions.transferBatchSet(this.bestSets, this.batchNum, this.batchStart);
     }
 
     async transferBatchData(batchNum) {
@@ -146,6 +184,24 @@ class BatchProcess {
             crossSetCount: this.crossSetCount
         };
         await dbTransactions.saveBatchData(batchNum, batchData);
+    }
+
+    async transferFSBatchData(batchNum) {
+        await fsTransactions.clearBatchData(batchNum);
+        let batchData = {
+            monoclonalInsCount: this.monoclonalInsCount,
+            monoclonalByteCount: this.monoclonalByteCount,
+            interbreedCount: this.interbreedCount,
+            interbreed2Count: this.interbreed2Count,
+            interbreedFlaggedCount: this.interbreedFlaggedCount,
+            interbreedInsMergeCount: this.interbreedInsMergeCount,
+            selfBreedCount: this.selfBreedCount,
+            seedRuleBreedCount: this.seedRuleBreedCount,
+            seedTemplateBreedCount: this.seedTemplateBreedCount,
+            randomCount: this.randomCount,
+            crossSetCount: this.crossSetCount
+        };
+        await fsTransactions.saveBatchData(batchNum, batchData);
     }
 
     stringToIntArray(str) {
