@@ -360,6 +360,112 @@ const seedTemplates = {
                         ins: "RETF"
                     }
                 ]
+            },
+            {
+                name: "multiplyAdjacentParams",
+                description: "multiply adjacent input params and place in output",
+                template: [
+                    {
+                        ins: "LDIL A"
+                    },
+                    {
+                        ins: "SR A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        // Main Loop
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "SWP A, C"
+                    },
+                    {
+                        ins: "LD A, IMM",
+                        data: [0]
+                    },
+                    {
+                        ins: "DEC C"
+                    },
+                    {
+                        ins: "JRNC",
+                        data: [3] // Continue
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "JR",
+                        data: [] // Save Result
+                    },
+                    {
+                        // Continue
+                        noops: 15
+                    },
+                    {
+                        // Save Result
+                        ins: "LD C, (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [202]
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [200]
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xD4] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
             }
         ];
 
