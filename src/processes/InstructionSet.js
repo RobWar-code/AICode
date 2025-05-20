@@ -916,6 +916,49 @@ class InstructionSet {
                     ins: "JRC",
                     data: [7] // Swap
                 }
+            ],
+            [
+                {
+                    ins: "LD A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                }
+            ],
+            [
+                {
+                    ins: "PUSH A" 
+                },
+                {
+                    ins: "POP C"
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xFE]
+                }
             ]
         ]; // end of fragments
 

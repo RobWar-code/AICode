@@ -1554,6 +1554,20 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, 
                 inBlockStart: 0, inBlockLen: 32,
+                insDistribution: [
+                    {
+                        ins: "ADD A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "SWP A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd: 40
+                    }
+                ],
                 highIC: 16 * 18 * 20 + 100 * 4,
                 highIP: 80,
                 sampleIn: [[
