@@ -21,22 +21,19 @@ Jobs Due
     
     + Add a completion of all rules procedure. Untested
 
-
     Code Enhancement - Consider separating out the rule/seed option functions
     into their own module from the main control object, rather
     than repeating the functions in the serial and parallel
     modules.
 
-
     Rationalise the modulo rules - always use two or more inputs
 
     Reorganise scorelist
 
-
     Backup the projects folder on the USB.
 
-    Change the transfer batch in MainControlParallel to a complete set, rather than 
-    individual entities
+    * Add transfer of batch data by individual files rather than using the
+    database.
 
     Include save scorelist for an entity?
 

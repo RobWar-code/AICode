@@ -24,6 +24,118 @@ const seedTemplates = {
                  
         templates = [
             {
+                name: "addAdjacentParamOp",
+                description: "Add adjacent param as indicated by a + op",
+                template: [
+                    {
+                        ins: "LDIL A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    { 
+                        // Main Loop
+                        ins: "LD C, (MEM)",
+                        data: [201]
+                    },
+                    {
+                        ins: "LDI A, (C)" // Op
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "PUSH A"
+                    },
+                    {
+                        ins: "LDI A, (C)" // First Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // First Param
+                    },
+                    {
+                        ins: "LDI A, (C)" // Second Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Second Param
+                    },
+                    {
+                        ins: "POP A" // Operator
+                    },
+                    {
+                        ins: "LD B, IMM",
+                        dataRange: [40, 61] // +-*/= etc.
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [13] // Next Instruction
+                    },
+                    {
+                        ins: "LD C, (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        noops: 12
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201]
+                    },
+                    {
+                        ins: "POP C" // Input Pointer
+                    },
+                    {
+                        // Next Loop
+                        ins: "LD A, (MEM)",
+                        data: [200] // Main Loop Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200] 
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xD3] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
                 name: "firstParamExtractLoop",
                 description: "Loop with separate i/o pointers using first param", 
                 template: [

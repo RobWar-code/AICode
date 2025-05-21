@@ -1,3 +1,7 @@
+20/05/2025
+Stuck at multiplyAdjacentParams, tried templates and
+fragments without success. Seeded solution.
+
 18/05/2025
 
 sortTriplets had not completed after 580 rounds. (30/38)
