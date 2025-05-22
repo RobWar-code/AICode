@@ -1625,7 +1625,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideAdjacentParamsRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 1", ruleId: 57, 
+            {rule: "Use op to Convert Adjacent Params 1 (=)", ruleId: 57, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 49, 
@@ -1657,7 +1657,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getParamOperationsRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 2", ruleId: 58, 
+            {rule: "Use op to Convert Adjacent Params 2 (+)", ruleId: 58, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 50, 
@@ -1689,7 +1689,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getParamOperationsRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 3", ruleId: 59, 
+            {rule: "Use op to Convert Adjacent Params 3 (-)", ruleId: 59, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 51, 
@@ -1722,7 +1722,7 @@ const rulesets = {
 
         // Multiply
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 4", ruleId: 60, 
+            {rule: "Use op to Convert Adjacent Params 4 (*)", ruleId: 60, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 52, 
@@ -1756,7 +1756,7 @@ const rulesets = {
 
         // Modulo
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 5", ruleId: 61, 
+            {rule: "Use op to Convert Adjacent Params 5 (%)", ruleId: 61, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 53, 
@@ -1764,6 +1764,20 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 8,
+                        scanEnd: 30
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 8,
+                        scanEnd: 30
+                    }
+                ],
                 highIC: 16 * 14 * 16 + 100 * 4,
                 highIP: 85,
                 sampleIn: [[

@@ -2,6 +2,9 @@
 Stuck on op multiply adjacent params. Added multiplier
 fragment.
 
+Op Multiply adajacent params was stuck at 20.7/26 after
+360 rounds, so used seed program.
+
 21/05/2025
 Added Template for opAdjacentParams, add completed
 after 3 rounds, subtract after 160 rounds.

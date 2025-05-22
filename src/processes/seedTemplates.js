@@ -85,7 +85,7 @@ const seedTemplates = {
                     },
                     {
                         ins: "LD B, IMM",
-                        dataRange: [40, 61] // +-*/= etc.
+                        dataRange: [35, 61] // +-*/= etc.
                     },
                     {
                         ins: "CMP A, B"
