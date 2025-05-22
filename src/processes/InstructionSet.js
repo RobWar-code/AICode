@@ -959,6 +959,53 @@ class InstructionSet {
                     ins: "JRNZ",
                     data: [0xFE]
                 }
+            ],
+            [
+                // Multiply Saved Values
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [203]
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRC",
+                    data: [11] // Output Result
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Parameter
+                },
+                {
+                    ins: "DEC B"
+                },
+                {
+                    ins: "JRC",
+                    data: [5] // Output Value
+                },
+                {
+                    ins: "INC B"
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xFE]
+                },
+                // Output Value
+
             ]
         ]; // end of fragments
 

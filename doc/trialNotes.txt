@@ -1,3 +1,11 @@
+22/05/2025
+Stuck on op multiply adjacent params. Added multiplier
+fragment.
+
+21/05/2025
+Added Template for opAdjacentParams, add completed
+after 3 rounds, subtract after 160 rounds.
+
 20/05/2025
 Stuck at multiplyAdjacentParams, tried templates and
 fragments without success. Seeded solution.
