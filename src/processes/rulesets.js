@@ -3643,6 +3643,14 @@ const rulesets = {
         return outputList;
     },
 
+    byteDivideByFirstParam(self, rule, value, address, initialParams, params, outputValues) {
+        let offset = address - rule.outBlockStart;
+        let a = initialParams[rule.inBlockStart];
+        let required = Math.floor(initialParams[rule.inblockStart + offset] / a) & 255;
+        let score = self.doByteScore(required, value);
+        return score;
+    },
+
     getPowerFirstParamRequiredOutputs(self, inputList) {
         let outputList = [];
 
@@ -3656,14 +3664,6 @@ const rulesets = {
             outputList.push(output);
         }
         return outputList;
-    },
-
-    byteDivideByFirstParam(self, rule, value, address, initialParams, params, outputValues) {
-        let offset = address - rule.outBlockStart;
-        let a = initialParams[rule.inBlockStart];
-        let required = Math.floor(initialParams[rule.inblockStart + offset] / a) & 255;
-        let score = self.doByteScore(required, value);
-        return score;
     },
 
     getNumbersGreaterThanFirstRequiredOutputs(self, inputList) {

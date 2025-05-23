@@ -1763,6 +1763,181 @@ const seedPrograms = {
             ]
         },
         {
+            name: "powerFirstParam",
+            description: "Raise the inputs by the power given by the first parameter",
+            program: [
+                {
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200] // Loop Counter
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer 
+                },
+                {
+                    // Main Loop:
+                    ins: "LDI A, (MEM)",
+                    data: [0] // Power
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "JRNC",
+                    data: [4] // Do Calc 
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "JR",
+                    data: [40] // Output Result
+                },
+                {
+                    // Do Calc:
+                    ins: "ST (MEM), A",
+                    data: [203] // Power Count
+                },
+                {
+                    ins: "SWP A, B" // B = Power Count
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // Input Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204] // Input Param
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "POP C" // C = Input Param
+                },
+                {
+                    ins: "DEC B", // Power Count
+                },
+                {
+                    ins: "JRC",
+                    data: [24] // Output Result
+                },
+                {
+                    // Do Further Calc:
+                    ins: "PUSH C"
+                },
+                {
+                    ins: "POP B" // ABC are input param
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    // Add Loop:
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xFE] // Add Loop
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [205] // Current Result
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203] // Power Count
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [205] // Result
+                },
+                {
+                    ins: "JRZ",
+                    data: [8] // Output Result
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [204] // Input Param
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [205]
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "POP B" // Current Result
+                },
+                {
+                    ins: "JR",
+                    data: [0xEA] // Add Loop
+                },
+                {
+                    // Output Result:
+                    ins: "LD C, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200] // Loop Counter
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xC2] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "sampleInMinusSampleOut",
             description: "Output whether the sampleOut items are greater than sampleIn",
             program: [
