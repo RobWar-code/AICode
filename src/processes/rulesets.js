@@ -1882,7 +1882,7 @@ const rulesets = {
 
         // Divide
         this.scoreList.push(
-            {rule: "Use op to Convert Adjacent Params 6", ruleId: 62, 
+            {rule: "Use op to Convert Adjacent Params 6 (/)", ruleId: 62, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
                 sequenceNum: 57, 
