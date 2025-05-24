@@ -136,6 +136,223 @@ const seedTemplates = {
                 ]
             },
             {
+                name: "adjacentParamOps",
+                description: "Framework for handling multiple adjacent param ops",
+                template: [
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        // Main Loop:
+                        ins: "LD C, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "LDI A, (C)" // A = op
+                    },
+                    {
+                        ins: "PUSH A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // First param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [204] // Second Param
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "POP A"
+                    },
+
+                    {
+                        ins: "LD B, IMM",
+                        data: [61] // =
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [15] // Next Op Compare 1
+                    },
+                    {
+                        noops: 12
+                    },
+                    {
+                        ins: "JR",
+                        data: [94] // Output Result
+                    },
+
+                    {
+                        // Next Op Compare 1:
+                        ins: "LD B, IMM",
+                        data: [42] // *
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [15] // Next Op Compare 2
+                    },
+                    {
+                        noops: 12
+                    },
+                    {
+                        ins: "JR",
+                        data: [75] // Output Result
+                    },
+
+                    {
+                        // Next Op Compare 2:
+                        ins: "LD B, IMM",
+                        data: [43] // +
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [15] // Next Op Compare 3
+                    },
+                    {
+                        noops: 12
+                    },
+                    {
+                        ins: "JR",
+                        data: [56] // Output Result
+                    },
+
+                    {
+                        // Next Op Compare 3:
+                        ins: "LD B, IMM",
+                        data: [45] // -
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [15] // Next Op Compare 4
+                    },
+                    {
+                        ins: "JR", 
+                        data: [2] // Calculation
+                    },
+                    {
+                        // Branch Back:
+                        ins: "JR",
+                        data: [0xB0] // Main Loop
+                    },
+                    {
+                        // Calculation:
+                        noops: 12
+                    },
+                    {
+                        ins: "JR",
+                        data: [37] // Output Result
+                    },
+
+                    {
+                        // Next Op Compare 4:
+                        ins: "LD B, IMM",
+                        data: [47] // /
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [15] // Next Op Compare 5
+                    },
+                    {
+                        noops: 12
+                    },
+                    {
+                        ins: "JR",
+                        data: [16] // Output Result
+                    },
+
+                    {
+                        // Next Op Compare 5:
+                        ins: "LD B, IMM",
+                        data: [37] // %
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [19] // Next Process
+                    },
+                    {
+                        noops: 12
+                    },
+
+                    {
+                        // Output Result:
+                        ins: "LD C, (MEM)",
+                        data: [202] // Output Pointer
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ST (MEM), C",
+                        data: [202]
+                    },
+                    {
+                        // Next Process
+                        ins: "LDIL A"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [201] // Input Pointer
+                    },
+                    {
+                        ins: "CMP A, B"
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xC0] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
                 name: "firstParamExtractLoop",
                 description: "Loop with separate i/o pointers using first param", 
                 template: [
