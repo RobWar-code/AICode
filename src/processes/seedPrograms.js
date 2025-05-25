@@ -194,6 +194,410 @@ const seedPrograms = {
             ]
         },
         {
+            name: "adjacentParamOps",
+            description: "Framework for handling multiple adjacent param ops",
+            program: [
+                {
+                    ins: "CLR (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    // Main Loop:
+                    label: "mainLoop",
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LDI A, (C)" // A = op
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // First param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "POP A"
+                },
+
+                {
+                    ins: "LD B, IMM",
+                    data: [61] // =
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["compare1"]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "JR",
+                    data: ["nextProcess"]
+                },
+
+                {
+                    label: "compare1",
+                    ins: "LD B, IMM",
+                    data: [43] // +
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["compare2"] // Next Op Compare 2
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "JR",
+                    data: ["outputResult"]
+                },
+
+                {
+                    label: "compare2",
+                    ins: "LD B, IMM",
+                    data: [45] // -
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["compare3"]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "JR",
+                    data: ["outputResult"] // Output Result
+                },
+
+                {
+                    // Next Op Compare 3:
+                    label: "compare3",
+                    ins: "LD B, IMM",
+                    data: [42] // *
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["compare4"] // Next Op Compare 4
+                },
+                {
+                    ins: "JR", 
+                    data: ["calculation"] // Calculation
+                },
+                {
+                    // Branch Back:
+                    label: "branchBack",
+                    ins: "JR",
+                    data: ["mainLoop"] // Main Loop
+                },
+                {
+                    label: "calculation",
+                    ins: "LD B, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "SWP B, C"
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    // Add Loop:
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xFE] // Add Loop
+                },
+                {
+                    ins: "JR",
+                    data: ["outputResult"] // Output Result
+                },
+
+                {
+                    // Next Op Compare 4:
+                    label: "compare4",
+                    ins: "LD B, IMM",
+                    data: [47] // /
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["compare5"] // Next Op Compare 5
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204]
+                },
+                {
+                    ins: "LD C, IMM",
+                    data: [0]
+                },
+                {
+                    // Subtract Loop
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [7] // Set Div Result
+                },
+                {
+                    ins: "JRZ",
+                    data: [3] // Set Div Result + 1 
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "JR",
+                    data: [0xFA] // Subtract Loop
+                },
+                {
+                    // Set Div Result + 1
+                    ins: "INC C"
+                },
+                {
+                    // Set Div Result
+                    ins: "SWP A, C"
+                },
+                {
+                    ins: "JR",
+                    data: ["outputResult"] // Output Result
+                },
+
+                {
+                    // Next Op Compare 5:
+                    label: "compare5",
+                    ins: "LD B, IMM",
+                    data: [37] // %
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["nextProcess"] // Next Process
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Second Param
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "SWP B, C"
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [203] // First Param
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "SWP B, C"
+                },
+                {
+                    // Sub Loop:
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: ["outputResult"] // Output Result
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xFC] // Sub Loop
+                },
+
+                {
+                    // Output Result:
+                    label: "outputResult",
+                    ins: "LD C, (MEM)",
+                    data: [202] // Output Pointer
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [202]
+                },
+                {
+                    // Next Process:
+                    label: "nextProcess",
+                    ins: "LDIL A"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["branchBack"] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             name: "divideAdjacentParams",
             description: "divide inputs by their adjacent parameters",
             program: [

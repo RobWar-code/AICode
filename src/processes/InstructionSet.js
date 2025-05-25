@@ -1018,8 +1018,23 @@ class InstructionSet {
 
     compileCodeFragmentOrTemplate(fragment) {
         // Convert the fragment to binary code
+        let labels = [];
+        let calls = []
         let codeBlock = [];
+        let addr = 0;
         for (let ins of fragment) {
+            if ("label" in ins) {
+                labels.push({label: ins.label, addr: addr})
+            }
+            if ("addr" in ins) {
+                if (ins.addr < addr) {
+                    console.error("compileCodeFragmentOrTemplate, addr overlaps existing addr", ins.addr, addr);
+                    throw "Program Error";
+                }
+                let padding = new Array(ins.addr - addr).fill(255);
+                codeBlock = codeBlock.concat(padding);
+                addr = codeBlock.length;
+            }
             if ("freeform" in ins) {
                 let count = ins.freeform;
                 for (let i = 0; i < count; i++) {
@@ -1035,23 +1050,69 @@ class InstructionSet {
             }
             else if ("noops" in ins) {
                 let numNoops = ins.noops;
-                codeBlock = new Array(numNoops).fill(255);
+                codeBlock = codeBlock.concat(new Array(numNoops).fill(255));
             }
-            else if (typeof ins.ins === 'object') { // ie: array
-                let insName = ins.ins[Math.floor(Math.random() * ins.ins.length)];
-                let tempIns = {...ins};
-                tempIns.ins = insName;
-                this.compileIns(tempIns, codeBlock);
+            else if ("ins" in ins) {
+                if (typeof ins.ins === 'object') { // ie: array
+                    let insName = ins.ins[Math.floor(Math.random() * ins.ins.length)];
+                    let tempIns = {...ins};
+                    tempIns.ins = insName;
+                    this.compileIns(tempIns, codeBlock, calls, addr);
+                }
+                else {
+                    this.compileIns(ins, codeBlock, calls, addr);
+                }
             }
-            else {
-                this.compileIns(ins, codeBlock);
-            }
+            addr = codeBlock.length;
         }
+
+        this.compileLabelRefs(codeBlock, labels, calls);
 
         return codeBlock;
     }
 
-    compileIns(ins, codeBlock) {
+    compileLabelRefs(codeBlock, labels, calls) {
+        for (let call of calls) {
+            let label = call.label;
+            // Find the label
+            let found = false;
+            let labelItem = null;
+            for (labelItem of labels) {
+                if (labelItem.label === label) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                let targetAddr = labelItem.addr;
+                if (call.rel) {
+                    let relAddr;
+                    // Relative Address
+                    if (call.addr > targetAddr) {
+                        relAddr = targetAddr - (call.addr - 1);
+                        if (relAddr < -127) {
+                            console.error("compileLabelRefs: negative relative address out of range:", label, call.addr);
+                            throw "Program Error";
+                        } 
+                        relAddr = relAddr & 255;
+                    }
+                    else {
+                        relAddr = (targetAddr - (call.addr + 1)) & 255;
+                        if (relAddr > 128) {
+                            console.error("compileLabelRefs: relative address out of range: ", label, call.addr);
+                            throw "Program Error";
+                        }
+                    }
+                    codeBlock[call.addr] = relAddr;
+                }
+                else {
+                    codeBlock[call.addr] = labelItem.addr;
+                }
+            }
+        }
+    }
+
+    compileIns(ins, codeBlock, calls, addr) {
         let insItem = this.getInsItemFromIns(ins);
         codeBlock.push(insItem.code);
         if ("data" in ins) {
@@ -1059,9 +1120,19 @@ class InstructionSet {
             if (insItem.insLen > 1) {
                 // Add data bytes
                 for (let i = 0; i < insItem.insLen - 1; i++) {
-                    if (dataGiven[i] === "?") {
-                        let v = Math.floor(Math.random() * 256);
-                        codeBlock.push(v);
+                    if (typeof dataGiven[i] === "string") {
+                        if (dataGiven[i] === "?") {
+                            let v = Math.floor(Math.random() * 256);
+                            codeBlock.push(v);
+                        }
+                        else {
+                            let rel = false;
+                            if (insItem.name.substring(0, 2) === "JR") {
+                                rel = true;
+                            }
+                            calls.push({label: dataGiven[i], addr: addr + 1, rel: rel});
+                            codeBlock.push(0);
+                        }
                     }
                     else {
                         codeBlock.push(dataGiven[i]);
@@ -1861,45 +1932,15 @@ class InstructionSet {
 
     compileTestCode(testCode, memSpace) {
         let createMemSpace = false;
-        if (memSpace.length === 0) createMemSpace = true;
-
-        let ip = 0;
-        for (let codeItem of testCode) {
-            if ("at" in codeItem) {
-                ip = codeItem["at"];
-            }
-            if (codeItem["ins"] === "DATA") {
-                let addr = codeItem["addr"];
-                memSpace[addr] = codeItem["value"];
-            }
-            else {
-                let codeDetails = this.getInsCode(codeItem["ins"]);
-                if (codeDetails.code === null) {
-                    console.error("Invalid compiler code found at", codeItem.ins);
-                }
-                else {
-                    if (createMemSpace) {
-                        memSpace.push(codeDetails.code);
-                    }
-                    else {
-                        memSpace[ip] = codeDetails.code;
-                    }
-                    if (codeDetails.insLen > 1 && "data" in codeItem) {
-                        let c = 1;
-                        for (let n of codeItem["data"]) {
-                            if (createMemSpace) {
-                                memSpace.push(n);
-                            }
-                            else {
-                                memSpace[ip + c] = n;
-                            }
-                            ++c;
-                        }
-                    }
-                    ip = ip + codeDetails.insLen;
-                }
-            }
+        if (memSpace.length === 0) {
+            createMemSpace = true;
+            memSpace = new Array(256).fill(0);
         }
+        let codeBlock = this.compileCodeFragmentOrTemplate(testCode);
+        for (let i = 0; i < codeBlock.length; i++) {
+            memSpace[i] = codeBlock[i];
+        }
+        return memSpace;
     }
 
     getInsItemFromIns(ins) {
