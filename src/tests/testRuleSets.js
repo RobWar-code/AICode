@@ -1720,9 +1720,11 @@ const testRuleSets = {
     },
 
     testConvertASCIINumbers: function() {
-        let ruleNum = 18;
+        let ruleSequenceNum = 62;
         rulesets.initialise();
-        let rule = rulesets.scoreList[ruleNum];
+        let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
+        console.log("rule outputs:", rule.outputs);
+        return;
 
         // Check the initial parameters in the entity
         let insSet = new InstructionSet();
@@ -2176,7 +2178,7 @@ const testByteRules = {
 }
 console.log("Got Here");
 
-testRuleSets.testBubbleSort();
+// testRuleSets.testBubbleSort();
 
 // testRuleSets.testParamOpsDivide();
 
@@ -2197,7 +2199,7 @@ testRuleSets.testBubbleSort();
 // testRuleSets.testSortAdjacentParams();
 // testRuleSets.testAddAdjacentParams();
 // testRuleSets.testSubtractAdjacentParams();
-// testRuleSets.testConvertASCIINumbers();
+testRuleSets.testConvertASCIINumbers();
 
 // testByteRules.valuesOutFromInitialParams();
 // testByteRules.valuesOutMatchInitialParams();

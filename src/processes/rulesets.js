@@ -2063,6 +2063,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10,
+                highIP: 40,
                 sampleIn: sampleASCII1,
                 sampleOut: [],
                 paramsIn: asciiParams1,
@@ -2084,6 +2086,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 * 2,
+                highIP: 40,
                 sampleIn: sampleASCII2,
                 sampleOut: [],
                 paramsIn: asciiParams2,
@@ -2104,6 +2108,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 * 3,
+                highIP: 40,
                 sampleIn: sampleASCII3,
                 sampleOut: [],
                 paramsIn: asciiParams3,
@@ -2124,6 +2130,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 * 3,
+                highIP: 45,
                 sampleIn: sampleASCII4,
                 sampleOut: [],
                 paramsIn: asciiParams4,
@@ -2218,7 +2226,7 @@ const rulesets = {
         let set2 = null;
 
         if (setNum === 1) {
-            set1 = ["1","5","7","6","9;","0","8","3","5","9","0","6","3","8","4","2"];
+            set1 = ["1","5","7","6","9","0","8","3","5","9","0","6","3","8","4","2"];
             set2 = ["2","4","8","7","5","9","0","6","1","3","8","7","4","2","0","1"];
         }
         else if (setNum === 2) {
