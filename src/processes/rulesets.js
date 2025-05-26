@@ -35,6 +35,33 @@ const rulesets = {
         this.byteFunction = [];
         this.requiredOutputsFunction = [];
 
+        /*
+            Rule Template
+            {   rule: "Convert ASCII Numbers 1", ruleId: 32,
+                retain: false, skip: false, 
+                excludeHelperRules: [67], // Optional
+                sequenceNum: 62, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10,
+                highIP: 40, // Optional, Default 80
+                ASCIISampleIn: // Optional, Default Ignore 
+                [
+                    "1;7;9;3;2;5;7;0;9;8;3;2;4;6;7;8;"
+                ],
+                sampleIn: [],
+                sampleOut: [],
+                ASCIIParamsIn: // Optional, Default Ignore 
+                [
+                    "5;6;7;0;8;9;3;2;5;4;9;6;2;1;0;9;",
+                    "5;7;9;8;2;2;3;0;4;6;5;7;9;8;1;4;"
+                ],
+                paramsIn: [],
+                outputs: []
+            }
+
+        */
         this.scoreList.push(
             {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
                 sequenceNum: 0, score: 0, max: 2, startRoundNum: 0}
@@ -2053,8 +2080,6 @@ const rulesets = {
         this.byteFunction.push(this.byteParamOperations);
         this.requiredOutputsFunction.push(this.getParamOperationsRequiredOutputs);
 
-        let sampleASCII1 = this.getASCIIParams(5);
-        let asciiParams1 = this.getASCIIParams(1);
         this.scoreList.push(
             {rule: "Convert ASCII Numbers 1", ruleId: 32,
                 retain: false, skip: false, 
@@ -2065,9 +2090,16 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 32,
                 highIC: 16 * 10,
                 highIP: 40,
-                sampleIn: sampleASCII1,
+                ASCIISampleIn: [
+                    "1;7;9;3;2;5;7;0;9;8;3;2;4;6;7;8;"
+                ],
+                sampleIn: [],
                 sampleOut: [],
-                paramsIn: asciiParams1,
+                ASCIIParamsIn: [
+                    "5;6;7;0;8;9;3;2;5;4;9;6;2;1;0;9;",
+                    "5;7;9;8;2;2;3;0;4;6;5;7;9;8;1;4;"
+                ],
+                paramsIn: [],
                 outputs: []
             }
         );
@@ -2075,8 +2107,6 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        let sampleASCII2 = this.getASCIIParams(6);
-        let asciiParams2 = this.getASCIIParams(2);
         this.scoreList.push(
             {rule: "Convert ASCII Numbers 2", ruleId: 33,
                 retain: false, skip: false, 
@@ -2085,12 +2115,19 @@ const rulesets = {
                 score: 0, completionRound: -1, displayGroupBy:3, 
                 max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
+                inBlockStart: 0, inBlockLen: 48,
                 highIC: 16 * 10 * 2,
-                highIP: 40,
-                sampleIn: sampleASCII2,
+                highIP: 60,
+                ASCIISampleIn: [
+                    "12;23;45;56;91;24;10;11;15;47;63;72;25;28;84;57;"
+                ],
+                sampleIn: [],
                 sampleOut: [],
-                paramsIn: asciiParams2,
+                ASCIIParamsIn: [
+                    "33;48;56;17;19;25;10;11;16;98;78;37;42;64;28;72;",
+                    "36;17;91;85;83;48;92;18;20;22;75;87;43;57;45;59;"
+                ],
+                paramsIn: [],
                 outputs: []
             }
         );
@@ -2098,8 +2135,6 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        let sampleASCII3 = this.getASCIIParams(7);
-        let asciiParams3 = this.getASCIIParams(3);
         this.scoreList.push(
             {rule: "Convert ASCII Numbers 3", ruleId: 34,
                 retain: false, skip: false, 
@@ -2107,12 +2142,19 @@ const rulesets = {
                 sequenceNum: 64, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
+                inBlockStart: 0, inBlockLen: 64,
                 highIC: 16 * 10 * 3,
                 highIP: 40,
-                sampleIn: sampleASCII3,
+                ASCIISampleIn: [
+                    "112;135;201;197;243;217;179;165;143;122;119;107;104;190;221;254;"
+                ],
+                sampleIn: [],
                 sampleOut: [],
-                paramsIn: asciiParams3,
+                ASCIIParamsIn: [
+                    "108;246;225;123;101;100;200;235;154;187;190;136;128;227;215;124;",
+                    "109;107;121;189;176;105;100;201;209;230;147;156;159;190;103;122;"
+                ],
+                paramsIn: [],
                 outputs: []
             }
         );
@@ -2120,8 +2162,6 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        let sampleASCII4 = this.getASCIIParams(8);
-        let asciiParams4 = this.getASCIIParams(4);
         this.scoreList.push(
             {rule: "Convert ASCII Numbers 4", ruleId: 35,
                 retain: false, skip: false, 
@@ -2129,12 +2169,19 @@ const rulesets = {
                 sequenceNum: 65, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
+                inBlockStart: 0, inBlockLen: 48,
                 highIC: 16 * 10 * 3,
                 highIP: 45,
-                sampleIn: sampleASCII4,
+                ASCIISampleIn: [
+                    "1;12;15;9;71;101;124;213;5;9;8;85;17;11;202;105;"
+                ],
+                sampleIn: [],
                 sampleOut: [],
-                paramsIn: asciiParams4,
+                ASCIIParamsIn: [
+                    "2;14;17;8;73;102;127;214;6;8;9;87;18;19;201;106;",
+                    "3;13;16;7;75;109;121;216;2;4;7;88;16;13;200;109;"
+                ],
+                paramsIn: [],
                 outputs: []
             }
         );
@@ -2184,6 +2231,14 @@ const rulesets = {
 
     initialiseOutputData() {
         for (let i = 0; i < this.scoreList.length; i++) {
+            let rule = this.scoreList[i];
+            if ("ASCIISampleIn" in rule) {
+                rule.sampleIn = this.convertASCIILists(rule.ASCIISampleIn);
+            }
+            if ("ASCIIParamsIn" in rule) {
+                rule.paramsIn = this.convertASCIILists(rule.ASCIIParamsIn);
+            }
+
             if (this.requiredOutputsFunction[i] != null) {
                 // Get sample outputs
                 let sampleOut = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn);
@@ -2198,6 +2253,19 @@ const rulesets = {
                 }
             }
         }
+    },
+
+    convertASCIILists(sourceList){
+        let outputList = [];
+        for (let source of sourceList) {
+            let output = [];
+            for (let p = 0; p < source.length; p++) {
+                let v = source.charCodeAt(p);
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getDiffOpt(outputs) {
@@ -2216,101 +2284,6 @@ const rulesets = {
     zeroScores() {
         for (let rule of this.scoreList) {
             rule.score = 0;
-        }
-    },
-
-    getASCIIParams(setNum) {
-        let paramsBlock = [];
-
-        let set1;
-        let set2 = null;
-
-        if (setNum === 1) {
-            set1 = ["1","5","7","6","9","0","8","3","5","9","0","6","3","8","4","2"];
-            set2 = ["2","4","8","7","5","9","0","6","1","3","8","7","4","2","0","1"];
-        }
-        else if (setNum === 2) {
-            set1 = [
-                "12","26","94","18","17","35","64","20",
-                "42","48","15","17","19","21","75","29"
-            ]
-            set2 = [
-                "22","46","74","16","19","55","44","30",
-                "47","38","75","12","15","51","95","49"
-            ]
-        }
-        else if (setNum === 3) {
-            set1 = [
-                "112","226","194","218","217","135","164","220",
-                "242","148","115","217","219","121","175","129"
-            ]
-            set2 = [
-                "222","146","174","216","219","255","144","130",
-                "247","138","175","212","215","151","195","149"
-            ]
-        }
-        else if (setNum === 4) {
-            set1 = [
-                "1","26","194","18","217","135","64","120",
-                "2","9","11","3","219","21","75","29"
-            ]
-            set2 = [
-                "2","146","174","216","19","55","144","13",
-                "3","138","8","17","15","151","9","6"
-            ]
-        }
-        else if (setNum === 5) {
-            set1 = [
-                "1","9","3","5","2","0","8","7",
-                "2","5","5","6","4","7","0","6"
-            ]
-        }
-        else if (setNum === 6) {
-            set1 = [
-                "21","19","10","81","17","56","81","90",
-                "17","34","57","74","27","29","38","19"
-            ]
-        }
-        else if (setNum === 7) {
-            set1 = [
-                "219","124","242","167","209","108","165","143",
-                "182","118","136","196","192","202","214","173"
-            ]
-        }
-        else if (setNum === 8) {
-            set1 = [
-                "1","14","134","54","2","3","34","19",
-                "104","213","111","36","75","89","91","8"
-            ]
-        }
-
-        if (set2 != null) {
-            let params1 = insertAsciiStrings(set1);
-            paramsBlock.push(params1);
-            let params2 = insertAsciiStrings(set2);
-            paramsBlock.push(params2);
-
-            return paramsBlock;
-        }
-        else {
-            let outputs = insertAsciiStrings(set1);
-            return [outputs];
-        }
-
-        function insertAsciiStrings(set) {
-            let p = [];
-            for (let numStr of set) {
-                for (let i = 0; i < numStr.length; i++) {
-                    let c = numStr.charCodeAt(i);
-                    p.push(c);
-                }
-                let s = ";";
-                p.push(s.charCodeAt(0));
-            }
-            if (p.length >= 256) {
-                console.log("initial params too long");
-            }
-            return p;
         }
     },
 
