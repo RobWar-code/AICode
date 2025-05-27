@@ -1005,7 +1005,72 @@ class InstructionSet {
                     data: [0xFE]
                 },
                 // Output Value
-
+            ],
+            [
+                // ASCII Numbers
+                {
+                    label: "fetchNumLoop",
+                    ins: "LD C, (MEM)",
+                    data: [201] // Input Pointer
+                },
+                {
+                    // Fetch Input Chars
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [201] // Input Pointer
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [59] // ;
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRZ",
+                    data: ["?"] // Do Calc
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    data: [204] // Digit Counter
+                },
+                {
+                    ins: "INC B"
+                },
+                {
+                    ins: "ST (MEM), B",
+                    data: [204]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [203] // Digit Pointer
+                },
+                {
+                    ins: "LD B, IMM",
+                    data: [48] // 0
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [203] // Digit Pointer
+                },
+                {
+                    ins: "JR",
+                    data: ["fetchNumLoop"]
+                }
             ]
         ]; // end of fragments
 
