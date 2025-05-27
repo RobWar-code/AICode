@@ -8,7 +8,8 @@ const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
-const {databaseType, processMode, workerDataTransfer} = require(path.join(__dirname, '../AICodeConfig.js'));
+const {databaseType, processMode, workerDataTransfer, numProcessesSet} = 
+    require(path.join(__dirname, '../AICodeConfig.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class MainControlParallel {
@@ -62,7 +63,15 @@ class MainControlParallel {
 
     setupBatchProcessing() {
         // Get number of processors
-        this.numCPUs = os.cpus().length / 2;
+        if (numProcessesSet === "auto") {
+            this.numCPUs = os.cpus().length / 2;
+        }
+        else if (typeof numProcessesSet === 'number') {
+            this.numCPUs = numProcessesSet;
+        }
+        else {
+            this.numCPUs = 2;
+        }
         console.log("Num cpus", this.numCPUs);
 
         // A batch is a group of best sets sent to an individual worker

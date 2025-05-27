@@ -1,6 +1,8 @@
 Worked Examples and Strategies
 
 Contents
+    Status Reports
+        Status May 2025
     Problem Space Background
         Review of Methodology
             Further Detailed Analysis
@@ -25,6 +27,15 @@ Contents
         Setting Up Tests to Derive Further Instruction Sequences
     Toward Stepped Pathways
     Performance Notes
+
+<h1>Status Reports
+
+<h2>Status May 2025
+    The system as it stands has completed all bar the final 3 of the rules, 
+    requiring seed programs in about 7 cases out of 60. Although the system
+    completed the first ASCII rule, it seems likely that subsequent rules
+    will need seed intervention, and this begins to beg the question of
+    what the system is for.
 
 <h1>Problem Space Background
     Using the instruction set to date, we can consider the solution to
