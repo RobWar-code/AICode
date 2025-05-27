@@ -1009,6 +1009,14 @@ class InstructionSet {
             [
                 // ASCII Numbers
                 {
+                    ins: "LD A, IMM",
+                    data: [205] // Digit Values
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [203] // Digit Pointer
+                },
+                {
                     label: "fetchNumLoop",
                     ins: "LD C, (MEM)",
                     data: [201] // Input Pointer
@@ -1071,6 +1079,141 @@ class InstructionSet {
                     ins: "JR",
                     data: ["fetchNumLoop"]
                 }
+            ],
+            [
+                // Totalise ASCII Number
+                {
+                    ins: "CLR (MEM)",
+                    data: [208] // Total
+                },
+                {
+                    ins: "LD C, IMM",
+                    data: [205] // Digit Pointer
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [203]
+                },
+                {
+                    label: "totaliseLoop",
+                    ins: "LD C, (MEM)",
+                    data: [203] // Digit Pointer
+                },
+                {
+                    ins: "LD A, (C)" // Current Digit 
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [203]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [204] // Digit Counter
+                },
+                {
+                    ins:"ST (MEM), C",
+                    data: [210] // Digit Counter Reserve
+                },
+                {
+                    // Get Power Of 10
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [204] // Digit Counter
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "PUSH B"
+                },
+                {
+                    ins: "POP A"
+                },
+                {
+                    ins: "JRC",
+                    data: ["addToTotal"]
+                },
+                {
+                    label: "powerUp",
+                    ins: "LD C, IMM",
+                    data: [10]
+                },
+                {
+                    label: "tenTimes",
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["tenTimes"]
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [204] // Digit Counter
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [204]
+                },
+                {
+                    ins: "JRZ",
+                    data: ["addToTotal"]
+                },
+                {
+                    ins: "PUSH A"
+                },
+                {
+                    ins: "POP B"
+                },
+                {
+                    ins: "JR",
+                    data: ["powerUp"]
+                },
+                {
+                    label: "addToTotal",
+                    ins: "LD B, (MEM)",
+                    data: [208] // Total
+                },
+                {
+                    ins: "ADD A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [208] // Total
+                },
+                {
+                    ins: "LD C, (MEM)",
+                    data: [210] // Digit Counter Reserve
+                },
+                {
+                    ins: "DEC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [210]
+                },
+                {
+                    ins: "ST (MEM), C",
+                    data: [204] // Digit Counter
+                },
+                {
+                    ins: "JRNZ",
+                    data: ["totaliseLoop"]
+                }
+
             ]
         ]; // end of fragments
 
