@@ -88,7 +88,7 @@ class BatchProcess {
         }
         else {
             let jsonStr = 
-                "{\"type\": \"entityData\", \"data\": " +
+                `{\"type\": \"entityData\", \"batchNum\": ${this.batchNum}, \"data\": ` +
                 fsTransactions.prepareJSONEntitySet(this.bestSets, this.batchStart) +
                 "}\n";
             process.stdout.write(jsonStr);

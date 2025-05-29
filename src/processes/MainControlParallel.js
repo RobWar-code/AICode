@@ -128,6 +128,7 @@ class MainControlParallel {
             }
         }
 
+        console.log("Num Processes:", this.numProcesses);
         for (let processNum = 0; processNum < this.numProcesses; processNum++) {
             let entityJSONData = "";
 
@@ -197,8 +198,9 @@ class MainControlParallel {
                     console.log("worker message:", msg.message);
                 }
                 else if (type === "entityData") {
+                    let batchNum = msg.batchNum;
                     let entityData = msg.data;
-                    this.collectStdioEntityData(entityData, processNum);
+                    this.collectStdioEntityData(entityData, batchNum);
                 }
                 else if (type === "batchData") {
                     let batchData = msg.data;
@@ -219,7 +221,7 @@ class MainControlParallel {
         worker.stderr.on("data", (data) => {
             console.error(`Worker ${processNum} stderr: ${data}`);
         });
-    
+
         worker.on("exit", (code) => {
             if (code === 0 && workerDataTransfer != "stdio") {
                 ++this.batchProcessCount;
@@ -263,6 +265,7 @@ class MainControlParallel {
             let elapsedTime = endTime - this.startTime;
             this.elapsedTime = elapsedTime;
             this.displayEntity(null, this.spanStart, 0, false);
+            this.lastSpanStart = this.spanStart;
             this.spanStart += this.spanLength;
             ++this.spanNum;
         }
@@ -991,7 +994,6 @@ class MainControlParallel {
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
         displayData.selfBreedCount = this.selfBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
-        console.log("displayEntity: this.seedTemplateBreedCount", this.seedTemplateBreedCount);
         displayData.seedTemplateBreedCount = this.seedTemplateBreedCount;
         displayData.crossSetCount = this.crossSetCount;
         displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
