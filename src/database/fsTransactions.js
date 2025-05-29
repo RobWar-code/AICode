@@ -25,6 +25,20 @@ const fsTransactions = {
 
     async saveTransferEntitySet(bestSets, batchStart, batchLength, processNum) {
         // Prepare JSON entity set
+        let jsonStr = this.parentPrepareBatchJSONSet(bestSets, batchStart, batchLength);
+
+        // Create the transfer file
+        const filepath = "src/database/workerTransfer/transferSet" + processNum + ".json";
+       
+        try {
+            await fs.writeFile(filepath, jsonStr, 'utf8');
+        }
+        catch (err) {
+            console.error("saveTransferEntitySet: could not write file: ", filepath);
+        }
+    },
+
+    parentPrepareBatchJSONSet(bestSets, batchStart, batchLength) {
         let jsonObj = [];
         for (let i = 0; i < batchLength; i++) {
             let entitySet = [];
@@ -47,17 +61,8 @@ const fsTransactions = {
             }
             jsonObj.push(entitySet);
         }
-        jsonStr = JSON.stringify(jsonObj);
-
-        // Create the transfer file
-        const filepath = "src/database/workerTransfer/transferSet" + processNum + ".json";
-       
-        try {
-            await fs.writeFile(filepath, jsonStr, 'utf8');
-        }
-        catch (err) {
-            console.error("saveTransferEntitySet: could not write file: ", filepath);
-        }
+        let jsonStr = JSON.stringify(jsonObj);
+        return jsonStr;
     },
 
     async fetchSpanEntities(numProcesses, spanStart, bestSets, ruleSequenceNum, instructionSet) {
@@ -140,7 +145,22 @@ const fsTransactions = {
     },
 
     async transferBatchSet(bestSets, batchNum, batchStart) {
+        // Child Worker for Parent
         // Prepare JSON entity set
+        let jsonStr = this.prepareJSONEntitySet(bestSets, batchStart);
+
+        // Create the transfer file
+        const filepath = "src/database/workerTransfer/transferSet" + batchNum + ".json";
+       
+        try {
+            await fs.writeFile(filepath, jsonStr, 'utf8');
+        }
+        catch (err) {
+            console.error("saveTransferEntitySet: could not write file: ", filepath);
+        }
+    },
+
+    prepareJSONEntitySet(bestSets, batchStart) {
         let jsonObj = [];
         for (let i = 0; i < bestSets.length; i++) {
             let entitySet = [];
@@ -163,17 +183,8 @@ const fsTransactions = {
             }
             jsonObj.push(entitySet);
         }
-        jsonStr = JSON.stringify(jsonObj);
-
-        // Create the transfer file
-        const filepath = "src/database/workerTransfer/transferSet" + batchNum + ".json";
-       
-        try {
-            await fs.writeFile(filepath, jsonStr, 'utf8');
-        }
-        catch (err) {
-            console.error("saveTransferEntitySet: could not write file: ", filepath);
-        }
+        let jsonStr = JSON.stringify(jsonObj);
+        return jsonStr;
     },
 
     async saveBatchData(batchNum, batchData) {

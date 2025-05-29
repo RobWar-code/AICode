@@ -181,13 +181,17 @@ git restore src/database/createSqliteTables.js
 If you alter other files temporarily (ie: mainControlParallel.js) use
 the git restore operation before doing git pull origin main
 
+## Summary of Status 28/05/2025
+The project has now been operational for 7 months. Evolutionary problem
+solving has been shown to be successful in about 80% of the problems set,
+but rather less for the more sophisticated problems set later.
 
+At this stage, this system cannot be said to be a useful tool for writing code, 
+but it does demonstrate the potential of the evolutionary approach.
 
-
-
-
-
-
+For these reasons, the project is to be placed on hold for a few months
+whilst other works proceed.
+ 
 ## Background
 
 This document suggests ideas for further developments derived or based upon the ideas implemented in the XBasic program EvoGraphII01.x

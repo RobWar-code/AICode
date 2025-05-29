@@ -1,5 +1,6 @@
 const path = require('node:path');
 const { spawn } = require('child_process');
+const readline = require('readline');
 const os = require('os');
 
 const { seedRuleMemSpaces } = require('./rulesets');
@@ -128,23 +129,37 @@ class MainControlParallel {
         }
 
         for (let processNum = 0; processNum < this.numProcesses; processNum++) {
+            let entityJSONData = "";
+
             // Transfer the best set entity data to the exchange tables
             if (workerDataTransfer === "database") {
                 // Send via database
                 await this.sendEntityExchangeData(this.spanNum, this.numProcesses, processNum);
             }
-            else {
+            else if (workerDataTransfer === "fileSystem") {
                 // Send via file system
                 await this.sendFSEntityExchangeData(this.spanNum, this.numProcesses, processNum);
             }
+            else {
+                // Send via stdio, get JSON data
+                let batchStart = this.spanStart + processNum * this.bestSetsPerBatch;
+                let batchLength = this.bestSetsPerBatch;
+                if (this.spanNum === this.numSpans - 1 && processNum === this.numProcesses - 1 && this.finalBatchLength > 0) {
+                    batchLength = this.finalBatchLength;
+                }
+                entityJSONData = 
+                    "{\"type\":\"entityData\", \"data\":" + 
+                    fsTransactions.parentPrepareBatchJSONSet(this.bestSets, batchStart, batchLength) +
+                    "}\n";
+            }
             // Spawn the processes
-            this.spawnProcess(this.spanNum, this.numProcesses, processNum);
+            this.spawnProcess(this.spanNum, this.numProcesses, processNum, entityJSONData);
         }
         
         this.mainWindow.webContents.send('batchDispatched', 0);
     }
 
-    spawnProcess(spanNum, numProcesses, processNum) {
+    spawnProcess(spanNum, numProcesses, processNum, batchEntityJSON) {
         let batchLength = this.bestSetsPerBatch;
         if (spanNum === this.numSpans - 1 && processNum === numProcesses - 1 && this.finalBatchLength > 0) {
             batchLength = this.finalBatchLength
@@ -157,16 +172,56 @@ class MainControlParallel {
         const worker = spawn("node", ["src/processes/workerApp.js", processNum, batchStart, batchLength, 
             this.ruleSequenceNum, batchEntityNumber, batchCycle, this.roundNum]);
 
-        worker.stdout.on("data", (data) => {
-            console.log(`Worker ${processNum} stdout: ${data}`);
-        });
+        if (workerDataTransfer === "stdio") {
+            // Message interface (stdout)
+            const rl = readline.createInterface({
+                input: worker.stdout,
+                terminal: false
+            });
+
+            rl.on('line', (line) => {
+                let msg;
+                let type;
+                try {
+                    msg = JSON.parse(line);
+                    console.log(`[MESSAGE] From worker`);
+                } catch (err) {
+                    let slen = line.length;
+                    console.error('[PARENT] Invalid JSON from worker:', line.substring(0,80));
+                    console.error(line.substring(slen - 80, slen));
+                    throw "Stdio JSON Error";
+                }
+                type = msg.type;
+                console.log("type:", type);
+                if (type === "message") {
+                    console.log("worker message:", msg.message);
+                }
+                else if (type === "entityData") {
+                    let entityData = msg.data;
+                    this.collectStdioEntityData(entityData, processNum);
+                }
+                else if (type === "batchData") {
+                    let batchData = msg.data;
+                    this.collectStdioBatchData(batchData);
+                    ++this.batchProcessCount;
+                    if (this.batchProcessCount >= this.numProcesses) {
+                        this.batchDataCollection();
+                    }
+                }
+            });
+        }
+        else {
+            worker.stdout.on("data", (data) => {
+                console.log(`Worker ${processNum} stdout: ${data}`);
+            });
+        }
     
         worker.stderr.on("data", (data) => {
             console.error(`Worker ${processNum} stderr: ${data}`);
         });
     
         worker.on("exit", (code) => {
-            if (code === 0) {
+            if (code === 0 && workerDataTransfer != "stdio") {
                 ++this.batchProcessCount;
                 console.log ("Exited batch");
                 if (this.batchProcessCount >= this.numProcesses) {
@@ -175,6 +230,11 @@ class MainControlParallel {
             }
             console.log(`Worker ${process} exited with code ${code}`);
         });
+
+        // If using stdio, transfer the entity data
+        if (workerDataTransfer === "stdio") {
+            worker.stdin.write(batchEntityJSON);
+        }
     
     }
 
@@ -193,9 +253,18 @@ class MainControlParallel {
             await this.collectBatchData();
             await this.collectEntityData();
         }
-        else {
+        else if (workerDataTransfer === 'fileSystem') {
             await this.collectFSBatchData();
             await this.collectFSEntityData();
+        }
+        else {
+            // stdio transfer
+            let endTime = Date.now();
+            let elapsedTime = endTime - this.startTime;
+            this.elapsedTime = elapsedTime;
+            this.displayEntity(null, this.spanStart, 0, false);
+            this.spanStart += this.spanLength;
+            ++this.spanNum;
         }
         this.collectScoreHistory();
         this.mainWindow.webContents.send("batchProcessed", 0);
@@ -341,6 +410,33 @@ class MainControlParallel {
         // This returns to the server event loop
     }
 
+    collectStdioEntityData(entityData, batchNum) {
+        let batchStart = this.spanStart + this.bestSetsPerBatch * batchNum;
+        console.log("batchStart: ", batchStart, "batchNum:", batchNum);
+        let setIndex = 0;
+        for (let eset of entityData) {
+            let entityIndex = 0;
+            let outSet = [];
+            for (let entity of eset) {
+                let asRandom = false;
+                let seeded = false;
+                let newEntity = new Entity(entity.entityNumber, this.instructionSet, asRandom, seeded, 
+                    entity.birthCycle, this.ruleSequenceNum, entity.roundNum, entity.initialMemSpace);
+                newEntity.score = entity.score;
+                newEntity.memSpace = entity.memSpace;
+                newEntity.breedMethod = entity.breedMethod;
+                newEntity.birthTime = entity.birthTime;
+                newEntity.birthDateTime = entity.birthDateTime;
+                newEntity.birthCycle = entity.birthCycle;
+                newEntity.registers = entity.registers;
+                outSet.push(newEntity);
+                ++entityIndex;
+            }
+            this.bestSets[batchStart + setIndex] = outSet;
+            ++setIndex;
+        }
+    }
+
     async collectBatchData() {
         let numBatches = this.numCPUs;
         if (this.spanNum === this.numSpans - 1) {
@@ -383,6 +479,20 @@ class MainControlParallel {
             this.randomCount += batchData.randomCount;
             this.crossSetCount += batchData.crossSetCount;
         }
+    }
+
+    collectStdioBatchData(batchData) {
+        this.monoclonalInsCount += batchData.monoclonalInsCount;
+        this.monoclonalByteCount += batchData.monoclonalByteCount;
+        this.interbreedCount += batchData.interbreedCount;
+        this.interbreed2Count += batchData.interbreed2Count;
+        this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
+        this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
+        this.selfBreedCount += batchData.selfBreedCount;
+        this.seedRuleBreedCount += batchData.seedRuleBreedCount;
+        this.seedTemplateBreedCount += batchData.seedTemplateBreedCount;
+        this.randomCount += batchData.randomCount;
+        this.crossSetCount += batchData.crossSetCount;
     }
 
     collectScoreHistory() {

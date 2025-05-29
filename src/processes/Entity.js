@@ -363,7 +363,7 @@ class Entity {
             }
             if (!different) {
                 newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
-                newEntity.breedMethod = "Monoclonal";
+                newEntity.breedMethod = "MonoclonalIns";
             }
         }
         return (newEntity);

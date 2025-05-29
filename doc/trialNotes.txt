@@ -1,3 +1,11 @@
+29/05/2025
+Trial stuck on ASCIIParams2, have included fragments
+without additional success.
+
+Currently deciding whether to continue with the project 
+by continuing to add rules with the aim of it developing
+a fragment library.
+
 26/05/2025
 Seed program for op adjacent params worked ok. So
 after a time the trial system proceeded to ASCIIParams 1,

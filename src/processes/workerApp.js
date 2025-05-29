@@ -1,3 +1,4 @@
+const readline = require('readline');
 const path = require('node:path');
 const { seedRuleMemSpaces } = require('./rulesets');
 const MainProcess = require(path.join(__dirname, 'MainProcess.js'));
@@ -61,28 +62,53 @@ class BatchProcess {
         rulesets.initialise();
     }
 
-    async startProcess() {
+    async startProcess(entityData) {
         await dbConn.openConnection();
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
-        console.log("Seed Rule List:", rulesets.seedRuleMemSpaces.length);
         if (workerDataTransfer === 'database') {
             await this.fetchBatchEntities();
         }
-        else {
+        else if (workerDataTransfer === 'fileSystem') {
             await this.fetchFSBatchEntities();
         }
-        console.log("Start Process: Entity Number", this.entityNumber);
+        else {
+            this.fetchStdioBatchEntities(entityData);
+        }
         let mainProcess = new MainProcess(rulesets);
         mainProcess.mainLoop(this);
         if (workerDataTransfer === 'database') {
             await this.transferBatchEntities();
             await this.transferBatchData(this.batchNum);
         }
-        else {
+        else if (workerDataTransfer === 'fileSystem') {
             await this.transferFSBatchEntities();
             await this.transferFSBatchData(this.batchNum);
+        }
+        else {
+            let jsonStr = 
+                "{\"type\": \"entityData\", \"data\": " +
+                fsTransactions.prepareJSONEntitySet(this.bestSets, this.batchStart) +
+                "}\n";
+            process.stdout.write(jsonStr);
+
+            let batchData = {
+                monoclonalInsCount: this.monoclonalInsCount,
+                monoclonalByteCount: this.monoclonalByteCount,
+                interbreedCount: this.interbreedCount,
+                interbreed2Count: this.interbreed2Count,
+                interbreedFlaggedCount: this.interbreedFlaggedCount,
+                interbreedInsMergeCount: this.interbreedInsMergeCount,
+                selfBreedCount: this.selfBreedCount,
+                seedRuleBreedCount: this.seedRuleBreedCount,
+                seedTemplateBreedCount: this.seedTemplateBreedCount,
+                randomCount: this.randomCount,
+                crossSetCount: this.crossSetCount
+            };
+            jsonStr = JSON.stringify(batchData);
+            jsonStr = "{\"type\": \"batchData\", \"data\": " + jsonStr + "}\n";
+            process.stdout.write(jsonStr);
         }
         await dbConn.close();
     }
@@ -136,6 +162,14 @@ class BatchProcess {
 
     async fetchFSBatchEntities() {
         let batchSet = await fsTransactions.fetchBatchEntitySet(this.batchNum);
+        this.setEntities(batchSet);
+    }
+
+    fetchStdioBatchEntities(entityData) {
+        this.setEntities(entityData);
+    }
+
+    setEntities(batchSet) {
         for (let i = 0; i < batchSet.length; i++) {
             let set = [];
             for (let j = 0; j < batchSet[i].length; j++) {
@@ -228,5 +262,30 @@ let cycleCounter = parseInt(process.argv[7]);
 let roundNum = parseInt(process.argv[8]);
 
 let batchProcess = new BatchProcess(batchNum, batchStart, batchLength, ruleSequenceNum, entityNumber, cycleCounter, roundNum);
-batchProcess.startProcess();
+
+if (workerDataTransfer != "stdio") {
+    batchProcess.startProcess();
+}
+else {
+    // Setup to read JSON messages from parent
+    const rl = readline.createInterface({
+    input: process.stdin,
+    terminal: false
+    });
+
+    rl.on('line', (line) => {
+        let message;
+        try {
+            message = JSON.parse(line);
+            console.error(`[LOG] Worker Got Data ${process.pid}`);
+        } catch (err) {
+            console.error(`[ERROR] Failed to parse input: ${err.message}`, line);
+            throw "No input for worker";
+        }
+        if (message.type === "entityData") {
+            batchProcess.startProcess(message.data);
+        }
+    });
+
+}
 

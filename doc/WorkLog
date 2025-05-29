@@ -32,7 +32,12 @@ Jobs Due
 
     Backup the projects folder on the USB.
 
-    Add label handling to compiler
+    * Provide configuration option to use stdio in place of file transfer
+    for communication with worker apps.
+
+    * Add fragments for ASCII numbers
+
+    * Add label handling to compiler
 
     * Add transfer of batch data by individual files rather than using the
     database.
