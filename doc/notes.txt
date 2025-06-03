@@ -1,3 +1,11 @@
+General Program Notes
+
+Contents
+    Instruction Set Starter
+    Parallel Processing Data Transfer Operations
+        Parallel Performance Notes
+
+<h1>Instruction Set Starter
 Memory	          Read	        LD A, [MEM]
                   Write	        ST [MEM], A
                   Clear	        CLR [MEM]
@@ -14,3 +22,96 @@ Meta-Transactions Call          CALL 8bit Address
                   Call Stored   CALL 32bit Address
                   Return        RET
 Set Flags	      Implicit in arithmetic/logic
+
+<h1>Parallel Processing Data Transfer Operations
+
+🧠 Parallel Processing Data Transfer Strategies
+1. stdio (In-Memory Streams between Processes)
+Best When:
+
+Performance is critical (low-latency, high-frequency communication)
+
+Data size per message is moderate (< a few MBs)
+
+Processes are tightly coordinated and run in bursts or waves
+
+Advantages:
+
+Very fast (RAM-based)
+
+No disk usage
+
+Cautions:
+
+Requires careful handling of backpressure and process startup
+
+Fragile if misused — needs disciplined await, drain, and exit handling
+
+2. File Transfer (Filesystem-based I/O)
+Best When:
+
+System needs maximum stability or resilience
+
+Data volumes are large and infrequent
+
+Processed data needs to persist after crashes
+
+Advantages:
+
+Easy to debug and inspect
+
+Low maintenance and portable
+
+Cautions:
+
+Much slower due to disk I/O
+
+Accumulated file clutter must be managed
+
+SSD wear over time for high volumes
+
+3. Database (Local or Networked DB)
+Best When:
+
+Task coordination is complex and distributed
+
+Data needs to be persisted, queried, or shared across unrelated processes or machines
+
+You need auditability, traceability, or transactional safety
+
+Advantages:
+
+Persistent, structured, often transactional
+
+Good for many-to-many communication and historical analysis
+
+Cautions:
+
+Heavier setup/maintenance
+
+May become a bottleneck under heavy parallel load
+
+Risk of overengineering for simple job queues
+
+📌 Mental Model Guideline
+Requirement	Use
+🔄 Speed, low latency	stdio
+📁 Stability, simplicity	File Transfer
+🗄️ Persistence, audit	Database
+⚖️ Hybrid needed	Combine: stdio + file fallback
+
+<h2>Parallel Processing Performance Notes
+
+The following trial was performed on or about 02/06/2025
+using stdio rather than file system.
+
+Number   | Rounds     | Rounds | Fan   |
+of       | Performed  | per    | Noise |
+Workers  |            | Hour   |       |
+---------|------------|--------|-------|
+2        |
+3        |
+4        |
+6        |
+8        |
+12       |

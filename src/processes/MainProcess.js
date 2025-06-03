@@ -211,26 +211,10 @@ class MainProcess {
                 newSet.push(entity);
             }
         }
-        // Debug
-        /*
-        console.log("newSet score:", score);
-        for (let i = 0; i < newSet.length; i++) {
-            console.log(newSet[i].score);
-        }
-        console.log("-----------");
-        */
         return newSet;
     }
 
     addEntitiesToBestSet(bestEntitySet, bestEntitySetMax, currentEntitySet) {
-        // Debug
-        /*
-        for (let i = 0; i < currentEntitySet.length; i++) {
-            console.log(currentEntitySet[i].score);
-        }
-        console.log("-----------------")
-        */
-        let score = 0;
         let currentIndex = 0;
         let bestIndex = 0;
         let newSet = [];

@@ -206,10 +206,9 @@ const entityDisplay = {
     displayScoreList() {
         let data = this.currentData;
         // Clear the old list
-        document.getElementById('scoreList').remove();
+        document.getElementById('scoreListDiv').innerHTML = "";
         // Display the modal
         document.getElementById('scoreListBackground').style.display = "block";
-        console.log("Extracting score", data.scoreList[62].score);
         // Prepare the new list
         let html = "<ul id='scoreList'>";
         let i = 0;
@@ -222,19 +221,28 @@ const entityDisplay = {
             if ("sequenceNum" in scoreItem) {
                 sequenceNum = scoreItem.sequenceNum;
             }
-            let completionRound = "";
-            if (data.ruleCompletionRound[i] > -1) {
-                completionRound = data.ruleCompletionRound[i];
+            let ruleStartRound = "";
+            let completed = "";
+            if (data.ruleRounds[i].start > -1) {
+                ruleStartRound = data.ruleRounds[i].start;
+                if (data.ruleRounds[i].completed) {
+                    completed = "Y";
+                }
             }
+            let completionRound = "";
+            if (data.ruleRounds[i].completed) {
+                completionRound = data.ruleRounds[i].end;
+            }
+
             let score = Math.floor(data.ruleScores[i] * 10000) / 10000;
             html += "<li>";
-            html += `<span id="scoreListStartRound" style="display: inline-block; width: 50px">${scoreItem.startRoundNum}</span>`;
-            html += `<span id="scoreListOutAddress" style="display: inline-block; width: 50px">${outBlockStart}</span>`;
-            html += `<span id="scoreListSequenceNum" style="display: inline-block; width: 60px">${sequenceNum}</span>`;
-            html += `<span id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
-            html += `<span id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
-            html += `<span id="scoreListMax" style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
-            html += `<span id="scoreListCompletionRound" style="display: inline-block; width: 60px">${completionRound}</span>`;
+            html += `<span class="scoreListItem" id="scoreListSequenceNum" style="display: inline-block; width: 60px">${sequenceNum}</span>`;
+            html += `<span class="scoreListItem" id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
+            html += `<span class="scoreListItem" id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
+            html += `<span class="scoreListItem" id="scoreListMax" style="display: inline-block; width: 40px">${scoreItem.max}</span>`;
+            html += `<span class="scoreListItem" id="scoreListStartRound" style="display: inline-block; width: 40px">${ruleStartRound}</span>`;
+            html += `<span class="scoreListItem" id="scoreListCompletionRound" style="display: inline-block; width: 60px">${completionRound}</span>`;
+            html += `<span class="scoreListItem" id="scoreListCompleted" style="display: inline-block; width: 40px">${completed}</span>`;
             html += "</li>";
             ++i;
         }

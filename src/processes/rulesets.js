@@ -9,6 +9,8 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 82,
     maxRuleId: 81,
+    maxRoundsPerRule: 320,
+    maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
@@ -21,7 +23,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleCompletionRound: new Array(82).fill(-1),
+    ruleRounds: new Array(82),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     seedRuleFragments: [],
@@ -41,7 +43,8 @@ const rulesets = {
                 retain: false, skip: false, 
                 excludeHelperRules: [67], // Optional
                 sequenceNum: 62, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                score: 0, startRound: -1,
+                completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
                 highIC: 16 * 10,
@@ -275,7 +278,7 @@ const rulesets = {
                 excludeHelperRules: [67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
                 highIC: 12 * 16 + 5,
                 highIP: 25,
                 insDistribution: [
@@ -320,20 +323,7 @@ const rulesets = {
                 sequenceNum: 3, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 highIC: 7 * 16 + 5 * 100,
-                insDistribution: [
-                    {
-                        ins: "LDI A, (C)",
-                        countOpt: 2,
-                        scanStart: 0,
-                        scanEnd: 16
-                    },
-                    {
-                        ins: "JRNZ",
-                        countOpt: 2,
-                        scanStart: 24,
-                        scanEnd: 42
-                    }
-                ],
+                highIP: 32,
                 sampleIn: [[3,4]],
                 sampleOut: [],
                 paramsIn: [
@@ -354,7 +344,6 @@ const rulesets = {
                 excludeHelperRules: [67],
                 sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
-                optICFactor: 37,
                 highIC: 9 * 16 * 5,
                 sampleIn: [[3,16,3]],
                 sampleOut: [],
@@ -2221,7 +2210,8 @@ const rulesets = {
             if (scoreItem.sequenceNum > maxSequenceNum) {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
-            scoreItem.completionRound = this.ruleCompletionRound[index];
+            scoreItem.completionRound = -1;
+            this.ruleRounds[index] = {completed: false, start: -1, end: 0, used: 0};
             ++index;
         }
         this.maxScore = maxScore * 2;
@@ -2230,8 +2220,15 @@ const rulesets = {
     },
 
     initialiseOutputData() {
+        this.maxRuleSequenceNum = 0;
         for (let i = 0; i < this.scoreList.length; i++) {
             let rule = this.scoreList[i];
+
+            // Set maxRuleSequenceNum
+            if (rule.sequenceNum > this.maxRuleSequenceNum && !rule.retain) {
+                this.maxRuleSequenceNum = rule.sequenceNum;
+            }
+
             if ("ASCIISampleIn" in rule) {
                 rule.sampleIn = this.convertASCIILists(rule.ASCIISampleIn);
             }
@@ -2299,7 +2296,7 @@ const rulesets = {
                         if (address >= rule.outBlockStart && address < rule.outBlockStart + rule.outBlockLen) {
                             let score = this.byteFunction[index](this, rule, value, address, initialParams, params, outputValues);
                             if (isNaN(score)) {
-                                console.log("Invalid byte score", score, index);
+                                console.error("Invalid byte score", score, index);
                             }
                             totalScore = score;
                             totalSignificance = rule.max;
@@ -2556,9 +2553,12 @@ const rulesets = {
         return score;
     },
 
-    insDistribution (self, dataParams, ruleParams) {
+    insDistribution(self, dataParams, ruleParams) {
         let instructionSet = dataParams.instructionSet;
         let memSpace = dataParams.memSpace;
+        if (memSpace.length != 256) {
+            console.error("insDistribution: invalid memspace", memSpace.length);
+        }
 
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         if (!("insDistribution" in rule)) {
@@ -2573,7 +2573,7 @@ const rulesets = {
             // Count the number of occurences of the instruction in the scan area
             let p = insData.scanStart;
             let itemCount = 0;
-            while (p < insData.scanEnd) {
+            while (p < insData.scanEnd && p < memSpace.length) {
                 let code = memSpace[p];
                 let insItem = instructionSet.getInsDetails(code);
                 if (insItem.name === ins && itemCount < insData.countOpt) {
@@ -2864,7 +2864,7 @@ const rulesets = {
             let v = 0;
             let output = [];
             for (let i = 0; i < limit; i++) {
-                v = i * step;
+                v = (i * step) & 255;
                 output.push(v);
             }
             outputList.push(output);
@@ -4852,6 +4852,7 @@ const rulesets = {
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         let passMark = 0.95;
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
+        let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
             passMark = rule.passScore;
         }
@@ -4864,13 +4865,16 @@ const rulesets = {
             let seedRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
             let ruleId = item.ruleId;
-            console.log("seedRuleUpdate: rule:", item.rule, ruleId);
             seedRuleItem.ruleId = ruleId;
             seedRuleItem.memSpace = memSpace;
             this.seedRuleMemSpaces.push(seedRuleItem);
             this.seedRuleSet = true;
+            this.ruleRounds[ruleIndex].end = roundNum;
+            this.ruleRounds[ruleIndex].completed = true;
 
             ++this.ruleSequenceNum;
+            let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+            this.ruleRounds[newRuleIndex].start = roundNum;
             // Get the new current rule number
             let index = 0;
             for (let rule of this.scoreList) {
@@ -4880,13 +4884,20 @@ const rulesets = {
                         break;
                     }
                     if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
-                        this.ruleCompletionRound[index] = roundNum;
-                        console.log("seedRuleUpdate: - update rule completion round:", this.ruleCompletionRound[index]);
+                        this.ruleRounds[index].end = roundNum;
                     }
                 }
                 ++index;
             }
             this.currentMaxScore = this.getCurrentMaxScore();
+        }
+        else if (roundNum > this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
+            // Rule exceeds limit for number of rounds to pass
+            ++this.ruleSequenceNum;
+            if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
+                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+                this.ruleRounds[newRuleIndex].start = roundNum;
+            }
         }
         else {
             this.seedRuleSet = false;
@@ -5128,6 +5139,20 @@ const rulesets = {
                 return rule;
             }
         }
+    },
+
+    getRuleIndexFromSequence(sequenceNum) {
+        let found = false;
+        let index = 0;
+        for (let rule of this.scoreList) {
+            if (rule.sequenceNum === sequenceNum && !rule.retain && !rule.skip) {
+                found = true;
+                break;
+            }
+            ++index;
+        }
+        if (!found) return -1;
+        return index;
     },
 
     getCurrentParamsIn() {

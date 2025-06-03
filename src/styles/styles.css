@@ -136,6 +136,10 @@ li {
     overflow: auto;
 }
 
+.scoreListItem {
+    text-align: left;
+}
+
 #scoreTitles {
     margin-left: 20px;
 }
@@ -169,9 +173,19 @@ li {
     display: inline-block;
 }
 
+#scoreStartRound {
+    display: inline-block;
+    width: 40px;
+}
+
 #scoreCompletionRound {
     display: inline-block;
     width: 60px;
+}
+
+#scoreCompleted {
+    display: inline-block;
+    width: 40px;
 }
 
 .scoreListRule {

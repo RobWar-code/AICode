@@ -545,7 +545,7 @@ class MainControl {
         displayData.crossSetCount = this.crossSetCount;
         displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;
-        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
+        displayData.ruleRounds = rulesets.ruleRounds;
 
         // Get the display grouping for inputs and outputs
         if ("displayGroupBy" in rule) {

@@ -1,5 +1,5 @@
 const mysql = require('mysql2/promise');
-const dbConn = require('./dbConnSqlite.js');
+const dbConn = require('./dbConn.js');
 
 
 createTables();
@@ -67,14 +67,17 @@ async function createTables() {
     await connection.query(sql);
     */
 
-    /*
+    sql = "DROP TABLE rule";
+    await connection.query(sql);
+
     sql = "CREATE TABLE rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
-    sql += "rule_num INT,",
-    sql += "completion_round INT"
+    sql += "rule_num INT,";
+    sql += "start_round INT,";
+    sql += "completion_round INT,";
+    sql += "completed INT";
     sql += ")";
     await connection.query(sql);
-    */
 
     /*
     sql = "CREATE TABLE seed_rule_fragment (";
@@ -137,7 +140,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
+    
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -156,6 +159,7 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
+    */
 
     connection.end();
 }
@@ -166,7 +170,6 @@ async function clearTables(connection) {
     sql = "DELETE FROM batch_data";
     await connection.query(sql);
 
-    /*
     sql = "DELETE FROM transfer_entity_output";
     await connection.query(sql);
 
@@ -187,5 +190,5 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM session";
     await connection.query(sql);
-    */
+    
 }

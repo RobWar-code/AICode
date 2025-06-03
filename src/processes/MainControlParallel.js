@@ -160,7 +160,9 @@ class MainControlParallel {
         this.mainWindow.webContents.send('batchDispatched', 0);
     }
 
-    spawnProcess(spanNum, numProcesses, processNum, batchEntityJSON) {
+    async spawnProcess(spanNum, numProcesses, processNum, batchEntityJSON) {
+        const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
         let batchLength = this.bestSetsPerBatch;
         if (spanNum === this.numSpans - 1 && processNum === numProcesses - 1 && this.finalBatchLength > 0) {
             batchLength = this.finalBatchLength
@@ -230,14 +232,21 @@ class MainControlParallel {
                     this.batchDataCollection();
                 }
             }
-            console.log(`Worker ${process} exited with code ${code}`);
+            console.log(`Worker ${processNum} exited with code ${code}`);
         });
 
         // If using stdio, transfer the entity data
         if (workerDataTransfer === "stdio") {
-            worker.stdin.write(batchEntityJSON);
+            await sleep(200);
+            let dataSentOK = worker.stdin.write(batchEntityJSON);
+            if (!dataSentOK) {
+                console.warn(`spawnProcess - data send issue worker ${processNum}`);
+                worker.stdin.once('drain', () => {
+                    console.log(`Drain: Resumed writing to worker ${processNum}`);
+                });
+                await sleep(100);
+            }
         }
-    
     }
 
     async batchDataCollection() {
@@ -906,6 +915,8 @@ class MainControlParallel {
         console.log("ruleSequenceNum:", ruleSequenceNum);
         this.ruleSequenceNum = ruleSequenceNum;
         rulesets.ruleSequenceNum = ruleSequenceNum;
+        let ruleIndex = rulesets.getRuleIndexFromSequence(this.ruleSequenceNum);
+        rulesets.ruleRounds[ruleIndex].start = this.numRounds;
         this.bestSetNum = 0;
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.setupBatchProcessing();
@@ -998,7 +1009,7 @@ class MainControlParallel {
         displayData.crossSetCount = this.crossSetCount;
         displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;
-        displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
+        displayData.ruleRounds = rulesets.ruleRounds;
 
         // Get the display grouping for inputs and outputs
         if ("displayGroupBy" in rule) {

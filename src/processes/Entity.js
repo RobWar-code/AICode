@@ -151,7 +151,7 @@ class Entity {
                 let len = this.instructionSet.getInsLen(n);
                 if (len === 0) {
                     // Debug
-                    console.log("Missing code?", n, i);
+                    console.error("Missing code?", n, i);
                 }
                 if (len > 1) {
                     for (let j = 1; j < len; j++) {
@@ -296,14 +296,22 @@ class Entity {
 
     qualityControlIns(message, memSpace) { 
         if (memSpace.length != this.memLength) {
-            console.log("qualityControlIns - length wrong", message, memSpace.length);
+            console.error("qualityControlIns - length wrong", message, memSpace.length);
+            if (memSpace.length < this.memLength) {
+                for (let i = memSpace.length; i < this.memLength; i++) {
+                    memSpace.push(0);
+                }
+            }
+            else {
+                memSpace = memSpace.slice(0, this.memLength);
+            }
         }
        // Quality Control, check the array
-        for (let i = 0; i < this.initialMemSpace.length; i++) {
-            let c = this.initialMemSpace[i];
+        for (let i = 0; i < memSpace.length; i++) {
+            let c = memSpace[i];
             if (typeof(c) != "number" || c < 0 || c > 255) {
-                console.log("qualityControlIns - ", message, c, i);
-                this.initialMemSpace[i] = 245;
+                console.error("qualityControlIns - ", message, c, i);
+                memSpace[i] = 0;
             }
         }
     }
@@ -521,7 +529,7 @@ class Entity {
                 newCodeSegment.push(0);
             }
         }
-        this.qualityControlIns("Monoclonal", newCodeSegment);
+        this.qualityControlIns("Monoclonal Ins", newCodeSegment);
 
         let asRandom = false;
         let seeded = false;
@@ -1055,7 +1063,6 @@ class Entity {
         let executionEnded = false;
         if (restart) {
             this.executionCount = executionCount;
-            console.log("stepExecute restart executionCount:", executionCount);
             this.scoreObj = {score: 0, scoreList: null};
             this.resetRegisters();
             this.copyMem(this.executionCount);

@@ -75,9 +75,13 @@ class BatchProcess {
         }
         else {
             this.fetchStdioBatchEntities(entityData);
+            console.error("[LOG] workerApp:", this.batchNum, "Loaded batch entities", entityData.length);
         }
+
+        // Main Process
         let mainProcess = new MainProcess(rulesets);
         mainProcess.mainLoop(this);
+
         if (workerDataTransfer === 'database') {
             await this.transferBatchEntities();
             await this.transferBatchData(this.batchNum);
@@ -263,6 +267,8 @@ let roundNum = parseInt(process.argv[8]);
 
 let batchProcess = new BatchProcess(batchNum, batchStart, batchLength, ruleSequenceNum, entityNumber, cycleCounter, roundNum);
 
+const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
 if (workerDataTransfer != "stdio") {
     batchProcess.startProcess();
 }
@@ -283,7 +289,11 @@ else {
             throw "No input for worker";
         }
         if (message.type === "entityData") {
-            batchProcess.startProcess(message.data);
+            (async () => { 
+                await batchProcess.startProcess(message.data);
+                await sleep(200);
+                process.exit(0);
+            })();
         }
     });
 

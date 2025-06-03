@@ -32,6 +32,10 @@ Jobs Due
 
     Backup the projects folder on the USB.
 
+    * Fix incomplete data transmission on stdio
+
+    * Fix workers not exiting on stdio
+
     * Provide configuration option to use stdio in place of file transfer
     for communication with worker apps.
 

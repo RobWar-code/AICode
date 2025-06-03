@@ -170,6 +170,12 @@ ipcMain.on("activateMainProcess", () => {
   // reset the seeded program status
   program.seedEntity = null;
   program.ruleSequenceNum = rulesets.ruleSequenceNum;
+  if (rulesets.ruleSequenceNum === 0) {
+    let ruleIndex = rulesets.getRuleIndexFromSequence(rulesets.ruleSequenceNum);
+    if (rulesets.ruleRounds[ruleIndex].start === -1) {
+      rulesets.ruleRounds[ruleIndex].start = program.numRounds;
+    }
+  }
   
   if (processMode === "serial") {
     program.doProcess(program);

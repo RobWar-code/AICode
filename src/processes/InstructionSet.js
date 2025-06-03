@@ -1420,18 +1420,38 @@ class InstructionSet {
         let sampleOutLength = sampleOut.length;
         let inputsLength = initialParams.length;
         let outputsLength = rule.outputs[executionCycle].length;
-
+        if (typeof sampleIn === 'undefined') {
+            console.error("sampleIn Undefined");
+        }
+        if (typeof sampleOut === 'undefined') {
+            console.error("sampleOut Undefined");
+        }
+        if (typeof sampleInLength === 'undefined') {
+            console.error('sampleInLength undefined');
+        }
+        if (typeof sampleOutLength === 'undefined') {
+            console.error('sampleOutLength undefined');
+        }
+        if (typeof inputsLength === 'undefined') {
+            console.error('inputsLength undefined');
+        }
+        if (typeof outputsLength === 'undefined') {
+            console.error('outputsLength undefined');
+        }
         let ins = memSpace[IP];
+        if (IP >= memSpace.length) {
+            console.error("executeIns - IP out of range", IP, memSpace.length);
+        }
         // Debug
         if (isNaN(ins)) {
-            console.log("ExecuteIns - Invalid code:", ins, IP);
+            console.error("ExecuteIns - Invalid code:", ins, IP);
             ins = 0;
         }
         else if (!Number.isInteger(ins)) {
-            console.log("executeIns: Invalid code (not integer)", ins, IP);
+            console.error("executeIns: Invalid code (not integer)", ins, IP);
         }
         else if (ins < 0 || ins > 255) {
-            console.log("ExecuteIns - code out of range", ins);
+            console.error("ExecuteIns - code out of range", ins);
             ins = 0;
         }
         if (codeFlags[IP] < 256) ++codeFlags[IP];
@@ -2115,6 +2135,9 @@ class InstructionSet {
                     break;
             }
         }
+        if (typeof A === 'undefined') {
+            console.error("executeIns: Invalid A reg", ins);
+        }
         return {registers:{A:A, B:B, C:C, R: R, S: S, CF:CF, ZF:ZF, SP:SP, IP:IP}, RETF: RETF};
     }
 
@@ -2276,7 +2299,10 @@ class InstructionSet {
 
     getInsDetails(code) {
         let insItem = {};
-        if (code < 0 || code >= this.numIns) {
+        if (typeof code === 'undefined') {
+            console.error("getInsDetails: code is undefined");
+        }
+        else if (code < 0 || code >= this.numIns) {
             insItem.name = "NOOP/DATA";
             insItem.code = code;
             insItem.insLen = 1;

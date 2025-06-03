@@ -253,10 +253,11 @@ const dbTransactions = {
         let sql = "DELETE FROM rule";
         await dbConnection.query(sql);
 
-        for (let i = 0; i < rulesets.ruleCompletionRound.length; i++) {
+        for (let i = 0; i < rulesets.ruleRounds.length; i++) {
             try {
-                sql = "INSERT INTO rule (rule_num, completion_round) VALUES (?, ?)";
-                const [results] = await dbConnection.execute(sql, [i, rulesets.ruleCompletionRound[i]]);
+                sql = "INSERT INTO rule (rule_num, start_round, completion_round, completed) VALUES (?, ?, ?, ?)";
+                const [results] = await dbConnection.execute(sql, [i, rulesets.ruleRounds[i].start, 
+                    rulesets.ruleRounds[i].end, rulesets.ruleRounds[i].completed]);
             }
             catch (error) {
                 console.log("saveRules: Could not insert ruleCompletionRound[]:", i);
@@ -401,11 +402,13 @@ const dbTransactions = {
             return;
         }
 
-        let sql = "SELECT rule_num, completion_round FROM rule";
+        let sql = "SELECT rule_num, start_round, completion_round, completed FROM rule";
         try {
             [results] = await dbConnection.query(sql);
             for (let item of results) {
-                rulesets.ruleCompletionRound[item.rule_num] = item.completion_round; 
+                rulesets.ruleRounds[item.rule_num].start = item.start_round;
+                rulesets.ruleRounds[item.rule_num].end = item.completion_round;
+                rulesets.ruleRounds[item.rule_num].completed = item.completed;
             }
         }
         catch (error) {
@@ -442,7 +445,6 @@ const dbTransactions = {
             console.log ("Could not open db connection");
             return;
         }
-
         let sql;
         try {
             sql = `DELETE FROM transfer_entity_output WHERE best_set_num = ${bestSetNum}`;
