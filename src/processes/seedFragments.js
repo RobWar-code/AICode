@@ -3,6 +3,37 @@ seedFragments = {
         // See seedTemplates.js for object format
         const fragments = [
             [
+                // General Parameter Retrieval
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    dataRange: [200, 210]
+                }
+            ],
+            [
+                // General Counter Retrieval
+                {
+                    ins: "LD A, (MEM)",
+                    dataRange: [200, 210]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    dataRange: [200, 210]
+                },
+                {
+                    ins: "JRNZ",
+                    dataRange: [0x80, 0xFF]
+                }
+            ],
+            [
                 {
                     ins: "LDIL A"
                 },
