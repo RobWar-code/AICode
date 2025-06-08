@@ -387,6 +387,33 @@ const rulesets = {
                 sequenceNum: 6, highIP: 42, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 20,
                 highIC: 9 * 12 * 5,
+                highIP: 80,
+                insDistribution: [
+                    {
+                        ins: "LDI A, (C)",
+                        countOpt: 3,
+                        scanStart: 0,
+                        scanEnd: 18
+                    },
+                    {
+                        ins: "JRNZ",
+                        countOpt: 3,
+                        scanStart: 10,
+                        scanEnd: 80
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        countOpt: 6,
+                        scanStart: 1,
+                        scanEnd: 60
+                    },
+                    {
+                        ins: "ADD A, B",
+                        countOpt: 1,
+                        scanStart: 8,
+                        scanEnd: 25
+                    }
+                ],
                 sampleIn: [[4,10,3]],
                 sampleOut: [],
                 paramsIn: [
@@ -2561,6 +2588,9 @@ const rulesets = {
         }
 
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
+        if (typeof rule === 'undefined') {
+            console.error("insDistribution: rule not found", dataParams.sequenceNum);
+        }
         if (!("insDistribution" in rule)) {
             return 1;
         }
@@ -2575,8 +2605,11 @@ const rulesets = {
             let itemCount = 0;
             while (p < insData.scanEnd && p < memSpace.length) {
                 let code = memSpace[p];
+                if (typeof code === 'undefined') {
+                    console.error("insDistribution: ins code undefined");
+                }
                 let insItem = instructionSet.getInsDetails(code);
-                if (insItem.name === ins && itemCount < insData.countOpt) {
+                if (insItem.name === ins && itemCount <= insData.countOpt) {
                     ++count;
                     ++itemCount;
                 }

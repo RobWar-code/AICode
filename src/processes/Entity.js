@@ -1,5 +1,6 @@
 const path = require('node:path');
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
+const seedFragments = require(path.join(__dirname, 'seedFragments.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class Entity {
@@ -62,6 +63,7 @@ class Entity {
         // Other Constants
         this.dataMaxValue = 255;
         if (memSpace != null) {
+            this.qualityControlIns("External Breed", memSpace);
             this.initialMemSpace = memSpace.concat();
         }
         else if (seeded) {
@@ -111,7 +113,7 @@ class Entity {
         let checkArray = [];
         for (let i = 0; i < this.memLength; i++) {
             if (Math.random() < fragmentChance) {
-                let codeBlock = this.instructionSet.getCodeFragment();
+                let codeBlock = seedFragments.getCodeFragment(this.instructionSet);
                 let j = 0;
                 while (i < this.memLength && j < codeBlock.length) {
                     this.initialMemSpace[i] = codeBlock[j];
@@ -309,7 +311,7 @@ class Entity {
        // Quality Control, check the array
         for (let i = 0; i < memSpace.length; i++) {
             let c = memSpace[i];
-            if (typeof(c) != "number" || c < 0 || c > 255) {
+            if (typeof c != "number" || c < 0 || c > 255) {
                 console.error("qualityControlIns - ", message, c, i);
                 memSpace[i] = 0;
             }
@@ -501,7 +503,7 @@ class Entity {
                 }
                 else {
                     // Insert Code Fragment
-                    let codeBlock = this.instructionSet.getCodeFragment();
+                    let codeBlock = seedFragments.getCodeFragment(this.instructionSet);
                     let j = 0;
                     while (newCodeSegment.length < this.memLength && j < codeBlock.length) {
                         newCodeSegment.push(codeBlock[j]);
@@ -641,6 +643,7 @@ class Entity {
             }
             from1 = !from1;
         }
+        this.qualityControlIns("Interbreed", newMemSpace);
         let asRandom = false;
         let seeded = false;
         let ruleSequenceNum = null;
@@ -656,7 +659,7 @@ class Entity {
         let entityFlipper = false;
         let pointer1 = 0;
         let pointer2 = 0;
-        while (newProgram.length < this.memLength && !(pointer1 >= this.memLength && pointer2 >= this.memLength)) {
+        while (newProgram.length < this.memLength && pointer1 < this.initialMemSpace.length && pointer2 < mate.initialMemSpace.length) {
             let blockObj = {};
             let a;
             if (entityFlipper) {
@@ -668,6 +671,14 @@ class Entity {
                 blockObj = this.getInsBlock(insBlockLen, mate.initialMemSpace, pointer2);
                 a = blockObj.block;
                 pointer2 = blockObj.pointer;
+            }
+            // Check a
+            let i = 0;
+            for (let c of a) {
+                if (typeof c === 'undefined') {
+                    console.error("interbreed2: invalid code", a.length, i);
+                }
+                ++i;
             }
             newProgram = newProgram.concat(a);
             entityFlipper = !entityFlipper;
@@ -878,6 +889,7 @@ class Entity {
         }
 
         // Create the new entity
+        this.qualityControlIns("InterbreedInsMerge", newCode);
         let asRandom = false;
         let seeded = false;
         let ruleSequenceNum = null;
@@ -896,9 +908,14 @@ class Entity {
             code = memSpace[p];
             let insItem = this.instructionSet.getInsDetails(code);
             let insLen = insItem.insLen;
-            if (insLen + p >= this.memLength) insLen = this.memLength - p;
+            if (insLen + p >= memSpace.length) insLen = memSpace.length - p;
             for (let i = 0; i < insLen; i++) {
-                insBlock.push(memSpace[p + i]);
+                let c = memSpace[p + i];
+                // Debug
+                if (typeof c === 'undefined') {
+                    console.error("getInsBlock: invalid code", memSpace.length, p + i, i);
+                }
+                insBlock.push(c);
             }
             p += insLen;
             ++count;

@@ -28,9 +28,24 @@ Jobs Due
 
     Rationalise the modulo rules - always use two or more inputs
 
-    Reorganise scorelist
-
     Backup the projects folder on the USB.
+
+    Write rules for Forth-like arithmetic operations
+    
+    Add another insDistribution rule for general operation
+
+    Get ASCII number rule working
+
+    Add further simple rules that might help the performance for 
+    more sophisticated rules
+
+    Add fragments/templates for rules not completed
+
+    Add insDistribution items for rules not completed
+
+    Add fragments for SeriesOfSeries3
+
+    * Reorganise scorelist
 
     * Fix incomplete data transmission on stdio
 

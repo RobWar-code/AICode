@@ -53,6 +53,7 @@ class MainProcess {
                         asRandom = false;
                         entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
                             self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                        entity.qualityControlIns("seedRule", memSpace);
                         entity.breedMethod = "SeedRule";
                     }
                     else if (breedMode === "seedTemplate") {

@@ -105,13 +105,20 @@ Requirement	Use
 The following trial was performed on or about 02/06/2025
 using stdio rather than file system.
 
-Number   | Rounds     | Rounds | Fan   |
-of       | Performed  | per    | Noise |
-Workers  |            | Hour   |       |
----------|------------|--------|-------|
-2        |
-3        |
-4        |
-6        |
-8        |
-12       |
+The trials were run on a pc with 6 CPU's (12 logical
+CPU's).
+
+A round covers the processing of 72 sets of trial
+entities, grouped into 4 sets per process.
+
+Number   | Rounds     | Elapsed | Rounds | Fan   |
+of       | Performed  | Time    | per    | Noise |
+Workers  |            |         | Hour   |       |
+---------|------------|---------|--------|-------|
+2        |34          | 1.049   | 34     | No    |     
+3        |44          | 0.951   | 46.3   | No    |
+4        |40          | 0.720   | 55.6   | No    |
+5        |            |         |        | Yes   |
+6        |52          | 0.664   | 78.3   | Yes   |
+8        |41          | 0.604   | 67.9   | Yes   |
+12       |40          | 0.473   | 84.6   | Yes   |

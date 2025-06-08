@@ -138,6 +138,8 @@ li {
 
 .scoreListItem {
     text-align: left;
+    border-right: 1px solid black;
+    padding-left: 2px;
 }
 
 #scoreTitles {
@@ -156,36 +158,42 @@ li {
 
 #scoreSequenceNum {
     display: inline-block;
-    width: 60px;
+    width: 92px;
 }
 
 #scoreRule {
     display: inline-block;
-    width: 300px;
+    width: 296px;
 }
 
 #score {
     display: inline-block;
-    width: 100px;
+    width: 97px;
 }
 
 #scoreMax {
     display: inline-block;
+    width: 46px;
 }
 
 #scoreStartRound {
     display: inline-block;
-    width: 40px;
+    width: 46px;
 }
 
 #scoreCompletionRound {
     display: inline-block;
-    width: 60px;
+    width: 47px;
+}
+
+#scoreNumberOfRounds {
+    display: inline-block;
+    width: 49px;
 }
 
 #scoreCompleted {
     display: inline-block;
-    width: 40px;
+    width: 47px;
 }
 
 .scoreListRule {

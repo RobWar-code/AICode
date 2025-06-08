@@ -181,6 +181,21 @@ git restore src/database/createSqliteTables.js
 If you alter other files temporarily (ie: mainControlParallel.js) use
 the git restore operation before doing git pull origin main
 
+## Project Aims
+The principle aims of the project as it currently stands are:
+
+    To examine the feasibility of the evolutionary approach to
+    code generation problems.
+
+    To enable the generation of code solutions that can be subjected
+    to analysis by human operators.
+
+    To work towards autonomous/custom AI systems that can operate
+    within 10 to 100GB on local systems.
+
+    To allow for the possible development of custom training models
+    for autonomus AI applications.
+
 ## Summary of Status 28/05/2025
 The project has now been operational for 7 months. Evolutionary problem
 solving has been shown to be successful in about 80% of the problems set,
@@ -189,7 +204,7 @@ but rather less for the more sophisticated problems set later.
 At this stage, this system cannot be said to be a useful tool for writing code, 
 but it does demonstrate the potential of the evolutionary approach.
 
-For these reasons, the project is to be placed on hold for a few months
+For these reasons, the project may be placed on hold for a few months
 whilst other works proceed.
  
 ## Background
@@ -530,6 +545,18 @@ rulesets should allow for:
 - Search
 - Sort
 - Arrange
+
+#### Forth-Like Instruction Rule Implementation
+
+In order to advance the learning into more natural domains,
+the ruleset will include rules to enable the learning of the
+interpretation of ASCII Forth-like statements, such as
+    5 4 +;
+    6 7 -;
+    8 9 *;
+
+The basic arithmetic functions will be extended with other
+Forth style stack commands.
 
 #### Reproduction
 The most successful programs in a set of trials are copied to

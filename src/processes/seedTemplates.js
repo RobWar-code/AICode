@@ -27,6 +27,7 @@ const seedTemplates = {
                 name: "addAdjacentParamOp",
                 description: "Add adjacent param as indicated by a + op",
                 template: [
+                    // 0
                     {
                         ins: "LDIL A"
                     },
@@ -136,6 +137,7 @@ const seedTemplates = {
                 ]
             },
             {
+                // 1
                 name: "adjacentParamOps",
                 description: "Framework for handling multiple adjacent param ops",
                 template: [
@@ -353,6 +355,7 @@ const seedTemplates = {
                 ]
             },
             {
+                // 2
                 name: "firstParamExtractLoop",
                 description: "Loop with separate i/o pointers using first param", 
                 template: [
@@ -439,6 +442,7 @@ const seedTemplates = {
                 ]    
             },
             {
+                // 3
                 name: "findNumbers",
                 description: "Find numbers from the first set in the second",
                 template: [
@@ -570,6 +574,7 @@ const seedTemplates = {
                 ]
             },
             {
+                // 4
                 name: "firstAndSecondParamExtractLoop",
                 description: "Extract numbers based on the first and second param",
                 template: [
@@ -691,6 +696,7 @@ const seedTemplates = {
                 ]
             },
             {
+                // 5
                 name: "multiplyAdjacentParams",
                 description: "multiply adjacent input params and place in output",
                 template: [
@@ -755,7 +761,7 @@ const seedTemplates = {
                     },
                     {
                         ins: "JR",
-                        data: [] // Save Result
+                        data: [15] // Save Result
                     },
                     {
                         // Continue
@@ -802,6 +808,20 @@ const seedTemplates = {
         let t = Math.floor(Math.random() * templates.length);
         let codeItem = templates[t].template;
         let codeBlock = this.instructionSet.compileCodeFragmentOrTemplate(codeItem);
+        // Debug
+        let found = false;
+        let i;
+        for (i = 0; i < codeBlock.length; i++) {
+            let c = codeBlock[i];
+            if (typeof c === 'undefined') {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            console.error("getSeedTemplate: invalid code at:", t, i);
+        }
+
         let memSpace = new Array(256).fill(0);
         let index = 0;
         for (let code of codeBlock) {
