@@ -776,6 +776,9 @@ class MainControlParallel {
         let memObj = entity.execute(0, 0);
         // Get the display details
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
+        seedDisplayData.scoreList = rulesets.scoreList;
+        seedDisplayData.ruleRounds = rulesets.ruleRounds;
+
         return seedDisplayData;
     }
 

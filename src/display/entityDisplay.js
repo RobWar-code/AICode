@@ -77,13 +77,12 @@ const entityDisplay = {
         }
         // Parameter blocks
         if (data.params.length < 4) {
-            console.log("Got Here");
-            document.getElementById("inputsRow2").style.display = "none";
-            document.getElementById("outputsRow2").style.display = "none";
+            document.getElementById("inputsRow2").classList.add("d-none");
+            document.getElementById("outputsRow2").classList.add("d-none");
         }
         else {
-            document.getElementById("inputsRow2").style.display = "block";
-            document.getElementById("outputsRow2").style.display = "block";
+            document.getElementById("inputsRow2").classList.remove("d-none");
+            document.getElementById("outputsRow2").classList.remove("d-none");
         }
         for (let i = 0; i < this.numDataDivs; i++) {
             let num = i;
