@@ -35,6 +35,37 @@ seedFragments = {
             ],
             [
                 {
+                    ins: "LD C, (MEM)",
+                    dataRange: [200, 210] 
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    dataRange: [200, 210]
+                },
+                {
+                    ins: "LD B, (MEM)",
+                    dataRange: [200, 210]
+                },
+                {
+                    ins: ["ADD A, B", "SUB A, B", "AND A, B", "OR A, B"]
+                },
+                {
+                    ins: "ST (MEM), A",
+                    dataRange: [200, 210]
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "ST (MEM), C",
+                    dataRange: [200, 210]
+                }
+            ],
+            [
+                {
                     ins: "LDIL A"
                 },
                 {
