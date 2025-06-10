@@ -18,7 +18,8 @@ async function createTables() {
 
     console.log("Tables Cleared");
 
-
+    return;
+    
     /*
     // sql = "DROP TABLE session";
     // await connection.query(sql);

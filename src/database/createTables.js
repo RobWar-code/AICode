@@ -17,7 +17,7 @@ async function createTables() {
     await clearTables(connection);
 
     console.log("Tables Cleared");
-//   return;
+    return;
 
     /*
 

@@ -1,3 +1,15 @@
+10/06/2025
+
+Restarted the trials from scratch to see which rules 
+passed and which did not. The usual rules failed.
+
+Currently attempting to get seriesOfSeries3 working
+with fragments.
+
+Next-up skip the earlier seriesOfSeries rules, because
+it is possible that the seed from these misdirects the
+development of seriesOfSeries3.
+
 29/05/2025
 Trial stuck on ASCIIParams2, have included fragments
 without additional success.
