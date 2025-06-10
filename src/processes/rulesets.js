@@ -5098,7 +5098,7 @@ const rulesets = {
         let found = false;
         let rule = "";
         for (let item of this.scoreList) {
-            if (item.sequenceNum === sequenceNum && item.retain === false && !rule.skip) {
+            if (item.sequenceNum === sequenceNum && item.retain === false && item.skip === false) {
                 found = true;
                 rule = item.rule;
                 break;
