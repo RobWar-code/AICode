@@ -297,7 +297,6 @@ class MainControl {
         ++this.scoreHistoryCounter[setNum];
     }
 
-
     loadAndExecuteSeed(seedProgram) {
         let insSet = new InstructionSet();
         // Compile the seed program
@@ -313,6 +312,9 @@ class MainControl {
         let memObj = entity.execute(0, 0);
         // Get the display details
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
+        seedDisplayData.scoreList = rulesets.scoreList;
+        seedDisplayData.ruleRounds = rulesets.ruleRounds;
+
         return seedDisplayData;
     }
 

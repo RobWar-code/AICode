@@ -390,10 +390,28 @@ const rulesets = {
                 highIP: 50,
                 insDistribution: [
                     {
+                        ins: "LDI A, (C)",
+                        countOpt: 3,
+                        scanStart: 0,
+                        scanEnd: 30
+                    },
+                    {
+                        ins: "INC C",
+                        countOpt: 4,
+                        scanStart: 0,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "SWP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
                         ins: "JRNZ",
                         countOpt: 2,
-                        scanStart: 8,
-                        scanEnd: 40
+                        scanStart: 10,
+                        scanEnd: 50
                     },
                     {
                         ins: "ADD A, B",
