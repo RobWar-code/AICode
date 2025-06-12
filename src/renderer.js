@@ -95,6 +95,11 @@ ipcRenderer.on("seedRuleSelectorActivate", (event, ruleList) => {
     seedDisplay.displaySeedRuleSelector(ruleList);
 });
 
+ipcRenderer.on("subOptRuleSelectorActivate", (event, ruleList) => {
+    console.log("subOptRuleSelectorActivate");
+    seedDisplay.displaySubOptRuleSelector(ruleList);
+});
+
 ipcRenderer.on("displayRuleSelectionList", (event, ruleList) => {
     ruleDisplay.displayRuleSelector(ruleList);
 });
@@ -130,6 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadSeedRuleButton = document.getElementById('loadSeedRuleButton');
     const seedRuleSelectorForm = document.getElementById('seedRuleSelectorForm');
     const cancelLoadSeedRuleButton = document.getElementById('cancelLoadSeedRuleButton');
+    const loadSubOptRuleButton = document.getElementById('loadSubOptRuleButton');
+    const subOptRuleSelectorForm = document.getElementById('subOptRuleSelectorForm');
+    const cancelLoadSubOptRuleButton = document.getElementById('cancelLoadSubOptRuleButton');
     const restoreRuleSeedButton = document.getElementById('restoreRuleSeedButton');
     const restoreRuleSeedSelector = document.getElementById('restoreRuleSeedSelector');
     const restoreRuleSeedSubmit = document.getElementById('restoreRuleSeedSubmit');
@@ -267,11 +275,29 @@ document.addEventListener('DOMContentLoaded', () => {
     seedRuleSelectorForm.addEventListener('click', (event) => {
         event.preventDefault();
         let seedRuleId = document.getElementById('seedRuleSelector').value;
-        ipcRenderer.send("loadAndExecuteSeedRule", seedRuleId);
+        ipcRenderer.send("loadAndExecuteSeedRule", {option: "seed", id: seedRuleId});
     });
 
     cancelLoadSeedRuleButton.addEventListener("click", (event) => {
         document.getElementById("seedRuleSelectionDiv").style.display = "none";
+    });
+
+    loadSubOptRuleButton.addEventListener('click', (event) => {
+        ipcRenderer.send("subOptRuleListRequest", 0);
+        // Halt the on-going processing
+        document.getElementById("haltProcessButton").innerText = "Resume";
+        clearTimeout(processTimeout);
+        processingCancelled = true;
+    });
+
+    subOptRuleSelectorForm.addEventListener('click', (event) => {
+        event.preventDefault();
+        let subOptRuleId = document.getElementById('subOptRuleSelector').value;
+        ipcRenderer.send("loadAndExecuteSeedRule", {option: "subOpt", id: subOptRuleId});
+    });
+
+    cancelLoadSeedRuleButton.addEventListener("click", (event) => {
+        document.getElementById("subOptRuleSelectionDiv").style.display = "none";
     });
 
     restoreRuleSeedButton.addEventListener("click", (event) => {

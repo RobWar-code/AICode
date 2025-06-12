@@ -92,6 +92,7 @@
           <button class="textButton" id="loadSeedButton" title="Load a crafted seed entity">Load Seed</button>
           <button class="textButton" id="loadSeedRuleButton" title="Load seed rule from memory">Load Seed Rule</button>
           <button class="textButton" id="restoreRuleSeedButton" title="Restore a saved seed rule">Restore Rule Seed</button>
+          <button class="textButton" id="loadSubOptRuleButton" title="Load a failed rule memspace">Load SubOpt Rule</button>
           <button class="textButton" id="ruleSelectionButton">Select Rule</button>
           <button class="textButton" id="saveButton">Save</button>
           <button class="textButton" id="loadButton">Load</button>
@@ -134,6 +135,18 @@
         </div>
       </div>
 
+      <!-- Sub Opt Rule Selection -->
+      <div class="row" id="subOptRuleSelectionDiv">
+        <div class="col formDiv">
+          <form class="lineForm" id="subOptRuleSelectorForm">
+            <label for="subOptRuleSelector">Select SubOpt Program: </label>
+            <select id="subOptRuleSelector" name="subOptRuleSelector"></select>
+            <button type="submit" class="textButton">Submit</button>
+          </form>
+          <button class="textButton" id="cancelLoadSubOptRuleButton">Cancel</button>
+        </div>
+      </div>
+
       <!-- Rule Selection -->
       <div class="row" id="ruleSelectionDiv">
         <div class="col formDiv">
@@ -149,20 +162,20 @@
       <div id="entityDescription">
         <!-- Seed Program Details -->
         <div id="seedDetails">
-          <h2 class="text-center">Seed Program</h2>
+          <h2 class="text-center" id="seedDetailsTitle">Seed Program</h2>
           <div class="row">
             <div class="col">
-              <p>Seed Program Name: <span id="seedName"></span></p>
+              <p>Program Name: <span id="seedName"></span></p>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <p>Seed Description: <span id="seedDescription"></span></p>
+              <p>Description: <span id="seedDescription"></span></p>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <p>Seed Score: <span id="seedScore"></span></p>
+              <p>Score: <span id="seedScore"></span></p>
             </div>
           </div>
           <div class="row">

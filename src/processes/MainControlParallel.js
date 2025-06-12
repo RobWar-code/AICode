@@ -782,12 +782,19 @@ class MainControlParallel {
         return seedDisplayData;
     }
 
-    loadAndExecuteSeedRule(seedRuleId) {
+    loadAndExecuteSeedRule(option, seedRuleId) {
         let insSet = new InstructionSet();
         // Fetch the seed rule program
         let found = false;
         let memSpace = null;
-        for (let item of rulesets.seedRuleMemSpaces) {
+        let list;
+        if (option === "seed") {
+            list = rulesets.seedRuleMemSpaces;
+        }
+        else {
+            list = rulesets.subOptRuleMemSpaces;
+        }
+        for (let item of list) {
             if (item.ruleId === seedRuleId) {
                 memSpace = item.memSpace.concat();
                 found = true;
@@ -813,6 +820,8 @@ class MainControlParallel {
         let seedRuleDescription = rulesets.getDescriptionFromRuleId(seedRuleId);
         seedProgram.description = seedRuleDescription;
         let seedDisplayData = entity.getSeedDisplayData(seedProgram);
+        seedDisplayData.scoreList = rulesets.scoreList;
+        seedDisplayData.ruleRounds = rulesets.ruleRounds;
         return seedDisplayData;
     }
 
@@ -844,7 +853,7 @@ class MainControlParallel {
      * @param {*} session -session database record
      * @param {*} entities - entity database records
      */
-    loadRestart(session, entities, seedRules) {
+    loadRestart(session, entities, seedRules, subOptRules) {
         // Set session details
         this.cycleCounter = session.cycle_counter;
         this.numRounds = session.num_rounds;
@@ -902,6 +911,27 @@ class MainControlParallel {
                 item.ruleId = ruleId;
                 item.memSpace = memArray;
                 rulesets.seedRuleMemSpaces.push(item);
+            }
+        }
+
+        // Load the sub-opt rules
+        for (let item of subOptRules) {
+            let memStr = item.sub_opt_rule_mem_space;
+            let memArray = this.stringToIntArray(memStr);
+            let ruleId = item.rule_id;
+            // Search the existing seed rules
+            let found = false;
+            for (let item of rulesets.subOptRuleMemSpaces) {
+                if (item.ruleId === ruleId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let item = {};
+                item.ruleId = ruleId;
+                item.memSpace = memArray;
+                rulesets.subOptRuleMemSpaces.push(item);
             }
         }
     }

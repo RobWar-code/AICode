@@ -122,6 +122,11 @@ li {
     display: none;
 }
 
+/* SubOpt Rule Selection */
+#subOptRuleSelectionDiv {
+    display: none;
+}
+
 /* Rule Selection */
 #ruleSelectionDiv {
     display: none;

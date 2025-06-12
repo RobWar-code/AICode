@@ -242,10 +242,27 @@ ipcMain.on("seedRuleListRequest", (event, data) => {
   }  
 });
 
-ipcMain.on("loadAndExecuteSeedRule", (event, seedRuleId) => {
-  let seedNum = parseInt(seedRuleId);
-  let seedDisplayData = program.loadAndExecuteSeedRule(seedNum);
-  mainWindow.webContents.send("seedDisplayResults", seedDisplayData);
+ipcMain.on("subOptRuleListRequest", (event, data) => {
+  let subOptRulesLength = rulesets.subOptRuleMemSpaces.length;
+  console.log("subOptRuleListRequest", subOptRulesLength);
+  if (subOptRulesLength === 0) return;
+  else {
+    let subOptRules = [];
+    for (let i = 0; i < subOptRulesLength; i++) {
+      let item = rulesets.subOptRuleMemSpaces[i];
+      let ruleId = item.ruleId;
+      let name = rulesets.getDescriptionFromRuleId(ruleId);
+      subOptRules.push({ruleId: ruleId, name:name});
+    }
+    mainWindow.webContents.send("subOptRuleSelectorActivate", subOptRules);
+  }  
+});
+
+ipcMain.on("loadAndExecuteSeedRule", (event, data) => {
+  let id = data.id
+  let seedNum = parseInt(id);
+  let seedDisplayData = program.loadAndExecuteSeedRule(data.option, seedNum);
+  mainWindow.webContents.send("seedDisplayResults", {option: data.option, displayData: seedDisplayData});
 });
 
 ipcMain.on("fetchSavedRuleSeedList", async (event, data) => {

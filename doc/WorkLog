@@ -43,7 +43,12 @@ Jobs Due
 
     Add insDistribution items for rules not completed
 
-    Add fragments for SeriesOfSeries3
+    Add sub-optimum rule results
+        * Save subOpt result
+        * Select/Display SubOpt rule
+        Check for serial operation
+
+    * Add fragments for SeriesOfSeries3
 
     * Reorganise scorelist
 

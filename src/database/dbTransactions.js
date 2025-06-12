@@ -45,6 +45,11 @@ const dbTransactions = {
             resultOK = await this.saveSeedRules(sessionId, dbConnection);
         }
 
+        if (resultOK) {
+            // Save sub-opt rules
+            resultOK = await this.saveSubOptRules(sessionId, dbConnection);
+        }
+
         await this.deleteOtherRecords(dbConnection, sessionId);
 
         if (resultOK) {
@@ -199,6 +204,19 @@ const dbTransactions = {
         catch (error) {
             console.error("Could not read from seed_rule table.", error.message);
         }
+
+        // Get seed rule memspace
+        let subOptRules;
+        try {
+            [subOptRules] = await dbConnection.execute(
+                `SELECT * FROM sub_opt_rule ORDER BY rule_sequence_num`
+            );
+            console.log("Loaded subOptRules");
+        }
+        catch (error) {
+            console.error("Could not read from sub_opt_rule table.", error.message);
+        }
+        
         await dbConnection.end();
 
         // Rules
@@ -207,7 +225,7 @@ const dbTransactions = {
         // Seed Rule Fragments
         await this.loadFragments();
 
-        program.loadRestart(sessions[0], entities, seedRules);
+        program.loadRestart(sessions[0], entities, seedRules, subOptRules);
 
         mainWindow.webContents.send("loadDone", 0);
     },
@@ -232,6 +250,27 @@ const dbTransactions = {
 
     },
 
+    async saveSubOptRules(sessionId, dbConnection) {
+
+        let subOptRules = rulesets.subOptRuleMemSpaces;
+        console.log("saveSubOptRules:", subOptRules.length);
+        if (subOptRules.length === 0) return true;
+
+        let ruleSequenceNum = 0;
+        for (let subOptRuleItem of subOptRules) {
+            let ruleId = subOptRuleItem.ruleId;
+            let subOptRuleMemSpace = subOptRuleItem.memSpace;
+            let result = await this.saveSubOptRule(dbConnection, sessionId, ruleId, ruleSequenceNum, subOptRuleMemSpace);
+            if (!result) return false;
+            ++ruleSequenceNum;
+        }
+
+        console.log("saved sub-opt rules");
+
+        return true;
+
+    },
+
     async saveSeedRule(dbConnection, sessionId, ruleId, ruleSequenceNum, seedRuleMemSpace) {
         // Delete any existing record for this rule sequence number
         sql = `DELETE FROM seed_rule WHERE rule_id = ${ruleId}`;
@@ -245,6 +284,23 @@ const dbTransactions = {
         }
         catch (error) {
             console.error("Failed to insert seed_rule", error.message);
+            throw error;
+        }
+    },
+
+    async saveSubOptRule(dbConnection, sessionId, ruleId, ruleSequenceNum, subOptRuleMemSpace) {
+        // Delete any existing record for this rule sequence number
+        sql = `DELETE FROM sub_opt_rule WHERE rule_id = ${ruleId}`;
+        await dbConnection.query(sql);
+
+        let memSpaceStr = this.intArrayToString(subOptRuleMemSpace, subOptRuleMemSpace.length);
+        try {
+            sql = "INSERT INTO sub_opt_rule (session_id, rule_id, rule_sequence_num, sub_opt_rule_mem_space) VALUES (?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [sessionId, ruleId, ruleSequenceNum, memSpaceStr]);
+            return true;
+        }
+        catch (error) {
+            console.error("Failed to insert sub_opt_rule", error.message);
             throw error;
         }
     },

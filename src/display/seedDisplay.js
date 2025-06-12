@@ -19,12 +19,15 @@ const seedDisplay = {
         document.getElementById("seedSelectionDiv").style.display = "block";
     },
 
-    displaySeedResults(displayData) {
+    displaySeedResults(data) {
+        let option = data.option;
         // Record the data
-        entityDisplay.currentData = displayData;
-        
+        entityDisplay.currentData = data.displayData;
+        let displayData = data.displayData;
+
+        console.log("displaySeedResults:", data);
         // Display the seed program details
-        displaySeedProgramDetails(displayData);
+        displaySeedProgramDetails(option, displayData);
         // Display the program details
         entityDisplay.displayEntityCode(displayData.data, 0);
         entityDisplay.displayEntityCode(displayData.data, 1);
@@ -32,7 +35,15 @@ const seedDisplay = {
         entityDisplay.displayDataValues(displayData, displayData.data, 1);
         return;
 
-        function displaySeedProgramDetails(displayData) {
+        function displaySeedProgramDetails(option, displayData) {
+            // Set The Title
+            if (option === "seed") {
+                document.getElementById("seedDetailsTitle").innerText = "Seed Program"
+            }
+            else {
+                document.getElementById("seedDetailsTitle").innerText = "SubOpt Program"
+            }
+
             // Hide the best set display selector
             document.getElementById("bestEntitySelectorDiv").style.display = "none";
             // Hide the standard entity process details
@@ -65,7 +76,23 @@ const seedDisplay = {
         };
         // Display the seed selector div
         document.getElementById("seedRuleSelectionDiv").style.display = "block";
+    },
+
+    displaySubOptRuleSelector(ruleList) {
+        console.log("Got to displaySubOptRuleSelector");
+        // Build the selection list
+        const selector = document.getElementById("subOptRuleSelector");
+        selector.innerHTML = "";
+        for (let count = 0; count < ruleList.length; count++) {
+            const opt = document.createElement('option');
+            opt.value = ruleList[count].ruleId;
+            opt.textContent = ruleList[count].name;
+            selector.appendChild(opt);
+        };
+        // Display the seed selector div
+        document.getElementById("subOptRuleSelectionDiv").style.display = "block";
     }
+
 }
 
 module.exports = seedDisplay; 
