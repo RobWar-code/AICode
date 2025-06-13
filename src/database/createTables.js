@@ -191,7 +191,13 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM rule",
     await connection.query(sql);
+
+    sql = "DELETE FROM seed_rule_fragment";
+    await connection.query(sql);
     
+    sql = "DELETE FROM sub_opt_rule";
+    await connection.query(sql);
+       
     sql = "DELETE FROM seed_rule";
     await connection.query(sql);
 
