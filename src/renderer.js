@@ -32,18 +32,21 @@ ipcRenderer.on('batchDispatched', (event, data) => {
     document.getElementById('statusPara').innerText = batchStatus + " Processing";
 });
 
-ipcRenderer.on('batchProcessed', (event, data) => {
+ipcRenderer.on('batchProcessed', (event, pause) => {
     batchStatus = "batch span processed";
     document.getElementById('statusDiv').style.display = "block";
     document.getElementById('statusPara').innerText = batchStatus + " User Interface Active";
     processingMode = false;
+    let waitTime = 6000;
+    if (pause) waitTime = 120000;
+    document.getElementById('statusPara').innerText = batchStatus + " User Interface Active - " + waitTime;
     if (!processingCancelled && !testObj.testOperation) {
         processTimeout = setTimeout(() => {
             document.getElementById("statusDiv").style.display = "block";
             document.getElementById("statusPara").innerText = "Processing...";
             processingMode = true;
             ipcRenderer.send("activateMainProcess", 0);
-        }, 6000);
+        }, waitTime);
     }
 });
 
@@ -296,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send("loadAndExecuteSeedRule", {option: "subOpt", id: subOptRuleId});
     });
 
-    cancelLoadSeedRuleButton.addEventListener("click", (event) => {
+    cancelLoadSubOptRuleButton.addEventListener("click", (event) => {
         document.getElementById("subOptRuleSelectionDiv").style.display = "none";
     });
 

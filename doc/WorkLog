@@ -43,10 +43,13 @@ Jobs Due
 
     Add insDistribution items for rules not completed
 
-    Add sub-optimum rule results
+    * Provide for cooling periods when parallel processing
+
+    * Add sub-optimum rule results
         * Save subOpt result
         * Select/Display SubOpt rule
-        Check for serial operation
+        * Check for serial operation
+        * Do cancel operation
 
     * Add fragments for SeriesOfSeries3
 

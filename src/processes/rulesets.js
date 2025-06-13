@@ -347,6 +347,39 @@ const rulesets = {
                 sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
                 highIC: 9 * 16 * 5,
+                highIP: 50,
+                insDistribution: [
+                    {
+                        ins: "LDI A, (C)",
+                        countOpt: 3,
+                        scanStart: 0,
+                        scanEnd: 30
+                    },
+                    {
+                        ins: "INC C",
+                        countOpt: 4,
+                        scanStart: 0,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "SWP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "JRNZ",
+                        countOpt: 2,
+                        scanStart: 10,
+                        scanEnd: 50
+                    },
+                    {
+                        ins: "ADD A, B",
+                        countOpt: 1,
+                        scanStart: 8,
+                        scanEnd: 30
+                    }
+                ],
                 sampleIn: [[3,16,3]],
                 sampleOut: [],
                 paramsIn: [
@@ -368,6 +401,39 @@ const rulesets = {
                 sequenceNum: 5, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
                 highIC: 9 * 16 * 5,
+                highIP: 50,
+                insDistribution: [
+                    {
+                        ins: "LDI A, (C)",
+                        countOpt: 3,
+                        scanStart: 0,
+                        scanEnd: 30
+                    },
+                    {
+                        ins: "INC C",
+                        countOpt: 4,
+                        scanStart: 0,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "SWP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "JRNZ",
+                        countOpt: 2,
+                        scanStart: 10,
+                        scanEnd: 50
+                    },
+                    {
+                        ins: "ADD A, B",
+                        countOpt: 1,
+                        scanStart: 8,
+                        scanEnd: 30
+                    }
+                ],
                 sampleIn: [[3,15,3]],
                 sampleOut: [],
                 paramsIn: [

@@ -279,7 +279,9 @@ class MainControlParallel {
             ++this.spanNum;
         }
         this.collectScoreHistory();
-        this.mainWindow.webContents.send("batchProcessed", 0);
+        let pause = false;
+        if (this.numRounds > 0 && this.spanNum === 1 && this.numRounds % 20 === 0) pause = true;
+        this.mainWindow.webContents.send("batchProcessed", pause);
 
     }
 

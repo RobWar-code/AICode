@@ -545,146 +545,159 @@ Consider repeat input params
     JR [0xF6]
     
 <h1>Toward Stepped Pathways
-Having tested the app as at 05/12/2025 - we find that code
-entities plateau with a score of about 1/3 of the maximum
-using a mixture of random number and series transfers to
-output, but also a degree of reading from the input.
+    Having tested the app as at 05/12/2025 - we find that code
+    entities plateau with a score of about 1/3 of the maximum
+    using a mixture of random number and series transfers to
+    output, but also a degree of reading from the input.
 
-These scores were achieved after about 80 million trials
-and scoring progress was very slow indeed at this point.
+    These scores were achieved after about 80 million trials
+    and scoring progress was very slow indeed at this point.
 
-The most likely account for this is that further improvement
-would require very low probability events in the breed/mutate
-cycle.
+    The most likely account for this is that further improvement
+    would require very low probability events in the breed/mutate
+    cycle.
 
-Here, we consider stepped pathways, in which no progressive
-step has a probability lower than a certain threshold.
+    Here, we consider stepped pathways, in which no progressive
+    step has a probability lower than a certain threshold.
 
-So let us consider some sequences.
+    So let us consider some sequences.
 
-Firstly consider
+    Firstly consider
 
-LDI A, (C) // LD A from the input buffer
-STO (C), A // ST A in the output buffer
-INC C 
-JR 0xFC // Jump relative back to start
+    LDI A, (C) // LD A from the input buffer
+    STO (C), A // ST A in the output buffer
+    INC C 
+    JR 0xFC // Jump relative back to start
 
-Using the rule sets, this scores on valuesOutSet, valuesFromInitialParams and various random
-hits as the input fills the output.
+    Using the rule sets, this scores on valuesOutSet, valuesFromInitialParams and various random
+    hits as the input fills the output.
 
-However this does not approach solving the individual problems in the ruleset.
+    However this does not approach solving the individual problems in the ruleset.
 
-Consider:
+    Consider:
 
-LD B, IMM 8
-Loop:
-PUSH B
-LDI A, (C)
-LD B, IMM 3
-ADD A, B
-STO (C), A
-POP B
-DEC B
-JRZ 2
-JR 0xF7 (Loop)
+    LD B, IMM 8
+    Loop:
+    PUSH B
+    LDI A, (C)
+    LD B, IMM 3
+    ADD A, B
+    STO (C), A
+    POP B
+    DEC B
+    JRZ 2
+    JR 0xF7 (Loop)
 
-Which is the solution for rule paramsPlusThree. How could the system arrive at this solution
-by stepwise enhancements?
+    Which is the solution for rule paramsPlusThree. How could the system arrive at this solution
+    by stepwise enhancements?
 
-One possibility is to score particular sequences of instructions which might be useful, for example
-LDI A, (C)
-LD B, IMM
-ADD A, B
-STO (C), A
+    One possibility is to score particular sequences of instructions which might be useful, for example
+    LDI A, (C)
+    LD B, IMM
+    ADD A, B
+    STO (C), A
 
-This has the disadvantage of requiring some foreknowledge about the type and form of problems to
-be solved.
+    This has the disadvantage of requiring some foreknowledge about the type and form of problems to
+    be solved.
+
+<h2>Further Ideas on Stepped Pathways
+
+    When considering how the system approaches the solution to the rules, we can consider the
+    case in which an entity obtains a single hit on a required output, this might or might
+    not be derived from an input(s).
+
+    Having obtained one or a few matched outputs, the system has the problem of assembling
+    the required loop controls, whether from the inputs or by crude guess.
+
+    Does the existing fragment system allow for this stepping of scores?
+
 <h1>Performance Notes
-25/01/2025
-Reduced cross-set breed chance to 0.001 to increase diversity on main computer.
 
-Best Score: 56.5636
-Loops: Long stretch (44 bytes) with multiple outputs, trailed by a closing loop producing
-    output sequences of about 10 bytes.
-Elapsed Time: 1.8105
-Number of Trials: 6,048,000
-Comments: More varied best set results
+    25/01/2025
+    Reduced cross-set breed chance to 0.001 to increase diversity on main computer.
 
-24/01/2025
-Trial on main computer, adjusted clearance pass to 10 rounds
+    Best Score: 56.5636
+    Loops: Long stretch (44 bytes) with multiple outputs, trailed by a closing loop producing
+        output sequences of about 10 bytes.
+    Elapsed Time: 1.8105
+    Number of Trials: 6,048,000
+    Comments: More varied best set results
 
-Best Score: 61.1617
-Loops: Two overlapping loops reading the input and assigning to the output
-    with a couple of bytes set with immediate values. Total executed sequence
-    is 33 bytes.
-Elapsed Time: 18.8172
-Number of Trials: 57,184,000
-Comments: There seems little gain from the modification of the clearance pass
+    24/01/2025
+    Trial on main computer, adjusted clearance pass to 10 rounds
 
-Best Score: 55.2929
-Loops: First loop to set the initial parameters, second to add incrementing
-    set of numbers
-Elapsed Time: 3.0535
-Number of Trials: 9,792,000
+    Best Score: 61.1617
+    Loops: Two overlapping loops reading the input and assigning to the output
+        with a couple of bytes set with immediate values. Total executed sequence
+        is 33 bytes.
+    Elapsed Time: 18.8172
+    Number of Trials: 57,184,000
+    Comments: There seems little gain from the modification of the clearance pass
 
-24/01/2025
-Generalisation of byte scores
+    Best Score: 55.2929
+    Loops: First loop to set the initial parameters, second to add incrementing
+        set of numbers
+    Elapsed Time: 3.0535
+    Number of Trials: 9,792,000
 
-Best Set Score: 64.924
-Loops: Long double loop with a short tail loop with jump back to out-of sequence
-    instruction
-Elapsed Time: 22.9824
-Number of Trials: 129,420,800
-Comments: Locked into the same pattern for a long time
+    24/01/2025
+    Generalisation of byte scores
 
-Best Set Score: 61.2908
-Loops: Long double loop with a short tail loop with jump back to out-of sequence
-    instruction
-Elapsed Time: 5.651
-Number of Trials: 32,486,400
+    Best Set Score: 64.924
+    Loops: Long double loop with a short tail loop with jump back to out-of sequence
+        instruction
+    Elapsed Time: 22.9824
+    Number of Trials: 129,420,800
+    Comments: Locked into the same pattern for a long time
 
-Best Set Score: 58.8769
-Loops: Two loops, the first being invoked with a CASM and RET, the second with
-    a JR.
-Elapsed Time: 2.6263
-Number of Trials: 16,172,800
+    Best Set Score: 61.2908
+    Loops: Long double loop with a short tail loop with jump back to out-of sequence
+        instruction
+    Elapsed Time: 5.651
+    Number of Trials: 32,486,400
 
-23/01/2025
-Addition of convert ASCII numbers rule
+    Best Set Score: 58.8769
+    Loops: Two loops, the first being invoked with a CASM and RET, the second with
+        a JR.
+    Elapsed Time: 2.6263
+    Number of Trials: 16,172,800
 
-Best Set Score: 57.7241 from 162
-Loops: As previous, but also included a send conditional jump back which may activate
-Elapsed Time: 9.2121
-Number of Trials: 51,014,400
+    23/01/2025
+    Addition of convert ASCII numbers rule
 
-Best Set Score: 56.4711 from 162
-Loops: 2 Loops, the first with a conditional branch which jumps to the second
-Elapsed Time: 2.1539
-Number of Trials: 12,550,400
+    Best Set Score: 57.7241 from 162
+    Loops: As previous, but also included a send conditional jump back which may activate
+    Elapsed Time: 9.2121
+    Number of Trials: 51,014,400
 
-22/01/2025
-Add clearance of duplicated outputs
+    Best Set Score: 56.4711 from 162
+    Loops: 2 Loops, the first with a conditional branch which jumps to the second
+    Elapsed Time: 2.1539
+    Number of Trials: 12,550,400
 
-Best Set Score: 61.6447 from 154
-Loops: 2 loops, both modified by themselves
-Elapsed Time: 18.6437
-Number of Trials: 85,017,600
-Comments: Quite a bit faster improvement than the previous 30,000,000 trials.
+    22/01/2025
+    Add clearance of duplicated outputs
 
-Best Set Score: 59.8913
-Loops: 2 Self-modifying loops
-Elapsed Time: 11.5534
-Number of Trials: 51,488,000
-Comments: Note that it has taken 6 hours to gain 0.6 points.
+    Best Set Score: 61.6447 from 154
+    Loops: 2 loops, both modified by themselves
+    Elapsed Time: 18.6437
+    Number of Trials: 85,017,600
+    Comments: Quite a bit faster improvement than the previous 30,000,000 trials.
 
-Best Set Score: 59.2335 from 146
-Loops: 3 self-modifying loops, bytes 0 - 47
-Elapsed Time: 5.5057
-Number of Trials: 21,740,800
+    Best Set Score: 59.8913
+    Loops: 2 Self-modifying loops
+    Elapsed Time: 11.5534
+    Number of Trials: 51,488,000
+    Comments: Note that it has taken 6 hours to gain 0.6 points.
 
-20 - 22/01/2025
-Best Set Score: 65.7074 from 146
-Loops: 2
-Loop Lengths: 12, 11
-Elapsed Time: 2.25 Days
-Number of Trials: 272,761,600
+    Best Set Score: 59.2335 from 146
+    Loops: 3 self-modifying loops, bytes 0 - 47
+    Elapsed Time: 5.5057
+    Number of Trials: 21,740,800
+
+    20 - 22/01/2025
+    Best Set Score: 65.7074 from 146
+    Loops: 2
+    Loop Lengths: 12, 11
+    Elapsed Time: 2.25 Days
+    Number of Trials: 272,761,600
