@@ -14,11 +14,11 @@ async function createTables() {
 
     let sql;
 
-    // await clearTables(connection);
+    await clearTables(connection);
 
-    // console.log("Tables Cleared");
+    console.log("Tables Cleared");
 
-    // return;
+    return;
     
     /*
     // sql = "DROP TABLE session";
@@ -186,6 +186,9 @@ async function clearTables(connection) {
     await connection.query(sql);
 
     sql = "DELETE FROM rule",
+    await connection.query(sql);
+
+    sql = "DELETE FROM sub_opt_rule",
     await connection.query(sql);
     
     sql = "DELETE FROM seed_rule";

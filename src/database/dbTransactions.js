@@ -336,6 +336,7 @@ const dbTransactions = {
                 let v = fragment[i];
                 let c = String.fromCharCode(v);
                 frag += c;
+                if (frag.length >= 127) break;
             }
             // Insert into database
             try {
