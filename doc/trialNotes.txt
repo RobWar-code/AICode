@@ -1,3 +1,33 @@
+14/06/2026
+
+Having re-run the trial from scratch with seriesOfSeries
+having insDistribution set with 6 instructions, we find
+that the seriesOfSeries1 reaches only 35/49 after 280
+rounds. Generally this passes by about round 170.
+
+Adjusted insDistribution to following:
+
+    insDistribution: [
+        {
+            ins: "LDI A, (C)",
+            countOpt: 3,
+            scanStart: 0,
+            scanEnd: 30
+        },
+        {
+            ins: "INC C",
+            countOpt: 3,
+            scanStart: 0,
+            scanEnd: 40
+        },
+        {
+            ins: "SWP A, B",
+            countOpt: 1,
+            scanStart: 0,
+            scanEnd: 20
+        }
+    ],
+
 10/06/2025
 
 Restarted the trials from scratch to see which rules 

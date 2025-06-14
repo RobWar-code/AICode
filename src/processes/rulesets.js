@@ -357,7 +357,7 @@ const rulesets = {
                     },
                     {
                         ins: "INC C",
-                        countOpt: 4,
+                        countOpt: 3,
                         scanStart: 0,
                         scanEnd: 40
                     },
@@ -366,18 +366,6 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
-                    },
-                    {
-                        ins: "JRNZ",
-                        countOpt: 2,
-                        scanStart: 10,
-                        scanEnd: 50
-                    },
-                    {
-                        ins: "ADD A, B",
-                        countOpt: 1,
-                        scanStart: 8,
-                        scanEnd: 30
                     }
                 ],
                 sampleIn: [[3,16,3]],
@@ -411,7 +399,7 @@ const rulesets = {
                     },
                     {
                         ins: "INC C",
-                        countOpt: 4,
+                        countOpt: 3,
                         scanStart: 0,
                         scanEnd: 40
                     },
@@ -420,18 +408,6 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
-                    },
-                    {
-                        ins: "JRNZ",
-                        countOpt: 2,
-                        scanStart: 10,
-                        scanEnd: 50
-                    },
-                    {
-                        ins: "ADD A, B",
-                        countOpt: 1,
-                        scanStart: 8,
-                        scanEnd: 30
                     }
                 ],
                 sampleIn: [[3,15,3]],
@@ -466,7 +442,7 @@ const rulesets = {
                     },
                     {
                         ins: "INC C",
-                        countOpt: 4,
+                        countOpt: 3,
                         scanStart: 0,
                         scanEnd: 40
                     },
@@ -475,18 +451,6 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
-                    },
-                    {
-                        ins: "JRNZ",
-                        countOpt: 2,
-                        scanStart: 10,
-                        scanEnd: 50
-                    },
-                    {
-                        ins: "ADD A, B",
-                        countOpt: 1,
-                        scanStart: 8,
-                        scanEnd: 30
                     }
                 ],
                 sampleIn: [[4,10,3]],
