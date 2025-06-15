@@ -801,6 +801,64 @@ const seedTemplates = {
                         ins: "RETF"
                     }
                 ]
+            },
+            {
+                name: "seriesOfSeries",
+                description: "Create a series of series in the output from first three params",
+                template: [
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [202] // Number of steps
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [203] // Step Counter
+                    },
+                    {
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [204] // Number of Series
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [201] // Output Pointer
+                    },
+                    {
+                        freeform: 10
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [204] // Number Of Series
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [204]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xF1]
+                    }
+                ]
             }
         ];
 

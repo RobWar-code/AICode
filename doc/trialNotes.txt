@@ -1,4 +1,15 @@
-14/06/2026
+15/06/2025
+SeriesOfSeries2 Completed after 259 rounds.
+
+SeriesOfSeries3 at 41.5/49 after 130 rounds.
+
+SeriesOfSeries3 still failed, having reached 42.2/49.
+
+Template introduced on development system.
+
+Replace Chance on monoclonalInsBreed set to 0.6 from 0.5
+
+14/06/2025
 
 Having re-run the trial from scratch with seriesOfSeries
 having insDistribution set with 6 instructions, we find
@@ -27,6 +38,9 @@ Adjusted insDistribution to following:
             scanEnd: 20
         }
     ],
+
+SeriesOfSeries1 completed after 132 rounds.
+SeriesOfSeries2 reached 45.5/49 after 170 rounds.
 
 10/06/2025
 

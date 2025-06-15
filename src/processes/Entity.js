@@ -393,7 +393,7 @@ class Entity {
 
         const duplicateChance = 0.1;
         const transposeChance = 0.15;
-        const replaceChance = 0.5;
+        const replaceChance = 0.6;
         const insertChance = 0.75;
         const deleteChance = 0.97;
         const ruleSeedFragmentChance = 0.985;
