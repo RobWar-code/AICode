@@ -1,3 +1,12 @@
+16/06/2025
+
+Series of series 1 failed at 46.3/49 despite the
+use of the template. We note that the program
+produced bore little relation to the template logically
+but looked as though it may have originated from it.
+
+Modified template and restarted.
+
 15/06/2025
 SeriesOfSeries2 Completed after 259 rounds.
 
@@ -8,6 +17,10 @@ SeriesOfSeries3 still failed, having reached 42.2/49.
 Template introduced on development system.
 
 Replace Chance on monoclonalInsBreed set to 0.6 from 0.5
+
+Restarted Trial with clear database, to see how series of series
+fares. The aim to see what is necessary without resorting to the
+seed program as a solution.
 
 14/06/2025
 

@@ -823,10 +823,6 @@ const seedTemplates = {
                         data: [202] // Number of steps
                     },
                     {
-                        ins: "CLR (MEM)",
-                        data: [203] // Step Counter
-                    },
-                    {
                         ins: "INC C"
                     },
                     {
@@ -841,7 +837,50 @@ const seedTemplates = {
                         data: [201] // Output Pointer
                     },
                     {
-                        freeform: 10
+                        // Series Loop
+                        ins: "LD A, (MEM)",
+                        data: [202] // Number of Steps
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Step Counter
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [205] // Series Tally
+                    },
+                    {
+                        // Tally Loop
+                        ins: "LD A, (MEM)",
+                        data: [205]
+                    },
+                    {
+                        ins: "STO (C), A"
+                    },
+                    { 
+                        ins: "INC C"
+                    },
+                    {
+                        ins: "ADD A, B"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [205] //Series Tally
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [203] // Step Counter
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [203] // Step Counter
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xF4] // Tally Loop
                     },
                     {
                         ins: "LD A, (MEM)",
@@ -856,7 +895,7 @@ const seedTemplates = {
                     },
                     {
                         ins: "JRNZ",
-                        data: [0xF1]
+                        data: [0xE7] // Series Loop
                     }
                 ]
             }
