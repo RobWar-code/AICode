@@ -697,6 +697,65 @@ const seedTemplates = {
             },
             {
                 // 5
+                name: "modulo first param",
+                description: "Find the modulus of each parameter using the first parameter",
+                template: [ 
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "SWP A, B"
+                    },
+                    {
+                        ins: "LD A, IMM",
+                        data: [16]
+                    },
+                    {
+                        // Main Loop
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "LDI A, (C)"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [201]
+                    },
+                    {
+                        ins: "CLR (MEM)",
+                        data: [202]
+                    },
+                    {
+                        // Calculation Loop
+                        ins: "ST (MEM), A",
+                        data: [201]
+                    },
+                    {
+                        freeform: 10
+                    },
+                    {
+                        ins: "LD A, (MEM)",
+                        data: [200]
+                    },
+                    {
+                        ins: "DEC A"
+                    },
+                    {
+                        ins: "ST (MEM), A",
+                        data: [200]
+                    },
+                    {
+                        ins: "JRNZ",
+                        data: [0xE6] // Main Loop
+                    },
+                    {
+                        ins: "RETF"
+                    }
+                ]
+            },
+            {
+                // 6
                 name: "multiplyAdjacentParams",
                 description: "multiply adjacent input params and place in output",
                 template: [
@@ -803,6 +862,7 @@ const seedTemplates = {
                 ]
             },
             {
+                // 7
                 name: "seriesOfSeries",
                 description: "Create a series of series in the output from first three params",
                 template: [

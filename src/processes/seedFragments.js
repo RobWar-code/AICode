@@ -672,6 +672,43 @@ seedFragments = {
                     data: ["totaliseLoop"]
                 }
 
+            ],
+            [
+                // Modulo First Param
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [9], // Main Loop Back
+                },
+                {
+                    ins: "JRZ",
+                    data: [5], // Zero End
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "JR",
+                    data: [0xF6] // Calculation Loop
+                },
+                {
+                    // Zero End
+                    ins: "LD A, IMM",
+                    data: [0]
+                },
+                {
+                    // Main Loop Back
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                }
             ]
         ]; // end of fragments
 

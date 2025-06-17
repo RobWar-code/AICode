@@ -1,3 +1,13 @@
+17/06/2025
+
+Failed modulo first param 6, currently doing modulo
+first param 7
+
+Aim is to use templates and fragments to make rules work.
+
+Modulo first param 6 and 7 failed, so the task is to get
+them working via the fragment and template methods.
+
 16/06/2025
 
 Series of series 1 failed at 46.3/49 despite the
@@ -6,6 +16,9 @@ produced bore little relation to the template logically
 but looked as though it may have originated from it.
 
 Modified template and restarted.
+
+Since the template was more or less the solution, this resolved
+in 4 rounds.
 
 15/06/2025
 SeriesOfSeries2 Completed after 259 rounds.
