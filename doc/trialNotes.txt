@@ -1,3 +1,24 @@
+19/06/2025
+Divisible by first param failed at 39.2/53
+
+Not Divisible by first param has score 41.9/53
+after 88 rounds.
+
+Will wait and see whether the not divisible rule
+can be fed-back to the divisible by rule
+
+18/06/2025
+
+modulo first param 6 failed but
+modulo first param 7 passed in 6 rounds
+
+Have restarted at modulo first param 6, hoping
+that the solution to 7 will help.
+
+Modulo 6 completed in one round.
+
+Divisible by first param 38.5/53 at 70 rounds.
+
 17/06/2025
 
 Failed modulo first param 6, currently doing modulo
@@ -7,6 +28,7 @@ Aim is to use templates and fragments to make rules work.
 
 Modulo first param 6 and 7 failed, so the task is to get
 them working via the fragment and template methods.
+
 
 16/06/2025
 

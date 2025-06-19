@@ -7,8 +7,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 84,
-    maxRuleId: 83,
+    numRules: 85,
+    maxRuleId: 84,
     maxRoundsPerRule: 320,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -23,7 +23,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(82),
+    ruleRounds: new Array(85),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -31,6 +31,7 @@ const rulesets = {
     seedRuleSet: false,
     subOptRuleSet: false,
     executionScores: [],
+    learnCodeAllowance: 2000,
 
     initialise() {
 
@@ -38,7 +39,7 @@ const rulesets = {
         this.ruleFunction = [];
         this.byteFunction = [];
         this.requiredOutputsFunction = [];
-
+        const learnCodeAllowance = this.learnCodeAllowance;
         /*
             Rule Template
             {   rule: "Convert ASCII Numbers 1", ruleId: 32,
@@ -72,6 +73,35 @@ const rulesets = {
                 sequenceNum: 0, score: 0, max: 2, startRoundNum: 0}
         );
         this.ruleFunction.push(this.insDistribution);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule: "General Instruction Distribution", ruleId: 84, skip: false, retain: true, 
+                sequenceNum: 0, score: 0, max: 1, startRoundNum: 0,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "LDSO A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 40
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 40
+                    }
+                ]
+            }
+        );
+        this.ruleFunction.push(this.generalInsDistribution);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
@@ -195,7 +225,8 @@ const rulesets = {
                 retain: false, score: 0, completionRound: -1, max: 5,
                 startRoundNum: 0,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
-                highIC: 7 * 16 + 4 * 100,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
                 sampleIn: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92]],
                 sampleOut: [],
                 paramsIn: [
@@ -231,7 +262,7 @@ const rulesets = {
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
                 highIC: 12 * 16 + 5,
-                highIP: 25,
+                highIP: 40,
                 insDistribution: [
                     {
                         ins: "LDSI A, (C)",
@@ -324,7 +355,7 @@ const rulesets = {
                 excludeHelperRules: [67],
                 sequenceNum: 3, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
-                highIC: 7 * 16 + 5 * 100,
+                highIC: 7 * 16,
                 highIP: 32,
                 sampleIn: [[3,4]],
                 sampleOut: [],
@@ -346,26 +377,26 @@ const rulesets = {
                 excludeHelperRules: [67],
                 sequenceNum: 4, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
-                highIC: 9 * 16 * 5,
-                highIP: 50,
+                highIC: 9 * 16 * 5 + learnCodeAllowance,
+                highIP: 80,
                 insDistribution: [
                     {
                         ins: "LDI A, (C)",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 80
                     },
                     {
                         ins: "INC C",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 40
+                        scanEnd: 80
                     },
                     {
                         ins: "SWP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 80
                     }
                 ],
                 sampleIn: [[3,16,3]],
@@ -388,26 +419,26 @@ const rulesets = {
                 excludeHelperRules: [67],
                 sequenceNum: 5, score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 64,
-                highIC: 9 * 16 * 5,
-                highIP: 50,
+                highIC: 9 * 16 * 5 + learnCodeAllowance,
+                highIP: 80,
                 insDistribution: [
                     {
                         ins: "LDI A, (C)",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 80
                     },
                     {
                         ins: "INC C",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 40
+                        scanEnd: 80
                     },
                     {
                         ins: "SWP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 80
                     }
                 ],
                 sampleIn: [[3,15,3]],
@@ -431,26 +462,26 @@ const rulesets = {
                 sequenceNum: 6, 
                 score: 0, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 20,
-                highIC: 9 * 12 * 5,
-                highIP: 50,
+                highIC: 9 * 12 * 5 + learnCodeAllowance,
+                highIP: 80,
                 insDistribution: [
                     {
                         ins: "LDI A, (C)",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 80
                     },
                     {
                         ins: "INC C",
                         countOpt: 3,
                         scanStart: 0,
-                        scanEnd: 40
+                        scanEnd: 80
                     },
                     {
                         ins: "SWP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 80
                     }
                 ],
                 sampleIn: [[4,10,3]],
@@ -474,8 +505,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 9 * 16 + 100 * 4,
-                highIP: 50,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[12,3,19,24,190,87,65,221,120,95,86,38,72,86,254,112]],
                 sampleOut: [],
                 paramsIn: [
@@ -500,7 +531,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 9 * 16 + 100 * 4,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[10,25,34,65,53,98,87,110,5,86,93,63,76,81,24,32]],
                 sampleOut: [],
                 paramsIn: [
@@ -525,7 +557,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 9 * 16 + 100 * 4,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[3,4,7,9,8,10,12,5,29,31,85,2,4,15,91,84]],
                 sampleOut: [],
                 paramsIn: [
@@ -550,7 +583,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 4 * 10 * 16 + 100 * 4,
+                highIC: 4 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[4,6,51,23,25,31,18,10,12,65,32,43,14,21,31,7]],
                 sampleOut: [], 
                 paramsIn: [
@@ -575,7 +609,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 6 * 10 * 16 + 100 * 4,
+                highIC: 6 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[5,3,12,34,43,53,42,13,21,27,32,19,8,7,6,4]],
                 sampleOut: [],
                 paramsIn: [
@@ -600,7 +635,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 9 * 10 * 16 + 100 * 4,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[8,3,5,20,24,30,35,19,17,6,4,5,8,11,17,19]],
                 sampleOut: [],
                 paramsIn: [
@@ -624,7 +660,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 50 * 9 * 16 + 100 * 4,
+                highIC: 50 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[4,19,30,65,207,191,3,18,20,48,64,76,54,19,32,17]],
                 sampleOut: [], 
                 paramsIn: [
@@ -648,7 +685,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 30 * 9 * 16 + 100 * 4,
+                highIC: 30 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[5,5,8,90,180,217,86,64,32,54,98,118,96,17,24,23]],
                 sampleOut: [],
                 paramsIn: [
@@ -670,7 +708,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 20 * 9 * 16 + 100 * 4,
+                highIC: 20 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[7,19,24,87,196,216,86,96,54,49,24,8,19,43,72,12]],
                 sampleOut: [],
                 paramsIn: [
@@ -692,7 +731,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 9 * 16 + 100 * 4,
+                highIC: 16 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[9,18,24,5,78,196,112,90,76,63,24,87,18,93,75,202]],
                 sampleOut: [],
                 paramsIn: [
@@ -714,7 +754,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 15 * 9 * 16 + 100 * 4,
+                highIC: 15 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[12,45,37,98,147,56,215,54,76,85,180,17,54,9,11,19]],
                 sampleOut: [],
                 paramsIn: [
@@ -736,7 +777,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 20 * 9 * 16 + 100 * 4,
+                highIC: 20 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[15,87,45,13,91,100,95,30,76,84,83,82,19,8,21,24]],
                 sampleOut: [],
                 paramsIn: [
@@ -761,7 +803,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 33 * 9 * 16 + 100 * 4,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[11,121,48,76,198,212,86,245,75,190,15,17,11,12,13,85]],
                 sampleOut: [],
                 paramsIn: [
@@ -792,7 +835,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 33 * 9 * 16 + 100 * 4,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [
                     [
                         6,24,17,18,3,7,15,12,36,120,19,17,11,72,13,30,
@@ -832,7 +876,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 33 * 9 * 16 + 100 * 4,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [
                     [
                         6,24,17,18,3,7,15,12,36,120,19,17,11,72,13,30,
@@ -872,8 +917,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 50 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 50 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[5,10,15,20,31,33,87,121,64,236,119,125,64,63,62,12]],
                 sampleOut: [],
                 paramsIn: [
@@ -898,8 +943,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 30 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 30 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[3,9,12,18,36,48,87,180,53,64,97,237,181,18,64,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -924,8 +969,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 16 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[6,8,9,64,53,27,98,247,45,85,17,24,45,46,76,32]],
                 sampleOut: [],
                 paramsIn: [
@@ -950,8 +995,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 16 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[12,144,87,86,50,212,119,8,65,76,86,17,18,34,36,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -982,8 +1027,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 13 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 13 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[7,49,56,90,87,14,32,54,86,197,230,145,86,185,82,19]],
                 sampleOut: [],
                 paramsIn: [
@@ -1008,8 +1053,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 16 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[8,64,86,90,108,84,25,32,65,64,72,89,150,160,12,16]],
                 sampleOut: [],
                 paramsIn: [
@@ -1034,8 +1079,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 10 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43]],
                 sampleOut: [],
                 paramsIn: [
@@ -1060,8 +1105,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 11 * 16 + 100,
-                highIP: 80,
+                highIC: 16 * 11 * 16 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[2,3,7,10,4,6,11,13,14,5,15,8,16,0,9,12]],
                 sampleOut: [],
                 paramsIn: [
@@ -1086,8 +1131,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 12 * 16 + 100,
-                highIP: 80,
+                highIC: 16 * 12 * 16 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[3,3,7,4,4,6,5,3,5,2,1,6,3,1,7,0]],
                 sampleOut: [],
                 paramsIn: [
@@ -1112,8 +1157,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 12 * 16 + 100,
-                highIP: 80,
+                highIC: 16 * 12 * 16 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [
                     [2,1,6,4,5,3,7,5,3,3,4,2,1,0,6,5],
                     [3,3,7,4,4,6,5,3,5,2,1,6,3,1,7,0]
@@ -1141,7 +1186,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 8 + 100 * 4,
+                highIC: 16 * 8 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[17,98,4,86,15,17,19,12,10,9,54,3,45,12,13,91]],
                 sampleOut: [],
                 paramsIn: [
@@ -1166,7 +1212,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 14 + 100 * 4,
+                highIC: 16 * 14 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[36,17,19,45,59,75,17,24,34,76,90,112,211,89,12,32]],
                 sampleOut: [],
                 paramsIn: [
@@ -1193,7 +1240,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 8,
-                highIC: 8 * 10 + 100 * 4,
+                highIC: 8 * 10 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [[2,7,9,19,108,43,22,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -1220,7 +1268,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 8 + 100 * 4,
+                highIC: 16 * 8 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[
                     17,16,90,34,76,65,39,86,12,45,97,112,86,19,87,17,
                     23,65,87,83,67,73,19,29,32,54,12,90,198,74,86,61
@@ -1251,7 +1300,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 8 + 100 * 4,
+                highIC: 16 * 8 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[
                     43,54,76,81,17,19,21,40,80,120,255,103,96,75,81,84,
                     23,24,25,26,18,30,90,40,50,121,212,170,86,64,79,18
@@ -1281,7 +1331,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 10 + 100 * 4,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57]],
                 sampleOut:[],
                 paramsIn: [
@@ -1310,18 +1361,18 @@ const rulesets = {
                     {
                         ins: "CMP A, B",
                         countOpt: 1,
-                        scanStart: 0,
-                        scanEnd: 20
+                        scanStart: 30,
+                        scanEnd: 100
                     },
                     {
                         ins: "JRC",
                         countOpt: 1,
-                        scanStart: 0,
-                        scanEnd: 20
+                        scanStart: 30,
+                        scanEnd: 100
                     }
                 ],
-                highIC: 16 * 20 + 100,
-                highIP: 40,
+                highIC: 16 * 20 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [
                     [
                         60,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -1358,11 +1409,11 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 20
+                        scanEnd: 90
                     }
                 ],
-                highIC: 16 * 20 + 100,
-                highIP: 40,
+                highIC: 16 * 20 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [
                     [
                         60,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -1399,29 +1450,29 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 2,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 90
                     },
                     {
                         ins: "JRC",
                         countOpt: 1, 
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 90
                     },
                     {
                         ins: "JRZ",
                         countOpt: 2,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 90
                     },
                     {
                         ins: "JRNC",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 90
                     }
                 ],
-                highIC: 16 * 24 + 100,
-                highIP: 60,
+                highIC: 16 * 24 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [
                     [
                         40,60,87,90,52,17,21,34,57,45,98,47,119,54,81,45,
@@ -1453,8 +1504,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 10 * 9 * 16 + learnCodeAllowance,
+                highIP: 80,
                 sampleIn: [
                     [
                         7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -1486,8 +1537,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 10 * 9 * 16 + 100 * 4,
-                highIP: 60,
+                highIC: 10 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [
                     [
                         7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43,
@@ -1520,7 +1571,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 12 + 100 * 4,
+                highIC: 16 * 12 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[
                     37,17,86,86,85,32,64,17,90,110,87,65,87,88,109,110,
                     43,87,65,76,94,83,52,18,91,111,86,83,87,19,106,201
@@ -1551,7 +1603,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 8,
                 inBlockStart: 0, inBlockLen: 24,
-                highIC: 8 * 18,
+                highIC: 8 * 18 * 12 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[
                     37,17,86,86,85,32,64,17,90,110,87,65,87,88,109,110,
                     43,87,65,76,94,83,52,18
@@ -1581,8 +1634,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 15,
-                highIP: 85,
+                highIC: 16 * 15 * 16 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -1612,11 +1665,11 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 1,
                         scanStart: 0,
-                        scanEnd: 30
+                        scanEnd: 90
                     }
                 ],
-                highIC: 16 * 15,
-                highIP: 85,
+                highIC: 16 * 15 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [
                     [
                         17,4,67,98,19,30,11,27,21,29,89,93,12,11,74,38,
@@ -1648,8 +1701,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 10, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 8,
                 inBlockStart: 0, inBlockLen: 48,
-                highIC: 8 * 18 * 5,
-                highIP: 85,
+                highIC: 8 * 18 * 5 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [
                     [
                         17,4,67, 98,19,30, 11,27,21, 29,89,93, 12,11,74, 38,67,17, 93,19,38, 12,98,29,
@@ -1687,23 +1740,23 @@ const rulesets = {
                         ins: "CMP A, B",
                         countOpt: 2,
                         scanStart: 5,
-                        scanEnd: 40
+                        scanEnd: 120
                     },
                     {
                         ins: "JRNC",
                         countOpt: 2,
                         scanStart: 5,
-                        scanEnd: 40
+                        scanEnd: 120
                     },
                     {
                         ins: "JRC",
                         countOpt: 1,
                         scanStart: 5,
-                        scanEnd: 40
+                        scanEnd: 120
                     }
                 ],
-                highIC: 16 * 15 * 8,
-                highIP: 80,
+                highIC: 16 * 15 * 8 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[17,4,67,98,19,30,11,17,21,29,89,93,12,11,74,17,21,9]],
                 sampleOut: [],
                 paramsIn: [
@@ -1728,8 +1781,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, passScore: 0.8, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
-                highIC: 16 * 15 * 8,
-                highIP: 80,
+                highIC: 16 * 15 * 8 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[45,46,12,19,164,84,23,17,96,98,99,12,10,11,13,14]],
                 sampleOut: [],
                 paramsIn: [
@@ -1755,8 +1808,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 9 + 100 * 4,
-                highIP: 36,
+                highIC: 16 * 9 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[
                     4,5,8,9,90,91,103,12,76,76,87,87,54,12,17,19,
                     4,3,90,109,76,87,16,15,97,17,3,3,8,7,11,12,
@@ -1787,8 +1840,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 9 + 100 * 4,
-                highIP: 36,
+                highIC: 16 * 9 + learnCodeAllowance,
+                highIP: 90,
                 sampleIn: [[
                     8,9,87,43,54,25,23,13,8,9,78,76,87,14,100,10,
                     76,65,87,85,85,87,54,17,15,8,9,6,7,7,19,12
@@ -1824,17 +1877,17 @@ const rulesets = {
                         ins: "ADD A, B",
                         countOpt: 1,
                         scanStart: 5,
-                        scanEnd: 40
+                        scanEnd: 110
                     },
                     {
                         ins: "SWP A, B",
                         countOpt: 1,
                         scanStart: 5,
-                        scanEnd: 40
+                        scanEnd: 110
                     }
                 ],
-                highIC: 16 * 18 * 20 + 100 * 4,
-                highIP: 80,
+                highIC: 16 * 18 * 20 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[
                     3,2,4,5,6,4,89,2,86,3,86,2,12,2,13,3,
                     43,3,32,5,76,2,19,6,21,4,45,3,16,0,17,1
@@ -1865,8 +1918,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 32,
-                highIC: 16 * 18 * 25 + 100 * 4,
-                highIP: 85,
+                highIC: 16 * 18 * 25 + learnCodeAllowance,
+                highIP: 110,
                 sampleIn: [[
                     56,3,32,4,9,0,8,2,76,21,63,9,87,7,140,20,
                     43,8,40,8,76,17,78,9,144,12,46,19,82,2,14,7
@@ -1897,8 +1950,8 @@ const rulesets = {
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 14 + 100 * 4,
-                highIP: 65,
+                highIC: 16 * 14 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[
                     61,7,8, 61,9,7, 61,0,9, 61,2,4, 61,3,11, 61,12,90, 61,10,56, 61,11,16,
                     61,8,19, 61,4,12, 61,13,86, 61,15,45, 61,6,15, 61,5,14, 61,1,65, 61,9,11
@@ -1929,8 +1982,8 @@ const rulesets = {
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 14 + 100 * 4,
-                highIP: 65,
+                highIC: 16 * 14 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[
                     43,7,4, 43,19,18, 43,9,7, 43,4,109, 43,6,89, 43,91,92, 43,7,6, 43,8,9,
                     43,11,18, 43,56,14, 43,17,19, 43,78,105, 43,23,5, 43,27,9, 43,87,3, 43,8,11
@@ -1961,8 +2014,8 @@ const rulesets = {
                 score: 0, completionRound: -1, displayGroupBy: 3, max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 14 + 100 * 4,
-                highIP: 65,
+                highIC: 16 * 14 + learnCodeAllowance,
+                highIP: 120,
                 sampleIn: [[
                     45,9,11, 45,8,2, 45,7,3, 45,9,11, 45,12,10, 45,108,106, 45,87,81, 45,65,32,
                     45,8,7, 45,79,34, 45,87,65, 45,65,32, 45,217,111, 45,89,18, 45,19,11, 45,7,2
@@ -1995,8 +2048,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 14 * 16 + 100 * 4,
-                highIP: 85,
+                highIC: 16 * 14 * 16 + learnCodeAllowance,
+                highIP: 130,
                 sampleIn: [[
                     42,2,3, 42,4,5, 42,0,9, 42,11,10, 42,21,4, 42,45,5, 42,48,6, 42,3,5,
                     42,6,5, 42,11,9, 42,90,2, 42,65,3, 42,6,24, 42,8,7, 42,9,10, 42,8,4
@@ -2034,17 +2087,17 @@ const rulesets = {
                         ins: "SUB A, B",
                         countOpt: 1,
                         scanStart: 8,
-                        scanEnd: 30
+                        scanEnd: 130
                     },
                     {
                         ins: "CMP A, B",
                         countOpt: 1,
                         scanStart: 8,
-                        scanEnd: 30
+                        scanEnd: 130
                     }
                 ],
-                highIC: 16 * 14 * 16 + 100 * 4,
-                highIP: 85,
+                highIC: 16 * 14 * 16 + learnCodeAllowance,
+                highIP: 130,
                 sampleIn: [[
                     37,3,2, 37,9,3, 37,0,7, 37,96,78, 37,80,5, 37,87,17, 37,4,2, 37,18,5,
                     37,56,15, 37,112,16, 37,209,3, 37,76,86, 37,54,7, 37,12,4, 37,16,8, 37,19,21 
@@ -2077,8 +2130,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 14 * 16,
-                highIP: 85,
+                highIC: 16 * 14 * 16 + learnCodeAllowance,
+                highIP: 130,
                 sampleIn: [[
                     47,6,3, 47,9,0, 47,81,9, 47,90,10, 47,18,5, 47,27,3, 47,76,18, 47,87,8,
                     47,9,4, 47,101,10, 47,90,8, 47,21,25, 47,76,4, 47,24,6, 47,42,7, 47,87,9
@@ -2110,8 +2163,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 18 + 100 * 4,
-                highIP: 100,
+                highIC: 16 * 20 + learnCodeAllowance,
+                highIP: 140,
                 sampleIn: [[
                     61,5,2, 61,7,9, 61,2,3, 61,6,8, 61,0,19, 61,1,89, 61,4,7, 61,3,97,
                     43,17,9, 43,2,3, 43,5,6, 43,8,9, 43,21,45, 43,108,109, 43,87,15, 43,89,10
@@ -2143,8 +2196,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 18 + 100 * 4,
-                highIP: 100,
+                highIC: 16 * 18 + learnCodeAllowance,
+                highIP: 140,
                 sampleIn: [[
                     43,200,10, 43,26,87, 43,18,9, 43,98,54, 43,76,87,
                     45,100,10, 45,4,3, 45,9,2, 45,96,4, 45,97,13, 45,73,63, 45,90,17, 45,91,81, 45,97,11, 45,96,10, 45,13,12
@@ -2176,8 +2229,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
                 inBlockLen: 48,
-                highIC: 16 * 25 + 100 * 4,
-                highIP: 100,
+                highIC: 16 * 25 + learnCodeAllowance,
+                highIP: 140,
                 sampleIn: [[
                     43,3,4, 43,64,6, 43,76,9, 43,87,10, 43,12,11, 43,65,4,
                     42,65,5, 42,32,3, 42,10,8, 42,15,6, 42,17,15, 42,42,4, 42,6,7, 42,5,7, 42,98,2, 42,23,6
@@ -2210,8 +2263,8 @@ const rulesets = {
                 max: 20, startRoundNum: 800, 
                 outBlockStart: 0, outBlockLen: 32,
                 inBlockStart: 0, inBlockLen: 96,
-                highIC: 5000,
-                highIP: 120,
+                highIC: 5000 + learnCodeAllowance,
+                highIP: 190,
                 sampleIn: [[
                     61,4,5, 61,6,8, 61,5,10, 61,0,9, 61,3,19, 61,2,18, 61,1,24,
                     43,5,1, 43,9,10, 43,11,12, 43,90,91, 43,81,5, 43,76,5, 43,87,18, 43,19,11, 43,18,15,
@@ -2248,8 +2301,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 32,
-                highIC: 16 * 10,
-                highIP: 40,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
                 ASCIISampleIn: [
                     "1;7;9;3;2;5;7;0;9;8;3;2;4;6;7;8;"
                 ],
@@ -2276,8 +2329,8 @@ const rulesets = {
                 max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 48,
-                highIC: 16 * 10 * 2,
-                highIP: 60,
+                highIC: 16 * 10 * 2 + learnCodeAllowance,
+                highIP: 120,
                 ASCIISampleIn: [
                     "12;23;45;56;91;24;10;11;15;47;63;72;25;28;84;57;"
                 ],
@@ -2303,8 +2356,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 64,
-                highIC: 16 * 10 * 3,
-                highIP: 40,
+                highIC: 16 * 10 * 3 + learnCodeAllowance,
+                highIP: 130,
                 ASCIISampleIn: [
                     "112;135;201;197;243;217;179;165;143;122;119;107;104;190;221;254;"
                 ],
@@ -2330,8 +2383,8 @@ const rulesets = {
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 48,
-                highIC: 16 * 10 * 3,
-                highIP: 45,
+                highIC: 16 * 10 * 3 + learnCodeAllowance,
+                highIP: 150,
                 ASCIISampleIn: [
                     "1;12;15;9;71;101;124;213;5;9;8;85;17;11;202;105;"
                 ],
@@ -2349,7 +2402,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 82;
+        this.outputScoresItem = 83;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 sequenceNum: 0, score: 0, max: 2, startRoundNum: 0
@@ -2359,7 +2412,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 83;
+        this.diffScore = 84;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 sequenceNum: 0, score: 0, max: 1, startRoundNum: 0
@@ -2388,6 +2441,7 @@ const rulesets = {
         this.maxScore = maxScore * 2;
         this.maxRuleSequenceNum = maxSequenceNum;
 
+        // End Function
     },
 
     initialiseOutputData() {
@@ -2764,10 +2818,47 @@ const rulesets = {
         }
 
         let opt = countMax;
-        let max = opt;
-        let min = 0;
-        let score = self.doScore(opt, count, max, min);
+        let max = 256;
+        let score = self.doScoreAtMost(opt, count, max);
         return score;
+    },
+
+    generalInsDistribution(self, dataParams, ruleParams) {
+        let instructionSet = dataParams.instructionSet;
+        let memSpace = dataParams.memSpace;
+        if (memSpace.length != 256) {
+            console.error("generalInsDistribution: invalid memspace", memSpace.length);
+        }
+        let insSet = ruleParams.insDistribution;
+        let countMax = 0;
+        let count = 0;
+        // Count of occurrences
+        for (let insData of insSet) {
+            let ins = insData.ins;
+            // Count the number of occurences of the instruction in the scan area
+            let p = insData.scanStart;
+            let itemCount = 0;
+            while (p < insData.scanEnd && p < memSpace.length) {
+                let code = memSpace[p];
+                if (typeof code === 'undefined') {
+                    console.error("insDistribution: ins code undefined");
+                }
+                let insItem = instructionSet.getInsDetails(code);
+                if (insItem.name === ins && itemCount <= insData.countOpt) {
+                    ++count;
+                    ++itemCount;
+                }
+                p += insItem.insLen;
+            }
+
+            countMax += insData.countOpt;
+        }
+
+        let opt = countMax;
+        let max = 256;
+        let score = self.doScoreAtMost(opt, count, max);
+        return score;
+
     },
 
     matchCASM(self, dataParams, ruleParams) {
@@ -2891,7 +2982,7 @@ const rulesets = {
 
         let opt = f;
         let max = highestIC;
-        let score = self.doScore2(opt, IC, max);
+        let score = self.doScoreAtLeast(opt, IC, max);
         return score;
 
     },
@@ -2905,7 +2996,7 @@ const rulesets = {
         let opt = 35;
         if ("highIP" in rule) opt = rule.highIP;
         let max = maxIP - 1;
-        let score = self.doScore2(opt, IP, max);
+        let score = self.doScoreAtLeast(opt, IP, max);
         return score;
     },
 
@@ -5043,13 +5134,30 @@ const rulesets = {
      * @param {*} actual 
      * @param {*} max 
      */
-    doScore2: function(opt, actual, max) {
+    doScoreAtMost: function(opt, actual, max) {
         let score;
         if (actual <= opt) {
             score = 1;
         }
         else {
             score = 1 - ((actual - opt) / (max - opt));
+        }
+        return score;
+    },
+
+        /**
+     * In this case treat the minimum as 0, and score anything from the optimum and above as 1
+     * @param {*} opt 
+     * @param {*} actual 
+     * @param {*} max 
+     */
+    doScoreAtLeast: function(opt, actual, max) {
+        let score;
+        if (actual >= opt) {
+            score = 1;
+        }
+        else {
+            score = 1 - ((opt - actual) / (opt));
         }
         return score;
     },

@@ -32,7 +32,14 @@ Jobs Due
 
     Write rules for Forth-like arithmetic operations
     
-    Add another insDistribution rule for general operation
+    Add another insDistribution rule for general operation,
+    particularly LDSI A, (C); LDSO A, (C) etc.
+        At least score
+
+    Make ClearTables a user function
+    
+    Consider allowing more instruction operations and steps to
+    cater for possible analytical code
 
     Get ASCII number rule working
 
