@@ -7,6 +7,19 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
+    Add the rules:
+        * andFirstParam
+        * orFirstParam
+        * andAdjacentParams
+        * orAdjacentParams
+        * reverseTripletOrder
+        * reverseParamsOrder
+        * subtractFirstParamSecondTimes
+
+    Space-out rule sequence numbers by 10's to make inserts
+    easier? Or rely on the array sequence and use a flag
+    to denote helper rules (ie: retain).
+
     Possibly include duplication in monoclonal breed mutations
 
     Update the README with the current system definition
@@ -37,9 +50,6 @@ Jobs Due
         At least score
 
     Make ClearTables a user function
-    
-    Consider allowing more instruction operations and steps to
-    cater for possible analytical code
 
     Get ASCII number rule working
 
@@ -50,39 +60,11 @@ Jobs Due
 
     Add insDistribution items for rules not completed
 
-    * Provide for cooling periods when parallel processing
-
-    * Add sub-optimum rule results
-        * Save subOpt result
-        * Select/Display SubOpt rule
-        * Check for serial operation
-        * Do cancel operation
-
-    * Add fragments for SeriesOfSeries3
-
-    * Reorganise scorelist
-
-    * Fix incomplete data transmission on stdio
-
-    * Fix workers not exiting on stdio
-
-    * Provide configuration option to use stdio in place of file transfer
-    for communication with worker apps.
-
-    * Add fragments for ASCII numbers
-
-    * Add label handling to compiler
-
-    * Add transfer of batch data by individual files rather than using the
-    database.
-
     Include save scorelist for an entity?
 
     Check-out end of selected rule
 
     Analyse basis for scoring code combinations
-
-    Add powers of numbers rules
 
     Continue trials of code fragments and insDistribution
             
@@ -109,6 +91,39 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    19/06/2025
+    
+    * Consider allowing more instruction operations and steps to
+    cater for possible analytical code
+
+    * Provide for cooling periods when parallel processing
+
+    * Add sub-optimum rule results
+        * Save subOpt result
+        * Select/Display SubOpt rule
+        * Check for serial operation
+        * Do cancel operation
+
+    * Add fragments for SeriesOfSeries3
+
+    * Reorganise scorelist
+
+    * Add powers of numbers rules
+
+    * Fix incomplete data transmission on stdio
+
+    * Fix workers not exiting on stdio
+
+    * Provide configuration option to use stdio in place of file transfer
+    for communication with worker apps.
+
+    * Add fragments for ASCII numbers
+
+    * Add label handling to compiler
+
+    * Add transfer of batch data by individual files rather than using the
+    database.
+
 
     15/05/2025
     

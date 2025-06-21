@@ -1,3 +1,19 @@
+20/06/2025
+Retrial started from scratch reached moduloFirstParam6
+before getting stuck. Took 332 rounds to reach that point.
+
+Will now add rules:
+    andFirstParam
+    orFirstParam
+    andAdjacentParams
+    orAdjacentParams
+    reverseTripletOrder
+    reverseParamsOrder
+
+The general idea here is to give the system as wide a range
+of problems as feasible, to see whether it can develop any
+general patterning capability.
+
 19/06/2025
 Divisible by first param failed at 39.2/53
 
@@ -6,6 +22,16 @@ after 88 rounds.
 
 Will wait and see whether the not divisible rule
 can be fed-back to the divisible by rule
+
+Not divisible by first param also failed.
+
+Change of course:
+Introduced the helper rule generalInsDistribution and
+extended the number of IC instructions to 8000.
+This allows for the possibility of analytical code
+to develop, alongside rule solutions.
+
+Trial restarted from scratch.
 
 18/06/2025
 
