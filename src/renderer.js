@@ -107,6 +107,11 @@ ipcRenderer.on("displayRuleSelectionList", (event, ruleList) => {
     ruleDisplay.displayRuleSelector(ruleList);
 });
 
+ipcRenderer.on("tablesCleared", (event, data) => {
+    document.getElementById("statusDiv").style.display = "block";
+    document.getElementById("statusPara").innerText = "TABLES CLEARED";
+});
+
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "SAVE DONE";
@@ -148,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ruleSelectionButton = document.getElementById('ruleSelectionButton');
     const ruleSelectorForm = document.getElementById('ruleSelectorForm');
     const cancelRuleSelectionButton = document.getElementById('cancelRuleSelectionButton');
+    const clearTablesButton = document.getElementById('clearTablesButton');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
 
@@ -342,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("ruleSelectionDiv").style.display = "none";
     });
 
+    clearTablesButton.addEventListener('click', (event) => {
+        ipcRenderer.send("clearTables");
+    });
 
     saveButton.addEventListener('click', (event) => {
         ipcRenderer.send("saveSession", 0);

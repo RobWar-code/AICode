@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+const miscDbFunctions = require(path.join(__dirname, './database/miscDbFunctions'));
 const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const MainControlParallel = require(path.join(__dirname, './processes/MainControlParallel.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
@@ -281,6 +282,11 @@ ipcMain.on("requestRuleSequenceList", (event, data) => {
 
 ipcMain.on("startSelectedRule", (event, ruleNum) => {
   program.startSelectedRule(ruleNum);
+});
+
+ipcMain.on("clearTables", async () => {
+  await miscDbFunctions.clearTables();
+  mainWindow.webContents.send("tablesCleared", 0);
 });
 
 ipcMain.on("saveSession", () => {

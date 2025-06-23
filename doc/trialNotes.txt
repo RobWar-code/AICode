@@ -1,3 +1,19 @@
+22/06/2025
+
+Trial reached DivisibleByFirstParam after 426 rounds.
+Modulo 6 and 7 were completed in 27 and 2 rounds respectively.
+This strongly indicates the value of lead-up rules such as
+SubtractFirstParamSecondTimes
+
+Currently 42.1/57 on DivisibleByFirstParam after 60 rounds.
+
+21/06/2025
+
+Modulo 6 failed.
+Modulo 7 reached 44.7/53 after 270 rounds.
+
+Clear tables and restart with new rules
+
 20/06/2025
 Retrial started from scratch reached moduloFirstParam6
 before getting stuck. Took 332 rounds to reach that point.
@@ -9,7 +25,8 @@ Will now add rules:
     orAdjacentParams
     reverseTripletOrder
     reverseParamsOrder
-
+    SubtractFirstParamSecondTimes
+    
 The general idea here is to give the system as wide a range
 of problems as feasible, to see whether it can develop any
 general patterning capability.

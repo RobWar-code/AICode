@@ -7,7 +7,16 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    Add the rules:
+    Add the following rules
+        Remove the first parameter number from the inputs
+        Replace the first parameter number by the second in the inputs
+        Reverse the sequences separated by 0's
+        Do base 10 on 2 digit numbers
+        Do base 10 on 3 digit numbers
+
+    * Add a Clear Tables option
+    
+    * Add the rules:
         * andFirstParam
         * orFirstParam
         * andAdjacentParams
