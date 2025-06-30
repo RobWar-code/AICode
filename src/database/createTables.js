@@ -65,7 +65,6 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
 
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -76,7 +75,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /* 
     sql = "DROP TABLE rule";
     await connection.query(sql);
 
@@ -89,14 +87,44 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "fragment VARCHAR(128)";
     sql += ")";
     await connection.query(sql);
-    
+    */
 
+    sql = "CREATE TABLE seedbed_data (",
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "seed_batch_num INT,"
+    sql += "type VARCHAR(16),";
+    sql += "seed_index INT,";
+    sql += "start_round INT,";
+    sql += "promoted_round INT"
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE template_seedbed_log (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "template_index INT,";
+    sql += "num_attempts INT,";
+    sql += "failed_attempts INT,";
+    sql += "successful_attempts INT,";
+    sql += "current INT"
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE seed_rule_seedbed_log (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "seed_rule_index INT,";
+    sql += "num_attempts INT,";
+    sql += "failed_attempts INT,";
+    sql += "successful_attempts INT,";
+    sql += "current INT"
+    sql += ")";
+    await connection.query(sql);
+
+    /*
     // sql = "DROP TABLE transfer_entity";
     // await connection.query(sql);
 
@@ -176,6 +204,15 @@ async function createTables() {
 
 async function clearTables(connection) {
     let sql;
+
+    sql = "DELETE FROM seedbed_data";
+    await connection.query(sql);
+
+    sql = "DELETE FROM template_seedbed_log";
+    await connection.query(sql);
+
+    sql = "DELETE FROM seed_rule_seedbed_log";
+    await connection.query(sql);
 
     sql = "DELETE FROM batch_data";
     await connection.query(sql);

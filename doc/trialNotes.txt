@@ -1,3 +1,16 @@
+24/06/2025
+
+DivisibleByFirstParam reached 44.3/57 before
+ending.
+
+Now adding seed bed procedures for seed templates
+and seed rules.
+
+23/06/2025
+
+Added insDistribution to DivisibleByFirstParam
+restarted trial at that rule.
+
 22/06/2025
 
 Trial reached DivisibleByFirstParam after 426 rounds.

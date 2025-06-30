@@ -14,6 +14,28 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
+    Introduce seed beds to favour work on existing/template solutions.
+        * Do the notes/analysis in the README
+        * Do the database tables
+        * Clear Tables Sections
+        * Create the tables
+        * Do the fetch and save routines for the seedbed data
+        * MainControl Modifications
+        * MainProcess Modifications
+        * Test Serial Mode
+
+        Do analysis for handling seedbed logs in parallel mode
+        Because the seedbed data is relatively small, use the database
+        in both directions.
+
+        MainControlParallel Modifications
+            Adjust interface to workerApp
+            Transfer data to worker apps
+        workerApp Modifications
+            Define the seedbed transfer data tables
+            Transfer data back to MainControl Parallel
+        Test Parallel Mode
+
     * Add a Clear Tables option
     
     * Add the rules:

@@ -4,6 +4,8 @@ Contents
     Instruction Set Starter
     Parallel Processing Data Transfer Operations
         Parallel Performance Notes
+    Seed-Bed Entities
+        Seedbed Parallel Processing
 
 <h1>Instruction Set Starter
 Memory	          Read	        LD A, [MEM]
@@ -122,3 +124,137 @@ Workers  |            |         | Hour   |       |
 6        |52          | 0.664   | 78.3   | Yes   |
 8        |41          | 0.604   | 67.9   | Yes   |
 12       |40          | 0.473   | 84.6   | Yes   |
+
+<h1>Seed-Bed Entities
+    Whilst seed rules from existing solutions may be more useful than random code
+    in solving the current rule, unless their outputs coincidentally match the
+    required outputs, they are unlikely to do better than random code on the score
+    and select basis.
+
+    To obviate the problem of limited seed-rule success it may be useful to establish
+    seed-bed sets (say 8 * 4 = 32 best sets), that only accept a seed program as the
+    originator of entity programs. These can be allowed to run, possibly for 60 rounds
+    to see if they achieve 80% of the target, at which point they can be replaced by
+    other seed if not. Once the 80% target has been the best entities can be seeded
+    into the rest of the best set (4 * 10 = 40 best sets).
+
+    Each seed rule occupies 4 best sets, and each seed is uniquely represented
+    within the seed beds.
+
+    If there are fewer than maxSeedbeds seeds available, then each is selected
+    uniquely, up to the number of seeds available.
+
+    A log array is kept of the successes and failures of the seeds selected for
+    the current rule. Seeds not yet chosen are preferentially selected, where
+    as seeds that have failed more than twice are skipped
+
+    We can use the existing best sets to store the seed beds, simply providing
+    constants to divide the type. ie:
+        targetSeedbedScore = 0.8
+        seedbedMaxRoundsToTarget = 60
+        seedbedStart = 40
+        numSeedbeds = 8
+
+    Control Variables
+        numSeedbedsActive = n
+
+    Program Data: (Saved to database on each round)
+
+        seedbedData = [ // Associated with each set of 4 seed bed entities
+            {
+                seedType: "", // "template" or "seedRule",
+                seedIndex: n, // The index of the test seed from the relevant set
+                startRound: n, // The round on which the seed was planted
+                promotedRound: n // The round on which the seed entity was promoted
+            },
+            ..
+        ]
+
+    Logs: (Saved to database on each round)
+
+        The logs are reset each time the current rule changes
+
+        templateSeedbedLog = [ // for Each template seed
+            {
+                numAttempts:
+                numFailedAttempts:
+                numSuccessfulAttempts:
+                current:
+            }
+        ]
+
+        seedRuleSeedbedLog = [ // for Each seed rule, this is updated each time the current rule changes
+            {
+                numAttempts:
+                numFailedAttempts:
+                numSuccessfulAttempts:
+                current:
+            }
+        ]
+
+    We will need to convey these constants to the parallel processes and the module 
+    mainControl to enable correct breeding procedures.
+
+    Changes must be made to MainControlParallel, MainControl and MainProcess
+
+    In the MainProcess operations, the fact that an entity is within the seed
+    bed is detected, and the procedures for selecting breed operations are as
+    follows:
+        If all 4 entity sets in the batch are empty 
+            select a new seed for the batch (see procedure below)
+        Else if the current entity set is empty
+            use the seed from the seedbedData for the batch for the
+            new entity
+        Else
+            do the same breed operations as for the other entity sets
+            excluding random generation and seed operations.
+
+Selecting Seeds
+
+    Check whether any seeds have been selected (scan the logs)
+    If no seeds have previously been selected
+        select at random (either template or seed rule)
+    Else
+        choose whether template or seed rule
+        sort the template or seed rule logs into arrays of non-current
+            failed < 2
+            unused (numAttempts === 0)
+            successful
+        If there are no non-current seeds, then choose from current
+        Preferentially choose unused or failed or successful ()
+        Choose at random from the selected preference
+        
+<h2>Seedbed Parallel Processing
+
+    Because the seedbed log data is updated step by step as
+    the serial process progresses through the entity sets,
+    we can only use an approximation to the data by passing
+    a snapshot of the logs to the worker apps in parallel
+    processing.
+
+    The logs can then be updated by returning the changes
+    due from the worker apps to the main process.
+
+    The logs are passed complete to the worker apps,
+    but only the update data is returned to the MainControlParallel
+    process.
+
+    The worker app keeps an original copy of the log data,
+    and before it exits, it records the changes that are
+    due to the main program.
+
+    All seedbed data transfers are via the database and filesystem, 
+    Because the amounts of data are relatively small and the coding
+    is simpler. The database is used to transfer the data to the
+    workerApps and the filesystem is used to transfer the update
+    files back to MainControlParallel program.
+
+    The files transferred back to the main program workers are numFailedAttempts
+    as follows (N is the seed batch number):
+
+    transferSeedbedDataN.json
+    transferTemplateSeedbedLogN.json
+    transferSeedRuleSeedbedLogN.json
+
+    The logs are the changes due the main seedbed logs. The seedbedData is the
+    single record associated with the batch. The data is all in JSON format.

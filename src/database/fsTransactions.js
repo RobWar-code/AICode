@@ -196,7 +196,64 @@ const fsTransactions = {
         catch (err) {
             console.error("saveBatchData: Could not save batch data:", filepath);
         }
+    },
+
+    async saveTransferLog(log, logName, batchStart, seedbedStart, batchLen) {
+        if (batchStart < seedbedStart) return;
+        let batchNum = Math.floor((batchStart - seedbedStart)/batchLen);
+        let filename = "transfer" + logName + batchNum + ".json";
+        let filepath = "src/database/workerTransfer/" + filename;
+        let logData = JSON.stringify(log);
+        try {
+            await fs.writeFile(filepath, logData, 'utf8');
+        }
+        catch (err) {
+            console.error("saveTransferLog: Could not save log data:", filepath);
+        }
+    },
+
+    async saveTransferSeedbedData(seedbedData, batchStart, seedbedStart, batchLen) {
+        if (batchStart < seedbedStart) return;
+        let batchNum = Math.floor((batchStart - seedbedStart)/batchLen);
+        let filename = "transferSeedbedData" + batchNum + ".json";
+        let filepath = "src/database/workerTransfer/" + filename;
+        let item = seedbedData[batchNum];
+        let seedbedJSON = JSON.stringify(item);
+        try {
+            await fs.writeFile(filepath, seedbedJSON, 'utf8');
+        }
+        catch (err) {
+            console.error("saveTransferLog: Could not save log data:", filepath);
+        }
+    },
+
+    async fetchSeedbedDataItem(n) {
+        const filepath = "src/database/workerTransfer/transferSeedbedData" + n + ".json";
+        let jsonObj;
+        try {
+            let jsonStr = await fs.readFile(filepath, 'utf8');
+            jsonObj = JSON.parse(jsonStr);
+        }
+        catch (err) {
+            console.error("fetchSeedbedDataItem: Could not read transfer file:", filepath);
+        }
+        return jsonObj;
+    },
+
+    async fetchSeedbedLogUpdate(n, logName) {
+        const filepath = "src/database/workerTransfer/transfer" + logName + n + ".json";
+        let jsonObj;
+        try {
+            let jsonStr = await fs.readFile(filepath, 'utf8');
+            jsonObj = JSON.parse(jsonStr);
+        }
+        catch (err) {
+            console.error("fetchSeedbedLogUpdate: Could not read transfer file:", filepath);
+        }
+        return jsonObj;
     }
+
+
 }
 
 module.exports = fsTransactions;

@@ -9,6 +9,7 @@ const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
+const seedTemplates = require(path.join(__dirname, 'seedTemplates.js'));
 const {databaseType, processMode, workerDataTransfer, numProcessesSet} = 
     require(path.join(__dirname, '../AICodeConfig.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
@@ -23,6 +24,17 @@ class MainControlParallel {
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
+        // Seed bed data
+        this.absBestSetNum = 0;
+        this.seedbedStart = 56;
+        this.numSeedbeds = 4;
+        this.seedbedMaxRoundsToTarget = 60;
+        this.targetSeedbedScore = 0.8;
+        this.batchLen = 4;
+        this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+        this.templateSeedbedLog = [];
+        this.seedRuleSeedbedLog = [];
+
         this.scoreHistory = new Array(this.numBestSets).fill([]);
         this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
         this.scoreHistoryCycle = 1;
@@ -56,10 +68,41 @@ class MainControlParallel {
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
-        dbTransactions.fetchRuleSeeds();
-        dbTransactions.loadFragments();
+        this.fileInitialisations();
         rulesets.currentMaxScore = rulesets.getCurrentMaxScore();
         this.setupBatchProcessing();
+    }
+
+    async fileInitialisations() {
+        await dbTransactions.fetchRuleSeeds();
+        await dbTransactions.loadFragments();
+        this.initialiseSeedbedLogs();
+    }
+
+    initialiseSeedbedLogs() {
+        // Initialise Template Log
+        this.templateSeedbedLog = [];
+        for (let i = 0; i < seedTemplates.templates.length; i++) {
+            let logItem = {
+                numAttempts: 0,
+                numFailedAttempts: 0,
+                numSuccessfulAttempts: 0,
+                current: 0
+            }
+            this.templateSeedbedLog.push(logItem);
+        }
+
+        // Initialise seed rule log
+        this.seedRuleSeedbedLog = [];
+        for (let i = 0; i < rulesets.seedRuleMemSpaces.length; i++) {
+            let logItem = {
+                numAttempts: 0,
+                numFailedAttempts: 0,
+                numSuccessfulAttempts: 0,
+                current: 0
+            }
+            this.seedRuleSeedbedLog.push(logItem);
+        }
     }
 
     setupBatchProcessing() {
@@ -128,7 +171,12 @@ class MainControlParallel {
             }
         }
 
-        console.log("Num Processes:", this.numProcesses);
+        // Save seed bed data
+        let dbConnection = null;
+        await dbTransactions.saveSeedbedData(this.seedbedData, dbConnection);
+        await dbTransactions.saveTemplateSeedbedLog(this.templateSeedbedLog, dbConnection);
+        await dbTransactions.saveSeedRuleSeedbedLog(this.seedRuleSeedbedLog, dbConnection);
+
         for (let processNum = 0; processNum < this.numProcesses; processNum++) {
             let entityJSONData = "";
 
@@ -173,7 +221,8 @@ class MainControlParallel {
 
         console.log("spawnProcess: batchCycle, batchEntityNumber", processNum, batchCycle, batchEntityNumber);
         const worker = spawn("node", ["src/processes/workerApp.js", processNum, batchStart, batchLength, 
-            this.ruleSequenceNum, batchEntityNumber, batchCycle, this.roundNum]);
+            this.seedbedStart, this.numSeedbeds, this.ruleSequenceNum, batchEntityNumber, 
+            batchCycle, this.roundNum]);
 
         if (workerDataTransfer === "stdio") {
             // Message interface (stdout)
@@ -260,6 +309,9 @@ class MainControlParallel {
             this.entityNumber += this.entitiesPerProcess * (this.finalNumBatches - 1) + this.finalEntitiesPerProcess;
             this.cycleCounter += this.cyclesPerBatch * (this.finalNumBatches - 1) + this.finalBatchLength * this.maxCycles;
         }
+        // Collect the seedbed data (fileio) if applicable
+        await this.collectSeedbedData();
+
         if (workerDataTransfer === 'database') {
             await this.collectBatchData();
             await this.collectEntityData();
@@ -283,6 +335,49 @@ class MainControlParallel {
         if (this.numRounds > 0 && this.spanNum === 1 && this.numRounds % 20 === 0) pause = true;
         this.mainWindow.webContents.send("batchProcessed", pause);
 
+    }
+
+    async collectSeedbedData() {
+        // Determine whether any seedbed batches in the span
+        if (this.spanStart >= this.seedbedStart) {
+            let startSeedbedBatch = 0;
+            let startOffset;
+            if (this.spanStart > this.seedbedStart) {
+                startSeedbedBatch = Math.floor((this.spanStart - this.seedbedStart)/this.batchLen);
+                startOffset = 0;
+            }
+            else {
+                startOffset = Math.floor((this.seedbedStart - this.spanStart) / this.batchLen);
+            }
+            let numSeedbedBatches = this.numProcesses - startOffset;
+            await this.collectSeedbedDataFromFile(startSeedbedBatch, numSeedbedBatches);
+            await this.collectSeedbedLogUpdates(startSeedbedBatch, numSeedbedBatches, 
+                this.templateSeedbedLog, "TemplateSeedbedLog");
+            await this.collectSeedbedLogUpdates(startSeedbedBatch, numSeedbedBatches, 
+                this.seedRuleSeedbedLog, "SeedRuleSeedbedLog");
+        }
+    }
+
+    async collectSeedbedDataFromFile(startSeedbedBatch, numSeedbedBatches) {
+        for (let n = startSeedbedBatch; n < startSeedbedBatch + numSeedbedBatches; n++) {
+            let seedbedDataItem = await fsTransactions.fetchSeedbedDataItem(n);
+            this.seedbedData[n] = seedbedDataItem;
+        }
+    }
+
+    async collectSeedbedLogUpdates(startSeedbedBatch, numSeedbedBatches, 
+        log, logName) {
+        for (let n = startSeedbedBatch; n < startSeedbedBatch + numSeedbedBatches; n++) {
+            let updateList = await fsTransactions.fetchSeedbedLogUpdate(n, logName);
+            for (let i = 0; i < log.length; i++) {
+                let changeItem = updateList[i];
+                let logItem = log[i];
+                logItem.numAttempts += changeItem.numAttempts;
+                logItem.numFailedAttempts += changeItem.numFailedAttempts;
+                logItem.numSuccessfulAttempts += changeItem.numSuccessfulAttempts;
+                logItem.current += changeItem.current;
+            }
+        }
     }
 
     async sendEntityExchangeData(spanNum, numProcesses, processNum) {
@@ -528,6 +623,9 @@ class MainControlParallel {
         dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
         // Check for rule threshold reached
         let thresholdReached = this.checkRuleThreshold();
+        if (!thresholdReached) {
+            this.checkSeedbedThresholds();
+        }
     
         ++this.lapCounter;
         if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
@@ -541,8 +639,82 @@ class MainControlParallel {
         }
     }
 
+    checkSeedbedThresholds() {
+        for (let batchNum = 0; batchNum < this.numSeedbeds; batchNum++) {
+            // Check whether the round limit has been reached
+            let seedIndex = this.seedbedData[batchNum].seedIndex;
+            let seedType = this.seedbedData[batchNum].seedType;
+            let startRound = this.seedbedData[batchNum].startRound;
+            let promotedRound = this.seedbedData[batchNum].promotedRound;
+            let logItem;
+            if (seedType === "Template") {
+                logItem = this.templateSeedbedLog[seedIndex];
+            }
+            else {
+                logItem = this.seedRuleSeedbedLog[seedIndex];
+            }
+
+            let clearBatch = false;
+            if (this.numRounds >= startRound + this.seedbedMaxRoundsToTarget && promotedRound === 0) {
+                // If the time limit is reached, clear-down the batch
+                logItem.numFailedAttempts += 1;
+                logItem.current -= 1;
+                // Clear the seedBedData
+                this.seedbedData[batchNum].seedType = "";
+                this.seedbedData[batchNum].seedIndex = 0;
+                this.seedbedData[batchNum].startRound = 0;
+                this.seedbedData[batchNum].promotedRound = 0;
+                // Clear down the batch
+                clearBatch = true;
+            }
+            
+            let setNum = this.seedbedStart + this.batchLen * batchNum;
+            for (let i = 0; i < this.batchLen; i++) {
+                if (clearBatch) {
+                    this.bestSets[setNum] = [];
+                }
+                else {
+                    // Check for score threshold promotion
+                    if (this.bestSets[setNum].length > 0) {
+                        let entity = this.bestSets[setNum][0];
+                        let score = entity.score;
+                        if (score > this.targetSeedbedScore * rulesets.currentMaxScore
+                            && this.seedbedData[batchNum].promotedRound === 0) {
+                            let donePromotion = this.promoteSeedbedEntity(entity, batchNum);
+                            if (donePromotion) {
+                                logItem.numSuccessfulAttempts += 1;
+                                this.seedbedData[batchNum].promotedRound = this.numRounds;
+                                break;
+                            }
+                        }
+                    }
+                }
+                ++setNum;
+            }
+        }
+    }
+
+    promoteSeedbedEntity(entity, batchNum) {
+        let promotionDone = false;
+        let score = entity.score;
+        for (let i = 0; i < this.seedbedStart; i++) {
+            if (typeof this.bestSets[i][0] != "undefined") {
+                let eScore = this.bestSets[i][0].score;
+                if (eScore < score) {
+                    // Clone the entity
+                    let newEntity = entity.cloneEntity();
+                    // Copy the entity to the bestSet
+                    this.bestSets[i][0] = newEntity;
+                    promotionDone = true;
+                    break;
+                }
+            }
+        }
+        return promotionDone;
+    }
+
     shuffleSets() {
-        let numShuffles = 2;
+        let numShuffles = 1;
         for (let i = 0; i < numShuffles; i++) {
             let same = true;
             let a, b;

@@ -14,11 +14,11 @@ async function createTables() {
 
     let sql;
 
-    await clearTables(connection);
+    // await clearTables(connection);
 
-    console.log("Tables Cleared");
+    // console.log("Tables Cleared");
 
-    return;
+    // return;
     
     /*
     // sql = "DROP TABLE session";
@@ -65,10 +65,9 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
 
     sql = "CREATE TABLE sub_opt_rule (";
-    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "id INT PRIMARY KEY AUTOINCREMENT,";
     sql += "session_id INT,";
     sql += "rule_id INT,";
     sql += "rule_sequence_num INT,";
@@ -76,12 +75,11 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "DROP TABLE rule";
     await connection.query(sql);
 
     sql = "CREATE TABLE rule (";
-    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "id INT PRIMARY KEY AUTOINCREMENT,";
     sql += "rule_num INT,";
     sql += "start_round INT,";
     sql += "completion_round INT,";
@@ -94,8 +92,39 @@ async function createTables() {
     sql += "fragment VARCHAR(128)";
     sql += ")";
     await connection.query(sql);
+    */
 
+    sql = "CREATE TABLE seedbed_data (",
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "seed_batch_num INT,"
+    sql += "type VARCHAR(16),";
+    sql += "seed_index INT,";
+    sql += "start_round INT,";
+    sql += "promoted_round INT";
+    sql += ")";
+    await connection.query(sql);
 
+    sql = "CREATE TABLE template_seedbed_log (";
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "template_index INT,";
+    sql += "num_attempts INT,";
+    sql += "failed_attempts INT,";
+    sql += "successful_attempts INT,";
+    sql += "current INT"
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE seed_rule_seedbed_log (";
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "seed_rule_index INT,";
+    sql += "num_attempts INT,";
+    sql += "failed_attempts INT,";
+    sql += "successful_attempts INT,";
+    sql += "current INT"
+    sql += ")";
+    await connection.query(sql);
+
+    /*
     // sql = "DROP TABLE transfer_entity";
     // await connection.query(sql);
 
@@ -172,6 +201,15 @@ async function createTables() {
 
 async function clearTables(connection) {
     let sql;
+
+    sql = "DELETE FROM seedbed_data";
+    await connection.query(sql);
+
+    sql = "DELETE FROM template_seedbed_log";
+    await connection.query(sql);
+
+    sql = "DELETE FROM seed_rule_seedbed_log";
+    await connection.query(sql);
 
     sql = "DELETE FROM batch_data";
     await connection.query(sql);

@@ -10,13 +10,16 @@ let dbConn;
 if (databaseType === "sqlite") {
     dbConn = require(path.join(__dirname,'../database/dbConnSqlite.js'));
 }
+else {
+    dbConn = require(path.join(__dirname,'../database/dbConn.js'));
+}
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
 
 // See Main Program for the start up
 
 class BatchProcess {
-    constructor (batchNum, batchStart, batchLength, ruleSequenceNum, entityNumber, cycleCounter) {
+    constructor (batchNum, batchStart, batchLength, seedbedStart, numSeedbeds, ruleSequenceNum, entityNumber, cycleCounter) {
         this.bestEntitySetMax = 40;
         this.bestEntitySetCount = 0;
         this.bestEntitySet = [];
@@ -27,6 +30,18 @@ class BatchProcess {
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
+
+        // Seedbed data
+        this.absBestSetNum = batchStart;
+        this.seedbedStart = seedbedStart;
+        this.numSeedbeds = numSeedbeds;
+        this.batchLen = batchLength;
+        this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+        this.templateSeedbedLog = [];
+        this.origTemplateSeedbedLog = [];
+        this.seedRuleSeedbedLog = [];
+        this.origSeedRuleSeedbedLog = [];
+
         this.scoreHistory = new Array(this.numBestSets).fill([]);
         this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
         this.scoreHistoryCycle = 1;
@@ -67,6 +82,17 @@ class BatchProcess {
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
+        // Load the seedbed data
+        this.seedbedData = await dbTransactions.fetchSeedbedData();
+        this.templateSeedbedLog = await dbTransactions.fetchTemplateSeedbedLog();
+        this.seedRuleSeedbedLog = await dbTransactions.fetchSeedRuleSeedbedLog();
+        // Clone for original
+        let tStr = JSON.stringify(this.templateSeedbedLog);
+        this.origTemplateSeedbedLog = JSON.parse(tStr);
+        this.seedRuleSeedbedLog = await dbTransactions.fetchSeedRuleSeedbedLog();
+        tStr = JSON.stringify(this.seedRuleSeedbedLog);
+        this.origSeedRuleSeedbedLog = JSON.parse(tStr);
+
         if (workerDataTransfer === 'database') {
             await this.fetchBatchEntities();
         }
@@ -81,6 +107,10 @@ class BatchProcess {
         // Main Process
         let mainProcess = new MainProcess(rulesets);
         mainProcess.mainLoop(this);
+
+        // Save the transfer seed bed data
+        await this.prepareAndSaveSeedbedData();
+        
 
         if (workerDataTransfer === 'database') {
             await this.transferBatchEntities();
@@ -114,7 +144,38 @@ class BatchProcess {
             jsonStr = "{\"type\": \"batchData\", \"data\": " + jsonStr + "}\n";
             process.stdout.write(jsonStr);
         }
-        await dbConn.close();
+        if (databaseType === 'sqlite') {
+            await dbConn.close();
+        }
+    }
+
+    async prepareAndSaveSeedbedData() {
+
+        // Save the seedbed data for this batch;
+        await fsTransactions.saveTransferSeedbedData(this.seedbedData, this.batchStart, this.seedbedStart, this.batchLen);
+
+        // Prepare and save the template seed bed log change data
+        let changeLog = this.getSeedbedLogChanges(this.origTemplateSeedbedLog, this.templateSeedbedLog);
+        await fsTransactions.saveTransferLog(changeLog, "TemplateSeedbedLog", this.batchStart, this.seedbedStart, this.batchLen);
+
+        // Prepare and save the template seed bed log change data
+        changeLog = this.getSeedbedLogChanges(this.origSeedRuleSeedbedLog, this.seedRuleSeedbedLog);
+        await fsTransactions.saveTransferLog(changeLog, "SeedRuleSeedbedLog", this.batchStart, this.seedbedStart, this.batchLen);
+    }
+
+    getSeedbedLogChanges(origLog, log) {
+        let changeLog = [];
+        for (let i = 0; i < log.length; i++) {
+            let changeItem = {};
+            let origItem = origLog[i];
+            let item = log[i];
+            changeItem.numAttempts = item.numAttempts - origItem.numAttempts;
+            changeItem.numFailedAttempts = item.numFailedAttempts - origItem.numFailedAttempts;
+            changeItem.numSuccessfulAttempts = item.successfulAttempts - origItem.numSuccessfulAttempts;
+            changeItem.current = item.current - origItem.current;
+            changeLog.push(changeItem);
+        }
+        return changeLog;
     }
 
     async fetchBatchEntities() {
@@ -260,12 +321,15 @@ class BatchProcess {
 let batchNum = parseInt(process.argv[2]);
 let batchStart = parseInt(process.argv[3]);
 let batchLength = parseInt(process.argv[4]);
-let ruleSequenceNum = parseInt(process.argv[5]);
-let entityNumber = parseInt(process.argv[6]);
-let cycleCounter = parseInt(process.argv[7]);
-let roundNum = parseInt(process.argv[8]);
+let seedbedStart = parseInt(process.argv[5]);
+let numSeedbeds = parseInt(process.argv[6]);
+let ruleSequenceNum = parseInt(process.argv[7]);
+let entityNumber = parseInt(process.argv[8]);
+let cycleCounter = parseInt(process.argv[9]);
+let roundNum = parseInt(process.argv[10]);
 
-let batchProcess = new BatchProcess(batchNum, batchStart, batchLength, ruleSequenceNum, entityNumber, cycleCounter, roundNum);
+let batchProcess = new BatchProcess(batchNum, batchStart, batchLength, seedbedStart, numSeedbeds,
+     ruleSequenceNum, entityNumber, cycleCounter, roundNum);
 
 const sleep = (ms) => new Promise(res => setTimeout(res, ms));
 

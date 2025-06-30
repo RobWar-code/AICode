@@ -10,16 +10,20 @@ class MainProcess {
     mainLoop(self) {
         for (let i = 0; i < self.mainCycle; i++) {
             let bestEntitySet = self.bestSets[self.bestSetNum];
-            bestEntitySet = this.processLoop(self, bestEntitySet, self.bestSetNum);
+            bestEntitySet = this.processLoop(self, bestEntitySet, self.bestSetNum, self.absBestSetNum);
             self.bestSets[self.bestSetNum] = bestEntitySet;
             ++self.bestSetNum;
         }
     }
 
-    processLoop(self, bestEntitySet, bestSetNum) {
+    processLoop(self, bestEntitySet, bestSetNum, absBestSetNum) {
         const maxBreedEntities = self.bestEntitySetMax / 2;
         const maxBreedActions = 32;
         const currentEntitySetMaxLen = 3;
+        let inSeedbed = false;
+        let gotSeedbedEntity = false;
+        let seedbedEntity = null;
+        if (absBestSetNum >= self.seedbedStart) inSeedbed = true; 
         for (let cycle = 0; cycle < self.maxCycles; cycle++) {
             for (let i = 0; i < maxBreedEntities; i++) {
                 let currentEntitySet = [];
@@ -34,7 +38,7 @@ class MainProcess {
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    if (j === 0 && bestEntitySet.length < 20 && Math.random() < 0.8) {
+                    if (!inSeedbed && j === 0 && bestEntitySet.length < 20 && Math.random() < 0.8) {
                         if (Math.random() < 0.5 && this.rulesets.seedRuleMemSpaces.length > 0) {
                             breedMode = "seedRule";
                         }
@@ -42,8 +46,15 @@ class MainProcess {
                             breedMode = "seedTemplate";
                         }
                     }
-                    else if (bestEntitySet.length < self.bestEntitySetMax) {
+                    else if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
                         breedMode = "random";
+                    }
+                    else if (inSeedbed && bestEntitySet.length === 0 && !gotSeedbedEntity) {
+                        breedMode = "seedbedInsert"
+                    }
+                    else if (inSeedbed && bestEntitySet.length < self.bestEntitySetMax && gotSeedbedEntity && 
+                        seedbedEntity != null) {
+                        breedMode = "seedbedStarted"
                     }
 
                     if (breedMode === "seedRule") {
@@ -61,6 +72,26 @@ class MainProcess {
                         entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
                             self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
                         entity.breedMethod = "SeedTemplate";
+                    }
+                    else if (breedMode === "seedbedInsert") {
+                        // Fetch a seed memspace for the seed bed
+                        let memSpaceObj = this.fetchSeedbedSeed(self, absBestSetNum);
+                        memSpace = memSpaceObj.memSpace;
+                        let breedMethod = memSpaceObj.breedMethod;
+                        asRandom = false;
+                        entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
+                            self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                        entity.breedMethod = breedMethod;
+                        // Copy entity for the seedbedEntity
+                        seedbedEntity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
+                            self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                        gotSeedbedEntity = true;
+                    }
+                    else if (breedMode === "seedbedStarted") {
+                        // Do monoclonal breeds from the original seedbed entity
+                        let mate = null;
+                        entity = seedbedEntity.breed(self.entityNumber, mate, gotCrossMate, 
+                            self.cycleCounter, self.numRounds);
                     }
                     else if (breedMode === "reproduction") {
                         // Set-up for a breed operation 
@@ -189,6 +220,99 @@ class MainProcess {
             else r = (Math.floor(Math.random() * 2) * 2) - 1; 
         }
         return r;
+    }
+
+    fetchSeedbedSeed(self, absBestSetNum) {
+        let breedMethod;
+        let memSpace;
+        let seedIndex;
+        // Get the position within the batch
+        let batchEntityNum = absBestSetNum % self.batchLen;
+        // Determine whether this batch has been seeded
+        let batchNum = Math.floor((absBestSetNum - self.seedbedStart) / self.batchLen);
+        let seedType = self.seedbedData[batchNum].seedType;
+        if (seedType != "") {
+            // Use this seed again
+            seedIndex = self.seedbedData[batchNum].seedIndex;
+            if (seedType === "Template") {
+                memSpace = seedTemplates.getSeedTemplate(seedIndex);
+                breedMethod = "SeedTemplate";
+            }
+            else {
+                memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
+                breedMethod = "SeedRule";
+            }
+        }
+        else {
+            // Select the seed
+            // Select the seed type
+            let seedbedDataObj = {};
+            let memSpace;
+            let seedType = "SeedRule";
+            if (Math.random() < 0.25 || this.rulesets.seedRuleMemSpaces.length === 0) {
+                seedType = "Template";
+            }
+            // If template is chosen
+            if (seedType === "Template") {
+                seedIndex = this.selectSeedbedSeed(self.templateSeedbedLog);
+                memSpace = seedTemplates.getSeedTemplate(seedIndex);
+                breedMethod = "SeedTemplate";
+                // Update the log
+                let t = self.templateSeedbedLog[seedIndex];
+                t.numAttempts += 1;
+                t.current += 1;
+            }
+            else {
+                seedIndex = this.selectSeedbedSeed(self.seedRuleSeedbedLog);
+                memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
+                breedMethod = "SeedRule"
+                let t = self.seedRuleSeedbedLog[seedIndex];
+                t.numAttempts += 1;
+                t.current += 1;
+            }
+            // Set the seedbed data
+            seedbedDataObj.seedType = seedType;
+            seedbedDataObj.seedIndex = seedIndex;
+            seedbedDataObj.startRound = self.numRounds;
+            seedbedDataObj.promotedRound = 0;
+            self.seedbedData[batchNum] = seedbedDataObj;
+        }
+        return {memSpace: memSpace, breedMethod: breedMethod};
+    }
+
+    selectSeedbedSeed(log) {
+        let seedIndex;
+        // Get the unused templates
+        let unused = [];
+        let index = 0;
+        for (let item of log) {
+            if (item.numAttempts === 0 && item.current === 0) {
+                unused.push(index);
+            }
+            ++index;
+        }
+        if (unused.length > 0) {
+            seedIndex = unused[Math.floor(Math.random() * unused.length)];
+        }
+        else {
+            // Select non-current seed
+            let nonCurrent = [];
+            let index = 0;
+            for (let item of log) {
+                if (item.current === 0 && item.numFailedAttempts < 2) {
+                    nonCurrent.push(index);
+                }
+                ++index;
+            }
+            if (nonCurrent.length > 0) {
+                seedIndex = nonCurrent[Math.floor(Math.random() * nonCurrent.length)];
+            }
+            else {
+                // Choose a seed at random
+                seedIndex = Math.floor(Math.random() * log.length);
+            }
+        }
+        return seedIndex;
     }
     
     addEntityToCurrentSet(currentEntitySet, currentEntitySetMaxLen, entity, score) {

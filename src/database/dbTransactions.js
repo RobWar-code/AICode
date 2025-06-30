@@ -29,7 +29,7 @@ const dbTransactions = {
             sql += "VALUES (?, ?, ?, ?, ?)";
             const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, 
                 elapsedTime, program.entityNumber, ruleSequenceNum]);
-            console.log ("session saved -id", results.insertId);
+            console.error("session saved -id", results.insertId);
             sessionId = results.insertId;
         }
         catch (err) {
@@ -58,6 +58,18 @@ const dbTransactions = {
 
         if (resultOK) {
             resultOK = await this.saveFragments(dbConnection);
+        }
+
+        if (resultOK) {
+            resultOK = await this.saveSeedbedData(program.seedbedData, dbConnection);
+        }
+
+        if (resultOK) {
+            resultOK = await this.saveTemplateSeedbedLog(program.templateSeedbedLog, dbConnection);
+        }
+
+        if (resultOK) {
+            resultOK = await this.saveSeedRuleSeedbedLog(program.seedRuleSeedbedLog, dbConnection);
         }
 
         await dbConnection.end();
@@ -114,7 +126,7 @@ const dbTransactions = {
             }
         }
         if (count > 0) {
-            console.log("Entities Saved");
+            console.error("Entities Saved");
             return true;
         }
         else {
@@ -146,7 +158,6 @@ const dbTransactions = {
         try {
             const sql = 'DELETE FROM entity WHERE session_id != ?';
             const [results] = await dbConnection.execute(sql, [sessionId]);
-            console.log("Deleted old entities");
         } catch (err) {
             console.error('Error during DELETE entities operation:', err.message);
         }
@@ -155,7 +166,6 @@ const dbTransactions = {
         try {
             const sql = 'DELETE FROM session WHERE id != ?';
             const [results] = await dbConnection.execute(sql, [sessionId]);
-            console.log("Deleted old sessions");
         } catch (err) {
             console.error('Error during DELETE sessions operation:', err.message);
         }
@@ -164,7 +174,7 @@ const dbTransactions = {
     async loadSession(mainWindow, program) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -174,7 +184,7 @@ const dbTransactions = {
             [sessions] = await dbConnection.execute(
                 'SELECT * FROM session ORDER BY id DESC LIMIT 1'
             );
-            console.log("Loaded Session");
+            console.error("Loaded Session");
         } catch (err) {
             console.error('loadSession: Error retrieving most recent record:', err.message);
             throw err;
@@ -188,7 +198,6 @@ const dbTransactions = {
             [entities] = await dbConnection.execute(
                 `SELECT * FROM entity WHERE session_id = ${sessionId}`
             );
-            console.log('loaded entities - entities length', entities.length, sessionId);
         } catch (err) {
             console.error('Error retrieving most recent record:', err.message);
             throw err;
@@ -211,12 +220,20 @@ const dbTransactions = {
             [subOptRules] = await dbConnection.execute(
                 `SELECT * FROM sub_opt_rule ORDER BY rule_sequence_num`
             );
-            console.log("Loaded subOptRules");
         }
         catch (error) {
             console.error("Could not read from sub_opt_rule table.", error.message);
         }
         
+        // Seedbed Data
+        await this.loadSeedbedData(program, dbConnection);
+
+        // Template Seedbed Log
+        await this.loadTemplateSeedbedLog(program, dbConnection);
+
+        // Seed Rule Seedbed Log
+        await this.loadSeedRuleSeedbedLog(program, dbConnection);
+
         await dbConnection.end();
 
         // Rules
@@ -244,7 +261,7 @@ const dbTransactions = {
             ++ruleSequenceNum;
         }
 
-        console.log("saved seed rules");
+        console.error("saved seed rules");
 
         return true;
 
@@ -253,7 +270,6 @@ const dbTransactions = {
     async saveSubOptRules(sessionId, dbConnection) {
 
         let subOptRules = rulesets.subOptRuleMemSpaces;
-        console.log("saveSubOptRules:", subOptRules.length);
         if (subOptRules.length === 0) return true;
 
         let ruleSequenceNum = 0;
@@ -265,7 +281,7 @@ const dbTransactions = {
             ++ruleSequenceNum;
         }
 
-        console.log("saved sub-opt rules");
+        console.error("saved sub-opt rules");
 
         return true;
 
@@ -316,7 +332,7 @@ const dbTransactions = {
                     rulesets.ruleRounds[i].end, rulesets.ruleRounds[i].completed]);
             }
             catch (error) {
-                console.log("saveRules: Could not insert ruleCompletionRound[]:", i);
+                console.error("saveRules: Could not insert ruleCompletionRound[]:", i);
                 throw error.message;
             }
         }
@@ -349,14 +365,267 @@ const dbTransactions = {
             }
         }
 
-        console.log("Saved Seed Rule Fragments");
+        console.error("Saved Seed Rule Fragments");
         return true;
+    },
+
+    async saveSeedbedData(seedbedData, dbConnection){
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
+
+        let resultOK = false;
+        // Clear Existing Data
+        let sql;
+        sql = "DELETE FROM seedbed_data";
+        await dbConnection.query(sql);
+
+        // Insert each row from the seedbedData
+        for (let batchNum = 0; batchNum < seedbedData.length; batchNum++) {
+            let item = seedbedData[batchNum];
+            sql = "INSERT INTO seedbed_data (seed_batch_num, type, seed_index, start_round,";
+            sql += "promoted_round) VALUES (?, ?, ?, ?, ?)";
+            try {
+                await dbConnection.execute(sql, [batchNum, item.seedType, item.seedIndex, 
+                    item.startRound, item.promotedRound]);
+                resultOK = true;
+            }
+            catch (error) {
+                console.error("saveSeedbedData: problem saving data");
+                throw error;
+            }
+        }
+
+        if (dbConnOpened) {
+            await dbConnection.end();
+        }
+
+        return resultOK;
+    },
+
+    async loadSeedbedData(program, dbConnection) {
+        let sql;
+        sql = "SELECT * FROM seedbed_data";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            program.seedbedData = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.seed_batch_num;
+                program.seedbedData[index].seedType = row.type;
+                program.seedbedData[index].seedIndex = row.seed_index;
+                program.seedbedData[index].startRound = row.start_round;
+                program.seedbedData[index].promotedRound = row.promoted_round;
+            }
+        }
+        catch (error) {
+            console.error("loadSeedbedData: problem loading seedbed data");
+            throw error;
+        }
+    },
+
+    async fetchSeedbedData() {
+        let dbConnection = await dbConn.openConnection();
+
+        let seedbedData;
+        let sql;
+        sql = "SELECT * FROM seedbed_data";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            seedbedData = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.seed_batch_num;
+                seedbedData[index].seedType = row.type;
+                seedbedData[index].seedIndex = row.seed_index;
+                seedbedData[index].startRound = row.start_round;
+                seedbedData[index].promotedRound = row.promoted_round;
+            }
+        }
+        catch (error) {
+            console.error("loadSeedbedData: problem loading seedbed data");
+            throw error;
+        }
+
+        await dbConnection.end();
+        return seedbedData;
+    },
+
+    async loadTemplateSeedbedLog(program, dbConnection) {
+        let sql;
+        sql = "SELECT * FROM template_seedbed_log";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            program.templateSeedbedLog = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.template_index;
+                program.templateSeedbedLog[index].numAttempts = results.num_attempts;
+                program.templateSeedbedLog[index].numFailedAttempts = results.failed_attempts;
+                program.templateSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
+                program.templateSeedbedLog[index].current = results.current;
+            }
+        }
+        catch (error) {
+            console.error("loadTemplateSeedbedLog: problem loading data");
+            throw error;
+        }
+    },
+
+    async fetchTemplateSeedbedLog() {
+        let dbConnection = await dbConn.openConnection();
+
+        let templateSeedbedLog;
+        let sql;
+        sql = "SELECT * FROM template_seedbed_log";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            templateSeedbedLog = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.template_index;
+                templateSeedbedLog[index].numAttempts = results.num_attempts;
+                templateSeedbedLog[index].numFailedAttempts = results.failed_attempts;
+                templateSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
+                templateSeedbedLog[index].current = results.current;
+            }
+        }
+        catch (error) {
+            console.error("fetchTemplateSeedbedLog: problem loading data");
+            throw error;
+        }
+
+        await dbConnection.end();
+        return templateSeedbedLog;
+    },
+
+    async loadSeedRuleSeedbedLog(program, dbConnection) {
+        let sql;
+        sql = "SELECT * FROM seed_rule_seedbed_log";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            program.seedRuleSeedbedLog = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.seed_rule_index;
+                program.seedRuleSeedbedLog[index].numAttempts = results.num_attempts;
+                program.seedRuleSeedbedLog[index].numFailedAttempts = results.failed_attempts;
+                program.seedRuleSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
+                program.seedRuleSeedbedLog[index].current = results.current;
+            }
+        }
+        catch (error) {
+            console.error("loadSeedRuleSeedbedLog: problem loading data");
+            throw error;
+        }
+    },
+
+    async fetchSeedRuleSeedbedLog() {
+        let dbConnection = await dbConn.openConnection();
+
+        let seedRuleSeedbedLog;
+        let sql;
+        sql = "SELECT * FROM seed_rule_seedbed_log";
+        try {
+            const [results] = await dbConnection.query(sql);
+            let numItems = results.length;
+            seedRuleSeedbedLog = new Array(numItems).fill({});
+            for (let row of results) {
+                let index = row.seed_rule_index;
+                seedRuleSeedbedLog[index].numAttempts = results.num_attempts;
+                seedRuleSeedbedLog[index].numFailedAttempts = results.failed_attempts;
+                seedRuleSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
+                seedRuleSeedbedLog[index].current = results.current;
+            }
+        }
+        catch (error) {
+            console.error("fetchSeedRuleSeedbedLog: problem loading data");
+            throw error;
+        }
+        await dbConnection.end();
+        return seedRuleSeedbedLog;
+    },
+
+    async saveTemplateSeedbedLog(log, dbConnection) {
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
+
+        let resultOK = false;
+
+        // Clear the existing data
+        let sql;
+        sql = "DELETE FROM template_seedbed_log";
+        await dbConnection.query(sql);
+
+        // Insert each row from the log
+        for (let itemNum = 0; itemNum < log.length; itemNum++) {
+            let item = log[itemNum];
+            sql = "INSERT INTO template_seedbed_log (template_index, num_attempts, failed_attempts, ";
+            sql += "successful_attempts, current) VALUES (?, ?, ?, ?, ?)";
+            try {
+                await dbConnection.execute(sql, [itemNum, item.numAttempts, item.numFailedAttempts, 
+                    item.numSuccessfulAttempts, item.current]);
+                resultOK = true;
+            }
+            catch (error) {
+                console.error("saveTemplateSeedbedLog: problem saving data");
+                throw error;
+            }
+        }
+
+        if (dbConnOpened) {
+            await dbConnection.end();
+        }
+
+        return resultOK;
+    },
+
+    async saveSeedRuleSeedbedLog(log, dbConnection) {
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
+
+        let resultOK = false;
+
+        // Clear the existing data
+        let sql;
+        sql = "DELETE FROM seed_rule_seedbed_log";
+        await dbConnection.query(sql);
+
+        // Insert each row from the log
+        for (let itemNum = 0; itemNum < log.length; itemNum++) {
+            let item = log[itemNum];
+            sql = "INSERT INTO seed_rule_seedbed_log (seed_rule_index, num_attempts, failed_attempts, ";
+            sql += "successful_attempts, current) VALUES (?, ?, ?, ?, ?)";
+            try {
+                await dbConnection.execute(sql, [itemNum, item.numAttempts, item.numFailedAttempts, 
+                    item.numSuccessfulAttempts, item.current]);
+                resultOK = true;
+            }
+            catch (error) {
+                console.error("saveSeedRuleSeedbedLog: problem saving data");
+                throw error;
+            }
+        }
+
+        if (dbConnOpened) {
+            await dbConnection.end();
+        }
+        
+        return resultOK;
     },
 
     async fetchSeedRuleList() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error ("Could not open db connection");
             return;
         }
 
@@ -387,7 +656,7 @@ const dbTransactions = {
     async insertRuleSeed(ruleSeedList) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error ("Could not open db connection");
             return;
         }
         
@@ -428,7 +697,7 @@ const dbTransactions = {
     async fetchRuleSeeds() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error ("Could not open db connection");
             return;
         }
 
@@ -437,7 +706,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("fetchRuleSeeds: Problem with select");
+            console.error("fetchRuleSeeds: Problem with select");
             throw error;
         }
 
@@ -455,7 +724,7 @@ const dbTransactions = {
     async loadRules() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error ("Could not open db connection");
             return;
         }
 
@@ -469,7 +738,7 @@ const dbTransactions = {
             }
         }
         catch (error) {
-            console.log("loadRules: Could not load rule data");
+            console.error("loadRules: Could not load rule data");
             throw error;
         }
 
@@ -479,7 +748,7 @@ const dbTransactions = {
     async loadFragments() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -499,7 +768,7 @@ const dbTransactions = {
     async clearTransferEntitySet(bestSetNum) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
         let sql;
@@ -508,7 +777,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("clearTransferEntitySet - problem deleting output", bestSetNum);
+            console.error("clearTransferEntitySet - problem deleting output", bestSetNum);
             throw error;
         }
 
@@ -517,7 +786,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql); 
         }
         catch (error) {
-            console.log("clearTransferEntitySet - problem deleting input", bestSetNum);
+            console.error;("clearTransferEntitySet - problem deleting input", bestSetNum);
             throw error;
         }
 
@@ -526,7 +795,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("clearTransferEntitySet: Problem clearing entity set");
+            console.error("clearTransferEntitySet: Problem clearing entity set");
             throw error;
         }
 
@@ -538,7 +807,7 @@ const dbTransactions = {
         finalMemSpace, oldValuesOut, oldParams, score) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -548,7 +817,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("saveTransferEntity: Could not delete transfer_entity_output", bestSetNum, index);
+            console.error("saveTransferEntity: Could not delete transfer_entity_output", bestSetNum, index);
             throw error;
         }
 
@@ -558,7 +827,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("saveTransferEntity: Could not delete transfer_entity_input", bestSetNum, index);
+            console.error("saveTransferEntity: Could not delete transfer_entity_input", bestSetNum, index);
             throw error;
         }
 
@@ -568,7 +837,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("saveTransferEntity: problem clearing entity");
+            console.error("saveTransferEntity: problem clearing entity");
             throw error;
         }
 
@@ -590,7 +859,7 @@ const dbTransactions = {
             transferEntityId = results.insertId;
         }
         catch (error) {
-            console.log("saveTransferEntity: problem inserting transfer entity", bestSetNum, index);
+            console.error("saveTransferEntity: problem inserting transfer entity", bestSetNum, index);
             throw error;
         }
 
@@ -613,7 +882,7 @@ const dbTransactions = {
                 [results] = await dbConnection.execute(sql, [transferEntityId, bestSetNum, index, inx, outputStr]);
             }
             catch (error) {
-                console.log("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
+                console.error("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
                 throw error;
             }
             ++inx;
@@ -630,7 +899,7 @@ const dbTransactions = {
                 [results] = await dbConnection.execute(sql, [transferEntityId, bestSetNum, index, inx, inputStr]);
             }
             catch (error) {
-                console.log("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
+                console.error("saveTransferEntityOutputs: Problem saving output block - ", bestSetNum, index, inx);
                 throw error;
             }
             ++inx;
@@ -640,7 +909,7 @@ const dbTransactions = {
     async fetchTransferEntities(bestSetNum) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -649,7 +918,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("fetchTransferEntities: problem using select statement");
+            console.error("fetchTransferEntities: problem using select statement");
             throw error;
         }
 
@@ -661,7 +930,7 @@ const dbTransactions = {
     async fetchTransferEntityOutputs(bestSetNum, index) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -672,7 +941,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("fetchTransferEntityOutputs: Could not collect transfer entity outputs", bestSetNum, index);
+            console.error("fetchTransferEntityOutputs: Could not collect transfer entity outputs", bestSetNum, index);
             throw error;
         }
 
@@ -690,7 +959,7 @@ const dbTransactions = {
     async fetchTransferEntityInputs(bestSetNum, index) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -701,7 +970,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("fetchTransferEntityInputs: Could not collect transfer entity inputs", bestSetNum, index);
+            console.error("fetchTransferEntityInputs: Could not collect transfer entity inputs", bestSetNum, index);
             throw error;
         }
 
@@ -719,7 +988,7 @@ const dbTransactions = {
     async fetchTransferBestEntitySet(setNum) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -728,7 +997,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log('fetchTransferBestEntitySet: problem with select');
+            console.error('fetchTransferBestEntitySet: problem with select');
             throw error;
         }
 
@@ -739,7 +1008,7 @@ const dbTransactions = {
     async saveTransferEntitySet(setNum, set) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -782,7 +1051,7 @@ const dbTransactions = {
                 transferEntityId = results.insertId;
             }
             catch (error) {
-                console.log('saveTransferEntitySet: Problem with insert');
+                console.error('saveTransferEntitySet: Problem with insert');
                 throw error;
             }
 
@@ -801,7 +1070,7 @@ const dbTransactions = {
     async saveBatchData(batchNum, batchData) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -822,7 +1091,7 @@ const dbTransactions = {
             ]);
         }
         catch (error) {
-            console.log("saveBatchData: Problem with insert operation:", batchNum, batchData);
+            console.error("saveBatchData: Problem with insert operation:", batchNum, batchData);
             throw error;
         }
 
@@ -832,7 +1101,7 @@ const dbTransactions = {
     async fetchBatchData(batchNum) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
-            console.log ("Could not open db connection");
+            console.error("Could not open db connection");
             return;
         }
 
@@ -841,7 +1110,7 @@ const dbTransactions = {
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
-            console.log("fetchBatchData: Problem with select:", batchNum);
+            console.error("fetchBatchData: Problem with select:", batchNum);
             throw error;
         }
 

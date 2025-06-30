@@ -2874,7 +2874,7 @@ const rulesets = {
                             score = this.ruleFunction[i](this, dataParams, this.scoreList[i]);
                         }
                         if (isNaN(score)) {
-                            console.log("getScore: Erroneous Score:", i);
+                            console.error("getScore: Erroneous Score:", i);
                         }
                         if (!this.scoreList[i].retain) {
                             this.executionScores.push(score);
@@ -3015,9 +3015,9 @@ const rulesets = {
         score = (1 - (devSum / self.executionScores.length) ** 0.5);
         // Debug
         if (score > 1) {
-            console.log("Dev Score:", score);
+            console.error("Dev Score:", score);
             for (let i = 0; i < self.executionScores.length; i++) {
-                console.log("rule score:", self.executionScores[i]);
+                console.error("rule score:", self.executionScores[i]);
             }
             throw "outputScoresEqual: Score Problem";
         }
@@ -5258,7 +5258,7 @@ const rulesets = {
                         else r = Math.floor(a / b) & 255;
                         break;
                     default: 
-                        console.log("op error in paramOperations rule at:", i, op, inAddr);
+                        console.error("op error in paramOperations rule at:", i, op, inAddr);
                         r = 0;
                 }
                 if (r === v) ++count;
@@ -5308,7 +5308,7 @@ const rulesets = {
                         output[p] = r;
                         break;
                     default: 
-                        console.log("op error in paramOperations rule at:", i, op, inAddr);
+                        console.error("op error in paramOperations rule at:", i, op, inAddr);
                         r = 0;
                         throw "Invalid Op";
                 }
@@ -5362,7 +5362,7 @@ const rulesets = {
                     else r = Math.floor(a / b) & 255;
                     break;
                 default: 
-                    console.log("byteParamOperations: op error in paramOperations rule at:", i, addr, offset, op, address);
+                    console.error("byteParamOperations: op error in paramOperations rule at:", i, addr, offset, op, address);
                     r = 0;
                     throw "op error";
             }
@@ -5611,7 +5611,7 @@ const rulesets = {
             // Check for common program fragments
             if (this.seedRuleMemSpaces.length > 1) {
                 this.updateSeedRuleFragments(instructionSet, memSpace);
-                console.log("Fragment list updated:", this.seedRuleFragments.length);
+                console.error("Fragment list updated:", this.seedRuleFragments.length);
             }
             let seedRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
@@ -5651,7 +5651,7 @@ const rulesets = {
             subOptRuleItem.memSpace = memSpace;
             this.subOptRuleMemSpaces.push(subOptRuleItem);
             this.subOptRuleSet = true;
-            console.log("got subOptRule:", subOptRuleItem.ruleId);
+            console.error("got subOptRule:", subOptRuleItem.ruleId);
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
@@ -5887,7 +5887,7 @@ const rulesets = {
             }
         }
         if (!found) {
-            console.log("getRuleFromSequence: invalid sequence num - sequenceNum:", sequenceNum, this.scoreList[13]);
+            console.error("getRuleFromSequence: invalid sequence num - sequenceNum:", sequenceNum, this.scoreList[13]);
             throw "Invalid Rule Sequence Num";
         }
         return rule;

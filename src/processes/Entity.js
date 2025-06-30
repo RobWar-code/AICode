@@ -322,7 +322,7 @@ class Entity {
         let newEntity = null;
         this.crossSetBreed = false;
 
-        if (cycleCounter < this.interbreedCycle || Math.random() < 0.7) {
+        if (cycleCounter < this.interbreedCycle || Math.random() < 0.7 || mateEntity === null) {
             if (Math.random() < 0.5) {
                 newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "MonoclonalIns";
@@ -1144,6 +1144,16 @@ class Entity {
             this.params[i] = this.initialParams[i];
         }
         this.memSpace = this.initialMemSpace.concat();
+    }
+
+    cloneEntity() {
+        let asRandom = false;
+        let seeded = false;
+        let newEntity = new Entity(this.entityNumber, this.instructionSet, asRandom, seeded, 
+            this.birthCycle, this.ruleSequenceNum, this.roundNum, this.initialMemSpace);
+        newEntity.breedMethod = this.breedMethod;
+        newEntity.score = this.score;
+        return newEntity;
     }
 }
 

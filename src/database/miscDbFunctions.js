@@ -15,6 +15,15 @@ const miscDbFunctions = {
         
         let sql;
 
+        sql = "DELETE FROM seedbed_data";
+        await connection.query(sql);
+
+        sql = "DELETE FROM template_seedbed_log";
+        await connection.query(sql);
+
+        sql = "DELETE FROM seed_rule_seedbed_log";
+        await connection.query(sql);
+
         sql = "DELETE FROM batch_data";
         await connection.query(sql);
 

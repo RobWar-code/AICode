@@ -26,6 +26,7 @@ Contents
     Toward Stepped Rules
         Setting Up Tests to Derive Further Instruction Sequences
     Toward Stepped Pathways
+    Favouring Seed Rules - Seed Beds
     Performance Notes
 
 <h1>Status Reports
@@ -610,6 +611,22 @@ Consider repeat input params
     the required loop controls, whether from the inputs or by crude guess.
 
     Does the existing fragment system allow for this stepping of scores?
+
+<h1>Favouring Seed Rules - Seed Beds
+
+    Whilst seed rules from existing solutions may be more useful than random code
+    in solving the current rule, unless their outputs coincidentally match the
+    required outputs, they are unlikely to do better than random code on the score
+    and select basis.
+
+    To obviate the problem of limited seed-rule success it may be useful to establish
+    seed-bed sets (say 8 * 4 = 32 best sets), that only accept a seed program as the
+    originator of entity programs. These can be allowed to run, possibly for 60 rounds
+    to see if they achieve 80% of the target, at which point they can be replaced by
+    other seed if not. Once the 80% target has been the best entities can be seeded
+    into the rest of the best set (4 * 10 = 40 best sets).
+
+    For further notes on this, consult the README documentation and notes.txt
 
 <h1>Performance Notes
 
