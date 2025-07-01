@@ -602,7 +602,7 @@ class MainControlParallel {
         // Check for rule threshold reached
         let thresholdReached = this.checkRuleThreshold();
         if (!thresholdReached) {
-            mainControlShared.checkSeedbedThresholds(self);
+            mainControlShared.checkSeedbedThresholds(this);
         }
     
         ++this.lapCounter;
