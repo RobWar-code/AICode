@@ -22,7 +22,7 @@ class MainControl {
         this.absBestSetNum = 0;
         this.seedbedStart = 56;
         this.numSeedbeds = 4;
-        this.seedbedMaxRoundsToTarget = 60;
+        this.seedbedMaxRoundsToTarget = 30;
         this.targetSeedbedScore = 0.8;
         this.batchLen = 4;
         this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
@@ -73,6 +73,13 @@ class MainControl {
         await dbTransactions.fetchRuleSeeds();
         await dbTransactions.loadFragments();
         this.initialiseSeedbedLogs();
+    }
+
+    resetArrays() {
+        rulesets.seedRuleMemSpaces = [];
+        rulesets.seedRuleFragments = [];
+        this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+        this.seedRuleSeedbedLog = [];
     }
 
     initialiseSeedbedLogs() {

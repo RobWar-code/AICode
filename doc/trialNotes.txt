@@ -1,3 +1,14 @@
+01/07/2025
+Trial progressed to DivisibleByFirstParam after
+47 rounds, but then reached 43.4/57 after 270 rounds.
+This trial was voided by the fact that arrays derived
+from the cleared tables were not cleared.
+
+Add rules selectLess and selectGreaterThanFirstParam,
+to introduce the notion of selection of parameters.
+
+Restarted trial.
+
 30/06/2025
 Added seedbed handling to code to allow for better
 transference of learned procedures.

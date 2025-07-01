@@ -286,6 +286,7 @@ ipcMain.on("startSelectedRule", (event, ruleNum) => {
 
 ipcMain.on("clearTables", async () => {
   await miscDbFunctions.clearTables();
+  program.resetArrays();
   mainWindow.webContents.send("tablesCleared", 0);
 });
 

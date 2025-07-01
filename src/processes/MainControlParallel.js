@@ -24,11 +24,12 @@ class MainControlParallel {
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
+
         // Seed bed data
         this.absBestSetNum = 0;
         this.seedbedStart = 56;
         this.numSeedbeds = 4;
-        this.seedbedMaxRoundsToTarget = 60;
+        this.seedbedMaxRoundsToTarget = 30;
         this.targetSeedbedScore = 0.8;
         this.batchLen = 4;
         this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
@@ -79,6 +80,13 @@ class MainControlParallel {
         this.initialiseSeedbedLogs();
     }
 
+    resetArrays() {
+        rulesets.seedRuleMemSpaces = [];
+        rulesets.seedRuleFragments = [];
+        this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+        this.seedRuleSeedbedLog = [];
+    }
+    
     initialiseSeedbedLogs() {
         // Initialise Template Log
         this.templateSeedbedLog = [];

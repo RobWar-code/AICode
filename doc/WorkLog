@@ -14,13 +14,16 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
-    Add Rules
-        Select less than first param
-        Select greater than first param
+    * On Clear Tables - clear dependent arrays
+
+    * Add Rules
+        * Select less than first param
+        * Select greater than first param
 
     Space-out rule sequence numbers by 10's to make inserts
     easier? Or rely on the array sequence and use a flag
-    to denote helper rules (ie: retain).
+    to denote helper rules (ie: retain). Or set the sequence
+    numbers automatically on initialisation.
 
     Possibly include duplication in monoclonal breed mutations
 
@@ -51,7 +54,6 @@ Jobs Due
     particularly LDSI A, (C); LDSO A, (C) etc.
         At least score
 
-    Make ClearTables a user function
 
     Get ASCII number rule working
 
