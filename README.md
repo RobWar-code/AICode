@@ -184,17 +184,17 @@ the git restore operation before doing git pull origin main
 ## Project Aims
 The principle aims of the project as it currently stands are:
 
-    To examine the feasibility of the evolutionary approach to
-    code generation problems.
+To examine the feasibility of the evolutionary approach to
+code generation problems.
 
-    To enable the generation of code solutions that can be subjected
-    to analysis by human operators.
+To enable the generation of code solutions that can be subjected
+to analysis by human operators.
 
-    To work towards autonomous/custom AI systems that can operate
-    within 10 to 100GB on local systems.
+To work towards autonomous/custom AI systems that can operate
+within 10 to 100GB on local systems.
 
-    To allow for the possible development of custom training models
-    for autonomus AI applications.
+To allow for the possible development of custom training models
+for autonomus AI applications.
 
 ## Summary of Status 28/05/2025
 The project has now been operational for 7 months. Evolutionary problem
@@ -340,6 +340,14 @@ first compared to existing fragments to eliminate previously
 matched fragments. Then each of the rule seed programs is parsed
 as far as byte 200 for a match with the section. The search
 halts and the fragment is added if a match is found.
+
+##### Seedbed Rule and Template Specialisation
+
+A section of 16 or so sets (seedbed) at the end of the bestSets set 
+of 72 is reserved for seed rule and seed template entities, to
+allow for preferential breeding from these seeds.
+
+see Notes.txt for more details
 
 ##### Parallel Batch Processing
 
@@ -725,7 +733,7 @@ object for processing into HTML.
 
 ##### Seeding Programs
 
-Seed programs are provided in the object src/processes/seedScripts.js
+Seed programs are provided in the object src/processes/seedTemplates.js
 and have the object structure:
 
 ```js

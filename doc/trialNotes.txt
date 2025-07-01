@@ -1,3 +1,9 @@
+30/06/2025
+Added seedbed handling to code to allow for better
+transference of learned procedures.
+
+Trial restarted from scratch.
+
 24/06/2025
 
 DivisibleByFirstParam reached 44.3/57 before

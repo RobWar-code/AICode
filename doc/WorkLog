@@ -14,38 +14,9 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
-    Introduce seed beds to favour work on existing/template solutions.
-        * Do the notes/analysis in the README
-        * Do the database tables
-        * Clear Tables Sections
-        * Create the tables
-        * Do the fetch and save routines for the seedbed data
-        * MainControl Modifications
-        * MainProcess Modifications
-        * Test Serial Mode
-
-        Do analysis for handling seedbed logs in parallel mode
-        Because the seedbed data is relatively small, use the database
-        in both directions.
-
-        MainControlParallel Modifications
-            Adjust interface to workerApp
-            Transfer data to worker apps
-        workerApp Modifications
-            Define the seedbed transfer data tables
-            Transfer data back to MainControl Parallel
-        Test Parallel Mode
-
-    * Add a Clear Tables option
-    
-    * Add the rules:
-        * andFirstParam
-        * orFirstParam
-        * andAdjacentParams
-        * orAdjacentParams
-        * reverseTripletOrder
-        * reverseParamsOrder
-        * subtractFirstParamSecondTimes
+    Add Rules
+        Select less than first param
+        Select greater than first param
 
     Space-out rule sequence numbers by 10's to make inserts
     easier? Or rely on the array sequence and use a flag
@@ -122,6 +93,43 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    01/07/2025
+    
+    * Introduce seed beds to favour work on existing/template solutions.
+        * Do the notes/analysis in the README
+        * Do the database tables
+        * Clear Tables Sections
+        * Create the tables
+        * Do the fetch and save routines for the seedbed data
+        * MainControl Modifications
+        * MainProcess Modifications
+        * Test Serial Mode
+
+        * Do analysis for handling seedbed logs in parallel mode
+        Because the seedbed data is relatively small, use the database/
+        filesystem in both directions.
+
+        * MainControlParallel Modifications
+            * Adjust interface to workerApp
+            * Transfer data to worker apps
+        * workerApp Modifications
+            * Define the seedbed transfer data tables
+            * Transfer data back to MainControl Parallel
+        * Test Parallel Mode
+        
+        update README.
+
+    * Add a Clear Tables option
+    
+    * Add the rules:
+        * andFirstParam
+        * orFirstParam
+        * andAdjacentParams
+        * orAdjacentParams
+        * reverseTripletOrder
+        * reverseParamsOrder
+        * subtractFirstParamSecondTimes
+
     19/06/2025
     
     * Consider allowing more instruction operations and steps to
