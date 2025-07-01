@@ -6,6 +6,7 @@ const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const seedTemplates = require(path.join(__dirname, "seedTemplates.js"));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
+const mainControlShared = require(path.join(__dirname, 'mainControlShared.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class MainControl {
@@ -65,14 +66,8 @@ class MainControl {
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet();
         rulesets.initialise();
-        this.fileInitialisations();
+        mainControlShared.fileInitialisations(this);
         this.mainProcess = new MainProcess(rulesets);
-    }
-
-    async fileInitialisations() {
-        await dbTransactions.fetchRuleSeeds();
-        await dbTransactions.loadFragments();
-        this.initialiseSeedbedLogs();
     }
 
     resetArrays() {
@@ -80,32 +75,6 @@ class MainControl {
         rulesets.seedRuleFragments = [];
         this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
         this.seedRuleSeedbedLog = [];
-    }
-
-    initialiseSeedbedLogs() {
-        // Initialise Template Log
-        this.templateSeedbedLog = [];
-        for (let i = 0; i < seedTemplates.templates.length; i++) {
-            let logItem = {
-                numAttempts: 0,
-                numFailedAttempts: 0,
-                numSuccessfulAttempts: 0,
-                current: 0
-            }
-            this.templateSeedbedLog.push(logItem);
-        }
-
-        // Initialise seed rule log
-        this.seedRuleSeedbedLog = [];
-        for (let i = 0; i < rulesets.seedRuleMemSpaces.length; i++) {
-            let logItem = {
-                numAttempts: 0,
-                numFailedAttempts: 0,
-                numSuccessfulAttempts: 0,
-                current: 0
-            }
-            this.seedRuleSeedbedLog.push(logItem);
-        }
     }
 
     doProcess() {
@@ -135,7 +104,7 @@ class MainControl {
             // Check for rule threshold reached
             thresholdReached = this.checkRuleThreshold();
             if (!thresholdReached) {
-                this.checkSeedbedThresholds();
+                mainControlShared.checkSeedbedThresholds(this);
             }
         }
         if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && 
@@ -147,85 +116,9 @@ class MainControl {
         else if (thresholdReached && this.runningSingleRule) return;
         else if (thresholdReached) {
             // Reset the seedbed data and logs
-            this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0});
-            this.initialiseSeedbedLogs();
+            this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+            mainControlShared.initialiseSeedbedLogs(this);
         }
-    }
-
-    checkSeedbedThresholds() {
-        for (let batchNum = 0; batchNum < this.numSeedbeds; batchNum++) {
-            // Check whether the round limit has been reached
-            let seedType = this.seedbedData[batchNum].seedType;
-            if (seedType != "") {
-                let seedIndex = this.seedbedData[batchNum].seedIndex;
-                let startRound = this.seedbedData[batchNum].startRound;
-                let promotedRound = this.seedbedData[batchNum].promotedRound;
-                let logItem;
-                if (seedType === "Template") {
-                    logItem = this.templateSeedbedLog[seedIndex];
-                }
-                else {
-                    logItem = this.seedRuleSeedbedLog[seedIndex];
-                }
-
-                let clearBatch = false;
-                if (this.numRounds >= startRound + this.seedbedMaxRoundsToTarget && promotedRound === 0) {
-                    // If the time limit is reached, clear-down the batch
-                    logItem.numFailedAttempts += 1;
-                    logItem.current -= 1;
-                    // Clear the seedBedData
-                    this.seedbedData[batchNum].seedType = "";
-                    this.seedbedData[batchNum].seedIndex = 0;
-                    this.seedbedData[batchNum].startRound = 0;
-                    this.seedbedData[batchNum].promotedRound = 0;
-                    // Clear down the batch
-                    clearBatch = true;
-                }
-                
-                let setNum = this.seedbedStart + this.batchLen * batchNum;
-                for (let i = 0; i < this.batchLen; i++) {
-                    if (clearBatch) {
-                        this.bestSets[setNum] = [];
-                    }
-                    else {
-                        // Check for score threshold promotion
-                        if (this.bestSets[setNum].length > 0) {
-                            let entity = this.bestSets[setNum][0];
-                            let score = entity.score;
-                            if (score > this.targetSeedbedScore * rulesets.currentMaxScore
-                                && this.seedbedData[batchNum].promotedRound === 0) {
-                                let donePromotion = this.promoteSeedbedEntity(entity, batchNum);
-                                if (donePromotion) {
-                                    logItem.numSuccessfulAttempts += 1;
-                                    this.seedbedData[batchNum].promotedRound = this.numRounds;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    ++setNum;
-                }
-            }
-        }
-    }
-
-    promoteSeedbedEntity(entity, batchNum) {
-        let promotionDone = false;
-        let score = entity.score;
-        for (let i = 0; i < this.seedbedStart; i++) {
-            if (typeof this.bestSets[i][0] != "undefined") {
-                let eScore = this.bestSets[i][0].score;
-                if (eScore < score) {
-                    // Clone the entity
-                    let newEntity = entity.cloneEntity();
-                    // Copy the entity to the bestSet
-                    this.bestSets[i][0] = newEntity;
-                    promotionDone = true;
-                    break;
-                }
-            }
-        }
-        return promotionDone;
     }
 
     saveBestScore() {
