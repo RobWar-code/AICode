@@ -264,9 +264,9 @@ class MainProcess {
             }
             else {
                 seedIndex = this.selectSeedbedSeed(self.seedRuleSeedbedLog);
-                if (self.seedRuleSeedbedLog.length != self.rulesets.seedRuleMemSpaces.length) {
+                if (self.seedRuleSeedbedLog.length != this.rulesets.seedRuleMemSpaces.length) {
                     console.error("fetchSeedbedSeed: SeedIndex:", seedIndex, self.seedRuleSeedbedLog.length, 
-                        self.rulesets.seedRuleMemSpaces.length);
+                        this.rulesets.seedRuleMemSpaces.length);
                 }
                 memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
                 breedMethod = "SeedRule"
