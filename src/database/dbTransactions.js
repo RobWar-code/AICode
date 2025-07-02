@@ -514,15 +514,12 @@ const dbTransactions = {
                 program.seedRuleSeedbedLog[index].numFailedAttempts = results.failed_attempts;
                 program.seedRuleSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
                 program.seedRuleSeedbedLog[index].current = results.current;
-                console.log("index:", index);
             }
         }
         catch (error) {
             console.error("loadSeedRuleSeedbedLog: problem loading data");
             throw error;
         }
-        console.log("loadSeedRuleSeedBedLog: length:", program.seedRuleSeedbedLog.length, rulesets.seedRuleMemSpaces.length);
-        throw "program exit";
     },
 
     async fetchSeedRuleSeedbedLog() {
