@@ -514,6 +514,7 @@ const dbTransactions = {
                 program.seedRuleSeedbedLog[index].numFailedAttempts = results.failed_attempts;
                 program.seedRuleSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
                 program.seedRuleSeedbedLog[index].current = results.current;
+                console.log("index:", index);
             }
         }
         catch (error) {
