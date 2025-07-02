@@ -99,7 +99,7 @@ const mainControlShared = {
         let score = entity.score;
         for (let i = 0; i < self.seedbedStart; i++) {
             if (typeof self.bestSets[i][0] != "undefined") {
-                let eScore = this.bestSets[i][0].score;
+                let eScore = self.bestSets[i][0].score;
                 if (eScore < score) {
                     // Clone the entity
                     let newEntity = entity.cloneEntity();
