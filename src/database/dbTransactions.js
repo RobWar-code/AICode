@@ -520,6 +520,8 @@ const dbTransactions = {
             console.error("loadSeedRuleSeedbedLog: problem loading data");
             throw error;
         }
+        console.log("loadSeedRuleSeedBedLog: length:", program.seedRuleSeedbedLog.length, rulesets.seedRuleMemSpaces.length);
+        throw "program exit";
     },
 
     async fetchSeedRuleSeedbedLog() {

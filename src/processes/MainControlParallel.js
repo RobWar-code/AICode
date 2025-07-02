@@ -595,7 +595,6 @@ class MainControlParallel {
     doEndOfRoundOperations() {
         this.spanNum = 0;
         this.spanStart = 0;
-        console.log("Got to doEndOfRoundOperations");
         this.saveBestScore();
         ++this.numRounds;
         dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);

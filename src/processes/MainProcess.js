@@ -264,16 +264,6 @@ class MainProcess {
             }
             else {
                 seedIndex = this.selectSeedbedSeed(self.seedRuleSeedbedLog);
-                if (self.seedRuleSeedbedLog.length != this.rulesets.seedRuleMemSpaces.length) {
-                    console.error("fetchSeedbedSeed: SeedIndex:", seedIndex, self.seedRuleSeedbedLog.length, 
-                        this.rulesets.seedRuleMemSpaces.length);
-                }
-                if (typeof seedIndex === "undefined" || seedIndex >= this.rulesets.seedRuleMemSpaces.length) {
-                    console.error("fetchSeedbedSeed: SeedIndex:", seedIndex, self.seedRuleSeedbedLog.length, 
-                        this.rulesets.seedRuleMemSpaces.length);                    
-                }
-                console.error("fetchSeedbedSeed: SeedIndex:", seedIndex, self.seedRuleSeedbedLog.length, 
-                    this.rulesets.seedRuleMemSpaces.length);                    
                 memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
                 breedMethod = "SeedRule"
                 let t = self.seedRuleSeedbedLog[seedIndex];
