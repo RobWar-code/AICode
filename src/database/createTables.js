@@ -14,9 +14,9 @@ async function createTables() {
 
     let sql;
 
-    // await clearTables(connection);
+    await clearTables(connection);
 
-    // console.log("Tables Cleared");
+    console.log("Tables Cleared");
     // return;
 
     /*
@@ -53,19 +53,20 @@ async function createTables() {
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
- 
+    */
+
     sql = "DROP TABLE seed_rule";
     await connection.query(sql);
 
     sql = "CREATE TABLE seed_rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
-    sql += "session_id INT,";
     sql += "rule_id INT,";
     sql += "rule_sequence_num INT,";
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
 
+    /*
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "session_id INT,";
@@ -92,7 +93,6 @@ async function createTables() {
     sql += "fragment VARCHAR(128)";
     sql += ")";
     await connection.query(sql);
-    */
 
     sql = "CREATE TABLE seedbed_data (",
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -124,7 +124,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
+    
     // sql = "DROP TABLE transfer_entity";
     // await connection.query(sql);
 

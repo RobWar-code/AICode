@@ -133,7 +133,7 @@ class MainControlParallel {
     async batchProcessLoop() {
         console.log("batchProcessLoop - numSpans:", this.numSpans, "spanNum:", this.spanNum);
         if (this.spanNum >= this.numSpans) {
-            this.doEndOfRoundOperations();
+            await this.doEndOfRoundOperations();
         }
 
         this.batchProcessCount = 0;
@@ -592,16 +592,19 @@ class MainControlParallel {
         }
     }
 
-    doEndOfRoundOperations() {
+    async doEndOfRoundOperations() {
         this.spanNum = 0;
         this.spanStart = 0;
         this.saveBestScore();
         ++this.numRounds;
-        dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
+        await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
         // Check for rule threshold reached
         let thresholdReached = this.checkRuleThreshold();
         if (!thresholdReached) {
             mainControlShared.checkSeedbedThresholds(this);
+        }
+        else {
+            await dbTransactions.saveSeedRules(null);
         }
     
         ++this.lapCounter;
@@ -656,7 +659,7 @@ class MainControlParallel {
         rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
-    checkRuleThreshold() {
+    async checkRuleThreshold() {
         // Get the best set scores
         let index = 0;
         let highScore = 0;
@@ -694,7 +697,7 @@ class MainControlParallel {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            await rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
             if (rulesets.seedRuleSet) {
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
                     // Clear down all best sets to use only the seed rules or random

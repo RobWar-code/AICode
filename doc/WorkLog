@@ -20,14 +20,14 @@ Jobs Due
         * Select less than first param
         * Select greater than first param
 
-    Space-out rule sequence numbers by 10's to make inserts
+    * Space-out rule sequence numbers by 10's to make inserts
     easier? Or rely on the array sequence and use a flag
-    to denote helper rules (ie: retain). Or set the sequence
+    to denote helper rules (ie: retain). * Or set the sequence
     numbers automatically on initialisation.
 
-    Possibly include duplication in monoclonal breed mutations
+    Update the README with the latest tables
 
-    Update the README with the current system definition
+    Possibly include duplication in monoclonal breed mutations
 
     Check through code sequences to establish stepwise rules
 
@@ -50,11 +50,6 @@ Jobs Due
 
     Write rules for Forth-like arithmetic operations
     
-    Add another insDistribution rule for general operation,
-    particularly LDSI A, (C); LDSO A, (C) etc.
-        At least score
-
-
     Get ASCII number rule working
 
     Add further simple rules that might help the performance for 
@@ -64,14 +59,10 @@ Jobs Due
 
     Add insDistribution items for rules not completed
 
-    Include save scorelist for an entity?
-
     Check-out end of selected rule
 
     Analyse basis for scoring code combinations
 
-    Continue trials of code fragments and insDistribution
-            
     Trace operation
         Close the trace window from the main window
 

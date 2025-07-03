@@ -42,7 +42,7 @@ const dbTransactions = {
 
         if (resultOK) {
             // Save the seed rules
-            resultOK = await this.saveSeedRules(sessionId, dbConnection);
+            resultOK = await this.saveSeedRules(dbConnection);
         }
 
         if (resultOK) {
@@ -247,7 +247,12 @@ const dbTransactions = {
         mainWindow.webContents.send("loadDone", 0);
     },
 
-    async saveSeedRules(sessionId, dbConnection) {
+    async saveSeedRules(dbConnection) {
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
 
         let seedRules = rulesets.seedRuleMemSpaces;
         if (seedRules.length === 0) return true;
@@ -256,12 +261,16 @@ const dbTransactions = {
         for (let seedRuleItem of seedRules) {
             let ruleId = seedRuleItem.ruleId;
             let seedRuleMemSpace = seedRuleItem.memSpace;
-            let result = await this.saveSeedRule(dbConnection, sessionId, ruleId, ruleSequenceNum, seedRuleMemSpace);
+            let result = await this.saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace);
             if (!result) return false;
             ++ruleSequenceNum;
         }
 
         console.error("saved seed rules");
+
+        if (dbConnOpened) {
+            dbConnection.end();
+        }
 
         return true;
 
@@ -287,15 +296,15 @@ const dbTransactions = {
 
     },
 
-    async saveSeedRule(dbConnection, sessionId, ruleId, ruleSequenceNum, seedRuleMemSpace) {
+    async saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace) {
         // Delete any existing record for this rule sequence number
         sql = `DELETE FROM seed_rule WHERE rule_id = ${ruleId}`;
         await dbConnection.query(sql);
 
         let memSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
         try {
-            sql = "INSERT INTO seed_rule (session_id, rule_id, rule_sequence_num, seed_rule_mem_space) VALUES (?, ?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [sessionId, ruleId, ruleSequenceNum, memSpaceStr]);
+            sql = "INSERT INTO seed_rule (rule_id, rule_sequence_num, seed_rule_mem_space) VALUES (?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [ruleId, ruleSequenceNum, memSpaceStr]);
             return true;
         }
         catch (error) {

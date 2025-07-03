@@ -1,8 +1,15 @@
+02/07/2025
+Trial ended with problem with seedRuleSeedbedLog.
+Possibly database fault.
+
+Restarted from scratch.
+
 01/07/2025
 Trial progressed to DivisibleByFirstParam after
-47 rounds, but then reached 43.4/57 after 270 rounds.
-This trial was voided by the fact that arrays derived
-from the cleared tables were not cleared.
+47 rounds using existing seed, but then reached 
+43.4/57 after 270 rounds. This trial was voided by 
+the fact that arrays derived from the cleared tables 
+were not cleared.
 
 Add rules selectLess and selectGreaterThanFirstParam,
 to introduce the notion of selection of parameters.
