@@ -1,3 +1,20 @@
+05/07/2025
+Trial reached moduloFirstParam7 on round 1248,
+reaching 44/57 after 200 rounds;
+having failed SampleInMinusSampleOut and
+moduloFirstParam6.
+
+Adjusted the seedbed to 3 beds and the trial
+time to 25 rounds.
+
+Also modified shufflesets to sample only upto
+but not including the seedbed.
+
+
+03/07/2025
+Trial restarted from scratch with fix to seed rules and 
+log getting out of step.
+
 02/07/2025
 Trial ended with problem with seedRuleSeedbedLog.
 Possibly database fault.

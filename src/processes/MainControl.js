@@ -21,9 +21,9 @@ class MainControl {
 
         // Seed bed data
         this.absBestSetNum = 0;
-        this.seedbedStart = 56;
-        this.numSeedbeds = 4;
-        this.seedbedMaxRoundsToTarget = 30;
+        this.seedbedStart = 60;
+        this.numSeedbeds = 3;
+        this.seedbedMaxRoundsToTarget = 25;
         this.targetSeedbedScore = 0.8;
         this.batchLen = 4;
         this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
