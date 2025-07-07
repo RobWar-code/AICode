@@ -154,6 +154,12 @@ class MainControlParallel {
         await dbTransactions.saveSeedbedData(this.seedbedData, dbConnection);
         await dbTransactions.saveTemplateSeedbedLog(this.templateSeedbedLog, dbConnection);
         await dbTransactions.saveSeedRuleSeedbedLog(this.seedRuleSeedbedLog, dbConnection);
+        // Debug
+        if (rulesets.seedRuleMemSpaces.length != this.seedRuleSeedbedLog.length) {
+            console.log("batchProcessLoop: Mismatch log:", this.seedRuleSeedbedLog.length, 
+                rulesets.seedRuleMemSpaces.length);
+            throw "program exit";
+        }
 
         for (let processNum = 0; processNum < this.numProcesses; processNum++) {
             let entityJSONData = "";

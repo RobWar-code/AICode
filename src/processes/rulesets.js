@@ -900,32 +900,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getModuloFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Modulo First Param 6", ruleId: 45,
-                retain: false, skip: false, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 16,
-                highIC: 20 * 9 * 16 + learnCodeAllowance,
-                highIP: 90,
-                sampleIn: [[15,87,45,13,91,100,95,30,76,84,83,82,19,8,21,24]],
-                sampleOut: [],
-                paramsIn: [
-                    [
-                        5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
-                    ],
-                    [
-                        6,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
-                    ]
-                ],
-                outputs: []
-            }
-        );
-        this.ruleFunction.push(this.moduloFirstParam);
-        this.byteFunction.push(this.byteModuloFirstParam);
-        this.requiredOutputsFunction.push(this.getModuloFirstParamRequiredOutputs);
-
-        this.scoreList.push(
-            {rule: "Modulo First Param 7", ruleId: 44,
+            {rule: "Modulo First Param 6", ruleId: 44,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -946,6 +921,31 @@ const rulesets = {
                     ],
                     [
                         15,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.moduloFirstParam);
+        this.byteFunction.push(this.byteModuloFirstParam);
+        this.requiredOutputsFunction.push(this.getModuloFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Modulo First Param 7", ruleId: 45,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 20 * 9 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[15,87,45,13,91,100,95,30,76,84,83,82,19,8,21,24]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        5,20,15,11,96,3,8,200,128,255,27,29,31,14,16,21
+                    ],
+                    [
+                        6,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
                     ]
                 ],
                 outputs: []
@@ -5651,13 +5651,8 @@ const rulesets = {
                 this.updateSeedRuleFragments(instructionSet, memSpace);
                 console.error("Fragment list updated:", this.seedRuleFragments.length);
             }
-            let seedRuleItem = {};
-            let item = this.getRuleFromSequence(this.ruleSequenceNum);
-            let ruleId = item.ruleId;
-            seedRuleItem.ruleId = ruleId;
-            seedRuleItem.memSpace = memSpace;
-            this.seedRuleMemSpaces.push(seedRuleItem);
-            this.seedRuleSet = true;
+
+            this.insertSeedRule(memSpace);
             this.ruleRounds[ruleIndex].end = roundNum;
             this.ruleRounds[ruleIndex].completed = true;
 
@@ -5702,6 +5697,31 @@ const rulesets = {
         }
     },
 
+    insertSeedRule(memSpace) {
+        let seedRuleItem = {};
+        let item = this.getRuleFromSequence(this.ruleSequenceNum);
+        let ruleId = item.ruleId;
+        seedRuleItem.ruleId = ruleId;
+        seedRuleItem.memSpace = memSpace;
+        // Check whether this rule is already listed
+        let found = false;
+        let index = 0;
+        for (let m of this.seedRuleMemSpaces) {
+            if (m.ruleId === ruleId) {
+                found = true;
+                break;
+            }
+            ++index;
+        }
+        if (found) {
+            this.seedRuleMemSpaces[index] = seedRuleItem;
+        }
+        else {
+            this.seedRuleMemSpaces.push(seedRuleItem);
+        }
+        this.seedRuleSet = true;
+    },
+    
     updateSeedRuleFragments(instructionSet, memSpace) {
         const maxSections = 30;
         let sectionList = [];

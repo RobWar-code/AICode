@@ -38,15 +38,7 @@ class MainProcess {
                     // Debug
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
-                    if (!inSeedbed && j === 0 && bestEntitySet.length < 20 && Math.random() < 0.8) {
-                        if (Math.random() < 0.5 && this.rulesets.seedRuleMemSpaces.length > 0) {
-                            breedMode = "seedRule";
-                        }
-                        else {
-                            breedMode = "seedTemplate";
-                        }
-                    }
-                    else if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
+                    if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
                         breedMode = "random";
                     }
                     else if (inSeedbed && bestEntitySet.length === 0 && !gotSeedbedEntity) {

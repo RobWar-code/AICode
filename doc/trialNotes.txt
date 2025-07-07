@@ -1,3 +1,14 @@
+07/07/2025
+Trial Reached moduloFirstParam7 on round 1071
+reaching 45.5/57 after 144 rounds.
+
+Failed on moduloFirstParam6 and sampleInMinusSampleOut.
+
+Reversed the order of modulo6/7
+
+Removed the seedRule and template inclusions to seedbed
+only.
+
 05/07/2025
 Trial reached moduloFirstParam7 on round 1248,
 reaching 44/57 after 200 rounds;

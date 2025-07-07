@@ -27,6 +27,14 @@ Jobs Due
 
     Update the README with the latest tables
 
+    Reverse the order of Modulo6/7
+
+    Consider tables/charts for comparing historical trials
+        Consider trial notes before a run.
+
+    Remove the seed/template breed methods from the general run
+    confine to seedbeds only.
+
     Possibly include duplication in monoclonal breed mutations
 
     Check through code sequences to establish stepwise rules
