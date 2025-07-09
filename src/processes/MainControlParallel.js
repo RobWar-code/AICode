@@ -616,7 +616,7 @@ class MainControlParallel {
         }
     
         ++this.lapCounter;
-        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && this.bestSetNum === 0)) {
+        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0)) {
             console.log("Clearance Round");
             // Clearance Pass
             this.restartSets();
@@ -667,7 +667,7 @@ class MainControlParallel {
         rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
-    async checkRuleThreshold() {
+    checkRuleThreshold() {
         // Get the best set scores
         let index = 0;
         let highScore = 0;
@@ -705,7 +705,7 @@ class MainControlParallel {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            await rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
             if (rulesets.seedRuleSet) {
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
                     // Clear down all best sets to use only the seed rules or random
