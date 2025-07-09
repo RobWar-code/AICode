@@ -14,6 +14,8 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
+    Update the README with the latest tables
+
     * On Clear Tables - clear dependent arrays
 
     * Add Rules
@@ -25,15 +27,13 @@ Jobs Due
     to denote helper rules (ie: retain). * Or set the sequence
     numbers automatically on initialisation.
 
-    Update the README with the latest tables
+    * Reverse the order of Modulo6/7
 
-    Reverse the order of Modulo6/7
+    * Remove the seed/template breed methods from the general run
+    confine to seedbeds only.
 
     Consider tables/charts for comparing historical trials
         Consider trial notes before a run.
-
-    Remove the seed/template breed methods from the general run
-    confine to seedbeds only.
 
     Possibly include duplication in monoclonal breed mutations
 

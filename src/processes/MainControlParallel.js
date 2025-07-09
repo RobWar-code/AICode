@@ -25,6 +25,7 @@ class MainControlParallel {
         this.bestSets = new Array(this.numBestSets).fill([]);
         this.bestSetNum = 0;
         this.bestEntitySetFullCycle = new Array(this.numBestSets).fill(0);
+        this.shuffleRound = 8;
 
         // Seed bed data
         this.absBestSetNum = 0;
@@ -625,7 +626,7 @@ class MainControlParallel {
             this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
             mainControlShared.initialiseSeedbedLogs(this);
         }
-        else {
+        else if (this.numRounds > 0 && this.numRounds % this.shuffleRound === 0) {
             this.shuffleSets();
         }
     }

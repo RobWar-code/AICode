@@ -1,3 +1,8 @@
+09/07/2025
+Restarted trial from scratch with shufflesets 
+modified to 1 in 8 rounds.
+
+
 07/07/2025
 Trial Reached moduloFirstParam7 on round 1071
 reaching 45.5/57 after 144 rounds.
@@ -8,6 +13,8 @@ Reversed the order of modulo6/7
 
 Removed the seedRule and template inclusions to seedbed
 only.
+
+Still failed on sampleInMinusSampleOut
 
 05/07/2025
 Trial reached moduloFirstParam7 on round 1248,
