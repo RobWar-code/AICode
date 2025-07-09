@@ -314,7 +314,7 @@ const rulesets = {
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
                 highIC: 12 * 16 + 5,
-                highIP: 25,
+                highIP: 40,
                 insDistribution: [
                     {
                         ins: "LDSI A, (C)",
@@ -327,6 +327,12 @@ const rulesets = {
                         countOpt: 1,
                         scanStart: 0,
                         scanEnd: 20
+                    },
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd:40
                     }
                 ],
                 sampleIn: [

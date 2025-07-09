@@ -602,6 +602,7 @@ class MainControlParallel {
     async doEndOfRoundOperations() {
         this.spanNum = 0;
         this.spanStart = 0;
+        this.bestSetNum = 0;
         this.saveBestScore();
         ++this.numRounds;
         await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
