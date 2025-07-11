@@ -67,7 +67,7 @@ class MainProcess {
                     }
                     else if (breedMode === "seedbedInsert") {
                         // Fetch a seed memspace for the seed bed
-                        let memSpaceObj = this.fetchSeedbedSeed(self, absBestSetNum);
+                        let memSpaceObj = this.fetchSeedbedSeed(self, absBestSetNum, bestSetNum);
                         memSpace = memSpaceObj.memSpace;
                         let breedMethod = memSpaceObj.breedMethod;
                         asRandom = false;
@@ -214,61 +214,43 @@ class MainProcess {
         return r;
     }
 
-    fetchSeedbedSeed(self, absBestSetNum) {
+    fetchSeedbedSeed(self, absBestSetNum, bestSetNum) {
         let breedMethod;
         let memSpace;
         let seedIndex;
         // Get the position within the batch
-        let batchEntityNum = absBestSetNum % self.batchLen;
-        // Determine whether this batch has been seeded
-        let batchNum = Math.floor((absBestSetNum - self.seedbedStart) / self.batchLen);
-        let seedType = self.seedbedData[batchNum].seedType;
-        if (seedType != "") {
-            // Use this seed again
-            seedIndex = self.seedbedData[batchNum].seedIndex;
-            if (seedType === "Template") {
-                memSpace = seedTemplates.getSeedTemplate(seedIndex);
-                breedMethod = "SeedTemplate";
-            }
-            else {
-                memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
-                breedMethod = "SeedRule";
-            }
+        let seedbedEntityNum = absBestSetNum - self.seedbedStart + bestSetNum;
+        // Select the seed
+        // Select the seed type
+        let seedbedDataObj = {};
+        let seedType = "SeedRule";
+        if (Math.random() < 0.25 || this.rulesets.seedRuleMemSpaces.length === 0) {
+            seedType = "Template";
+        }
+        // If template is chosen
+        if (seedType === "Template") {
+            seedIndex = this.selectSeedbedSeed(self.templateSeedbedLog);
+            memSpace = seedTemplates.getSeedTemplate(seedIndex);
+            breedMethod = "SeedTemplate";
+            // Update the log
+            let t = self.templateSeedbedLog[seedIndex];
+            t.numAttempts += 1;
+            t.current += 1;
         }
         else {
-            // Select the seed
-            // Select the seed type
-            let seedbedDataObj = {};
-            let memSpace;
-            let seedType = "SeedRule";
-            if (Math.random() < 0.25 || this.rulesets.seedRuleMemSpaces.length === 0) {
-                seedType = "Template";
-            }
-            // If template is chosen
-            if (seedType === "Template") {
-                seedIndex = this.selectSeedbedSeed(self.templateSeedbedLog);
-                memSpace = seedTemplates.getSeedTemplate(seedIndex);
-                breedMethod = "SeedTemplate";
-                // Update the log
-                let t = self.templateSeedbedLog[seedIndex];
-                t.numAttempts += 1;
-                t.current += 1;
-            }
-            else {
-                seedIndex = this.selectSeedbedSeed(self.seedRuleSeedbedLog);
-                memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
-                breedMethod = "SeedRule"
-                let t = self.seedRuleSeedbedLog[seedIndex];
-                t.numAttempts += 1;
-                t.current += 1;
-            }
-            // Set the seedbed data
-            seedbedDataObj.seedType = seedType;
-            seedbedDataObj.seedIndex = seedIndex;
-            seedbedDataObj.startRound = self.numRounds;
-            seedbedDataObj.promotedRound = 0;
-            self.seedbedData[batchNum] = seedbedDataObj;
+            seedIndex = this.selectSeedbedSeed(self.seedRuleSeedbedLog);
+            memSpace = this.rulesets.seedRuleMemSpaces[seedIndex].memSpace;
+            breedMethod = "SeedRule"
+            let t = self.seedRuleSeedbedLog[seedIndex];
+            t.numAttempts += 1;
+            t.current += 1;
         }
+        // Set the seedbed data
+        seedbedDataObj.seedType = seedType;
+        seedbedDataObj.seedIndex = seedIndex;
+        seedbedDataObj.startRound = self.numRounds;
+        seedbedDataObj.promotedRound = 0;
+        self.seedbedData[seedbedEntityNum] = seedbedDataObj;
         return {memSpace: memSpace, breedMethod: breedMethod};
     }
 

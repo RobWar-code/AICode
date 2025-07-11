@@ -16,6 +16,10 @@ Jobs Due
 
     Update the README with the latest tables
 
+    Modify seed beds to individual, rather than grouped.
+        Parallel
+        Serial
+
     * On Clear Tables - clear dependent arrays
 
     * Add Rules
