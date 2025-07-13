@@ -1,3 +1,13 @@
+11/07/2025
+Trial failed on sampleInMinusSampleOut and 
+multiplyByFirstParam3
+
+Adjusted to seedbed to individual entity sets.
+Increased the clearance round to 40. Reduced
+the maximum number of trail rounds for a rule
+from 320 to 150.
+Restarted trial from scratch.
+
 09/07/2025
 Restarted trial from scratch with shufflesets 
 modified to 1 in 8 rounds.

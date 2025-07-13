@@ -8,6 +8,8 @@ Jobs Due
     + = completed not tested
 
     Add the following rules
+        Get sum of triplets
+        Get average of triplets
         Remove the first parameter number from the inputs
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
@@ -16,9 +18,9 @@ Jobs Due
 
     Update the README with the latest tables
 
-    Modify seed beds to individual, rather than grouped.
-        Parallel
-        Serial
+    * Modify seed beds to individual, rather than grouped.
+        * Parallel
+        * Serial
 
     * On Clear Tables - clear dependent arrays
 

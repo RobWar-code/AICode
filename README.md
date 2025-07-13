@@ -196,6 +196,20 @@ within 10 to 100GB on local systems.
 To allow for the possible development of custom training models
 for autonomus AI applications.
 
+## Summary of Status 13/07/2025
+The system now includes seed beds for preferential breeding of
+seeds and templates.
+
+Currently achieves about a 50% success rate on the problems
+set the rulesets.
+
+The question arising is whether using this evolutionary paradigm
+the system can attain a heuristic level of problem solving with
+the right initial set of rules, templates and fragments.
+
+Final observations are being made on a complete trial, before
+the project is put on ice to await further inspiration.
+
 ## Summary of Status 28/05/2025
 The project has now been operational for 7 months. Evolutionary problem
 solving has been shown to be successful in about 80% of the problems set,
@@ -343,7 +357,7 @@ halts and the fragment is added if a match is found.
 
 ##### Seedbed Rule and Template Specialisation
 
-A section of 16 or so sets (seedbed) at the end of the bestSets set 
+A section of 12 or so sets (seedbed) at the end of the bestSets set 
 of 72 is reserved for seed rule and seed template entities, to
 allow for preferential breeding from these seeds.
 
