@@ -5646,6 +5646,7 @@ const rulesets = {
 
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         let passMark = 0.95;
+        this.currentMaxScore = this.getCurrentMaxScore();
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
         let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
