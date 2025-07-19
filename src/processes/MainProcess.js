@@ -172,6 +172,7 @@ class MainProcess {
                         bestSetHighScore = bestEntitySet[0].score;
                         bestSetLowScore = bestEntitySet[self.bestEntitySet.length - 1].score;
                     }
+                    // Execute the entity program
                     let memObj = entity.execute(bestSetHighScore, bestSetLowScore);
                     // Check whether a rule set threshold was reached
                     if (this.rulesets.seedRuleSet) {
