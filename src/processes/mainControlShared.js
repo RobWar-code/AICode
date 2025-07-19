@@ -67,7 +67,7 @@ const mainControlShared = {
                     clearBatch = true;
                 }
                 
-                let setNum = self.seedbedStart + self.batchLen * batchNum;
+                let setNum = self.seedbedStart + batchNum;
                 for (let i = 0; i < self.batchLen; i++) {
                     if (clearBatch) {
                         self.bestSets[setNum] = [];

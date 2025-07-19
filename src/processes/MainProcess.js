@@ -220,7 +220,7 @@ class MainProcess {
         let memSpace;
         let seedIndex;
         // Get the position within the batch
-        let seedbedEntityNum = absBestSetNum - self.seedbedStart + bestSetNum;
+        let seedbedEntityNum = absBestSetNum - self.seedbedStart;
         // Select the seed
         // Select the seed type
         let seedbedDataObj = {};

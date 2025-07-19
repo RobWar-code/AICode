@@ -214,16 +214,18 @@ const fsTransactions = {
 
     async saveTransferSeedbedData(seedbedData, batchStart, seedbedStart, batchLen) {
         if (batchStart < seedbedStart) return;
-        let batchNum = Math.floor((batchStart - seedbedStart)/batchLen);
-        let filename = "transferSeedbedData" + batchNum + ".json";
-        let filepath = "src/database/workerTransfer/" + filename;
-        let item = seedbedData[batchNum];
-        let seedbedJSON = JSON.stringify(item);
-        try {
-            await fs.writeFile(filepath, seedbedJSON, 'utf8');
-        }
-        catch (err) {
-            console.error("saveTransferLog: Could not save log data:", filepath);
+        for (let i = 0; i < batchLen; i++) {
+            let batchNum = i + (batchStart - seedbedStart);
+            let filename = "transferSeedbedData" + batchNum + ".json";
+            let filepath = "src/database/workerTransfer/" + filename;
+            let item = seedbedData[batchNum];
+            let seedbedJSON = JSON.stringify(item);
+            try {
+                await fs.writeFile(filepath, seedbedJSON, 'utf8');
+            }
+            catch (err) {
+                console.error("saveTransferLog: Could not save log data:", filepath);
+            }
         }
     },
 

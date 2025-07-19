@@ -394,6 +394,11 @@ const dbTransactions = {
         // Insert each row from the seedbedData
         for (let batchNum = 0; batchNum < seedbedData.length; batchNum++) {
             let item = seedbedData[batchNum];
+            // Debug
+            if (typeof item === 'undefined') {
+                console.log("saveSeedbedData: item undefined", batchNum, seedbedData.length);
+                throw "program error exit"
+            }
             sql = "INSERT INTO seedbed_data (seed_batch_num, type, seed_index, start_round,";
             sql += "promoted_round) VALUES (?, ?, ?, ?, ?)";
             try {
