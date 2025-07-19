@@ -44,13 +44,20 @@ const rulesets = {
         /*
             Rule Template
             {   rule: "Convert ASCII Numbers 1", ruleId: 32,
-                retain: false, skip: false, 
+                retain: false, 
+                skip: false, 
                 excludeHelperRules: [67], // Optional
-                sequenceNum: 62, 
-                score: 0, startRound: -1,
-                completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 32,
+                sequenceNum: 62, // Automatic
+                score: 0, 
+                passScore: 0.95, // Optional
+                startRound: -1,
+                completionRound: -1, 
+                max: 5, 
+                startRoundNum: 800, // Not currently in use
+                outBlockStart: 0, 
+                outBlockLen: 16,
+                inBlockStart: 0, 
+                inBlockLen: 32,
                 highIC: 16 * 10,
                 highIP: 40, // Optional, Default 80
                 ASCIISampleIn: // Optional, Default Ignore 
@@ -1145,7 +1152,11 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Divide by First Param 4", ruleId: 42,
                 retain: false, skip: false, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                score: 0,
+                passScore: 0.5, 
+                completionRound: -1, 
+                max: 5, 
+                startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 16 * 9 * 16 + learnCodeAllowance,
@@ -5645,12 +5656,17 @@ const rulesets = {
     },
 
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
-        let passMark = 0.95;
+        let passMark = 0.95
         this.currentMaxScore = this.getCurrentMaxScore();
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
         let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
             passMark = rule.passScore;
+        }
+        // Debug
+        if (typeof score === 'undefined') {
+            console.log("seedRuleUpdate: entity score is undefined");
+            throw "Program Error Exit";
         }
         if ((score >= this.currentMaxScore * passMark) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             // Check for common program fragments

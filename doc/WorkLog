@@ -18,6 +18,8 @@ Jobs Due
 
     Update the README with the latest tables
 
+    Fix problem with invalid score pass at DivideByFirstParam5
+
     * Modify seed beds to individual, rather than grouped.
         * Parallel
         * Serial
