@@ -1153,7 +1153,6 @@ const rulesets = {
             {rule: "Divide by First Param 4", ruleId: 42,
                 retain: false, skip: false, 
                 score: 0,
-                passScore: 0.5, 
                 completionRound: -1, 
                 max: 5, 
                 startRoundNum: 800,

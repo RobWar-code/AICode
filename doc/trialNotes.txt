@@ -1,3 +1,6 @@
+19/07/2025
+Trial restarted with existing seed rules.
+
 11/07/2025
 Trial failed on sampleInMinusSampleOut and 
 multiplyByFirstParam3
