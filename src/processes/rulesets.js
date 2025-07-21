@@ -1042,6 +1042,14 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 32,
                 highIC: 33 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 30
+                    }
+                ],
                 sampleIn: [
                     [
                         6,24,17,18,3,7,15,12,36,120,19,17,11,72,13,30,
@@ -1186,7 +1194,10 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Divide by First Param 5", ruleId: 40,
                 retain: false, skip: false, 
-                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                score: 0, 
+                completionRound: -1, 
+                max: 5, 
+                startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 13 * 9 * 16 + learnCodeAllowance,
@@ -4250,7 +4261,10 @@ const rulesets = {
             let d = inputs[0];
             for (let v of inputs) {
                 if (v % d === 0) {
-                    output.push(v);
+                    output.push(1);
+                }
+                else {
+                    output.push(0);
                 }
             }
             outputList.push(output);
@@ -4267,7 +4281,10 @@ const rulesets = {
             let d = inputs[0];
             for (let v of inputs) {
                 if (v % d != 0) {
-                    output.push(v);
+                    output.push(1);
+                }
+                else {
+                    output.push(0);
                 }
             }
             outputList.push(output);
@@ -5665,6 +5682,10 @@ const rulesets = {
         // Debug
         if (typeof score === 'undefined') {
             console.log("seedRuleUpdate: entity score is undefined");
+            throw "Program Error Exit";
+        }
+        else if (score > this.currentMaxScore) {
+            console.log("seedRuleUpdate: score is inconsistent with the rule", score);
             throw "Program Error Exit";
         }
         if ((score >= this.currentMaxScore * passMark) && this.ruleSequenceNum < this.maxRuleSequenceNum) {

@@ -36,6 +36,28 @@ const mainControlShared = {
             self.seedRuleSeedbedLog.push(logItem);
         }
     },
+
+    resetSeedbedData(self, index) {
+        if (index < self.seedbedStart) {
+            return;
+        }
+        index -= self.seedbedStart;
+        // Get the seed item
+        let seedIndex = self.seedbedData[index].seedIndex;
+        let seedType = self.seedbedData[index].seedType;
+        let item = null;
+        if (seedType === "Template") {
+            item = self.templateSeedbedLog[seedIndex];
+        }
+        else {
+            item = self.seedRuleSeedbedLog[seedIndex];
+        }
+        item.current -= 1;
+        item.numFailedAttempts += 1;
+
+        // Reset the seedbedData entry
+        self.seedbedData[index] = {seedType: "", seedIndex:0, startRound: 0, promotedRound: 0};
+    },
     
     checkSeedbedThresholds(self) {
         for (let batchNum = 0; batchNum < self.numSeedbeds; batchNum++) {

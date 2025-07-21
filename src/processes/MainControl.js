@@ -217,6 +217,7 @@ class MainControl {
         for (let i = start; i < scoreList.length; i++) {
             let index = scoreList[i].index;
             this.bestSets[index] = [];
+            mainControlShared.resetSeedbedData(this, index);
             this.scoreHistory[index] = [];
         }
 

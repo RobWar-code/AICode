@@ -18,9 +18,13 @@ Jobs Due
 
     Update the README with the latest tables
 
-    Check that seedbed data is updated on set clearance.
-
     Fix problem with invalid score pass at DivideByFirstParam5
+
+    Modify Divisible and Not Divisible by first param to output
+    0 or 1 rather than the number itself, to avoid dead-end number
+    matching.
+
+    * Check that seedbed data is updated on set clearance.
 
     * Modify seed beds to individual, rather than grouped.
         * Parallel
