@@ -18,9 +18,12 @@ Jobs Due
 
     Update the README with the latest tables
 
-    Fix problem with invalid score pass at DivideByFirstParam5
+    Consider code position mutation hotspots for monoclonal and ins and byte
+    breed methods
+    
+    * Fix problem with invalid score pass at DivideByFirstParam5
 
-    Modify Divisible and Not Divisible by first param to output
+    * Modify Divisible and Not Divisible by first param to output
     0 or 1 rather than the number itself, to avoid dead-end number
     matching.
 

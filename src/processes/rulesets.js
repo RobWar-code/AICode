@@ -5680,15 +5680,6 @@ const rulesets = {
         if ("passScore" in rule) {
             passMark = rule.passScore;
         }
-        // Debug
-        if (typeof score === 'undefined') {
-            console.log("seedRuleUpdate: entity score is undefined");
-            throw "Program Error Exit";
-        }
-        else if (score > this.currentMaxScore) {
-            console.log("seedRuleUpdate: score is inconsistent with the rule", score);
-            throw "Program Error Exit";
-        }
         if ((score >= this.currentMaxScore * passMark) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
             // Check for common program fragments
             if (this.seedRuleMemSpaces.length > 1) {
