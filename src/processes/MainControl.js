@@ -175,8 +175,8 @@ class MainControl {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
-            if (rulesets.seedRuleSet) {
+            let roundThresholdReached = rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            if (rulesets.seedRuleSet || roundThresholdReached) {
                 console.log("Clearing best sets");
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
                     // Clear down all best sets to use only the seed rules or random

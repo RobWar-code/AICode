@@ -5672,6 +5672,7 @@ const rulesets = {
     },
 
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
+        let roundThresholdReached = false;
         let passMark = 0.95
         this.currentMaxScore = this.getCurrentMaxScore();
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
@@ -5700,6 +5701,7 @@ const rulesets = {
             this.ruleRounds[ruleIndex].completed = true;
 
             ++this.ruleSequenceNum;
+            this.seedRuleSet = true;
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
             this.ruleRounds[newRuleIndex].start = roundNum;
             // Get the new current rule number
@@ -5734,10 +5736,12 @@ const rulesets = {
                 let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
                 this.ruleRounds[newRuleIndex].start = roundNum;
             }
+            roundThresholdReached = true;
         }
         else {
             this.seedRuleSet = false;
         }
+        return roundThresholdReached;
     },
 
     insertSeedRule(memSpace) {
