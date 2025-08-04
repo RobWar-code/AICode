@@ -9,7 +9,7 @@ Jobs Due
 
     Add the following rules
         Get sum of triplets
-        Get average of triplets
+        * Get average of triplets
         Remove the first parameter number from the inputs
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
@@ -18,8 +18,14 @@ Jobs Due
 
     Update the README with the latest tables
 
+    Export Seed Rules and Fragments
+
+    Import Seed Rules and Fragments
+    
     Consider code position mutation hotspots for monoclonal and ins and byte
     breed methods
+    
+    Try for a generic template(s)
     
     * Fix problem with invalid score pass at DivideByFirstParam5
 

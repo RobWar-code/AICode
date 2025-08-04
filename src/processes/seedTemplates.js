@@ -695,7 +695,7 @@ const seedTemplates = {
         },
         {
             // 5
-            name: "modulo first param",
+            name: "moduloFirstParam",
             description: "Find the modulus of each parameter using the first parameter",
             template: [ 
                 {

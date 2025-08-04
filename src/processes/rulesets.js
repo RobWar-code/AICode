@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 96,
-    maxRuleId: 95,
+    numRules: 98,
+    maxRuleId: 97,
     maxRoundsPerRule: 150,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -24,7 +24,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(96),
+    ruleRounds: new Array(98),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -2257,6 +2257,68 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideAdjacentParamsRequiredOutputs);
 
         this.scoreList.push(
+            {rule: "Sum of Three Params", ruleId: 97, 
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
+                inBlockLen: 48,
+                highIC: 16 * 18 * 25 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [[
+                    56,3,4, 32,4,11, 9,0,12, 8,2,45, 76,21,100, 63,9,2, 87,7,11, 140,20,5,
+                    43,8,15, 40,8,17, 76,17,19, 78,9,21, 144,12,45, 46,19,43, 82,2,1, 14,7,200
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        10,2,11,  20,0,5, 36,9,45, 3,2,34, 12,2,54, 15,5,73, 60,12,105, 47,3,19,
+                        200,3,8, 3,6,9,  7,9,12,  120,7,15, 17,4,25, 18,11,91, 96,17,8, 27,3,11
+                    ],
+                    [
+                        15,7,18, 18,9,27, 21,3,39, 90,5,65, 17,0,72, 200,4,11, 240,12,1, 190,3,29,
+                        17,11,45, 64,6,76, 17,9,97, 19,7,14, 24,3,54, 96,3,15,  85,4,17, 180,26,15 
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSumOfThreeRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Average of Three Params", ruleId: 96, 
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800, 
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, 
+                inBlockLen: 48,
+                highIC: 16 * 18 * 25 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [[
+                    56,3,32, 4,9,0, 8,2,76, 21,63,9, 87,7,140, 20,100,5, 82,45,30, 17,22,42,
+                    43,8,40, 8,76,17, 78,9,144, 12,46,19, 82,2,14, 7,9,13, 61,72,17, 201,190,200
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        10,2,1,  20,0,15, 36,9,11, 3,2,81, 12,2,23, 15,5,7, 60,12,11, 47,3,9,
+                        200,3,3, 3,6,21,  7,9,15, 120,7,200, 17,4,5, 18,11,91, 96,17,30, 27,3,2
+                    ],
+                    [
+                        15,7,9,  18,9,27, 21,3,11, 90,5,15, 17,0,1, 200,4,2, 240,12,220, 190,3,7,
+                        17,11,24, 64,6,3, 17,9,7, 19,7,2, 24,3,23, 96,3,13, 85,4,12, 180,26,27 
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(this.null);
+        this.requiredOutputsFunction.push(this.getAveOfThreeRequiredOutputs);
+
+        this.scoreList.push(
             {rule: "Use op to Convert Adjacent Params 1 (=)", ruleId: 57, 
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
@@ -2702,7 +2764,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 94;
+        this.outputScoresItem = 96;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -2712,7 +2774,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 95;
+        this.diffScore = 97;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -5269,6 +5331,43 @@ const rulesets = {
                 if (b === 0) v = 0;
                 else v = (Math.floor(a/b)) & 255;
                 output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSumOfThreeRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            for (let p = 0; p < inputs.length; p += 3) {
+                let t = 0;
+                for (let i = p; i < p + 3; i++) {
+                    t += inputs[i];
+                }
+                output.push(t);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getAveOfThreeRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let c = Math.floor(inputs.length / 3);
+            for (let i = 0; i < c; i++) {
+                let t = 0;
+                let p = i * 3;
+                for (let j = 0; j < 3; j++) {
+                    t += inputs[p + j];
+                }
+                let a = Math.floor(t / 3) & 255;
+                output.push(a);
             }
             outputList.push(output);
         }

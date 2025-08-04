@@ -1,3 +1,8 @@
+22/07/2025
+Trial restarted from scratch after fix to
+number of rounds threshold and clearance of
+seedbedData.
+
 19/07/2025
 Trial restarted with existing seed rules.
 

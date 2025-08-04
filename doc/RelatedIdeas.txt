@@ -1,0 +1,41 @@
+22/07/2025
+
+Current System Status
+
+The current project appears to get as far as simple arrangements
+like subtractFirstParam, and multiply and modulo with the use of
+of templates. Although it is conceivable that the system might
+progress further with the right combination of rules and the
+process of learning from seed rules, it may well be worth considering
+variants of the approach to establish the general validity of the
+evolutionary code approach to machine learning.
+
+As the system stands it is the system as whole which "learns" by
+the accumulation of solutions and solution fragments that may be useful 
+in solving other problems. The learning at the entity program level
+is all by selective scoring, and sometimes this may fail because
+stepwise solutions to the problem are not available, or because the
+intermediate scores move the system further from the solution 
+probabilistically.
+
+The decision to be made at this juncture is whether to keep
+refining the existing model, or to extend the theory with the aim
+of writing a new model, or substantially reworking the existing
+model.
+
+Before moving on to reworking, let us consider whether the existing
+limitations can be overcome.
+
+Existing Limitations 
+
+    Stepwise Score Traps 
+        These may be caused by coincidental matching of values
+        in the output that deflect away from the algorithm.
+
+        This problem can be partially overcome by scoring
+        required instructions in the program code range.
+        However, this leans toward foreknowledge.
+
+        Could statistical code position analysers guide 
+        mutations/manipulations?
+
