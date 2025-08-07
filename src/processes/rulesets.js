@@ -2830,14 +2830,8 @@ const rulesets = {
     initialiseOutputData() {
         mathFuncs.init();
 
-        this.maxRuleSequenceNum = 0;
         for (let i = 0; i < this.scoreList.length; i++) {
             let rule = this.scoreList[i];
-
-            // Set maxRuleSequenceNum
-            if (rule.sequenceNum > this.maxRuleSequenceNum && !rule.retain) {
-                this.maxRuleSequenceNum = rule.sequenceNum;
-            }
 
             if ("ASCIISampleIn" in rule) {
                 rule.sampleIn = this.convertASCIILists(rule.ASCIISampleIn);
@@ -5779,7 +5773,7 @@ const rulesets = {
         if ("passScore" in rule) {
             passMark = rule.passScore;
         }
-        if ((score >= this.currentMaxScore * passMark) && this.ruleSequenceNum < this.maxRuleSequenceNum) {
+        if (score >= this.currentMaxScore * passMark) {
             // Check for common program fragments
             if (this.seedRuleMemSpaces.length > 1) {
                 this.updateSeedRuleFragments(instructionSet, memSpace);
@@ -5789,26 +5783,31 @@ const rulesets = {
             this.insertSeedRule(memSpace);
             this.ruleRounds[ruleIndex].end = roundNum;
             this.ruleRounds[ruleIndex].completed = true;
+            this.seedRuleSet = true;
 
             ++this.ruleSequenceNum;
-            this.seedRuleSet = true;
-            let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
-            this.ruleRounds[newRuleIndex].start = roundNum;
-            // Get the new current rule number
-            let index = 0;
-            for (let rule of this.scoreList) {
-                if (!rule.skip) {
-                    if (!rule.retain && this.ruleSequenceNum === rule.sequenceNum) {
-                        this.seedRuleNum = rule.rule_num;
-                        break;
+            if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
+                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+                this.ruleRounds[newRuleIndex].start = roundNum;
+                // Get the new current rule number
+                let index = 0;
+                for (let rule of this.scoreList) {
+                    if (!rule.skip) {
+                        if (!rule.retain && this.ruleSequenceNum === rule.sequenceNum) {
+                            this.seedRuleNum = rule.rule_num;
+                            break;
+                        }
+                        if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
+                            this.ruleRounds[index].end = roundNum;
+                        }
                     }
-                    if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
-                        this.ruleRounds[index].end = roundNum;
-                    }
+                    ++index;
                 }
-                ++index;
+                this.currentMaxScore = this.getCurrentMaxScore();
             }
-            this.currentMaxScore = this.getCurrentMaxScore();
+            else {
+                // All sequential rules completed
+            }
         }
         else if (roundNum > this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
             // Save the sub-optimal result for reference
@@ -5825,6 +5824,9 @@ const rulesets = {
             if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
                 let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
                 this.ruleRounds[newRuleIndex].start = roundNum;
+            }
+            else {
+                // Max rule reached
             }
             roundThresholdReached = true;
         }

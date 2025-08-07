@@ -106,6 +106,9 @@ class MainControl {
             if (!thresholdReached) {
                 mainControlShared.checkSeedbedThresholds(this);
             }
+            if (rulesets.ruleSequenceNum > rulesets.maxRuleSequenceNum) {
+                return;           
+            }
         }
         if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && 
             this.bestSetNum === 0)) {

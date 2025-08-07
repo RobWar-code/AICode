@@ -135,6 +135,7 @@ class MainControlParallel {
         console.log("batchProcessLoop - numSpans:", this.numSpans, "spanNum:", this.spanNum);
         if (this.spanNum >= this.numSpans) {
             await this.doEndOfRoundOperations();
+            if (rulesets.ruleSequenceNum > rulesets.maxRuleSequenceNum) return;
         }
 
         this.batchProcessCount = 0;
@@ -614,21 +615,23 @@ class MainControlParallel {
         else {
             await dbTransactions.saveSeedRules(null);
         }
-    
-        ++this.lapCounter;
-        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0)) {
-            console.log("Clearance Round");
-            // Clearance Pass
-            this.restartSets();
-        }
-        else if (thresholdReached && this.runningSingleRule) return;
-        else if (thresholdReached) {
-            // Reset the seedbed data and logs
-            this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
-            mainControlShared.initialiseSeedbedLogs(this);
-        }
-        else if (this.numRounds > 0 && this.numRounds % this.shuffleRound === 0) {
-            this.shuffleSets();
+ 
+        if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
+            ++this.lapCounter;
+            if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0)) {
+                console.log("Clearance Round");
+                // Clearance Pass
+                this.restartSets();
+            }
+            else if (thresholdReached && this.runningSingleRule) return;
+            else if (thresholdReached) {
+                // Reset the seedbed data and logs
+                this.seedbedData = new Array(this.numSeedbeds).fill({seedType: "", seedIndex:0, startRound: 0, promotedRound: 0});
+                mainControlShared.initialiseSeedbedLogs(this);
+            }
+            else if (this.numRounds > 0 && this.numRounds % this.shuffleRound === 0) {
+                this.shuffleSets();
+            }
         }
     }
 
