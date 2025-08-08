@@ -1093,6 +1093,10 @@ class MainControlParallel {
      * @param {*} terminateProcessing 
      */
     displayEntity(entity, setNum, entityIndex, terminateProcessing) {
+        let ruleSequenceNum = this.ruleSequenceNum;
+        if (this.ruleSequenceNum > rulesets.maxRuleSequenceNum) {
+            ruleSequenceNum = rulesets.maxRuleSequenceNum;
+        }
         // Prepare and re-execute the entity
         let e2;
         if (entity === null) {
@@ -1102,7 +1106,7 @@ class MainControlParallel {
             let seeded = false;
             let currentCycle = e1.birthCycle;
             e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
-                this.ruleSequenceNum, this.roundNum, memSpace);
+                ruleSequenceNum, this.roundNum, memSpace);
             e2.breedMethod = e1.breedMethod;
         }
         else {
@@ -1112,7 +1116,7 @@ class MainControlParallel {
         let displayData = e2.display(setNum, entityIndex);
 
         // Sample Data
-        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
         displayData.sampleIn = rule.sampleIn;
         displayData.sampleOut = rule.sampleOut;
 
@@ -1121,7 +1125,7 @@ class MainControlParallel {
         displayData.numTrials = this.entityNumber;
         displayData.currentCycle = this.cycleCounter;
         displayData.numRounds = this.numRounds;
-        displayData.ruleSequenceNum = this.ruleSequenceNum;
+        displayData.ruleSequenceNum = ruleSequenceNum;
         displayData.currentMaxScore = rulesets.currentMaxScore;
         displayData.maxScore = rulesets.maxScore;
         let etime = this.elapsedTime / (3600 * 1000);
@@ -1137,7 +1141,7 @@ class MainControlParallel {
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
         displayData.seedTemplateBreedCount = this.seedTemplateBreedCount;
         displayData.crossSetCount = this.crossSetCount;
-        displayData.currentRule = this.ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(this.ruleSequenceNum);
+        displayData.currentRule = ruleSequenceNum + " - " + rulesets.getDescriptionFromSequence(ruleSequenceNum);
         displayData.scoreList = rulesets.scoreList;
         displayData.ruleRounds = rulesets.ruleRounds;
 
