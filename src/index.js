@@ -180,7 +180,9 @@ ipcMain.on("activateMainProcess", () => {
   
   if (processMode === "serial") {
     program.doProcess(program);
-    mainWindow.webContents.send("mainCycleCompleted", 0);
+    if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
+      mainWindow.webContents.send("mainCycleCompleted", 0);
+    }
   }
   else {
     program.batchProcessLoop();

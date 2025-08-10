@@ -1,3 +1,10 @@
+10/08/2025
+Full trial completed to final rule. Attains a success rate
+of about 50%, primarily of the simpler rules.
+
+Restarted trial with seed preserved from the complete trial
+to see whether the seed allows the completion of more rules.
+
 22/07/2025
 Trial restarted from scratch after fix to
 number of rounds threshold and clearance of

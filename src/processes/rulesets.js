@@ -2919,7 +2919,7 @@ const rulesets = {
         codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, IC, highestIP, sequenceNum, roundNum) {
 
         // Get the current maximum score
-        this.currentMaxScore = this.getCurrentMaxScore();
+        this.currentMaxScore = this.getCurrentMaxScore(sequenceNum);
 
         // Reset the sequential rule execution scores
         if (entityOutputs.length === 1) {
@@ -3020,8 +3020,8 @@ const rulesets = {
         return score;
     },
 
-    getCurrentMaxScore() {
-        let mainRule = this.getRuleFromSequence(this.ruleSequenceNum);
+    getCurrentMaxScore(sequenceNum) {
+        let mainRule = this.getRuleFromSequence(sequenceNum);
         let excludeRules = null;
         if ("excludeHelperRules" in mainRule) {
             excludeRules = mainRule.excludeHelperRules;
@@ -3037,8 +3037,8 @@ const rulesets = {
 
         for (let rule of this.scoreList) {
             if ("sequenceNum" in rule && !rule.skip) {
-                if (rule.sequenceNum === this.ruleSequenceNum || 
-                    (rule.sequenceNum <= this.ruleSequenceNum && rule.retain)) {
+                if (rule.sequenceNum === sequenceNum || 
+                    (rule.sequenceNum <= sequenceNum && rule.retain)) {
                     // Check whether this rule is excluded
                     let ruleExcluded = false;
                     if (excludeRules != null) {
@@ -5767,7 +5767,7 @@ const rulesets = {
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         let roundThresholdReached = false;
         let passMark = 0.95
-        this.currentMaxScore = this.getCurrentMaxScore();
+        this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
         let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
@@ -5803,7 +5803,7 @@ const rulesets = {
                     }
                     ++index;
                 }
-                this.currentMaxScore = this.getCurrentMaxScore();
+                this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
             }
             else {
                 // All sequential rules completed
@@ -5818,9 +5818,9 @@ const rulesets = {
             subOptRuleItem.memSpace = memSpace;
             this.subOptRuleMemSpaces.push(subOptRuleItem);
             this.subOptRuleSet = true;
-            console.error("got subOptRule:", subOptRuleItem.ruleId);
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
+            console.error("got subOptRule:", subOptRuleItem.ruleId, this.ruleSequenceNum, this.maxRuleSequenceNum);
             if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
                 let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
                 this.ruleRounds[newRuleIndex].start = roundNum;

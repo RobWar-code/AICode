@@ -162,6 +162,7 @@ class MainControl {
 
         // Check whether the score threshold has been reached
         let set = this.bestSets[highIndex];
+        let setNum = highIndex;
         let entity = set[0];
         let passScore = 0.95;
 
@@ -565,6 +566,7 @@ class MainControl {
         let ruleSequenceNum = this.ruleSequenceNum;
         if (ruleSequenceNum > rulesets.maxRuleSequenceNum) {
             ruleSequenceNum = rulesets.maxRuleSequenceNum;
+            console.log("displayEntity: ruleSequenceNum - ", ruleSequenceNum, rulesets.maxRuleSequenceNum);
         }
         // Prepare and re-execute the entity
         let e2;

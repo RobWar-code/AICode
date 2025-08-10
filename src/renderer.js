@@ -114,7 +114,14 @@ ipcRenderer.on("tablesCleared", (event, data) => {
 
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
-    document.getElementById("statusPara").innerText = "SAVE DONE";
+    let statusText = document.getElementById("statusPara").innerText;
+    console.log("Got statusText:", statusText);
+    if (statusText.indexOf("Completed") > 0) {
+        document.getElementById("statusPara").innerText += " SAVE DONE";
+    }
+    else {
+        document.getElementById("statusPara").innerText = "SAVE DONE";
+    }
 });
 
 ipcRenderer.on("loadDone", (event, data) => {

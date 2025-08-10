@@ -72,7 +72,7 @@ class MainControlParallel {
         this.instructionSet = new InstructionSet;
         rulesets.initialise();
         mainControlShared.fileInitialisations(this);
-        rulesets.currentMaxScore = rulesets.getCurrentMaxScore();
+        rulesets.currentMaxScore = rulesets.getCurrentMaxScore(this.ruleSequenceNum);
         this.setupBatchProcessing();
     }
 
@@ -132,7 +132,6 @@ class MainControlParallel {
     }
 
     async batchProcessLoop() {
-        console.log("batchProcessLoop - numSpans:", this.numSpans, "spanNum:", this.spanNum);
         if (this.spanNum >= this.numSpans) {
             await this.doEndOfRoundOperations();
             if (rulesets.ruleSequenceNum > rulesets.maxRuleSequenceNum) return;
@@ -158,7 +157,7 @@ class MainControlParallel {
         await dbTransactions.saveSeedRuleSeedbedLog(this.seedRuleSeedbedLog, dbConnection);
         // Debug
         if (rulesets.seedRuleMemSpaces.length != this.seedRuleSeedbedLog.length) {
-            console.log("batchProcessLoop: Mismatch log:", this.seedRuleSeedbedLog.length, 
+            console.error("batchProcessLoop: Mismatch log:", this.seedRuleSeedbedLog.length, 
                 rulesets.seedRuleMemSpaces.length);
             throw "program exit";
         }
@@ -205,7 +204,6 @@ class MainControlParallel {
         let batchCycle = processNum * this.cyclesPerBatch + this.cycleCounter;
         let batchEntityNumber = processNum * this.entitiesPerProcess + this.entityNumber;
 
-        console.log("spawnProcess: batchCycle, batchEntityNumber", processNum, batchCycle, batchEntityNumber);
         const worker = spawn("node", ["src/processes/workerApp.js", processNum, batchStart, batchLength, 
             this.seedbedStart, this.numSeedbeds, this.ruleSequenceNum, batchEntityNumber, 
             batchCycle, this.roundNum]);
@@ -230,7 +228,6 @@ class MainControlParallel {
                     throw "Stdio JSON Error";
                 }
                 type = msg.type;
-                console.log("type:", type);
                 if (type === "message") {
                     console.log("worker message:", msg.message);
                 }
@@ -285,7 +282,6 @@ class MainControlParallel {
     }
 
     async batchDataCollection() {
-        console.log("collecting batch process data");
         // Update entityNumber and cycleCounter
         if (this.spanNum < this.numSpans - 1 || this.spanRemnant === 0) {
             this.entityNumber += this.entitiesPerProcess * this.numCPUs;
@@ -372,7 +368,6 @@ class MainControlParallel {
             batchLength = this.finalBatchLength;
         }
         let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
-        console.log("sendEntityExchangeData - batchStart:", batchStart, "spanStart:", this.spanStart, "spanNum:", this.spanNum);
         for (let bestSetNum = batchStart; bestSetNum < batchStart + batchLength; bestSetNum++) {
             // Clear this best set from the transfer entities
             await dbTransactions.clearTransferEntitySet(bestSetNum);
@@ -387,8 +382,6 @@ class MainControlParallel {
             batchLength = this.finalBatchLength;
         }
         let batchStart = this.spanStart + this.bestSetsPerBatch * processNum;
-        console.log("sendFSEntityExchangeData - batchStart:", batchStart, "spanStart:", 
-            this.spanStart, "spanNum:", this.spanNum, "processNum:", processNum);
         await fsTransactions.clearTransferEntitySet(processNum);
         await fsTransactions.saveTransferEntitySet(this.bestSets, batchStart, batchLength, processNum);
     }
@@ -507,7 +500,6 @@ class MainControlParallel {
 
     collectStdioEntityData(entityData, batchNum) {
         let batchStart = this.spanStart + this.bestSetsPerBatch * batchNum;
-        console.log("batchStart: ", batchStart, "batchNum:", batchNum);
         let setIndex = 0;
         for (let eset of entityData) {
             let entityIndex = 0;
@@ -619,7 +611,6 @@ class MainControlParallel {
         if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
             ++this.lapCounter;
             if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0)) {
-                console.log("Clearance Round");
                 // Clearance Pass
                 this.restartSets();
             }
@@ -709,10 +700,10 @@ class MainControlParallel {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
             let roundThresholdReached = rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            this.ruleSequenceNum = rulesets.ruleSequenceNum;
             if (rulesets.seedRuleSet || roundThresholdReached) {
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
                     // Clear down all best sets to use only the seed rules or random
-                    console.log("Clearing best sets");
                     for (let i = 0; i < this.numBestSets; i++) {
                         this.bestSets[i] = [];
                     }
@@ -722,7 +713,6 @@ class MainControlParallel {
                     let terminateProcessing = true;
                     this.displayEntity(null, highIndex, 0, terminateProcessing)
                 }
-                this.ruleSequenceNum = rulesets.ruleSequenceNum;
                 rulesets.seedRuleSet = false;
                 return true;
             }
@@ -904,7 +894,6 @@ class MainControlParallel {
         let rule = rulesets.getRuleFromRuleId(seedRuleId);
         let ruleSequenceNum = rule.sequenceNum;
         this.ruleSequenceNum = ruleSequenceNum;
-        console.log("loadAndExecuteSeedRule - ruleNum:", seedRuleId, "ruleSequenceNum:", ruleSequenceNum);
         let asRandom = false;
         let seeded = false;
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
@@ -930,7 +919,6 @@ class MainControlParallel {
         // Create a new entity from the seed entity
         let asRandom = false;
         let seeded = false;
-        console.log("Inserting seed entity, ruleSequenceNum", rulesets.ruleSequenceNum);
         let entity = new Entity(this.entityNumber, insSet, asRandom, seeded, this.cycleCounter, 
             rulesets.ruleSequenceNum, this.numRounds, memSpace);
         this.ruleSequenceNum = rulesets.ruleSequenceNum;
@@ -988,7 +976,6 @@ class MainControlParallel {
             let set = [entity];
             this.bestSets[bestSetNum] = set;
         }
-        console.log("Entities Loaded");
 
         // Load the seed rules
         for (let item of seedRules) {
@@ -1042,7 +1029,6 @@ class MainControlParallel {
     }
 
     startAtRule(ruleSequenceNum) {
-        console.log("ruleSequenceNum:", ruleSequenceNum);
         this.ruleSequenceNum = ruleSequenceNum;
         rulesets.ruleSequenceNum = ruleSequenceNum;
         let ruleIndex = rulesets.getRuleIndexFromSequence(this.ruleSequenceNum);
@@ -1154,9 +1140,7 @@ class MainControlParallel {
         }
 
         this.mainWindow.webContents.send('displayEntity', displayData);
-        
     }
-    
 }
 
 module.exports = MainControlParallel;
