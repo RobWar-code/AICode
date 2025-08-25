@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 98,
-    maxRuleId: 97,
+    numRules: 100,
+    maxRuleId: 99,
     maxRoundsPerRule: 150,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -24,7 +24,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(98),
+    ruleRounds: new Array(100),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -769,6 +769,62 @@ const rulesets = {
         this.ruleFunction.push(this.multiplyByFirstParam);
         this.byteFunction.push(this.byteMultiplyByFirstParam);
         this.requiredOutputsFunction.push(this.getMultiplyByFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Multiply By First Param Add Adjacent", ruleId: 98,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[2,3, 5,20, 24,30, 35,19, 17,6, 4,5, 8,11, 17,19,
+                            4,12, 17,9, 63,20, 45,49, 55,20, 61,19, 42,19, 28,21
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        5,20, 15,11, 35,3, 8,200, 40,16, 27,29, 31,14, 16,21,
+                        17,19, 18,21, 19,52, 25,21, 24,24, 28,19, 13,4, 15,6
+                    ],
+                    [
+                        10,22, 4,67, 5,81, 12,17, 22,4, 19,15, 23,6, 9,11,
+                        10,15, 13,18, 8,11, 12,19, 4,8, 5,6, 16,7, 18,20
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getMultiplyByFirstParamAddAdjacentRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Multiply By First Param Minus Adjacent", ruleId: 99,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[5,3, 5,20, 24,30, 35,19, 17,6, 4,5, 8,11, 17,19,
+                            4,12, 17,9, 43,20, 45,49, 35,20, 41,19, 42,19, 28,21
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        2,2, 15,11, 35,3, 100,4, 40,16, 27,29, 31,14, 16,21,
+                        17,19, 18,21, 19,22, 25,21, 24,24, 28,19, 13,4, 15,6
+                    ],
+                    [
+                        10,22, 4,27, 5,11, 12,17, 22,4, 19,15, 23,6, 9,11,
+                        10,15, 13,18, 8,11, 12,19, 4,8, 5,6, 16,7, 18,20
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getMultiplyByFirstParamMinusAdjacentRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Subtract First Param Second Times", ruleId: 91,
@@ -2764,7 +2820,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 96;
+        this.outputScoresItem = 98;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -2774,7 +2830,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 97;
+        this.diffScore = 99;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4242,6 +4298,34 @@ const rulesets = {
         let required = (initialParams[rule.inblockStart + offset] * a) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getMultiplyByFirstParamAddAdjacentRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let m = inputs[0];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let v = inputs[i] * m + inputs[i + 1];
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getMultiplyByFirstParamMinusAdjacentRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let m = inputs[0];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let v = inputs[i] * m - inputs[i + 1];
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getSubtractFirstParamSecondTimesRequiredOutputs(self, inputList) {
