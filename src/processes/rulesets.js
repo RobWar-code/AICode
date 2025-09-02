@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 100,
-    maxRuleId: 99,
+    numRules: 101,
+    maxRuleId: 100,
     maxRoundsPerRule: 150,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -24,7 +24,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(100),
+    ruleRounds: new Array(101),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -361,6 +361,57 @@ const rulesets = {
             }
         );
         this.ruleFunction.push(this.sampleInMinusSampleOut);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Compare Sample In Sample Out", ruleId: 100, 
+                skip: false,
+                excludeHelperRules: [67],
+                retain: false, score: 0, max: 5,
+                startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
+                highIC: 18 * 16 + 5,
+                highIP: 80,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "LDSO A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd:40
+                    }
+                ],
+                sampleIn: [
+                    [32,5,7,18,26,36,225,190,20,22,19,35,63,79,105,99],
+                    [33,48,7,110,186,121,87,33,90,85,96,108,93,64,69,19]
+                ],
+                sampleOut: [
+                    [9,3,6,18,24,37,225,193,4,25,18,35,64,71,107,99],
+                    [30,49,6,111,186,122,87,17,88,85,77,91,95,63,65,19]
+                ],
+                paramsIn: [
+                    [15,85,93,24,201,176,184,98,32,21,76,186,130,110,82,65],
+                    [16,87,94,24,170,176,183,96,32,22,75,185,135,110,82,67]
+                ],
+                outputs: [
+                    [23,2,1,0,2,255,4,70,16,3,1,2,255,8,18,3],
+                    [3,2,1,255,63,2,254,16,2,2,19,17,3,1,4,1]
+                ]
+            }
+        );
+        this.ruleFunction.push(this.compareSampleInSampleOut);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
@@ -3831,6 +3882,32 @@ const rulesets = {
             let v3 = valuesOut[index];
             let v4 = (v1 - v2) & 255;
             if (v3 === v4) ++count;
+            ++index;
+        }
+        let opt = sampleIn.length;
+        let max = opt;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
+    compareSampleInSampleOut(self, dataParams, ruleParams) {
+        let valuesOut = dataParams.valuesOut;
+        let sampleIn = ruleParams.sampleIn;
+        let sampleOut = ruleParams.sampleOut;
+        let count = 0;
+        let index = 0;
+        for (let v1 of sampleIn) {
+            let v2 = sampleOut[index];
+            let v3 = valuesOut[index];
+            let t1 = 0;
+            if (v1 < v2) {
+                t1 = 255;
+            }
+            else if (v1 > v2) {
+                t1 = 1;
+            }
+            if (v3 === t1) ++count;
             ++index;
         }
         let opt = sampleIn.length;
