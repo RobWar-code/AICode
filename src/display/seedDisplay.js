@@ -53,6 +53,7 @@ const seedDisplay = {
             document.getElementById("seedName").innerText = displayData.seedName;
             document.getElementById("seedDescription").innerText = displayData.seedDescription;
             document.getElementById("seedScore").innerText = displayData.score;
+            document.getElementById("seedMaxScore").innerText = displayData.maxScore;
 
             // Hide the process button options
             document.getElementById("scoreHistoryButton").style.display = "none";

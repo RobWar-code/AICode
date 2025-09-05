@@ -1002,6 +1002,7 @@ class Entity {
         // Score list
         displayData.scoreList = rulesets.scoreList;
         displayData.ruleScores = this.ruleScores;
+        displayData.maxScore = rulesets.getCurrentMaxScore(this.ruleSequenceNum);
         displayData.ruleCompletionRound = rulesets.ruleCompletionRound;
         displayData.score = Math.floor(this.score * 10000)/10000;
 
