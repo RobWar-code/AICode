@@ -19,6 +19,7 @@ const rulesets = {
     totalScore: 0,
     currentMaxScore: 0,
     maxScore: 0,
+    interimMaxScore: 0,
     diffScore: 0,
     ignoreRounds: true,
     bestEntity: null,
@@ -54,6 +55,7 @@ const rulesets = {
                 completionRound: -1, 
                 max: 5, 
                 startRoundNum: 800, // Not currently in use
+                interim: boolean, // optional whether to include this rule in interim score
                 outBlockStart: 0, 
                 outBlockLen: 16,
                 inBlockStart: 0, 
@@ -78,7 +80,7 @@ const rulesets = {
         */
         this.scoreList.push(
             {rule: "Instruction Distribution", ruleId: 0, skip: false, retain: true, 
-                score: 0, max: 2, startRoundNum: 0}
+                score: 0, max: 2, startRoundNum: 0, interim: true}
         );
         this.ruleFunction.push(this.insDistribution);
         this.byteFunction.push(null);
@@ -86,7 +88,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "General Instruction Distribution", ruleId: 84, skip: false, retain: true, 
-                score: 0, max: 1, startRoundNum: 0,
+                score: 0, max: 1, startRoundNum: 0, interim: true,
                 insDistribution: [
                     {
                         ins: "LDSI A, (C)",
@@ -166,7 +168,7 @@ const rulesets = {
 
         this.scoreList.push(
             {rule: "Values Out Set", ruleId: 6, skip: false,
-                retain: true, score: 0, max: 1, startRoundNum: 0, 
+                retain: true, score: 0, max: 1, startRoundNum: 0, interim: true,
                 outBlockStart: 0, outBlockLen: 128 
             }
         );
@@ -177,7 +179,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Outputs Different to Inputs", ruleId: 67, 
                 skip: false,
-                retain: true, score: 0, max: 1, startRoundNum: 0, 
+                retain: true, score: 0, max: 1, startRoundNum: 0,
                 outBlockStart: 0, outBlockLen: 128 
             }
         );
@@ -188,7 +190,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Sum of Outputs", ruleId: 68, 
                 skip: false,
-                retain: true, score: 0, max: 1, startRoundNum: 0, 
+                retain: true, score: 0, max: 1, startRoundNum: 0, interim: true,
                 outBlockStart: 0, outBlockLen: 128 
             }
         );
@@ -199,7 +201,7 @@ const rulesets = {
         this.scoreList.push(
             {rule: "Output Standard Deviation", ruleId: 69, 
                 skip: false,
-                retain: true, score: 0, max: 1, startRoundNum: 0, 
+                retain: true, score: 0, max: 1, startRoundNum: 0, interim: true,
                 outBlockStart: 0, outBlockLen: 128 
             }
         );
@@ -2911,6 +2913,7 @@ const rulesets = {
         }
         this.maxScore = maxScore * 2;
         this.maxRuleSequenceNum = maxSequenceNum;
+        this.getInterimMaxScore();
 
         // End Function
     },
@@ -3023,7 +3026,8 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, IC, highestIP, sequenceNum, roundNum) {
+        codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, executionCycle,
+        IC, highestIP, sequenceNum, roundNum) {
 
         // Get the current maximum score
         this.currentMaxScore = this.getCurrentMaxScore(sequenceNum);
@@ -3041,6 +3045,7 @@ const rulesets = {
             paramsIn: paramsIn,
             valuesOut: valuesOut,
             entityOutputs: entityOutputs,
+            executionCycle: executionCycle,
             IC: IC,
             highestIP: highestIP,
             sequenceNum: sequenceNum
@@ -3089,6 +3094,42 @@ const rulesets = {
 
         this.totalScore = totalScore;
         return {score: this.totalScore, scoreList: this.scoreList};
+    },
+
+    getInterimScore(instructionSet, memSpace, 
+        codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, 
+        executionCycle, IC, highestIP, sequenceNum) 
+    {
+        let dataParams = {
+            instructionSet: instructionSet,
+            memSpace: memSpace,
+            codeFlags: codeFlags,
+            initialParams: initialParams,
+            paramsIn: paramsIn,
+            valuesOut: valuesOut,
+            entityOutputs: entityOutputs,
+            executionCycle: executionCycle,
+            IC: IC,
+            highestIP: highestIP,
+            sequenceNum: sequenceNum
+        }
+
+        let totalScore = 0;
+        let i = 0;
+        for (let rule of this.scoreList) {
+            if (!rule.skip) {
+                if ("interim" in rule) {
+                    if (rule.interim) {
+                        let score = this.ruleFunction[i](this, dataParams, rule);
+                        score *= rule.max;
+                        totalScore += score;
+                    }
+                }
+            }
+            ++i;
+        }
+        totalScore = Math.floor((totalScore / this.interimMaxScore) * 255);
+        return totalScore;
     },
 
     getOutputComparisonScore(ruleOutputs, entityOutputs) {
@@ -3170,6 +3211,21 @@ const rulesets = {
             maxScore -= diffMax * (numInputParamBlocks - 1);
         }
         return (maxScore);
+    },
+
+    getInterimMaxScore() {
+        let maxScore = 0;
+        for (let rule of this.scoreList) {
+            if (!rule.skip) {
+                if ("interim" in rule) {
+                    if (rule.interim) {
+                        maxScore += rule.max;
+                    }
+                }
+            }
+        }
+        this.interimMaxScore = maxScore;
+        return maxScore;
     },
 
     outputScoresEqual(self, dataParams, ruleParams) {
@@ -3515,7 +3571,7 @@ const rulesets = {
 
     valuesOutSet(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let entityOutputs = dataParams.entityOutputs;
+        let executionCycle = dataParams.executionCycle;
 
         // Obtain the current sequential rule
         let ruleSequenceNum = dataParams.sequenceNum;
@@ -3525,9 +3581,8 @@ const rulesets = {
         // Check whether required outputs present
         let opt = outBlockLen;
         if ("outputs" in rule) {
-            // Get the current required and entity ouputs
-            let p = entityOutputs.length - 1;
-            let output = rule.outputs[p];
+            // Get the current required and entity outputs
+            let output = rule.outputs[executionCycle];
             outBlockLen = output.length;
             // Count the number of non-zero values in the output
             opt = 0;
@@ -3731,7 +3786,7 @@ const rulesets = {
         let rule = self.getRuleFromSequence(ruleSequenceNum);
 
         // Determine the difference optimum
-        let executionCycle = dataParams.entityOutputs.length - 1;
+        let executionCycle = dataParams.executionCycle;
         let inputs = rule.paramsIn[executionCycle];
         let outputs = rule.outputs[executionCycle];
         let actualOutputs = dataParams.entityOutputs[executionCycle];
@@ -3752,9 +3807,9 @@ const rulesets = {
     sumOfOutputs(self, dataParams, ruleParams){
         let ruleSequenceNum = dataParams.sequenceNum;
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
-        let executionCycle = dataParams.entityOutputs.length - 1;
+        let executionCycle = dataParams.executionCycle;
         let outputs = rule.outputs[executionCycle];
-        let actualOutputs = dataParams.entityOutputs[executionCycle];
+        let actualOutputs = dataParams.valuesOut;
 
         let opt = 0;
         let count = 0;
@@ -3772,9 +3827,9 @@ const rulesets = {
     outputStandardDeviation(self, dataParams, ruleParams) {
         let ruleSequenceNum = dataParams.sequenceNum;
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
-        let executionCycle = dataParams.entityOutputs.length - 1;
+        let executionCycle = dataParams.executionCycle;
         let outputs = rule.outputs[executionCycle];
-        let actualOutputs = dataParams.entityOutputs[executionCycle];
+        let actualOutputs = dataParams.valuesOut;
 
         // Get the list of actual outputs
         let actOutputs = [];

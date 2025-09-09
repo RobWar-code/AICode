@@ -1,3 +1,17 @@
+09/09/2025
+The current trial produces no significant at the halfway
+stage. Division is still incomplete.
+
+Plan is to introduce an instruction to permit the entity
+programs to inspect an interim score in order to allow
+a certain amount of analytical logic in the entities.
+
+05/09/2025
+The earlier result proved to be spurious as there was an
+error in the rulesets code. Trial restarted, preserving
+seed. Will probably take 10 days to reach a conclusion
+about current performance.
+
 03/09/2025
 Having added four or five new rules and re-run the
 complete trial over two and half complete passes, the 

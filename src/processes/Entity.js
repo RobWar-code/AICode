@@ -1017,7 +1017,7 @@ class Entity {
     doScore(bestSetHighScore, bestSetLowScore) {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
             this.instructionSet, this.initialMemSpace, 
-            this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.registers.IC, 
+            this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.executionCount, this.registers.IC, 
             this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
         this.transferRuleScores(scoreObj.scoreList);
@@ -1046,7 +1046,7 @@ class Entity {
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(executionCount, this.memSpace, this.codeFlags, this.initialParams, 
-                this.params, this.valuesOut, this.ruleSequenceNum,
+                this.params, this.valuesOut, this.oldValuesOut, this.ruleSequenceNum,
                 this.roundNum);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
@@ -1059,7 +1059,8 @@ class Entity {
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
                 this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                this.oldValuesOut, memObj.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
+                this.oldValuesOut, executionCount, memObj.IC, this.instructionSet.highestIP, 
+                this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
         }
 
@@ -1100,8 +1101,9 @@ class Entity {
         this.instructionVisited[IP] = true;
         this.previousRegisters = {...this.registers};
         let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
-        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, executionCount, this.memSpace, 
-            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.ruleSequenceNum, rule, this.roundNum);
+        let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, IC, executionCount, this.memSpace, 
+            this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
+            this.ruleSequenceNum, rule, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         // Execution Cycle Completed

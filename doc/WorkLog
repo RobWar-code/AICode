@@ -16,6 +16,13 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
+    Add instruction to get an interim score from some of the helper
+    rules
+        Adjust rulesets to allow for interim score
+        Test routines
+        Adjust instructionSet
+        Restart trials from scratch
+
     Update the README with the latest tables
 
     Export Seed Rules and Fragments
@@ -27,34 +34,6 @@ Jobs Due
     
     Try for a generic template(s)
     
-    * Fix problem with invalid score pass at DivideByFirstParam5
-
-    * Modify Divisible and Not Divisible by first param to output
-    0 or 1 rather than the number itself, to avoid dead-end number
-    matching.
-
-    * Check that seedbed data is updated on set clearance.
-
-    * Modify seed beds to individual, rather than grouped.
-        * Parallel
-        * Serial
-
-    * On Clear Tables - clear dependent arrays
-
-    * Add Rules
-        * Select less than first param
-        * Select greater than first param
-
-    * Space-out rule sequence numbers by 10's to make inserts
-    easier? Or rely on the array sequence and use a flag
-    to denote helper rules (ie: retain). * Or set the sequence
-    numbers automatically on initialisation.
-
-    * Reverse the order of Modulo6/7
-
-    * Remove the seed/template breed methods from the general run
-    confine to seedbeds only.
-
     Consider tables/charts for comparing historical trials
         Consider trial notes before a run.
 
@@ -117,6 +96,36 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+    09/09/2025
+    
+    * Fix problem with invalid score pass at DivideByFirstParam5
+
+    * Modify Divisible and Not Divisible by first param to output
+    0 or 1 rather than the number itself, to avoid dead-end number
+    matching.
+
+    * Check that seedbed data is updated on set clearance.
+
+    * Modify seed beds to individual, rather than grouped.
+        * Parallel
+        * Serial
+
+    * On Clear Tables - clear dependent arrays
+
+    * Add Rules
+        * Select less than first param
+        * Select greater than first param
+
+    * Space-out rule sequence numbers by 10's to make inserts
+    easier? Or rely on the array sequence and use a flag
+    to denote helper rules (ie: retain). * Or set the sequence
+    numbers automatically on initialisation.
+
+    * Reverse the order of Modulo6/7
+
+    * Remove the seed/template breed methods from the general run
+    confine to seedbeds only.
+
     01/07/2025
     
     * Introduce seed beds to favour work on existing/template solutions.
