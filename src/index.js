@@ -5,8 +5,9 @@ const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const MainControlParallel = require(path.join(__dirname, './processes/MainControlParallel.js'));
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
-const rulesets = require(path.join(__dirname, "./processes/rulesets.js"))
+const rulesets = require(path.join(__dirname, "./processes/rulesets.js"));
 const instructionSetLists = require(path.join(__dirname, "./processes/instructionSetLists.js"));
+const logResults = require(path.join(__dirname, "./processes/logResults.js"));
 const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
 const {databaseType, processMode} = require(path.join(__dirname, 'AICodeConfig.js'));
 let dbConn;
@@ -214,6 +215,10 @@ ipcMain.on("traceRestart", (event, executionCount) => {
 
 ipcMain.on("fetchDisplayHistory", () => {
   mainWindow.webContents.send("displayHistory", program.scoreHistory);
+});
+
+ipcMain.on("logCompletions", () => {
+  logResults.makeRuleCompletionLog();
 });
 
 ipcMain.on("fetchInsSetListData", () => {

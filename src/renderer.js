@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreListButton = document.getElementById('scoreListButton');
     const scoreHistoryButton = document.getElementById('scoreHistoryButton');
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
+    const logCompletionsButton = document.getElementById('logCompletionsButton');
     const haltProcessButton = document.getElementById('haltProcessButton');
     const insSetListButton = document.getElementById('insSetListButton');
     const insSetListSelectorForm = document.getElementById('insSetListSelectorForm');
@@ -192,6 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     scoreHistoryDismiss.addEventListener('click', (event) => {
         document.getElementById("scoreHistoryBackground").style.display = "none";
+    });
+
+    logCompletionsButton.addEventListener('click', (event) => {
+        ipcRenderer.send("logCompletions", 0);
     });
 
     haltProcessButton.addEventListener('click', (event) => {
