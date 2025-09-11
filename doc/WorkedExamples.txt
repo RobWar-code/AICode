@@ -21,6 +21,7 @@ Contents
             Selecting Marked Sections
         valuesSet
         valuesOutMatchInputParams
+    Reduced Instruction Set Considerations
 
     AI Code - Example Sequences
     Toward Stepped Rules
@@ -718,3 +719,45 @@ Consider repeat input params
     Loop Lengths: 12, 11
     Elapsed Time: 2.25 Days
     Number of Trials: 272,761,600
+
+<h1>Reduced Instruction Set Considerations
+
+    In order to reduced the scale of the probability field for
+    the simpler rules, it may be useful to provide reduced
+    instructions sets. This could managed by having lists of
+    instruction codes to select from with the random breeding
+    code insertions.
+
+    If we assume a choice between a single list and the full
+    set, we can allow the choice to made on the menu options.
+
+    Suggested candidates for exclusion might be
+        CFAR
+        SM
+        LISC A
+        CALL
+        RET
+        CASM
+        POP B 
+        PUSH B 
+        POP C 
+        PUSH C 
+        DEC SP 
+        INC SP 
+        JRLZ
+        JRLC
+
+    This would reduce number of selected instructions from 63 to 49.
+    If we allow for multiple lists, we can compare performances for
+    different ranges of instructions.
+
+<h2> High Probability Branching and Memory Locations
+
+    We could have a set of say 8 fixed branch addresses
+    and use a special instruction to access them.
+    Say JRS n, where n is 0 to 8. We allow for a data
+    restrictor in instruction set. Or possibly, we divide
+    the data byte in the instruction code.
+
+    We could have a block of memory that spans say 10
+    locations and use a corresponding instruction.

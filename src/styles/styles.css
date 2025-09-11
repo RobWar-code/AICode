@@ -103,6 +103,11 @@ li {
     border: 1px solid black;
 }
 
+/* Ins Set List Selection */
+#insSetListDiv {
+    display: none;
+}
+
 /* Start Rule Selection */
 #startRuleDiv {
     display: none;

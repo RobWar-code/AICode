@@ -1,6 +1,7 @@
 const path = require('node:path');
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const seedFragments = require(path.join(__dirname, 'seedFragments.js'));
+const instructionSetLists = require(path.join(__dirname, 'instructionSetLists.js'));
 const testObj = require(path.join(__dirname, 'testObj'));
 
 class Entity {
@@ -121,13 +122,13 @@ class Entity {
                     ++j;
                 }
             }
-            else if (i < 60) {
+            else if (i < 100) {
                 let c = 4;
                 let n = 0;
 
                 let redundant = true;
                 while (redundant && c >= 0){
-                    n = Math.floor(this.instructionSet.numIns * Math.random());
+                    n = instructionSetLists.selectIns(numIns);
                     // Check for redundant frequency
                     if (i % 12 === 0) {
                         checkArray = new Array(numIns).fill(0);
@@ -398,6 +399,7 @@ class Entity {
         const deleteChance = 0.97;
         const ruleSeedFragmentChance = 0.985;
         const codeFragmentChance = 1.0;
+        const numIns = this.instructionSet.numIns;
         let newCodeSegment = [];
         let oldInsLen = 0;
         let oldCodeItem = [];
@@ -408,7 +410,7 @@ class Entity {
             let codeItem = [];
             let code = this.initialMemSpace[i];
             if (typeof code != "number") {
-                code = Math.floor(Math.random() * this.instructionSet.numIns);
+                code = instructionSetLists.selectIns(numIns);
             }
             let insItem = this.instructionSet.getInsDetails(code);
             codeItem.push(code);
@@ -426,7 +428,7 @@ class Entity {
 
             if (Math.random() < codeHitChance) {
                 // Create a random instruction
-                let n = Math.floor(Math.random() * this.instructionSet.numIns);
+                let n = instructionSetLists.selectIns(numIns);
                 let codeItem2 = [];
                 codeItem2.push(n);
                 let insItem = this.instructionSet.getInsDetails(n);

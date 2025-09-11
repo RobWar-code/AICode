@@ -1,3 +1,6 @@
+10/09/2025
+Current run fails the sample data usage rules
+
 09/09/2025
 The current trial produces no significant at the halfway
 stage. Division is still incomplete.
@@ -5,6 +8,8 @@ stage. Division is still incomplete.
 Plan is to introduce an instruction to permit the entity
 programs to inspect an interim score in order to allow
 a certain amount of analytical logic in the entities.
+
+Score inspection rule added. Trials started from scratch.
 
 05/09/2025
 The earlier result proved to be spurious as there was an

@@ -1,19 +1,14 @@
 const {ipcRenderer, ipcMain} = require("electron");
 const path = require('node:path');
 const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"));
+const insSetListDisplay = require(path.join(__dirname, "/display/insSetListDisplay.js"));
 const startRuleDisplay = require(path.join(__dirname, "/display/startRuleDisplay.js"));
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
 const restoreRuleSeed = require(path.join(__dirname, '/display/restoreRuleSeed.js'));
 const testObj = require(path.join(__dirname, '/processes/testObj.js'));
-/*
-document.getElementById("button01").addEventListener("click", () => {
-    document.getElementById("report").innerText = "Clicked";
-    console.log("Clicked");
-    ipcRenderer.send("buttonClicked");
-});
-*/
+
 let processingCancelled = true;
 let processTimeout = null;
 let batchStatus = "not started";
@@ -74,6 +69,10 @@ ipcRenderer.on("mainCycleCompleted", (event, data) => {
     }
 });
 
+ipcRenderer.on("displayInsSetList", (event, insSetLists) => {
+    insSetListDisplay.display(insSetLists);
+});
+
 ipcRenderer.on("displayStartRuleList", (event, ruleList) => {
     startRuleDisplay.displayRuleSelector(ruleList);
 });
@@ -115,7 +114,6 @@ ipcRenderer.on("tablesCleared", (event, data) => {
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     let statusText = document.getElementById("statusPara").innerText;
-    console.log("Got statusText:", statusText);
     if (statusText.indexOf("Completed") > 0) {
         document.getElementById("statusPara").innerText += " SAVE DONE";
     }
@@ -140,6 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHistoryButton = document.getElementById('scoreHistoryButton');
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
     const haltProcessButton = document.getElementById('haltProcessButton');
+    const insSetListButton = document.getElementById('insSetListButton');
+    const insSetListSelectorForm = document.getElementById('insSetListSelectorForm');
+    const cancelInsSetListButton = document.getElementById('cancelInsSetListButton');
     const startAtRuleButton = document.getElementById('startAtRuleButton');
     const startRuleSelectorForm = document.getElementById('startRuleSelectorForm');
     const traceButton = document.getElementById('traceButton');
@@ -208,6 +209,21 @@ document.addEventListener('DOMContentLoaded', () => {
             ipcRenderer.send("activateMainProcess", 0);
         }
         processingCancelled = !processingCancelled;
+    });
+
+    insSetListButton.addEventListener('click', (event) => {
+        ipcRenderer.send("fetchInsSetListData", 0);
+    });
+
+    insSetListSelectorForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let insSetListNum = parseInt(document.getElementById("insSetListSelector").value);
+        document.getElementById("insSetListDiv").style.display = "none";
+        ipcRenderer.send("setInsSetList", insSetListNum);
+    });
+
+    cancelInsSetListButton.addEventListener('click', (event) => {
+        document.getElementById("insSetListDiv").style.display = "none";
     });
 
     startAtRuleButton.addEventListener('click', (event) => {
