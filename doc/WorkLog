@@ -8,6 +8,8 @@ Jobs Due
     + = completed not tested
 
     Add the following rules
+        Add sum of first and Second params
+        Sub sum of First and Second Params
         Get sum of triplets
         * Get average of triplets
         Remove the first parameter number from the inputs
@@ -16,15 +18,15 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
-    Add a facility to allow for reduced instruction set selection
-        Provide the menu option as a drop down list of numbers 0 to n
-        Cancel list selector display
-        Record the reduced set number as the global
-        Add a global data object in processes
-        Write the instruction selection function in entity.js
-        Apply the instruction selection function in the breed routines of entity.js
+    * Add a facility to log the current completion status
 
-
+    * Add a facility to allow for reduced instruction set selection
+        * Provide the menu option as a drop down list of numbers 0 to n
+        * Cancel list selector display
+        * Record the reduced set number as the global
+        * Add a global data object in processes
+        * Write the instruction selection function in entity.js
+        * Apply the instruction selection function in the breed routines of entity.js
 
     * Add instruction to get an interim score from some of the helper
     rules
@@ -34,6 +36,8 @@ Jobs Due
         * Restart trials from scratch
 
     Update the README with the latest tables
+
+    Update the README with log and reduced ins set facility
 
     Export Seed Rules and Fragments
 

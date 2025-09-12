@@ -1,3 +1,14 @@
+12/09/2025
+
+Trial succesfully completed the subtract First Param Second 
+Times rule, which is generally missed.
+
+Added the rules Add Sum of First and Second Params and
+Sub Sum of First and Second Params.
+
+Reduced the max rounds per rule from 150 to 60 and restarted
+the trial using the current seed.
+
 10/09/2025
 Current run fails the sample data usage rules
 

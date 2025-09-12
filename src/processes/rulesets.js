@@ -8,9 +8,9 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 101,
-    maxRuleId: 100,
-    maxRoundsPerRule: 150,
+    numRules: 103,
+    maxRuleId: 102,
+    maxRoundsPerRule: 60,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -663,6 +663,56 @@ const rulesets = {
         this.ruleFunction.push(this.subtractFirstParam);
         this.byteFunction.push(this.byteSubtractFirstParam);
         this.requiredOutputsFunction.push(this.getSubtractFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Add Sum of First and Second Params", ruleId: 101,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[10,25,34,65,53,98,87,110,5,86,93,63,76,81,24,32]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,20,15,11,96,3,8,200,128,220,27,29,31,14,16,21
+                    ],
+                    [
+                        13,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
+                    ]
+                ],
+                outputs: [],
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getAddSumOfFirstAndSecondParamsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Sub Sum of First and Second Params", ruleId: 102,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[10,25,34,65,53,99,87,115,5,86,93,63,78,81,24,32]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,20,15,15,97,3,8,200,128,220,27,29,38,140,16,21
+                    ],
+                    [
+                        13,22,43,67,69,81,72,186,201,4,9,15,220,38,104,126
+                    ]
+                ],
+                outputs: [],
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSubSumOfFirstAndSecondParamsRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Odd And Even Params", ruleId: 14,
@@ -2873,7 +2923,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 99;
+        this.outputScoresItem = 101;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -2883,7 +2933,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 100;
+        this.diffScore = 102;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4308,6 +4358,38 @@ const rulesets = {
         let required = (initialParams[offset] - a) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getAddSumOfFirstAndSecondParamsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            a += inputs[1];
+            for (let v of inputs) {
+                let r = (v + a) & 255;
+                output.push(r); 
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSubSumOfFirstAndSecondParamsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            a += inputs[1];
+            for (let v of inputs) {
+                let r = (v - a) & 255;
+                output.push(r); 
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getSelectLessThanFirstParamRequiredOutputs(self, inputList) {

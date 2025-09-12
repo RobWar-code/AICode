@@ -691,6 +691,17 @@ The entity display contains:
 The data is assembled as an object by the process side entity 
 and transmitted to the renderer as an event.
 
+##### Reports
+The system provides for the current rule scores and rules 
+completed report from the Score List option.
+
+It also provides a best set top score history list to
+give an idea of progress on the current rule.
+
+A rule completion log is also provided to allow
+for comparison from trial to trial. The output
+from this goes to the text file logs/CompletionsLog.txt 
+
 ##### Trace (step through program) Functionality
 
 The trace facilities allow the user to select the currently
