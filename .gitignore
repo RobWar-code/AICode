@@ -99,3 +99,6 @@ src/database/database.db
 
 # Transfer Files
 src/database/workerTransfer
+
+# Logs
+logs/
