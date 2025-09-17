@@ -1735,6 +1735,7 @@ class InstructionSet {
         }
         if (!found) {
             console.error("getInsCode: ins not found", ins);
+            return null;
         }
         return {code: code, insLen: insLen}
     }

@@ -1,6 +1,7 @@
 const path = require('node:path');
 const { seedRuleMemSpaces } = require('./rulesets');
 const MainProcess = require(path.join(__dirname, 'MainProcess.js'));
+const instructionSetLists = require(path.join(__dirname, "instructionSetLists.js"));
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
@@ -65,6 +66,7 @@ class MainControl {
         this.elapsedTime = 0;
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet();
+        instructionSetLists.init(this.instructionSet);
         rulesets.initialise();
         mainControlShared.fileInitialisations(this);
         this.mainProcess = new MainProcess(rulesets);

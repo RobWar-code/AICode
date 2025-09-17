@@ -18,6 +18,8 @@ Jobs Due
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
+    Check erroneous breed method recorded in parallel processing entities
+
     * Add a facility to log the current completion status
 
     * Add a facility to allow for reduced instruction set selection
@@ -34,6 +36,8 @@ Jobs Due
         * Test routines
         * Adjust instructionSet
         * Restart trials from scratch
+
+    * Adjust the selected set to exclude listed instructions
 
     Update the README with the latest tables
 

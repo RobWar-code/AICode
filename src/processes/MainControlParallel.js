@@ -6,6 +6,7 @@ const os = require('os');
 const { seedRuleMemSpaces } = require('./rulesets');
 const Entity = require(path.join(__dirname, 'Entity.js'));
 const InstructionSet = require(path.join(__dirname, 'InstructionSet.js'));
+const instructionSetLists = require(path.join(__dirname, "instructionSetLists.js"));
 const rulesets = require(path.join(__dirname, 'rulesets.js'));
 const dbTransactions = require(path.join(__dirname, '../database/dbTransactions.js'));
 const fsTransactions = require(path.join(__dirname, '../database/fsTransactions.js'));
@@ -70,6 +71,7 @@ class MainControlParallel {
         this.elapsedTime = 0;
         this.previousElapsedTime = 0;
         this.instructionSet = new InstructionSet;
+        instructionSetLists.init(this.instructionSet);
         rulesets.initialise();
         mainControlShared.fileInitialisations(this);
         rulesets.currentMaxScore = rulesets.getCurrentMaxScore(this.ruleSequenceNum);
@@ -1085,6 +1087,7 @@ class MainControlParallel {
         }
         // Prepare and re-execute the entity
         let e2;
+        let breedMethod;
         if (entity === null) {
             let e1 = this.bestSets[setNum][entityIndex];
             let memSpace = e1.initialMemSpace;
@@ -1093,12 +1096,13 @@ class MainControlParallel {
             let currentCycle = e1.birthCycle;
             e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
                 ruleSequenceNum, this.roundNum, memSpace);
-            e2.breedMethod = e1.breedMethod;
+            breedMethod = e1.breedMethod;
         }
         else {
             e2 = entity;
         }
         e2.execute(0, 0);
+        e2.breedMethod = breedMethod;
         let displayData = e2.display(setNum, entityIndex);
 
         // Sample Data
