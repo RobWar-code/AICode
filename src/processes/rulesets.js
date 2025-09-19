@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 103,
-    maxRuleId: 102,
+    numRules: 105,
+    maxRuleId: 104,
     maxRoundsPerRule: 60,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -1563,6 +1563,62 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getPowerFirstParamRequiredOutputs);
 
         this.scoreList.push(
+            {rule: "Square Roots", ruleId: 103,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 12 * 16 + learnCodeAllowance,
+                highIP: 120,
+                sampleIn: [
+                    [4,121,100,64,225,144,36,16,25,225,144,196,9,81,49,16],
+                    [121,225,169,16,25,49,81,64,144,121,196,4,9,36,81,100]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        121,100,81,225,4,16,225,169,121,49,36,25,64,100,196,144
+                    ],
+                    [
+                        4,16,9,49,25,225,169,196,121,100,100,36,64,81,81,144
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSquareRootsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Cube Roots", ruleId: 104,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 12 * 16 + learnCodeAllowance,
+                highIP: 120,
+                sampleIn: [
+                    [216,27,64,8,125,27,216,216,125,64,8,8,27,64,216,125],
+                    [27,216,125,64,64,27,8,216,64,8,8,125,27,8,125,216]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        125,216,216,8,8,64,216,64,27,125,27,125,64,64,8,216
+                    ],
+                    [
+                        216,8,8,64,27,27,64,125,27,216,64,64,125,216,8,8
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCubeRootsRequiredOutputs);
+
+        this.scoreList.push(
             {rule: "Greater than First Param", ruleId: 19,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
@@ -2923,7 +2979,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 101;
+        this.outputScoresItem = 103;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -2933,7 +2989,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 102;
+        this.diffScore = 104;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4735,6 +4791,32 @@ const rulesets = {
             let power = inputs[0];
             for (let v of inputs) {
                 let r = (v ** power) & 255;
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSquareRootsRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                let r = Math.floor(Math.pow(v, 1/2));
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getCubeRootsRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                let r = Math.floor(Math.pow(v, 1/3));
                 output.push(r);
             }
             outputList.push(output);

@@ -8,17 +8,19 @@ Jobs Due
     + = completed not tested
 
     Add the following rules
-        Add sum of first and Second params
-        Sub sum of First and Second Params
-        Get sum of triplets
+        * Add sum of first and Second params
+        * Sub sum of First and Second Params
+        * Get sum of triplets
         * Get average of triplets
+        Square root
+        Third Root
         Remove the first parameter number from the inputs
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
-    Check erroneous breed method recorded in parallel processing entities
+    * Check erroneous breed method recorded in parallel processing entities
 
     * Add a facility to log the current completion status
 
