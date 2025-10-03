@@ -28,6 +28,7 @@ Contents
         Setting Up Tests to Derive Further Instruction Sequences
     Toward Stepped Pathways
     Favouring Seed Rules - Seed Beds
+    Solution Mesh Analogy
     Performance Notes
 
 <h1>Status Reports
@@ -628,6 +629,15 @@ Consider repeat input params
     into the rest of the best set (4 * 10 = 40 best sets).
 
     For further notes on this, consult the README documentation and notes.txt
+
+<h1>Solution Mesh Analogy
+    If we liken each accumulated solution to a node in a mesh and the joining fibres to
+    the probabilistic transition from node to node, then we can see that we
+    should:
+
+    a) Make code-related rules
+    b) Have as wide a set of rules as practical
+    c) Possibly design ways to relate old rules to new rules
 
 <h1>Performance Notes
 

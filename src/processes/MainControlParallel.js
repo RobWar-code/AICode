@@ -1116,6 +1116,9 @@ class MainControlParallel {
         displayData.currentCycle = this.cycleCounter;
         displayData.numRounds = this.numRounds;
         displayData.ruleSequenceNum = ruleSequenceNum;
+        let startRound = rulesets.getCurrentRuleStartRound();
+        let roundsThisRule = this.numRounds - startRound;
+        displayData.roundsThisRule = roundsThisRule;
         displayData.currentMaxScore = rulesets.currentMaxScore;
         displayData.maxScore = rulesets.maxScore;
         let etime = this.elapsedTime / (3600 * 1000);

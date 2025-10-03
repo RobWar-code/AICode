@@ -12,13 +12,17 @@ Jobs Due
         * Sub sum of First and Second Params
         * Get sum of triplets
         * Get average of triplets
-        Square root
-        Third Root
-        Remove the first parameter number from the inputs
+        * Extract the first parameterth number from the inputs
+        * Output matches sample input
+        * Output matches sample output
+        * Square root
+        * Third Root
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
+
+    Add Rounds this Rule info to the main display
 
     * Check erroneous breed method recorded in parallel processing entities
 

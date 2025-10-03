@@ -22,6 +22,7 @@ const entityDisplay = {
             document.getElementById("numTrials").innerText = data.numTrials;
             document.getElementById("mainTotalScore").innerText = data.score;
             document.getElementById("ruleSequenceNum").innerText = data.ruleSequenceNum;
+            document.getElementById("roundsThisRule").innerText = data.roundsThisRule;
             document.getElementById("currentMaxScore").innerText = data.currentMaxScore;
             document.getElementById("maxScore").innerText = data.maxScore;
             document.getElementById("elapsedTime").innerText = data.elapsedTime;

@@ -8,9 +8,9 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 105,
-    maxRuleId: 104,
-    maxRoundsPerRule: 60,
+    numRules: 110,
+    maxRuleId: 109,
+    maxRoundsPerRule: 90,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -25,7 +25,7 @@ const rulesets = {
     bestEntity: null,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(101),
+    ruleRounds: new Array(this.numRules),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -253,6 +253,48 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutMatchInitialParams);
         this.byteFunction.push(this.byteValuesOutMatch);
         this.requiredOutputsFunction.push(this.getValuesOutMatchRequiredOutputs);
+
+        this.scoreList.push(
+            {rule:"Values Out Match Sample Input", ruleId: 108, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92]],
+                sampleOut: [[9,15,78,90,76,81,96,45,105,202,16,17,19,76,81,5]],
+                paramsIn: [
+                    [
+                        0,9,18,57,202,109,81,56,14,17,34,67,83,76,20,21
+                    ]
+                ],
+                outputs: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92]]
+            }
+        );
+        this.ruleFunction.push(this.valuesOutMatchSampleInput);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Values Out Match Sample Output", ruleId: 109, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92]],
+                sampleOut: [[7,21,67,98,107,109,213,234,3,2,11,21,54,96,87,65]],
+                paramsIn: [
+                    [
+                        0,9,18,57,202,109,81,56,14,17,34,67,83,76,20,21
+                    ]
+                ],
+                outputs: [[7,21,67,98,107,109,213,234,3,2,11,21,54,96,87,65]]
+            }
+        );
+        this.ruleFunction.push(this.valuesOutMatchSampleOut);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
             {rule: "Values Out Different", ruleId: 10, skip:true,
@@ -563,6 +605,96 @@ const rulesets = {
         this.ruleFunction.push(this.outputSeriesOfSeries);
         this.byteFunction.push(this.byteOutputSeriesOfSeries);
         this.requiredOutputsFunction.push(this.getOutputSeriesOfSeriesRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Extract First Paramth Inputs 1", ruleId: 105,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[
+                    2,3, 20,24, 190,87, 65,224, 120,95, 86,38, 71,86, 254,112,
+                    79,115, 126,210, 63,3, 65,7, 9,11, 8,145, 10,126, 11,128
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        2,11, 4,16, 90,75, 101,202, 225,248, 121,128, 45,65, 64,73,
+                        23,56, 54,48, 85,72, 32,39, 67,98, 111,96, 134,4, 76,82
+                    ],
+                    [
+                        2,12, 3,4, 5,6, 9,11, 21,23, 56,68, 78,90, 77,63,
+                        23,43, 54,65, 43,21, 67,2, 91,1, 10,0, 11,12, 76,34
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractFirstParamthInputsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Extract First Paramth Inputs 2", ruleId: 106,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 48,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[
+                    3,3,11, 20,24,34, 190,87,45, 65,224,228, 120,95,12, 86,38,1, 71,86,0, 254,112,1,
+                    79,115,8, 126,210,212, 63,3,32, 65,7,3, 9,11,212, 8,145,63, 10,126,34, 11,128,17
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        3,11,21, 4,16,17, 90,75,72, 101,202,145, 225,248,12, 121,128,14, 45,65,19, 64,73,13,
+                        23,56,18, 54,48,76, 85,72,74, 32,39,11, 67,98,10, 111,96,67, 134,4,5, 76,82,76
+                    ],
+                    [
+                        3,12,21, 3,4,16, 5,6,48, 9,11,21, 21,23,27, 56,68,98, 78,90,0, 77,63,2,
+                        23,43,45, 54,65,76, 43,21,81, 67,2,3, 91,1,7, 10,0,214, 11,12,83, 76,34,17
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractFirstParamthInputsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Extract First Paramth Inputs 3", ruleId: 107,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 48,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[
+                    3,3,11, 20,24,34, 190,87,45, 65,224,228, 120,95,12, 86,38,1, 71,86,0, 254,112,1,
+                    79,115,8, 126,210,212, 63,3,32, 65,7,3, 9,11,212, 8,145,63, 10,126,34, 11,128,17
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        2,13, 4,17, 90,75, 101,202, 225,12, 121,128, 45,19, 64,13,
+                        23,56, 54,48, 72,74, 32,39, 98,10, 111,67, 4,5, 82,76
+                    ],
+                    [
+                        3,12,22, 3,4,16, 5,6,48, 9,11,29, 21,23,27, 56,68,101, 78,90,0, 77,63,8,
+                        23,43,47, 54,65,76, 43,21,83, 67,2,13, 91,1,17, 10,0,214, 11,12,85, 76,34,17
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractFirstParamthInputsRequiredOutputs);
 
         this.scoreList.push(
             {rule: "And First Param", ruleId: 85,
@@ -2979,7 +3111,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 103;
+        this.outputScoresItem = 108;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -2989,7 +3121,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 104;
+        this.diffScore = 109;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -3990,6 +4122,40 @@ const rulesets = {
         return score;
     },
 
+    valuesOutMatchSampleInput(self, dataParams, ruleParams) {
+        let valuesOut = dataParams.valuesOut;
+        let sampleIn = ruleParams.sampleIn[0];
+        let outBlockLen = ruleParams.outBlockLen;
+        let count = 0;
+        for (let i = 0; i < outBlockLen; i++) {
+            if (sampleIn[i] === valuesOut[i]) {
+                ++count;
+            }
+        }
+        let opt = outBlockLen;
+        let max = outBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
+    valuesOutMatchSampleOutput(self, dataParams, ruleParams) {
+        let valuesOut = dataParams.valuesOut;
+        let sampleOut = ruleParams.sampleOut[0];
+        let outBlockLen = ruleParams.outBlockLen;
+        let count = 0;
+        for (let i = 0; i < outBlockLen; i++) {
+            if (sampleOut[i] === valuesOut[i]) {
+                ++count;
+            }
+        }
+        let opt = outBlockLen;
+        let max = outBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
     byteValuesOutMatch(self, rule, value, address, initialParams, params, outputValues) {
         let score = 255;
         let offset = address - rule.outBlockStart;
@@ -4294,6 +4460,20 @@ const rulesets = {
         else if (a > n) required = 3;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getExtractFirstParamthInputsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let n = inputs[0];
+            for (let p = 0 + (n - 1); p < inputs.length; p += n) {
+                output.push(inputs[p]);
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getAndFirstParamRequiredOutputs(self, inputList) {
@@ -6504,6 +6684,12 @@ const rulesets = {
         let paramsIn = null;
         if ("paramsIn" in rule) paramsIn = rule.paramsIn;
         return paramsIn;
+    },
+
+    getCurrentRuleStartRound() {
+        let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+        let startRound = this.ruleRounds[ruleIndex].start;
+        return startRound;
     }
 }
 

@@ -1,3 +1,18 @@
+03/10/2025
+Trial completed adding seven rule completions from the
+previous trial.
+
+Start new trial with additional rules, increase the number
+of rounds per rule sequence num to 90 from 60.
+
+22/09/2025
+Trial successfully completed about 50% of the rules.
+Recommenced using carried-over seed and the reduced
+random instruction set. Also included are the rules
+for second and third roots.
+
+Now logging final results.
+
 12/09/2025
 
 Trial succesfully completed the subtract First Param Second 
