@@ -1406,6 +1406,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 30 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[3,9,12,18,36,48,87,180,53,64,97,237,181,18,64,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -1431,6 +1445,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 16 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[6,8,9,64,53,27,98,247,45,85,17,24,45,46,76,32]],
                 sampleOut: [],
                 paramsIn: [
@@ -1459,6 +1487,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 16 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[12,144,87,86,50,212,119,8,65,76,86,17,18,34,36,17]],
                 sampleOut: [],
                 paramsIn: [
@@ -1493,6 +1535,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 13 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[7,49,56,90,87,14,32,54,86,197,230,145,86,185,82,19]],
                 sampleOut: [],
                 paramsIn: [
@@ -1518,6 +1574,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 16 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[8,64,86,90,108,84,25,32,65,64,72,89,150,160,12,16]],
                 sampleOut: [],
                 paramsIn: [
@@ -1543,6 +1613,20 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 10 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                    {
+                        ins: "JRC",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 50
+                    }
+                ],
                 sampleIn: [[7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43]],
                 sampleOut: [],
                 paramsIn: [
@@ -3311,7 +3395,7 @@ const rulesets = {
                     if (this.ignoreRounds || this.scoreList[i].startRoundNum <= roundNum) {
                         let score;
                         if ("outputs" in this.scoreList[i]) {
-                            score = this.getOutputComparisonScore(this.scoreList[i].outputs, entityOutputs);
+                            score = this.getOutputComparisonScore(executionCycle, this.scoreList[i].outputs, valuesOut);
                         }
                         else {
                             score = this.ruleFunction[i](this, dataParams, this.scoreList[i]);
@@ -3352,6 +3436,8 @@ const rulesets = {
             sequenceNum: sequenceNum
         }
 
+
+        let maxScore = 0;
         let totalScore = 0;
         let i = 0;
         for (let rule of this.scoreList) {
@@ -3360,20 +3446,32 @@ const rulesets = {
                     if (rule.interim) {
                         let score = this.ruleFunction[i](this, dataParams, rule);
                         score *= rule.max;
+                        maxScore += rule.max;
                         totalScore += score;
                     }
                 }
             }
             ++i;
         }
-        totalScore = Math.floor((totalScore / this.interimMaxScore) * 255);
+
+        let index = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+        let rule = this.scoreList[index];
+        maxScore += rule.max;
+        let score = 0;
+        if ("outputs" in rule) {
+            totalScore += rule.max * this.getOutputComparisonScore(executionCycle, rule.outputs, valuesOut);
+        }
+        else {
+            totalScore += rule.max * this.ruleFunction[index](this, dataParams, rule);
+        }
+
+        totalScore = Math.floor((totalScore / maxScore) * 255);
         return totalScore;
     },
 
-    getOutputComparisonScore(ruleOutputs, entityOutputs) {
-        let outputNum = entityOutputs.length - 1;
-        let ruleOut = ruleOutputs[outputNum];
-        let output = entityOutputs[outputNum]
+    getOutputComparisonScore(executionCycle, ruleOutputs, valuesOut) {
+        let ruleOut = ruleOutputs[executionCycle];
+        let output = valuesOut;
         let consecutiveCount = 0;
         for (let i = 0; i < ruleOut.length; i++) {
             let a = ruleOut[i];
