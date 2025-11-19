@@ -353,6 +353,121 @@ const seedTemplates = {
             ]
         },
         {
+            name: "divideByFirstParam",
+            description: "divide the inputs by the first parameter and output each result",
+            template: [ 
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "SWP A, B"
+                },
+                {
+                    ins: "LD A, IMM",
+                    data: [16]
+                },
+                {
+                    // Main Loop
+                    ins: "ST (MEM), A",
+                    data: [200] // Input/output loop count
+                },
+                {
+                    ins: "LDI A, (C)"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201] // Remaining total
+                },
+                {
+                    ins: "CLR (MEM)",
+                    data: [202] // Count of subtractions
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    // Calculation Loop
+                    ins: "LD A, (MEM)",
+                    data: [201]
+                },
+                {
+                    ins: "CMP A, B"
+                },
+                {
+                    ins: "JRC",
+                    data: [17], // Main Loop Back
+                },
+                {
+                    ins: "JRZ",
+                    data: [10], // Zero End
+                },
+                {
+                    ins: "SUB A, B"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [201]
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    ins: "JR",
+                    data: [0xF1] // Calculation Loop
+                },
+                {
+                    // Zero End
+                    ins: "LD A, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "INC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [202]
+                },
+                {
+                    // Main Loop Back
+                    ins: "LD A, (MEM)",
+                    data: [202]
+                },
+                {
+                    ins: "STO (C), A"
+                },
+                {
+                    ins: "INC C"
+                },
+                {
+                    ins: "LD A, (MEM)",
+                    data: [200]
+                },
+                {
+                    ins: "DEC A"
+                },
+                {
+                    ins: "ST (MEM), A",
+                    data: [200]
+                },
+                {
+                    ins: "JRNZ",
+                    data: [0xDA] // Main Loop
+                },
+                {
+                    ins: "RETF"
+                }
+            ]
+        },
+        {
             // 2
             name: "firstParamExtractLoop",
             description: "Loop with separate i/o pointers using first param", 

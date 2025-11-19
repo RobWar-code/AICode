@@ -1,3 +1,13 @@
+
+09/10/2025
+Halt trial at nth Prime. No significant gains this trial.
+
+Modify LISC A to include score on number of hits. Add
+insDistribution instructions to the divide rules.
+
+Restart trial continuing with seed.
+
+
 03/10/2025
 Trial completed adding seven rule completions from the
 previous trial.
