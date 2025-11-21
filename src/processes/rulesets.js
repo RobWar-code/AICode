@@ -6446,28 +6446,28 @@ const rulesets = {
             this.seedRuleSet = true;
 
             ++this.ruleSequenceNum;
-            if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
-                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
-                this.ruleRounds[newRuleIndex].start = roundNum;
-                // Get the new current rule number
-                let index = 0;
-                for (let rule of this.scoreList) {
-                    if (!rule.skip) {
-                        if (!rule.retain && this.ruleSequenceNum === rule.sequenceNum) {
-                            this.seedRuleNum = rule.rule_num;
-                            break;
-                        }
-                        if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
-                            this.ruleRounds[index].end = roundNum;
-                        }
+            if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
+                this.ruleSequenceNum = 0;
+            }
+            this.ruleSequenceNum = this.findNextNonCompleteRule(this.ruleSequenceNum);
+            let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+            // Find the next non-completed rule
+            this.ruleRounds[newRuleIndex].start = roundNum;
+            // Get the new current rule number
+            let index = 0;
+            for (let rule of this.scoreList) {
+                if (!rule.skip) {
+                    if (!rule.retain && this.ruleSequenceNum === rule.sequenceNum) {
+                        this.seedRuleNum = rule.rule_num;
+                        break;
                     }
-                    ++index;
+                    if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
+                        this.ruleRounds[index].end = roundNum;
+                    }
                 }
-                this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
+                ++index;
             }
-            else {
-                // All sequential rules completed
-            }
+            this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
         }
         else if (roundNum >= this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
             // Save the sub-optimal result for reference
@@ -6482,39 +6482,46 @@ const rulesets = {
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
             console.error("got subOptRule:", subOptRuleItem.ruleId, this.ruleSequenceNum, this.maxRuleSequenceNum);
-            if (this.ruleSequenceNum <= this.maxRuleSequenceNum) {
-                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
-                this.ruleRounds[newRuleIndex].start = roundNum;
-            }
-            else {
+            if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 // Max rule reached
                 // Search for the first non-completed rule
                 this.ruleSequenceNum = 0;
-                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
-                let found = false;
-                let i;
-                for (i = newRuleIndex; i < this.ruleRounds.length; i++) {
-                    if (this.scoreList[i].retain) break;
-                    if (!this.ruleRounds[i].completed && !this.scoreList[i].skip) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
-                    this.ruleSequenceNum = this.scoreList[i].sequenceNum;
-                    this.ruleRounds[i].start = roundNum;
-                }
-                else {
-                    this.ruleRounds[newRuleIndex].start = roundNum;
-                }
-                ++this.numRuleLoops;
             }
+            this.ruleSequenceNum = this.findNextNonCompleteRule(this.ruleSequenceNum);
+            let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+            this.ruleRounds[newRuleIndex].start = roundNum;
+            ++this.numRuleLoops;
+            
             roundThresholdReached = true;
         }
         else {
             this.seedRuleSet = false;
         }
         return roundThresholdReached;
+    },
+
+    findNextNonCompleteRule(ruleSequenceNum) {
+        let newRuleIndex = this.getRuleIndexFromSequence(ruleSequenceNum);
+        let found = false;
+        let i = newRuleIndex;
+        let count = 0;
+        for (count = 0; count < this.ruleRounds.length; count++) {
+            if (!this.scoreList[i].retain && !this.scoreList[i].skip) {
+                if (!this.ruleRounds[i].completed) {
+                    found = true;
+                    break;
+                }
+            }
+            ++i;
+            if (i > this.ruleRounds.length) i = 0;
+        }
+        if (found) {
+            ruleSequenceNum = this.scoreList[i].sequenceNum;
+        }
+        else {
+            ruleSequenceNum = 0;
+        }
+        return ruleSequenceNum;
     },
 
     insertSeedRule(memSpace) {

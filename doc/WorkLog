@@ -8,17 +8,19 @@ Jobs Due
     + = completed not tested
 
     bestsStore entities
-        Save the bestsStore on each round completion along with other tables
-        Fetch the bestsStore in the worker app
-        Check whether selected - serial and parallel
-        Allow for rule re-runs in primary run loop
-            Skip completed rules
-        Save the batch breed count data
-            database
-            file system
-        Load the batch breed Count data
-            database
-            file system
+        * Save the bestsStore on each round completion along with other tables
+        * Fetch the bestsStore in the worker app
+        * Check whether selected - serial and parallel
+        * Allow for rule re-runs in primary run loop
+            * Skip completed rules
+        * Save the batch breed count data
+            * database
+            * file system
+        * Load the batch breed Count data
+            * database
+            * file system
+        When the rule sequence num is updated check for the next non-completed
+        rule.
         
     Add the following rules
         * Add sum of first and Second params

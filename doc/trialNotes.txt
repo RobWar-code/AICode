@@ -1,3 +1,14 @@
+21/11/2025
+Changed rule handling to cycle through the rules in a short number
+of rounds each (4), saving the best result for re-use in this and
+other rules. When the end of the ruleset is reached, restarts at the
+first non-completed rule.
+
+Changed rule LISC A to IOC A, (C) which compares a required output
+to a set output for a correct match.
+
+Restarted trial from scratch with no recorded data.
+
 19/11/2025
 Picked-up where trial left-off at divide by first param.
 Included the seed for divide by first param as a template.
