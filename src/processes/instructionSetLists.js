@@ -9,7 +9,7 @@ const instructionSetLists = {
                 "PUSH C",
                 "INC SP",
                 "DEC SP",
-                "LISC A",
+                "IOC A, (C)",
                 "JRLZ",
                 "JRLC",
                 "CFAR",

@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 110,
     maxRuleId: 109,
-    maxRoundsPerRule: 2,
+    maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -6756,7 +6756,7 @@ const rulesets = {
     testOutputByte(p, valuesOut, executionCycle, ruleSequenceNum) {
         let ruleIndex = this.getRuleIndexFromSequence(ruleSequenceNum);
         let rule = this.scoreList[ruleIndex];
-        if (outputs in rule) {
+        if ("outputs" in rule) {
             let output = rule.outputs[executionCycle];
             if (p >= output.length) return 0;
             if (valuesOut[p] === output[p]) return 1;
