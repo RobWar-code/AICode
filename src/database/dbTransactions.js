@@ -50,6 +50,10 @@ const dbTransactions = {
             resultOK = await this.saveSubOptRules(sessionId, dbConnection);
         }
 
+        if (resultOK) {
+            resultOK = await this.saveBestsStore(sessionId, dbConnection);
+        }
+
         await this.deleteOtherRecords(dbConnection, sessionId);
 
         if (resultOK) {
@@ -224,7 +228,17 @@ const dbTransactions = {
         catch (error) {
             console.error("Could not read from sub_opt_rule table.", error.message);
         }
-        
+
+        let bestsStore;
+        try {
+            [bestsStore] = await dbConnection.execute(
+                `SELECT * FROM bests_store ORDER BY rule_sequence_num`
+            );
+        }
+        catch (error) {
+            console.error("Could not read from bests_store table.", error.message);
+        }
+
         // Seedbed Data
         await this.loadSeedbedData(program, dbConnection);
 
@@ -242,7 +256,7 @@ const dbTransactions = {
         // Seed Rule Fragments
         await this.loadFragments();
 
-        program.loadRestart(sessions[0], entities, seedRules, subOptRules);
+        program.loadRestart(sessions[0], entities, seedRules, subOptRules, bestsStore);
 
         mainWindow.webContents.send("loadDone", 0);
     },
@@ -326,6 +340,43 @@ const dbTransactions = {
         }
         catch (error) {
             console.error("Failed to insert sub_opt_rule", error.message);
+            throw error;
+        }
+    },
+
+    async saveBestsStore(sessionId, dbConnection) {
+
+        let bestsStore = rulesets.bestsStore;
+        if (bestsStore.length === 0) return true;
+
+        let ruleSequenceNum = 0;
+        for (let bestsStoreItem of bestsStore) {
+            let ruleId = bestsStoreItem.ruleId;
+            let bestsStoreMemSpace = bestsStoreItem.memSpace;
+            let result = await this.saveBestsStoreItem(dbConnection, sessionId, ruleId, ruleSequenceNum, bestsStoreMemSpace);
+            if (!result) return false;
+            ++ruleSequenceNum;
+        }
+
+        console.error("saved bestsStore rules");
+
+        return true;
+
+    },
+
+    async saveBestsStoreItem(dbConnection, sessionId, ruleId, ruleSequenceNum, bestsStoreMemSpace) {
+        // Delete any existing record for this rule sequence number
+        sql = `DELETE FROM bests_store WHERE rule_id = ${ruleId}`;
+        await dbConnection.query(sql);
+
+        let memSpaceStr = this.intArrayToString(bestsStoreMemSpace, bestsStoreMemSpace.length);
+        try {
+            sql = "INSERT INTO bests_store (rule_id, rule_sequence_num, best_entity_mem_space) VALUES (?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [ruleId, ruleSequenceNum, memSpaceStr]);
+            return true;
+        }
+        catch (error) {
+            console.error("Failed to insert bestsStore item", error.message);
             throw error;
         }
     },
@@ -735,6 +786,33 @@ const dbTransactions = {
         }
     },
 
+    async fetchBestsStore() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.error ("Could not open db connection");
+            return;
+        }
+
+        try {
+            sql = "SELECT rule_id, best_entity_mem_space FROM bests_store";
+            [results] = await dbConnection.query(sql);
+        }
+        catch (error) {
+            console.error("fetchBestsStore: Problem with select");
+            throw error;
+        }
+
+        await dbConnection.end();
+        
+        rulesets.bestsStore = [];
+        for (let item of results) {
+            let entry = {};
+            entry.ruleId = item.rule_id;
+            entry.memSpace = this.stringToIntArray(item.best_entity_mem_space);
+            rulesets.bestsStore.push(entry);
+        }
+    },
+
     async loadRules() {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
@@ -1094,8 +1172,8 @@ const dbTransactions = {
         try {
             sql = "INSERT INTO batch_data (batch_num, monoclonal_ins_count, monoclonal_byte_count, interbreed_count,";
             sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, self_breed_count,";
-            sql += "seed_rule_breed_count, seed_template_breed_count, random_count, cross_set_count) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql += "bests_store_breedCount, seed_rule_breed_count, seed_template_breed_count, random_count, cross_set_count) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [batchNum, batchData.monoclonalInsCount, 
                 batchData.monoclonalByteCount, batchData.interbreedCount, batchData.interbreed2Count,
                 batchData.interbreedFlaggedCount, batchData.interbreedInsMergeCount,

@@ -22,12 +22,12 @@ Contents
         valuesSet
         valuesOutMatchInputParams
     Reduced Instruction Set Considerations
-
     AI Code - Example Sequences
     Toward Stepped Rules
         Setting Up Tests to Derive Further Instruction Sequences
     Toward Stepped Pathways
     Favouring Seed Rules - Seed Beds
+    Short Sampling
     Solution Mesh Analogy
     Performance Notes
 
@@ -629,6 +629,25 @@ Consider repeat input params
     into the rest of the best set (4 * 10 = 40 best sets).
 
     For further notes on this, consult the README documentation and notes.txt
+
+<h1>Short Sampling
+    Rather than playing-out individual rules to cycle to success or failure,
+    we might use a shorter cycle time per rule (say 8 rounds) to derive the best
+    score. If after 8 rounds, a pass is reached, then this is saved as seed,
+    otherwise the best scoring program is stashed as potential material for
+    use in the solving of other rules.
+
+    Such an approach might encourage the evolution of natural template-type
+    sequences.
+
+<h2>Implementation
+    Set the maximum cycles for a rule to about 8.
+    Save the highest scoring program in the new "bestsStore" (this also requires
+    file system storage).
+    When code is bred, have an option to select the entity code from the bestsStore,
+    say probability slightly higher than seed programs or templates.
+    We also need to change the clearance cycle.
+
 
 <h1>Solution Mesh Analogy
     If we liken each accumulated solution to a node in a mesh and the joining fibres to

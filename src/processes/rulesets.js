@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 110,
     maxRuleId: 109,
-    maxRoundsPerRule: 90,
+    maxRoundsPerRule: 2,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -23,12 +23,14 @@ const rulesets = {
     diffScore: 0,
     ignoreRounds: true,
     bestEntity: null,
+    numRuleLoops: 0,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
     ruleRounds: new Array(this.numRules),
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
+    bestsStore: [],
     seedRuleFragments: [],
     seedRuleSet: false,
     subOptRuleSet: false,
@@ -6467,7 +6469,7 @@ const rulesets = {
                 // All sequential rules completed
             }
         }
-        else if (roundNum > this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
+        else if (roundNum >= this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
             // Save the sub-optimal result for reference
             let subOptRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
@@ -6476,6 +6478,7 @@ const rulesets = {
             subOptRuleItem.memSpace = memSpace;
             this.subOptRuleMemSpaces.push(subOptRuleItem);
             this.subOptRuleSet = true;
+            this.bestsStore.push(subOptRuleItem);
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
             console.error("got subOptRule:", subOptRuleItem.ruleId, this.ruleSequenceNum, this.maxRuleSequenceNum);
@@ -6485,6 +6488,26 @@ const rulesets = {
             }
             else {
                 // Max rule reached
+                // Search for the first non-completed rule
+                this.ruleSequenceNum = 0;
+                let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
+                let found = false;
+                let i;
+                for (i = newRuleIndex; i < this.ruleRounds.length; i++) {
+                    if (this.scoreList[i].retain) break;
+                    if (!this.ruleRounds[i].completed && !this.scoreList[i].skip) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    this.ruleSequenceNum = this.scoreList[i].sequenceNum;
+                    this.ruleRounds[i].start = roundNum;
+                }
+                else {
+                    this.ruleRounds[newRuleIndex].start = roundNum;
+                }
+                ++this.numRuleLoops;
             }
             roundThresholdReached = true;
         }
@@ -6728,6 +6751,21 @@ const rulesets = {
             }
         }
         return ruleList;
+    },
+
+    testOutputByte(p, valuesOut, executionCycle, ruleSequenceNum) {
+        let ruleIndex = this.getRuleIndexFromSequence(ruleSequenceNum);
+        let rule = this.scoreList[ruleIndex];
+        if (outputs in rule) {
+            let output = rule.outputs[executionCycle];
+            if (p >= output.length) return 0;
+            if (valuesOut[p] === output[p]) return 1;
+            else return 0;
+
+        }
+        else {
+            return 0;
+        }
     },
 
     getRuleFromSequence(sequenceNum) {

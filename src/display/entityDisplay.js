@@ -35,6 +35,7 @@ const entityDisplay = {
             document.getElementById("interbreedFlaggedCount").innerText = data.interbreedFlaggedCount;
             document.getElementById("interbreedInsMergeCount").innerText = data.interbreedInsMergeCount;
             document.getElementById("selfBreedCount").innerText = data.selfBreedCount;
+            document.getElementById("bestsStoreBreedCount").innerText = data.bestsStoreBreedCount;
             document.getElementById("seedRuleBreedCount").innerText = data.seedRuleBreedCount;
             document.getElementById("seedTemplateBreedCount").innerText = data.seedTemplateBreedCount;
             document.getElementById("crossSetCount").innerText = data.crossSetCount;

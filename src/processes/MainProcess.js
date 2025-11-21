@@ -39,7 +39,12 @@ class MainProcess {
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
                     if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
-                        breedMode = "random";
+                        if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
+                            breedMode = "random";
+                        }
+                        else {
+                            breedMode = "bestsStore";
+                        }
                     }
                     else if (inSeedbed && bestEntitySet.length === 0 && !gotSeedbedEntity) {
                         breedMode = "seedbedInsert"
@@ -57,6 +62,14 @@ class MainProcess {
                             self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
                         entity.qualityControlIns("seedRule", memSpace);
                         entity.breedMethod = "SeedRule";
+                    }
+                    else if (breedMode === "bestsStore") {
+                        let r = Math.floor(Math.random() * this.rulesets.bestsStore.length);
+                        memSpace = this.rulesets.bestsStore[r].memSpace;
+                        asRandom = false;
+                        entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
+                            self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                        entity.breedMethod = "BestsStore";
                     }
                     else if (breedMode === "seedTemplate") {
                         memSpace = seedTemplates.getSeedTemplate();
@@ -148,8 +161,12 @@ class MainProcess {
                         case "InterbreedInsMerge" :
                             ++self.interbreedInsMergeCount;
                             if (gotCrossMate) ++self.crossSetCount;
+                            break;
                         case "Self-breed" :
                             ++self.selfBreedCount;
+                            break;
+                        case "BestsStore" :
+                            ++self.bestsStoreBreedCount;
                             break;
                         case "SeedRule" :
                             ++self.seedRuleBreedCount;

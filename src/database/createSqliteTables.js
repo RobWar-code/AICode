@@ -53,7 +53,6 @@ async function createTables() {
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
 
     sql = "DROP TABLE seed_rule";
     await connection.query(sql);
@@ -66,7 +65,14 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
+    sql = "CREATE TABLE bests_store (";
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "rule_id INT,";
+    sql += "rule_sequence_num INT,";
+    sql += "best_entity_mem_space VARCHAR(256)";
+    sql += ")";
+    await connection.query(sql);
+
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT PRIMARY KEY AUTOINCREMENT,";
     sql += "session_id INT,";
@@ -178,8 +184,9 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    // sql = "DROP TABLE batch_data";
-    // await connection.query(sql);
+    */
+    sql = "DROP TABLE batch_data";
+    await connection.query(sql);
     
     sql = "CREATE TABLE batch_data (";
     sql += "batch_num INT,"
@@ -190,17 +197,21 @@ async function createTables() {
     sql += "interbreed_flagged_count INT,";
     sql += "interbreed_ins_merge_count INT,";
     sql += "self_breed_count INT,";
+    sql += "bests_store_breed_count INT,";
     sql += "seed_rule_breed_count INT,";
     sql += "random_count INT,";
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-    */
+    
     connection.close();
 }
 
 async function clearTables(connection) {
     let sql;
+
+    sql = "DELETE FROM bests_store";
+    await connection.query(sql);
 
     sql = "DELETE FROM seedbed_data";
     await connection.query(sql);

@@ -363,6 +363,20 @@ allow for preferential breeding from these seeds.
 
 see Notes.txt for more details
 
+##### Multi-Pass Solution Evolution
+
+Rather than cycling through each rule a large number of times
+in the search for a solution, the system cycles through upto
+8 rounds of processing per rule. If the solution is found,
+then this is saved in the seedRules, otherwise the bestsStore
+is used to preserve the best solution from the rule cycles.
+
+The best solutions are randomly selected each time a new rule
+is begun as an alternative to random code.
+
+In this way, it is hoped that intermediate, template-like code
+will evolve naturally in the search for solutions.
+
 ##### Parallel Batch Processing
 
 The processing procedures for generating and trialing the
@@ -891,6 +905,12 @@ TABLE seed_rule
     session_id INT
     rule_sequence_num INT
     seed_rule_mem_space VARCHAR(256)
+
+TABLE bests_store
+    id INT UNIQUE PRIMARY KEY
+    session_id INT
+    rule_sequence_num INT
+    best_entity_memspace VARCHAR(256)
 
 The load operation halts processing, loads the most recent (highest save_time) 
 session into memory, clears down the best sets, creates an entity for each database 

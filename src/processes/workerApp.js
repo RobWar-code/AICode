@@ -69,6 +69,7 @@ class BatchProcess {
         this.interbreedFlaggedCount = 0;
         this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
+        this.bestsStoreBreedCount = 0;
         this.seedRuleBreedCount = 0;
         this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
@@ -82,6 +83,7 @@ class BatchProcess {
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
+        await dbTransactions.fetchBestsStore();
         // Load the seedbed data
         this.seedbedData = await dbTransactions.fetchSeedbedData();
         this.templateSeedbedLog = await dbTransactions.fetchTemplateSeedbedLog();
@@ -135,6 +137,7 @@ class BatchProcess {
                 interbreedFlaggedCount: this.interbreedFlaggedCount,
                 interbreedInsMergeCount: this.interbreedInsMergeCount,
                 selfBreedCount: this.selfBreedCount,
+                bestsStoreBreedCount: this.bestsStoreBreedCount,
                 seedRuleBreedCount: this.seedRuleBreedCount,
                 seedTemplateBreedCount: this.seedTemplateBreedCount,
                 randomCount: this.randomCount,
@@ -277,6 +280,7 @@ class BatchProcess {
             interbreedFlaggedCount: this.interbreedFlaggedCount,
             interbreedInsMergeCount: this.interbreedInsMergeCount,
             selfBreedCount: this.selfBreedCount,
+            bestsStoreBreedCount: this.bestsStoreBreedCount,
             seedRuleBreedCount: this.seedRuleBreedCount,
             seedTemplateBreedCount: this.seedTemplateBreedCount,
             randomCount: this.randomCount,
@@ -295,6 +299,7 @@ class BatchProcess {
             interbreedFlaggedCount: this.interbreedFlaggedCount,
             interbreedInsMergeCount: this.interbreedInsMergeCount,
             selfBreedCount: this.selfBreedCount,
+            bestsStoreBreedCount: this.bestsStoreBreedCount,
             seedRuleBreedCount: this.seedRuleBreedCount,
             seedTemplateBreedCount: this.seedTemplateBreedCount,
             randomCount: this.randomCount,

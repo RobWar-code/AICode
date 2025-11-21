@@ -63,6 +63,7 @@ class MainControlParallel {
         this.interbreedFlaggedCount = 0;
         this.interbreedInsMergeCount = 0;
         this.selfBreedCount = 0;
+        this.bestsStoreBreedCount = 0;
         this.seedRuleBreedCount = 0;
         this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
@@ -563,6 +564,7 @@ class MainControlParallel {
             this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
             this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
             this.selfBreedCount += batchData.selfBreedCount;
+            this.bestsStoreBreedCount += batchData.bestsStoreBreedCount;
             this.seedRuleBreedCount += batchData.seedRuleBreedCount;
             this.seedTemplateBreedCount += batchData.seedTemplateBreedCount;
             this.randomCount += batchData.randomCount;
@@ -578,6 +580,7 @@ class MainControlParallel {
         this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
         this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
         this.selfBreedCount += batchData.selfBreedCount;
+        this.bestsStoreBreedCount += batchData.bestsStoreBreedCount;
         this.seedRuleBreedCount += batchData.seedRuleBreedCount;
         this.seedTemplateBreedCount += batchData.seedTemplateBreedCount;
         this.randomCount += batchData.randomCount;
@@ -940,7 +943,7 @@ class MainControlParallel {
      * @param {*} session -session database record
      * @param {*} entities - entity database records
      */
-    loadRestart(session, entities, seedRules, subOptRules) {
+    loadRestart(session, entities, seedRules, subOptRules, bestsStore) {
         // Set session details
         this.cycleCounter = session.cycle_counter;
         this.numRounds = session.num_rounds;
@@ -1020,6 +1023,28 @@ class MainControlParallel {
                 rulesets.subOptRuleMemSpaces.push(item);
             }
         }
+
+        // Load the bestsStore rules
+        for (let item of bestsStore) {
+            let memStr = best_entity_mem_space;
+            let memArray = this.stringToIntArray(memStr);
+            let ruleId = item.rule_id;
+            // Search the existing seed rules
+            let found = false;
+            for (let item of rulesets.bestsStore) {
+                if (item.ruleId === ruleId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let item = {};
+                item.ruleId = ruleId;
+                item.memSpace = memArray;
+                rulesets.bestsStore.push(item);
+            }
+        }
+
     }
 
     stringToIntArray(str) {
@@ -1131,6 +1156,7 @@ class MainControlParallel {
         displayData.interbreedFlaggedCount = this.interbreedFlaggedCount;
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
         displayData.selfBreedCount = this.selfBreedCount;
+        displayData.bestsStoreBreedCount = this.bestsStoreBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
         displayData.seedTemplateBreedCount = this.seedTemplateBreedCount;
         displayData.crossSetCount = this.crossSetCount;

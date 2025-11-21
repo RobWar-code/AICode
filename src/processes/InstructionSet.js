@@ -331,7 +331,7 @@ class InstructionSet {
                 insLen: 1
             },
             {
-                name: "LISC A", // Load A with the interim score
+                name: "IOC A, (C)", // Is Output Correct - Compare the output byte with the required byte 
                 code: 17,
                 insLen: 1
             },
@@ -1057,10 +1057,8 @@ class InstructionSet {
                     ++IP;
                     break;
                 case 17:
-                    // LISC A - get interim score
-                    A = rulesets.getInterimScore(this, memSpace, codeFlags, initialParams, params, valuesOut,
-                        entityOutputs, executionCycle, IC, this.highestIP, rulesets.ruleSequenceNum
-                    );
+                    // IOC A, (C) - Compare the current with required output
+                    A = rulesets.testOutputByte(C, valuesOut, executionCycle, ruleSequenceNum);
                     ++IP;
                     break;
                 case 18:

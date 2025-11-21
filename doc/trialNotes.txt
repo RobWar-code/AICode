@@ -1,3 +1,16 @@
+19/11/2025
+Picked-up where trial left-off at divide by first param.
+Included the seed for divide by first param as a template.
+This rule is now solved.
+
+The aim is to build-up a set of machine and human generated
+solutions which the system can use to more likely find
+solutions to novel problems.
+
+This approach is still deemed too slow and cumbersome and prone 
+to get trapped in sub-optimal solutions.
+
+For a possible remedy see WorkedExamples - Short Sampling
 
 09/10/2025
 Halt trial at nth Prime. No significant gains this trial.
