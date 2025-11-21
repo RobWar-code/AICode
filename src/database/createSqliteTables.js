@@ -64,6 +64,7 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
+    */
 
     sql = "CREATE TABLE bests_store (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
@@ -73,6 +74,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    /*
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT PRIMARY KEY AUTOINCREMENT,";
     sql += "session_id INT,";
@@ -210,8 +212,8 @@ async function createTables() {
 async function clearTables(connection) {
     let sql;
 
-    sql = "DELETE FROM bests_store";
-    await connection.query(sql);
+    // sql = "DELETE FROM bests_store";
+    // await connection.query(sql);
 
     sql = "DELETE FROM seedbed_data";
     await connection.query(sql);
