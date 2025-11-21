@@ -507,9 +507,9 @@ class MainControl {
             }
         }
 
-                // Load the bestsStore rules
+        // Load the bestsStore rules
         for (let item of bestsStore) {
-            let memStr = best_entity_mem_space;
+            let memStr = item.best_entity_mem_space;
             let memArray = this.stringToIntArray(memStr);
             let ruleId = item.rule_id;
             // Search the existing seed rules
