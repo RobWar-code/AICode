@@ -6448,6 +6448,7 @@ const rulesets = {
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 this.ruleSequenceNum = 0;
+                ++this.numRuleLoops;
             }
             this.ruleSequenceNum = this.findNextNonCompleteRule(this.ruleSequenceNum);
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
@@ -6484,14 +6485,13 @@ const rulesets = {
             console.error("got subOptRule:", subOptRuleItem.ruleId, this.ruleSequenceNum, this.maxRuleSequenceNum);
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 // Max rule reached
+                ++this.numRuleLoops;
                 // Search for the first non-completed rule
                 this.ruleSequenceNum = 0;
             }
             this.ruleSequenceNum = this.findNextNonCompleteRule(this.ruleSequenceNum);
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
             this.ruleRounds[newRuleIndex].start = roundNum;
-            ++this.numRuleLoops;
-            
             roundThresholdReached = true;
         }
         else {
@@ -6513,7 +6513,9 @@ const rulesets = {
                 }
             }
             ++i;
-            if (i > this.ruleRounds.length) i = 0;
+            if (i > this.ruleRounds.length) { 
+                i = 0;
+            }
         }
         if (found) {
             ruleSequenceNum = this.scoreList[i].sequenceNum;

@@ -24,11 +24,11 @@ const dbTransactions = {
 
         // Insert the program session details
         try {
-            let sql = "INSERT INTO session (cycle_counter, num_rounds, elapsed_time, ";
+            let sql = "INSERT INTO session (num_rule_loops, cycle_counter, num_rounds, elapsed_time, ";
             sql +=  "entity_number, rule_sequence_num) "; 
-            sql += "VALUES (?, ?, ?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [program.cycleCounter, program.numRounds, 
-                elapsedTime, program.entityNumber, ruleSequenceNum]);
+            sql += "VALUES (?, ?, ?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [rulesets.numRuleLoops, program.cycleCounter, 
+                program.numRounds, elapsedTime, program.entityNumber, ruleSequenceNum]);
             console.error("session saved -id", results.insertId);
             sessionId = results.insertId;
         }

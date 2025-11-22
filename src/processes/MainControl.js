@@ -427,6 +427,7 @@ class MainControl {
      */
     loadRestart(session, entities, seedRules, subOptRules, bestsStore) {
         // Set session details
+        rulesets.numRuleLoops = session.num_rule_loops;
         this.cycleCounter = session.cycle_counter;
         this.numRounds = session.num_rounds;
         this.previousElapsedTime = session.elapsed_time;
@@ -619,7 +620,7 @@ class MainControl {
         // Details
         displayData.terminateProcessing = terminateProcessing;
         displayData.numTrials = this.entityNumber;
-        displayData.currentCycle = this.cycleCounter;
+        displayData.numRuleLoops = rulesets.numRuleLoops;
         displayData.numRounds = this.numRounds;
         displayData.ruleSequenceNum = ruleSequenceNum;
         let startRound = rulesets.getCurrentRuleStartRound();

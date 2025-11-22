@@ -19,13 +19,12 @@ async function createTables() {
     console.log("Tables Cleared");
     // return;
 
-    /*
-
     sql = "DROP TABLE session";
     await connection.query(sql);
 
     sql = "CREATE TABLE session (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "num_rule_loops INT,"
     sql += "cycle_counter INT,";
     sql += "num_rounds INT,"
     sql += "elapsed_time INT,";
@@ -34,6 +33,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    /*
     sql = "DROP TABLE entity";
     await connection.query(sql);
 
@@ -64,7 +64,7 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
+    
     sql = "CREATE TABLE bests_store (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "rule_id INT,";
@@ -73,7 +73,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "session_id INT,";
@@ -130,10 +129,9 @@ async function createTables() {
     sql += "current INT"
     sql += ")";
     await connection.query(sql);
-
     
-    // sql = "DROP TABLE transfer_entity";
-    // await connection.query(sql);
+    sql = "DROP TABLE transfer_entity";
+    await connection.query(sql);
 
     sql = "CREATE TABLE transfer_entity (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
@@ -184,7 +182,6 @@ async function createTables() {
     sql += "input_block VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-*/
     
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
@@ -205,15 +202,15 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-
+    */
     connection.end();
 }
 
 async function clearTables(connection) {
     let sql;
 
-    // sql = "DELETE FROM bests_store";
-    // await connection.query(sql);
+    sql = "DELETE FROM bests_store";
+    await connection.query(sql);
     
     sql = "DELETE FROM seedbed_data";
     await connection.query(sql);

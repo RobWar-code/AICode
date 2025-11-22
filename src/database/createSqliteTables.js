@@ -20,12 +20,12 @@ async function createTables() {
 
     // return;
     
-    /*
-    // sql = "DROP TABLE session";
-    // await connection.query(sql);
+    sql = "DROP TABLE session";
+    await connection.query(sql);
 
     sql = "CREATE TABLE session (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "num_rule_loops INTEGER,"
     sql += "cycle_counter INTEGER,";
     sql += "num_rounds INTEGER,"
     sql += "elapsed_time INTEGER,";
@@ -34,6 +34,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    /*
     // sql = "DROP TABLE entity";
     // await connection.query(sql);
 
@@ -64,7 +65,6 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
 
     sql = "CREATE TABLE bests_store (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
@@ -74,7 +74,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE sub_opt_rule (";
     sql += "id INT PRIMARY KEY AUTOINCREMENT,";
     sql += "session_id INT,";
@@ -186,7 +185,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -205,15 +203,15 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-    
+    */
     connection.close();
 }
 
 async function clearTables(connection) {
     let sql;
 
-    // sql = "DELETE FROM bests_store";
-    // await connection.query(sql);
+    sql = "DELETE FROM bests_store";
+    await connection.query(sql);
 
     sql = "DELETE FROM seedbed_data";
     await connection.query(sql);

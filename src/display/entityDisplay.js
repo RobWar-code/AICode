@@ -15,7 +15,7 @@ const entityDisplay = {
         function displayEntityDetails(data) {
             document.getElementById("bestSetNum").innerText = data.bestSetNum;
             document.getElementById("bestSetEntityNum").innerText = data.bestSetEntityNum;
-            document.getElementById("currentCycle").innerText = data.currentCycle;
+            document.getElementById("numRuleLoops").innerText = data.numRuleLoops;
             document.getElementById("numRounds").innerText = data.numRounds;
             document.getElementById("entityId").innerText = data.entityNumber;
             document.getElementById("creationCycle").innerText = data.birthCycle;
