@@ -6765,7 +6765,7 @@ const rulesets = {
         let rule = this.scoreList[ruleIndex];
         if ("outputs" in rule) {
             let output = rule.outputs[executionCycle];
-            if (p >= output.length) return 0;
+            if (p >= 3) return 0;
             if (valuesOut[p] === output[p]) return 1;
             else return 0;
 

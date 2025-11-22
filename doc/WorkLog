@@ -7,58 +7,13 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    bestsStore entities
-        * Save the bestsStore on each round completion along with other tables
-        * Fetch the bestsStore in the worker app
-        * Check whether selected - serial and parallel
-        * Allow for rule re-runs in primary run loop
-            * Skip completed rules
-        * Save the batch breed count data
-            * database
-            * file system
-        * Load the batch breed Count data
-            * database
-            * file system
-        When the rule sequence num is updated check for the next non-completed
-        rule.
-        
-    Add the following rules
-        * Add sum of first and Second params
-        * Sub sum of First and Second Params
-        * Get sum of triplets
-        * Get average of triplets
-        * Extract the first parameterth number from the inputs
-        * Output matches sample input
-        * Output matches sample output
-        * Square root
-        * Third Root
+    Add rules
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
     Add Rounds this Rule info to the main display
-
-    * Check erroneous breed method recorded in parallel processing entities
-
-    * Add a facility to log the current completion status
-
-    * Add a facility to allow for reduced instruction set selection
-        * Provide the menu option as a drop down list of numbers 0 to n
-        * Cancel list selector display
-        * Record the reduced set number as the global
-        * Add a global data object in processes
-        * Write the instruction selection function in entity.js
-        * Apply the instruction selection function in the breed routines of entity.js
-
-    * Add instruction to get an interim score from some of the helper
-    rules
-        * Adjust rulesets to allow for interim score
-        * Test routines
-        * Adjust instructionSet
-        * Restart trials from scratch
-
-    * Adjust the selected set to exclude listed instructions
 
     Update the README with the latest tables
 
@@ -79,8 +34,6 @@ Jobs Due
     Possibly include duplication in monoclonal breed mutations
 
     Check through code sequences to establish stepwise rules
-
-    Pass ExecutionCycle to the rulesets getScore method to trigger some rules
 
     Export and Load JSON tables
 
@@ -135,6 +88,60 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+
+    20/11/2025
+
+    * Change instruction LISC A for IOC A, (C)
+
+    * bestsStore entities
+        * Save the bestsStore on each round completion along with other tables
+        * Fetch the bestsStore in the worker app
+        * Check whether selected - serial and parallel
+        * Allow for rule re-runs in primary run loop
+            * Skip completed rules
+        * Save the batch breed count data
+            * database
+            * file system
+        * Load the batch breed Count data
+            * database
+            * file system
+        * When the rule sequence num is updated check for the next non-completed
+            rule.
+        
+    Add the following rules
+        * Add sum of first and Second params
+        * Sub sum of First and Second Params
+        * Get sum of triplets
+        * Get average of triplets
+        * Extract the first parameterth number from the inputs
+        * Output matches sample input
+        * Output matches sample output
+        * Square root
+        * Third Root
+
+    * Check erroneous breed method recorded in parallel processing entities
+
+    * Add a facility to log the current completion status
+
+    * Add a facility to allow for reduced instruction set selection
+        * Provide the menu option as a drop down list of numbers 0 to n
+        * Cancel list selector display
+        * Record the reduced set number as the global
+        * Add a global data object in processes
+        * Write the instruction selection function in entity.js
+        * Apply the instruction selection function in the breed routines of entity.js
+
+    * Add instruction to get an interim score from some of the helper
+    rules
+        * Adjust rulesets to allow for interim score
+        * Test routines
+        * Adjust instructionSet
+        * Restart trials from scratch
+
+    * Adjust the selected set to exclude listed instructions
+
+    * Pass ExecutionCycle to the rulesets getScore method to trigger some rules
+
     09/09/2025
     
     * Fix problem with invalid score pass at DivideByFirstParam5

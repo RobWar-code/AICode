@@ -1,3 +1,9 @@
+22/11/2025
+Changed the IOC A, (C) instruction to be limited to the
+first three bytes of correct output as a sampler.
+
+Retart trial with database cleared.
+
 21/11/2025
 Changed rule handling to cycle through the rules in a short number
 of rounds each (4), saving the best result for re-use in this and
@@ -8,6 +14,9 @@ Changed rule LISC A to IOC A, (C) which compares a required output
 to a set output for a correct match.
 
 Restarted trial from scratch with no recorded data.
+
+This trial found a generic "cheat" by scanning to correct values
+using the IOC A, (C) instruction.
 
 19/11/2025
 Picked-up where trial left-off at divide by first param.

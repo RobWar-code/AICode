@@ -15,6 +15,9 @@ const miscDbFunctions = {
         
         let sql;
 
+        sql = "DELETE FROM bests_store";
+        await connection.query(sql);
+        
         sql = "DELETE FROM seedbed_data";
         await connection.query(sql);
 
