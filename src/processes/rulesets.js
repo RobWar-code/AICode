@@ -26,7 +26,7 @@ const rulesets = {
     numRuleLoops: 0,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: new Array(this.numRules),
+    ruleRounds: [], // {completed:, start:, end:, used:}
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -3224,6 +3224,7 @@ const rulesets = {
         let maxScore = 0;
         let maxSequenceNum = 0;
         let index = 0;
+        this.ruleRounds = [];
         for (let scoreItem of this.scoreList) {
             if (scoreItem.skip != true) {
                 maxScore += scoreItem.max;
@@ -3232,7 +3233,7 @@ const rulesets = {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
             scoreItem.completionRound = -1;
-            this.ruleRounds[index] = {completed: false, start: -1, end: 0, used: 0};
+            this.ruleRounds.push({completed: false, start: -1, end: 0, used: 0});
             ++index;
         }
         this.maxScore = maxScore * 2;
@@ -6454,20 +6455,6 @@ const rulesets = {
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
             // Find the next non-completed rule
             this.ruleRounds[newRuleIndex].start = roundNum;
-            // Get the new current rule number
-            let index = 0;
-            for (let rule of this.scoreList) {
-                if (!rule.skip) {
-                    if (!rule.retain && this.ruleSequenceNum === rule.sequenceNum) {
-                        this.seedRuleNum = rule.rule_num;
-                        break;
-                    }
-                    if (!rule.retain && this.ruleSequenceNum - 1 === rule.sequenceNum) {
-                        this.ruleRounds[index].end = roundNum;
-                    }
-                }
-                ++index;
-            }
             this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
         }
         else if (roundNum >= this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
@@ -6482,7 +6469,6 @@ const rulesets = {
             this.bestsStore.push(subOptRuleItem);
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
-            console.error("got subOptRule:", subOptRuleItem.ruleId, this.ruleSequenceNum, this.maxRuleSequenceNum);
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 // Max rule reached
                 ++this.numRuleLoops;

@@ -1,3 +1,10 @@
+24/11/2025
+After 1840 rounds (about 9 rule loops) fewer rules had
+been completed than in passes of 60 or 90 rounds per
+rule (6000 or 9000 rounds), so the result is inconclusive.
+Likely it would be best to await the completion of say 
+5000 rounds, to make a just comparison.
+
 22/11/2025
 Changed the IOC A, (C) instruction to be limited to the
 first three bytes of correct output as a sampler.
