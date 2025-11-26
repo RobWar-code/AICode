@@ -1,3 +1,13 @@
+26/11/2025
+After about 2800 rounds (14 rule loops) the trial had
+completed a similar number of rules as the 90 Rounds
+per rule maximum.
+
+Clear the tables and restart the trial with the number of
+rounds per rule increased from 4 to 6.
+
+Begin study of static templates
+
 24/11/2025
 After 1840 rounds (about 9 rule loops) fewer rules had
 been completed than in passes of 60 or 90 rounds per
