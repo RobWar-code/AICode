@@ -39,16 +39,19 @@ const dbTransactions = {
     
         // Save the entities
         let resultOK = await this.saveEntities(program, sessionId, dbConnection);
+        console.log("Saved Entities", resultOK);
 
         if (resultOK) {
             // Save the seed rules
             resultOK = await this.saveSeedRules(dbConnection);
         }
+        console.log("Saved Seed Rules", resultOK);
 
         if (resultOK) {
             // Save sub-opt rules
             resultOK = await this.saveSubOptRules(sessionId, dbConnection);
         }
+        console.log("Saved SubOptRules", resultOK);
 
         if (resultOK) {
             resultOK = await this.saveBestsStore(sessionId, dbConnection);
@@ -57,6 +60,7 @@ const dbTransactions = {
         await this.deleteOtherRecords(dbConnection, sessionId);
 
         if (resultOK) {
+            console.log("Saving rule rounds");
             resultOK = await this.saveRules(dbConnection);
         }
 
@@ -134,7 +138,8 @@ const dbTransactions = {
             return true;
         }
         else {
-            return false;
+            // Best Sets may have been cleared
+            return true;
         }
     },
 
@@ -353,7 +358,9 @@ const dbTransactions = {
         for (let bestsStoreItem of bestsStore) {
             let ruleId = bestsStoreItem.ruleId;
             let bestsStoreMemSpace = bestsStoreItem.memSpace;
-            let result = await this.saveBestsStoreItem(dbConnection, sessionId, ruleId, ruleSequenceNum, bestsStoreMemSpace);
+            let result = await this.saveBestsStoreItem(dbConnection, sessionId, ruleId, 
+                ruleSequenceNum, bestsStoreMemSpace);
+            console.log("BestsStore result", result);
             if (!result) return false;
             ++ruleSequenceNum;
         }
@@ -387,9 +394,11 @@ const dbTransactions = {
 
         for (let i = 0; i < rulesets.ruleRounds.length; i++) {
             try {
-                sql = "INSERT INTO rule (rule_num, start_round, completion_round, completed) VALUES (?, ?, ?, ?)";
+                sql = "INSERT INTO rule (rule_num, start_round, completion_round, rule_loop_end, completed) ";
+                sql += "VALUES (?, ?, ?, ?, ?)";
                 const [results] = await dbConnection.execute(sql, [i, rulesets.ruleRounds[i].start, 
-                    rulesets.ruleRounds[i].end, rulesets.ruleRounds[i].completed]);
+                    rulesets.ruleRounds[i].end, rulesets.ruleRounds[i].ruleLoopEnd,
+                    rulesets.ruleRounds[i].completed]);
             }
             catch (error) {
                 console.error("saveRules: Could not insert ruleCompletionRound[]:", i);
@@ -397,6 +406,7 @@ const dbTransactions = {
             }
         }
 
+        console.log("Rule Rounds Saved");
         return true;
     },
 
@@ -820,12 +830,13 @@ const dbTransactions = {
             return;
         }
 
-        let sql = "SELECT rule_num, start_round, completion_round, completed FROM rule";
+        let sql = "SELECT rule_num, start_round, completion_round, rule_loop_end, completed FROM rule";
         try {
             [results] = await dbConnection.query(sql);
             for (let item of results) {
                 rulesets.ruleRounds[item.rule_num].start = item.start_round;
                 rulesets.ruleRounds[item.rule_num].end = item.completion_round;
+                rulesets.ruleRounds[item.rule_num].ruleLoopEnd = item.rule_loop_end;
                 rulesets.ruleRounds[item.rule_num].completed = item.completed;
             }
         }
@@ -834,6 +845,7 @@ const dbTransactions = {
             throw error;
         }
 
+        console.log("Loaded Rule Rounds", results.length);
         await dbConnection.end();
     },
 

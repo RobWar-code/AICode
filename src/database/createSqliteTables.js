@@ -19,7 +19,7 @@ async function createTables() {
     console.log("Tables Cleared");
 
     // return;
-    
+    /*
     sql = "DROP TABLE session";
     await connection.query(sql);
 
@@ -34,7 +34,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     // sql = "DROP TABLE entity";
     // await connection.query(sql);
 
@@ -83,18 +82,22 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    sql = "DROP TABLE rule";
-    await connection.query(sql);
+    */
+
+    // sql = "DROP TABLE rule";
+    // await connection.query(sql);
 
     sql = "CREATE TABLE rule (";
-    sql += "id INT PRIMARY KEY AUTOINCREMENT,";
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "rule_num INT,";
     sql += "start_round INT,";
     sql += "completion_round INT,";
+    sql += "rule_loop_end INT,"
     sql += "completed INT";
     sql += ")";
     await connection.query(sql);
 
+    /*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "fragment VARCHAR(128)";

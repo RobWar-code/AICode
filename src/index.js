@@ -219,6 +219,7 @@ ipcMain.on("fetchDisplayHistory", () => {
 
 ipcMain.on("logCompletions", () => {
   logResults.makeRuleCompletionLog();
+  mainWindow.webContents.send("ruleCompletionLogDone", 0);
 });
 
 ipcMain.on("fetchInsSetListData", () => {

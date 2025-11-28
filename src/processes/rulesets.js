@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 110,
-    maxRuleId: 109,
+    numRules: 114,
+    maxRuleId: 113,
     maxRoundsPerRule: 6,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -26,7 +26,7 @@ const rulesets = {
     numRuleLoops: 0,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: [], // {completed:, start:, end:, used:}
+    ruleRounds: [], // {completed:, start:, end:, ruleLoopEnd:, used:}
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -45,11 +45,15 @@ const rulesets = {
         this.requiredOutputsFunction = [];
         const learnCodeAllowance = this.learnCodeAllowance;
         /*
+            On Adding a rule, update the outputScoresItem and diffScore values toward
+            the end of this function
+            The ruleId for the new rule is the this.maxRuleId at the start of this object.
+
             Rule Template
             {   rule: "Convert ASCII Numbers 1", ruleId: 32,
                 retain: false, 
                 skip: false, 
-                excludeHelperRules: [67], // Optional
+                excludeHelperRules: [67], // Optional ID's
                 sequenceNum: 62, // Automatic
                 score: 0, 
                 passScore: 0.95, // Optional
@@ -299,9 +303,15 @@ const rulesets = {
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
-            {rule: "Values Out Different", ruleId: 10, skip:true,
-                score: 0, max: 1, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 8
+            {rule: "Values Out Different", ruleId: 10, skip:false, retain: false,
+                excludeHelperRules: [36,67,68,69],
+                score: 0, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                highIC: 16 * 16,
+                highIP: 60,
+                sampleIn: [],
+                sampleOut: [],
+                paramsIn: [[0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]]
             }
         );
         this.ruleFunction.push(this.valuesOutDifferent);
@@ -1006,6 +1016,102 @@ const rulesets = {
         this.ruleFunction.push(this.multiplyByFirstParam);
         this.byteFunction.push(this.byteMultiplyByFirstParam);
         this.requiredOutputsFunction.push(this.getMultiplyByFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Multiply Params by 10", ruleId: 110,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[8,3,5,20,24,25,15,19,17,6,4,5,8,11,17,19]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        5,20,15,11,20,3,8,14,12,25,24,22,11,4,16,21
+                    ],
+                    [
+                        9,22,23,17,19,11,12,18,21,4,9,15,22,18,10,16
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getMultiplyParamsBy10RequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Sixteen Bit Add First Param 1", ruleId: 111,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[20,255,250,240,245,252,237,230,252,249,254,248,247,241,242,210]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        40,217,220,235,210,222,226,252,245,248,230,225,229,227,217,200
+                    ],
+                    [
+                        105,220,230,170,190,111,195,180,60,49,212,215,222,188,175,160
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSixteenBitAddFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Sixteen Bit Add First Param 2", ruleId: 112,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[250,255,250,240,245,252,237,230,252,249,254,248,247,241,242,210]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        240,217,220,235,5,222,226,252,245,248,230,1,229,10,217,200
+                    ],
+                    [
+                        245,220,230,1,190,111,195,180,3,49,212,2,222,188,175,160
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSixteenBitAddFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Sixteen Bit Add First Two Params", ruleId: 113,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[4,255,6,240,12,252,20,230,18,249,35,248,41,241,16,210]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        10,217,20,235,25,222,26,252,15,248,0,10,1,10,30,200
+                    ],
+                    [
+                        20,220,15,1,26,111,54,180,3,49,20,2,0,188,0,10
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSixteenBitAddFirstTwoParamsRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Multiply By First Param Add Adjacent", ruleId: 98,
@@ -3197,7 +3303,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 108;
+        this.outputScoresItem = 112;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3207,7 +3313,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 109;
+        this.diffScore = 113;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -3233,7 +3339,7 @@ const rulesets = {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
             scoreItem.completionRound = -1;
-            this.ruleRounds.push({completed: false, start: -1, end: 0, used: 0});
+            this.ruleRounds.push({completed: false, start: -1, end: 0, ruleLoopEnd: 0, used: 0});
             ++index;
         }
         this.maxScore = maxScore * 2;
@@ -4851,6 +4957,57 @@ const rulesets = {
         return score;
     },
 
+    getMultiplyParamsBy10RequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                let r = v * 10;
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSixteenBitAddFirstParamRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            for (let v of inputs) {
+                let r = v + a;
+                let r1 = r & 255;
+                let r2 = r >> 8;
+                output.push(r2);
+                output.push(r1);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSixteenBitAddFirstTwoParamsRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0] << 8;
+            let b = a + inputs[1];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let r1 = inputs[i] << 8
+                let r2 = r1 + inputs[i + 1];
+                let r3 = r2 + b;
+                let r4 = r3 & 255;
+                let r5 = r3 >> 8;
+                output.push(r5);
+                output.push(r4);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+
+    },
+
     getMultiplyByFirstParamAddAdjacentRequiredOutputs(self, inputList) {
         let outputList = [];
         for (let inputs of inputList) {
@@ -6443,6 +6600,7 @@ const rulesets = {
 
             this.insertSeedRule(memSpace);
             this.ruleRounds[ruleIndex].end = roundNum;
+            this.ruleRounds[ruleIndex].ruleLoopEnd = this.numRuleLoops;
             this.ruleRounds[ruleIndex].completed = true;
             this.seedRuleSet = true;
 
@@ -6813,7 +6971,11 @@ const rulesets = {
     getParamsInFromRuleSequence(ruleSequenceNum) {
         let rule = this.getRuleFromSequence(ruleSequenceNum);
         let paramsIn = null;
-        if ("paramsIn" in rule) paramsIn = rule.paramsIn;
+        if ("paramsIn" in rule) {
+            if (rule.paramsIn.length > 0) {
+                paramsIn = rule.paramsIn;
+            }
+        }
         return paramsIn;
     },
 

@@ -111,6 +111,11 @@ ipcRenderer.on("tablesCleared", (event, data) => {
     document.getElementById("statusPara").innerText = "TABLES CLEARED";
 });
 
+ipcRenderer.on("ruleCompletionLogDone", (event, data) => {
+    document.getElementById("statusDiv").style.display = "block";
+    document.getElementById("statusPara").innerText = "Completions log done - see file logs/CompletionLog.txt";
+});
+
 ipcRenderer.on("saveDone", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     let statusText = document.getElementById("statusPara").innerText;

@@ -838,23 +838,30 @@ class InstructionSet {
     executeIns(A, B, C, R, S, CF, ZF, SP, IP, IC, executionCycle, memSpace, codeFlags, initialParams, params, 
         valuesOut, entityOutputs, ruleSequenceNum, rule, roundNum) {
         let sampleIn = null;
+        let sampleInLength = 0;
+        let sampleOutLength = 0;
         if (rule.sampleIn.length > 1) {
             sampleIn = rule.sampleIn[executionCycle];
+            sampleInLength = sampleIn.length;
         }
-        else {
+        else if (rule.sampleIn.length === 1) {
             sampleIn = rule.sampleIn[0];
+            sampleInLength = sampleIn.length;
         }
         let sampleOut = null;
         if (rule.sampleOut.length > 1) {
             sampleOut = rule.sampleOut[executionCycle];
+            sampleOutLength = sampleOut.length;
         }
-        else {
-            sampleOut = rule.sampleOut[0]
+        else if (rule.sampleOut.length === 1) {
+            sampleOut = rule.sampleOut[0];
+            sampleOutLength = sampleOut.length;
         }
-        let sampleInLength = sampleIn.length;
-        let sampleOutLength = sampleOut.length;
         let inputsLength = initialParams.length;
-        let outputsLength = rule.outputs[executionCycle].length;
+        let outputsLength = 0;
+        if ("outputs" in rule) {
+            outputsLength = rule.outputs[executionCycle].length;
+        }
         if (typeof sampleIn === 'undefined') {
             console.error("sampleIn Undefined");
         }

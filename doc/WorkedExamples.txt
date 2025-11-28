@@ -28,6 +28,7 @@ Contents
     Toward Stepped Pathways
     Favouring Seed Rules - Seed Beds
     Short Sampling
+    Static Templates
     Solution Mesh Analogy
     Performance Notes
 
@@ -648,7 +649,16 @@ Consider repeat input params
     say probability slightly higher than seed programs or templates.
     We also need to change the clearance cycle.
 
+<h1>Static Templates
+    If we use specific template manipulation procedures rather than the usual
+    breed methods, we can increase the probability of particular code permutations
+    being found, within the scope of the template.
 
+    However, if we use manual templates, then likely, intermediate scores will
+    be unlikely and we are faced with the absolute probability of the working
+    combination being derived, rather than being able to evolve through
+    gradations.
+    
 <h1>Solution Mesh Analogy
     If we liken each accumulated solution to a node in a mesh and the joining fibres to
     the probabilistic transition from node to node, then we can see that we

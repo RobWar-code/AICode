@@ -3,8 +3,8 @@ const path = require('node:path');
 const rulesets = require(path.join(__dirname,"./rulesets"));
 
 const logResults = {
-    heads: ["Rule", "Completed in Rounds"],
-    colWidths: [48,9],
+    heads: ["Rule", "Completed in Rounds", "Rule Loop End"],
+    colWidths: [48,9,9],
 
     makeRuleCompletionLog() {
         // Collect the data
@@ -16,14 +16,17 @@ const logResults = {
                 rowData.push(rule.rule);
                 let startRound = rulesets.ruleRounds[index].start;
                 let endRound = rulesets.ruleRounds[index].end;
+                let ruleLoopEnd = rulesets.ruleRounds[index].ruleLoopEnd;
                 let completed = rulesets.ruleRounds[index].completed;
                 if (startRound < 0 || !completed) {
+                    rowData.push ("");
                     rowData.push ("");
                 }
                 else {
                     let rounds = endRound - startRound;
                     rounds += "";
                     rowData.push(rounds);
+                    rowData.push(ruleLoopEnd + "");
                 }
                 rowArray.push(rowData);
             }

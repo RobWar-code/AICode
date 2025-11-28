@@ -7,16 +7,25 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    Display a status message when the completion log has output.
+    Remove Max Score from display
+
+    * Display a status message when the completion log has output.
+
+    * Add completion loop to rule rounds data
+
+
+    Add completion round data to rule completion log
 
     Study "Static Templates"
-    
+
     * Include the rule loop in the display
         * Database
         * Update
         * Display
         
     Add rules
+        * 16 bit add
+        16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
         Do base 10 on 2 digit numbers
