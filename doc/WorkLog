@@ -9,12 +9,14 @@ Jobs Due
 
     Remove Max Score from display
 
+    Use rule id on round rules file, to allow for additional rules
+        to be loaded before a run.
+
     * Display a status message when the completion log has output.
 
     * Add completion loop to rule rounds data
 
-
-    Add completion round data to rule completion log
+    * Add completion round data to rule completion log
 
     Study "Static Templates"
 
@@ -24,7 +26,10 @@ Jobs Due
         * Display
         
     Add rules
+        * Reinstate outputs different
         * 16 bit add
+        * add 16 bit value to sixteen bit
+        Outputs Different and Sum to First Param
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's

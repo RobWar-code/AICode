@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 114,
-    maxRuleId: 113,
+    numRules: 115,
+    maxRuleId: 114,
     maxRoundsPerRule: 6,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -316,6 +316,23 @@ const rulesets = {
         );
         this.ruleFunction.push(this.valuesOutDifferent);
         this.byteFunction.push(this.byteValuesOutDifferent);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule: "Values Out Different Sum to First", ruleId: 114, skip:false, retain: false,
+                excludeHelperRules: [36,67,68,69],
+                score: 0, max: 5, startRoundNum: 800,
+                inBlockStart: 0, inBlockLen: 1,
+                outBlockStart: 0, outBlockLen: 16,
+                highIC: 20 * 16,
+                highIP: 70,
+                sampleIn: [],
+                sampleOut: [],
+                paramsIn: [[90], [130], [180], [220]]
+            }
+        );
+        this.ruleFunction.push(this.valuesOutDifferentSumToFirst);
+        this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
@@ -3303,7 +3320,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 112;
+        this.outputScoresItem = 113;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3313,7 +3330,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 113;
+        this.diffScore = 114;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -3650,10 +3667,28 @@ const rulesets = {
         }
         // Allow for output difference and output scores equal
         if (numInputParamBlocks > 1) {
-            let diffMax = this.scoreList[this.outputScoresItem].max;
-            maxScore -= diffMax * (numInputParamBlocks - 1);
-            diffMax = this.scoreList[this.diffScore].max;
-            maxScore -= diffMax * (numInputParamBlocks - 1);
+            // Check which rules are excluded
+            let outputScoresItemExcluded = false;
+            let diffScoreExcluded = false;
+            if (excludeRules != null) {
+                for (let ruleId of excludeRules) {
+                    if (ruleId == this.scoreList[this.outputScoresItem].ruleId) {
+                        outputScoresItemExcluded = true;
+                    }
+                    else if (ruleId = this.scoreList[this.diffScore].ruleId) {
+                        diffScoreExcluded = true;
+                    }
+                }
+            }
+
+            if (!outputScoresItemExcluded) {
+                let diffMax = this.scoreList[this.outputScoresItem].max;
+                maxScore -= diffMax * (numInputParamBlocks - 1);
+            }
+            if (!diffScoreExcluded) {
+                let diffMax = this.scoreList[this.diffScore].max;
+                maxScore -= diffMax * (numInputParamBlocks - 1);
+            }
         }
         return (maxScore);
     },
@@ -4085,6 +4120,43 @@ const rulesets = {
                 }
             }
         }
+        return score;
+    },
+
+    valuesOutDifferentSumToFirst(self, dataParams, ruleParams) {
+        let outBlockLen = ruleParams.outBlockLen;
+        let params = dataParams.initialParams;
+        let s = params[0];
+        let valuesOut = dataParams.valuesOut;
+        let diffCount = 0;
+        let sameCount = 0;
+        let sum = 0;
+        for (let i = 0; i < outBlockLen; i++) {
+            let a = valuesOut[i];
+            sum += a;
+            let match = false;
+            for (let j = i + i; j < outBlockLen; j++) {
+                let b = valuesOut[j];
+                if (b === a) {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match) ++diffCount;
+            else ++sameCount;
+        }
+        let max = outBlockLen;
+        let min = 0;
+        let opt = outBlockLen;
+        let score1 = 0.5 * self.doScore(opt, diffCount, max, min);
+
+        max = 255 * outBlockLen;
+        min = 0;
+        opt = s;
+        let score2 = 0.5 * self.doScore(opt, sum, max, min);
+
+        let score = score1 + score2;
+        if (score > 1) console.log("Score:", score, score1, score2);
         return score;
     },
 
