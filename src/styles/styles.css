@@ -142,77 +142,17 @@ li {
     display: none;
 }
 
-#scoreListDiv {
+#scoreListMain {
     height: 400px;
     overflow: auto;
 }
 
-.scoreListItem {
-    text-align: left;
-    border-right: 1px solid black;
-    padding-left: 2px;
+#scoreListTable th {
+    border: 1px solid black;
 }
 
-#scoreTitles {
-    margin-left: 20px;
-}
-
-#scoreStartRound {
-    display: inline-block;
-    width: 50px;
-}
-
-#scoreOutAddress {
-    display: inline-block;
-    width: 50px;
-}
-
-#scoreSequenceNum {
-    display: inline-block;
-    width: 92px;
-}
-
-#scoreRule {
-    display: inline-block;
-    width: 296px;
-}
-
-#score {
-    display: inline-block;
-    width: 97px;
-}
-
-#scoreMax {
-    display: inline-block;
-    width: 46px;
-}
-
-#scoreStartRound {
-    display: inline-block;
-    width: 46px;
-}
-
-#scoreCompletionRound {
-    display: inline-block;
-    width: 47px;
-}
-
-#scoreNumberOfRounds {
-    display: inline-block;
-    width: 49px;
-}
-
-#scoreCompleted {
-    display: inline-block;
-    width: 47px;
-}
-
-.scoreListRule {
-    width: 200px;
-}
-
-.scoreListScore {
-    width: 200px;
+#scoreListTable td {
+    border: 1px solid black;
 }
 
 /* Score History */

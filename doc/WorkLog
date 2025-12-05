@@ -29,7 +29,8 @@ Jobs Due
         * Reinstate outputs different
         * 16 bit add
         * add 16 bit value to sixteen bit
-        Outputs Different and Sum to First Param
+        * Outputs Different and Sum to First Param
+        * Adjust cube roots to 20 examples
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's

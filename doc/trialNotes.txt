@@ -1,3 +1,20 @@
+03/12/2025
+In 2500 rounds completed fewer rules than the previous
+trial, notably missing out the output series rules.
+
+However a few rules were completed that were not
+completed in the previous trial, notably Convert ASCII
+Numbers 1.
+
+Trials ended until further rules added or new strategy
+considered.
+
+29/11/2025
+Last trial completed just over half the rules in 2500 rounds.
+Logged to CompletionsLogA02.txt
+
+New trial includes additional rules, start from scratch.
+
 26/11/2025
 After about 2800 rounds (14 rule loops) the trial had
 completed a similar number of rules as the 90 Rounds

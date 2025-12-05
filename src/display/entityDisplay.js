@@ -207,51 +207,66 @@ const entityDisplay = {
     displayScoreList() {
         let data = this.currentData;
         // Clear the old list
-        document.getElementById('scoreListDiv').innerHTML = "";
+        document.getElementById('scoreListTable').innerHTML = "";
         // Display the modal
         document.getElementById('scoreListBackground').style.display = "block";
-        // Prepare the new list
-        let html = "<ul id='scoreList'>";
+        // Do the table headings
+        let html = "<tr>";
+        html      += "<th>Sequence</th>";
+        html      += "<th>Rule</th>";
+        html      += "<th>Score</th>";
+        html      += "<th>Max</th>";
+        html      += "<th>Start Round</th>";
+        html      += "<th>End Round</th>";
+        html      += "<th>Num Rounds</th>"
+        html      += "<th>End Loop</th>";
+        html      += "<th>Completed</th>";
+        html   += "</tr>";
         let i = 0;
         for (let scoreItem of data.scoreList) {
             let outBlockStart = "";
             if ("outBlockStart" in scoreItem) {
                 outBlockStart = scoreItem.outBlockStart;
             }
-            let sequenceNum = "&nbsp;";
+            let sequenceNum = "";
             if ("sequenceNum" in scoreItem) {
                 sequenceNum = scoreItem.sequenceNum;
             }
-            let ruleStartRound = "&nbsp;";
-            let completed = "&nbsp";
+            let ruleStartRound = "";
+            let completed = "";
             if (data.ruleRounds[i].start > -1) {
                 ruleStartRound = data.ruleRounds[i].start;
                 if (data.ruleRounds[i].completed) {
                     completed = "Y";
                 }
             }
-            let completionRound = "&nbsp;";
-            let numRounds = "&nbsp;";
+            let completionRound = "";
+            let numRounds = "";
             if (data.ruleRounds[i].completed) {
                 completionRound = data.ruleRounds[i].end;
                 numRounds = data.ruleRounds[i].end - data.ruleRounds[i].start;
             }
 
+            let ruleLoopEnd = "";
+            if (data.ruleRounds[i].ruleLoopEnd >= 0) {
+                ruleLoopEnd = data.ruleRounds[i].ruleLoopEnd;
+            }
+
             let score = Math.floor(data.ruleScores[i] * 10000) / 10000;
-            html += "<li>";
-            html += `<span class="scoreListItem" id="scoreListSequenceNum" style="display: inline-block; width: 80px">${sequenceNum}</span>`;
-            html += `<span class="scoreListItem" id="scoreListRule" style="display: inline-block; width: 300px">${scoreItem.rule}</span>`;
-            html += `<span class="scoreListItem" id="scoreListScore" style="display: inline-block; width: 100px">${score}</span>`;
-            html += `<span class="scoreListItem" id="scoreListMax" style="display: inline-block; width: 50px">${scoreItem.max}</span>`;
-            html += `<span class="scoreListItem" id="scoreListStartRound" style="display: inline-block; width: 50px">${ruleStartRound}</span>`;
-            html += `<span class="scoreListItem" id="scoreListCompletionRound" style="display: inline-block; width: 50px">${completionRound}</span>`;
-            html += `<span class="scoreListItem" id="scoreListNumRounds" style="display: inline-block; width: 53px">${numRounds}</span>`;
-            html += `<span class="scoreListItem" id="scoreListCompleted" style="display: inline-block; width: 50px">${completed}</span>`;
-            html += "</li>";
+            html += "<tr>";
+            html +=    `<td>${sequenceNum}</td>`;
+            html +=    `<td>${scoreItem.rule}</td>`;
+            html +=    `<td>${score}</td>`;
+            html +=    `<td>${scoreItem.max}</td>`;
+            html +=    `<td>${ruleStartRound}</td>`;
+            html +=    `<td>${completionRound}</td>`;
+            html +=    `<td>${numRounds}</td>`;
+            html +=    `<td>${ruleLoopEnd}</td>`;
+            html +=    `<td>${completed}</td>`;
+            html += "</tr>";
             ++i;
         }
-        html += "</ul>";
-        document.getElementById('scoreListDiv').innerHTML = html;
+        document.getElementById('scoreListTable').innerHTML = html;
         document.getElementById('totalScore').innerText = data.score;
     },
 

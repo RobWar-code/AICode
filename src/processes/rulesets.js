@@ -1935,8 +1935,8 @@ const rulesets = {
             {rule: "Cube Roots", ruleId: 104,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
-                outBlockStart: 0, outBlockLen: 16,
-                inBlockStart: 0, inBlockLen: 16,
+                outBlockStart: 0, outBlockLen: 20,
+                inBlockStart: 0, inBlockLen: 20,
                 highIC: 16 * 12 * 16 + learnCodeAllowance,
                 highIP: 120,
                 sampleIn: [
@@ -1946,10 +1946,10 @@ const rulesets = {
                 sampleOut: [],
                 paramsIn: [
                     [
-                        125,216,216,8,8,64,216,64,27,125,27,125,64,64,8,216
+                        125,216,216,8,8,64,216,64,27,125,27,125,64,64,8,216,27,64,216,125
                     ],
                     [
-                        216,8,8,64,27,27,64,125,27,216,64,64,125,216,8,8
+                        216,8,8,64,27,27,64,125,27,216,64,64,125,216,8,27,8,125,216,64
                     ]
                 ],
                 outputs: []
@@ -3356,7 +3356,7 @@ const rulesets = {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
             scoreItem.completionRound = -1;
-            this.ruleRounds.push({completed: false, start: -1, end: 0, ruleLoopEnd: 0, used: 0});
+            this.ruleRounds.push({completed: false, start: -1, end: 0, ruleLoopEnd: -1, used: 0});
             ++index;
         }
         this.maxScore = maxScore * 2;
