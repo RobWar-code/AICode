@@ -266,6 +266,29 @@ const dbTransactions = {
         mainWindow.webContents.send("loadDone", 0);
     },
 
+    async fetchSession() {
+        const dbConnection = await dbConn.openConnection();
+        if (dbConnection === null) {
+            console.error("Could not open db connection");
+            return;
+        }
+
+        let sessions;
+        // Get most recent session
+        try {
+            [sessions] = await dbConnection.execute(
+                'SELECT * FROM session ORDER BY id DESC LIMIT 1'
+            );
+            console.error("Loaded Session");
+        } catch (err) {
+            console.error('loadSession: Error retrieving most recent record:', err.message);
+            throw err;
+        }
+        await dbConnection.end();
+        if (sessions.length === 0) return null;
+        return sessions[0];
+    },
+
     async saveSeedRules(dbConnection) {
         let dbConnOpened = false;
         if (dbConnection === null) {

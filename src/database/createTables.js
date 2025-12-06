@@ -82,7 +82,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
     sql = "DROP TABLE rule";
     await connection.query(sql);
 
@@ -96,7 +95,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "fragment VARCHAR(128)";

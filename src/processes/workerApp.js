@@ -57,6 +57,7 @@ class BatchProcess {
         this.maxCycles = 5;
         this.cycleCounter = cycleCounter;
         this.numRounds = 0;
+        this.numRuleLoops = 0;
         this.entityNumber = entityNumber;
         this.ruleSequenceNum = ruleSequenceNum;
         rulesets.ruleSequenceNum = ruleSequenceNum;
@@ -80,6 +81,12 @@ class BatchProcess {
 
     async startProcess(entityData) {
         await dbConn.openConnection();
+        // Fetch the round data
+        let session = await dbTransactions.fetchSession();
+        if (session != null) {
+            this.numRounds = session.num_rounds;
+            this.numRuleLoops = session.num_rule_loops;
+        }
         // Load the seed rule and fragments
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();

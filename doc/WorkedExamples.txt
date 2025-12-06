@@ -30,6 +30,7 @@ Contents
     Short Sampling
     Static Templates
     Solution Mesh Analogy
+    Blocking False Plateau Routes
     Performance Notes
 
 <h1>Status Reports
@@ -668,6 +669,33 @@ Consider repeat input params
     b) Have as wide a set of rules as practical
     c) Possibly design ways to relate old rules to new rules
 
+<h1>Blocking False Plateau Routes
+    Let us assume that many times routes to solutions are blocked
+    by plateaux of performance. We could allow a maximum number of rounds
+    with similar solutions, either beginning from scratch for that rule
+    or analysing for the plateau solution and blocking it from future 
+    developments.
+
+    If we simply start from scratch, there is a strong possibility
+    that the false plateau will re-establish itself. So the issue is
+    to identify the false plateau. We could use the score as an indication
+    of the identities, but this likely also to exclude valid routes.
+    Better would be to preserve an example of the false plateau solution
+    and do a code comparison when the same score is reached.
+
+    The code comparison should do a count of blocks of say 8 instructions
+    that are the same in the programs compared.
+
+    The threshold for identifying false plateaux should be about 15/20
+    rounds judging by the trial results.
+
+    If this approach replaces the clearance threshold currently used
+    it should integrate more easily.
+
+    A partial solution is to only allow non-random imports on rule
+    loop % 2 = 1. This would allow for a wider-range of random, native
+    solutions.
+    
 <h1>Performance Notes
 
     25/01/2025

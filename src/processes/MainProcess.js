@@ -39,7 +39,10 @@ class MainProcess {
                     // bestEntitySet.length >= this.bestEntitySetMax
                     // Determine whether random breed
                     if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
-                        if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
+                        if (self.numRuleLoops % 2 === 0) {
+                            breedMode = "random";
+                        }
+                        else if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
                             breedMode = "random";
                         }
                         else {

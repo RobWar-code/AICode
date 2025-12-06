@@ -143,8 +143,16 @@ li {
 }
 
 #scoreListMain {
-    height: 400px;
+    height: 480px;
     overflow: auto;
+    border-radius: 0;
+}
+
+#scoreListTable thead {
+    position: sticky;
+    top: 0;
+    background: #f0f0f0;
+    z-index: 1;
 }
 
 #scoreListTable th {

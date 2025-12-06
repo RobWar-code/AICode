@@ -211,7 +211,7 @@ const entityDisplay = {
         // Display the modal
         document.getElementById('scoreListBackground').style.display = "block";
         // Do the table headings
-        let html = "<tr>";
+        let html = "<thead><tr>";
         html      += "<th>Sequence</th>";
         html      += "<th>Rule</th>";
         html      += "<th>Score</th>";
@@ -221,7 +221,8 @@ const entityDisplay = {
         html      += "<th>Num Rounds</th>"
         html      += "<th>End Loop</th>";
         html      += "<th>Completed</th>";
-        html   += "</tr>";
+        html   += "</tr></thead>";
+        html   += "<tbody>"
         let i = 0;
         for (let scoreItem of data.scoreList) {
             let outBlockStart = "";
@@ -266,6 +267,7 @@ const entityDisplay = {
             html += "</tr>";
             ++i;
         }
+        html += "</tbody>";
         document.getElementById('scoreListTable').innerHTML = html;
         document.getElementById('totalScore').innerText = data.score;
     },
