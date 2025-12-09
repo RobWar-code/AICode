@@ -5313,7 +5313,7 @@ const rulesets = {
         for (let inputs of inputList) {
             let output = [];
             for (let v of inputs) {
-                let r = Math.floor(Math.pow(v, 1/2));
+                let r = Math.round(Math.pow(v, 1/2));
                 output.push(r);
             }
             outputList.push(output);
@@ -5326,7 +5326,7 @@ const rulesets = {
         for (let inputs of inputList) {
             let output = [];
             for (let v of inputs) {
-                let r = Math.floor(Math.pow(v, 1/3));
+                let r = Math.round(v ** (1/3));
                 output.push(r);
             }
             outputList.push(output);
