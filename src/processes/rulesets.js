@@ -4150,13 +4150,12 @@ const rulesets = {
         let opt = outBlockLen;
         let score1 = 0.5 * self.doScore(opt, diffCount, max, min);
 
-        max = 255 * outBlockLen;
+        max = 255;
         min = 0;
         opt = s;
         let score2 = 0.5 * self.doScore(opt, sum, max, min);
 
         let score = score1 + score2;
-        if (score > 1) console.log("Score:", score, score1, score2);
         return score;
     },
 
