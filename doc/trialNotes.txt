@@ -1,3 +1,9 @@
+11/12/2025
+Logged previous trial as CompletionsLogA05.txt.
+
+Fixed rules Outputs Different Sum to First and Cube Roots.
+Restarted trial from scratch.
+
 05/12/2025
 Restarted trial from scratch with adjustment to cube root 
 rule. Aim is to check-out the degree of random variance in

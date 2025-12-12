@@ -328,7 +328,7 @@ const rulesets = {
                 highIP: 70,
                 sampleIn: [],
                 sampleOut: [],
-                paramsIn: [[90], [130], [180], [220]]
+                paramsIn: [[120], [140], [180], [220]]
             }
         );
         this.ruleFunction.push(this.valuesOutDifferentSumToFirst);
@@ -3672,10 +3672,10 @@ const rulesets = {
             let diffScoreExcluded = false;
             if (excludeRules != null) {
                 for (let ruleId of excludeRules) {
-                    if (ruleId == this.scoreList[this.outputScoresItem].ruleId) {
+                    if (ruleId === this.scoreList[this.outputScoresItem].ruleId) {
                         outputScoresItemExcluded = true;
                     }
-                    else if (ruleId = this.scoreList[this.diffScore].ruleId) {
+                    else if (ruleId === this.scoreList[this.diffScore].ruleId) {
                         diffScoreExcluded = true;
                     }
                 }
@@ -6655,8 +6655,9 @@ const rulesets = {
 
     seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         let roundThresholdReached = false;
-        let passMark = 0.95
+        let passMark = 0.98
         this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
+        console.log("currentMaxScore", this.currentMaxScore);
         let rule = this.getRuleFromSequence(this.ruleSequenceNum);
         let ruleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
         if ("passScore" in rule) {
