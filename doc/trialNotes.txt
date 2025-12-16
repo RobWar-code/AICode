@@ -1,3 +1,18 @@
+16/12/2025
+Result at 2500 rounds is not an improvement on A02.
+
+Presumably, the recycled partial solutions are more
+of a hindrance than a help in solution finding.
+
+Suspend the partial solutions feature and re-run the trial
+(A07).
+
+12/12/2025
+Fixed problem with getCurrentMaxScore, preceding few trials
+invalid since after A02.
+
+Restarted trial from scratch (A06).
+
 11/12/2025
 Logged previous trial as CompletionsLogA05.txt.
 
