@@ -1,3 +1,10 @@
+20/12/2025
+Trial A07 completed rather fewer rules than with the use
+of carried-over subsolutions.
+
+Begin new trial A08, at the other extreme, with rounds per
+rule set to 2 and full carry-over (10%).
+
 16/12/2025
 Result at 2500 rounds is not an improvement on A02.
 

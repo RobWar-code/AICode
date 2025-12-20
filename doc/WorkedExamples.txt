@@ -31,6 +31,7 @@ Contents
     Static Templates
     Solution Mesh Analogy
     Blocking False Plateau Routes
+    Two Layer Processing
     Performance Notes
 
 <h1>Status Reports
@@ -695,6 +696,10 @@ Consider repeat input params
     A partial solution is to only allow non-random imports on rule
     loop % 2 = 1. This would allow for a wider-range of random, native
     solutions.
+
+<h1>Two Layer Processing
+    Consider using another 256 byte memory/execution block. This might
+    allow for more algorithmic type solution finding.
     
 <h1>Performance Notes
 

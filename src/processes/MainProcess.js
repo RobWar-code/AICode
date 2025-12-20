@@ -40,19 +40,12 @@ class MainProcess {
                     // Determine whether random breed
                     if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
                         breedMode = "random";
-                        /*
-                        Use of partial results (bestsStore) suspended
-
-                        if (self.numRuleLoops % 2 === 0) {
-                            breedMode = "random";
-                        }
-                        else if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
+                        if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
                             breedMode = "random";
                         }
                         else {
                             breedMode = "bestsStore";
                         }
-                        */
                     }
                     else if (inSeedbed && bestEntitySet.length === 0 && !gotSeedbedEntity) {
                         breedMode = "seedbedInsert"
