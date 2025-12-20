@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 115,
-    maxRuleId: 114,
+    numRules: 116,
+    maxRuleId: 115,
     maxRoundsPerRule: 2,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -387,13 +387,64 @@ const rulesets = {
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
+            {rule:"Sample In Plus Sample Out", ruleId: 115, 
+                skip: false,
+                excludeHelperRules: [67],
+                retain: false, score: 0, max: 5,
+                startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 16 + 5,
+                highIP: 40,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "LDSO A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "ADD A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd:40
+                    }
+                ],
+                sampleIn: [
+                    [32,5,7 ,18,26,36,225,190,20,22,19,35,63 ,79 ,105,99 ],
+                    [33,48,7 ,110,186,121,87 ,33,90 ,85 ,96 ,108,93 ,64 ,69 ,19]
+                ],
+                sampleOut: [
+                    [9 ,3,6, 18,24,37,32 ,60 ,4 ,19,18,33,64 ,71 ,87 ,96 ],
+                    [30,46,6 ,111,23 ,119,89 ,17,88 ,83 ,77 ,91 ,90 ,63 ,65 ,18]
+                ],
+                paramsIn: [
+                    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                    [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]
+                ],
+                outputs: [
+                    [41,8,13,36,50,73,2  ,250,24,41,47,68,127,150,192,195],
+                    [63,94,13,221,209,240,176,50,178,168,173,199,183,127,134,37]
+                ]
+            }
+        );
+        this.ruleFunction.push(this.sampleInPlusSampleOut);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
             {rule:"Sample In Minus Sample Out", ruleId: 71, 
                 skip: false,
                 excludeHelperRules: [67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
-                highIC: 12 * 16 + 5,
+                highIC: 16 * 16 + 5,
                 highIP: 40,
                 insDistribution: [
                     {
@@ -416,20 +467,20 @@ const rulesets = {
                     }
                 ],
                 sampleIn: [
-                    [32,5,7,18,26,36,225,190,20,22,19,35,63,79,105,99],
-                    [33,48,7,110,186,121,87,33,90,85,96,108,93,64,69,19]
+                    [32,5,7,18,26, 36,225,190,20,22,19,35, 63,79,105,99],
+                    [33,48,7,110,186,121, 87,33,90,85,96,108,93,64,69,19]
                 ],
                 sampleOut: [
-                    [9,3,6,18,24,37,221,120,4,19,18,33,64,71,87,96],
-                    [30,46,6,111,123,119,89,17,88,83,77,91,90,63,65,18]
+                    [ 9,3,6,18,24, 37,221,120, 4,19,18,33, 64,71, 87,96],
+                    [30,46,6,111,123,119, 89,17,88,83,77, 91,90,63,65,18]
                 ],
                 paramsIn: [
                     [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
                     [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]
                 ],
                 outputs: [
-                    [23,2,1,0,2,255,4,70,16,3,1,2,255,8,18,3],
-                    [3,2,1,255,63,2,254,16,2,2,19,17,3,1,4,1]
+                    [23,2,1, 0, 2,255,  4, 70,16, 3, 1, 2,255, 8, 18, 3],
+                    [ 3, 2,1,255, 63,  2,254,16, 2, 2,19, 17, 3, 1, 4, 1]
                 ]
             }
         );
@@ -3320,7 +3371,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 113;
+        this.outputScoresItem = 114;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3330,7 +3381,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 114;
+        this.diffScore = 115;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4470,6 +4521,26 @@ const rulesets = {
             ++index;
         }
         let opt = sampleOut.length;
+        let max = opt;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
+    sampleInPlusSampleOut(self, dataParams, ruleParams) {
+        let valuesOut = dataParams.valuesOut;
+        let sampleIn = ruleParams.sampleIn;
+        let sampleOut = ruleParams.sampleOut;
+        let count = 0;
+        let index = 0;
+        for (let v1 of sampleIn) {
+            let v2 = sampleOut[index];
+            let v3 = valuesOut[index];
+            let v4 = (v1 + v2) & 255;
+            if (v3 === v4) ++count;
+            ++index;
+        }
+        let opt = sampleIn.length;
         let max = opt;
         let min = 0;
         let score = self.doScore(opt, count, max, min);
