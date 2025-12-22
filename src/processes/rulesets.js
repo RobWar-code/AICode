@@ -6760,14 +6760,10 @@ const rulesets = {
         }
         else if (roundNum >= this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
             // Save the sub-optimal result for reference
-            let subOptRuleItem = {};
             let item = this.getRuleFromSequence(this.ruleSequenceNum);
             let ruleId = item.ruleId;
-            subOptRuleItem.ruleId = ruleId;
-            subOptRuleItem.memSpace = memSpace;
-            this.subOptRuleMemSpaces.push(subOptRuleItem);
-            this.subOptRuleSet = true;
-            this.bestsStore.push(subOptRuleItem);
+            this.recordSubOptRuleItem(ruleId, memSpace);
+            this.recordBestsStoreItem(ruleId, memSpace);
             // Rule exceeds limit for number of rounds to pass
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
@@ -6785,6 +6781,52 @@ const rulesets = {
             this.seedRuleSet = false;
         }
         return roundThresholdReached;
+    },
+
+    recordSubOptRuleItem(ruleId, memSpace) {
+        let subOptRuleItem = {};
+        subOptRuleItem.ruleId = ruleId;
+        subOptRuleItem.memSpace = memSpace;
+
+        // Check whether there is already an entry for this rule id
+        let found = false;
+        let index = 0;
+        for (let subOptItem of this.subOptRuleMemSpaces) {
+            if (subOptItem.ruleId === ruleId) {
+                found = true;
+                break;
+            }
+            ++index;
+        }
+        if (found) {
+            this.subOptRuleMemSpaces[index] = subOptRuleItem;
+        }
+        else {
+            this.subOptRuleMemSpaces.push(subOptRuleItem);
+        }
+    },
+
+    recordBestsStoreItem(ruleId, memSpace) {
+        let bestsStoreItem = {};
+        bestsStoreItem.ruleId = ruleId;
+        bestsStoreItem.memSpace = memSpace;
+
+        // Check whether there is already an entry for this rule id
+        let found = false;
+        let index = 0;
+        for (let b of this.bestsStore) {
+            if (b.ruleId === ruleId) {
+                found = true;
+                break;
+            }
+            ++index;
+        }
+        if (found) {
+            this.bestsStore[index] = bestsStoreItem;
+        }
+        else {
+            this.bestsStore.push(bestsStoreItem);
+        }
     },
 
     findNextNonCompleteRule(ruleSequenceNum) {

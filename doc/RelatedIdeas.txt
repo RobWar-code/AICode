@@ -1,41 +1,58 @@
-22/07/2025
+Contents
+    Current System Status
+    Minimum Useful Mutator
 
-Current System Status
+<h1>Current System Status
 
-The current project appears to get as far as simple arrangements
-like subtractFirstParam, and multiply and modulo with the use of
-of templates. Although it is conceivable that the system might
-progress further with the right combination of rules and the
-process of learning from seed rules, it may well be worth considering
-variants of the approach to establish the general validity of the
-evolutionary code approach to machine learning.
+    22/07/2025
 
-As the system stands it is the system as whole which "learns" by
-the accumulation of solutions and solution fragments that may be useful 
-in solving other problems. The learning at the entity program level
-is all by selective scoring, and sometimes this may fail because
-stepwise solutions to the problem are not available, or because the
-intermediate scores move the system further from the solution 
-probabilistically.
+    The current project appears to get as far as simple arrangements
+    like subtractFirstParam, and multiply and modulo with the use of
+    of templates. Although it is conceivable that the system might
+    progress further with the right combination of rules and the
+    process of learning from seed rules, it may well be worth considering
+    variants of the approach to establish the general validity of the
+    evolutionary code approach to machine learning.
 
-The decision to be made at this juncture is whether to keep
-refining the existing model, or to extend the theory with the aim
-of writing a new model, or substantially reworking the existing
-model.
+    As the system stands it is the system as whole which "learns" by
+    the accumulation of solutions and solution fragments that may be useful 
+    in solving other problems. The learning at the entity program level
+    is all by selective scoring, and sometimes this may fail because
+    stepwise solutions to the problem are not available, or because the
+    intermediate scores move the system further from the solution 
+    probabilistically.
 
-Before moving on to reworking, let us consider whether the existing
-limitations can be overcome.
+    The decision to be made at this juncture is whether to keep
+    refining the existing model, or to extend the theory with the aim
+    of writing a new model, or substantially reworking the existing
+    model.
 
-Existing Limitations 
+    Before moving on to reworking, let us consider whether the existing
+    limitations can be overcome.
 
-    Stepwise Score Traps 
-        These may be caused by coincidental matching of values
-        in the output that deflect away from the algorithm.
+    Existing Limitations 
 
-        This problem can be partially overcome by scoring
-        required instructions in the program code range.
-        However, this leans toward foreknowledge.
+        Stepwise Score Traps 
+            These may be caused by coincidental matching of values
+            in the output that deflect away from the algorithm.
 
-        Could statistical code position analysers guide 
-        mutations/manipulations?
+            This problem can be partially overcome by scoring
+            required instructions in the program code range.
+            However, this leans toward foreknowledge.
 
+            Could statistical code position analysers guide 
+            mutations/manipulations?
+
+<h1>Minimum Useful Mutator
+    This section considers ideas for a minimum mutable system that
+    is still able to produce "useful" results.
+
+    Firstly, let us recap what we are trying to achieve:
+        To find a system capable of producing algorithms that
+        have meaning, basically in the field of maths.
+
+    Suppose we set ourselves the task of producing modules
+    that have a permuted probability of < 1/2,000,000
+    with raw probability this would be 6 items of 8 possibilities.
+    What could usefully be constructed from such an arrangement?
+    
