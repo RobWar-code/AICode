@@ -65,6 +65,23 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    */
+
+    sql = "CREATE TABLE weighting_table (";
+    sql += "code_position INTEGER UNIQUE PRIMARY KEY,";
+    sql += "total_occurrences INT"
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE code_weight_item (";
+    sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
+    sql += "code_position INT,";
+    sql += "code_item INT,";
+    sql += "occurrences INT";
+    sql += ")";
+    await connection.query(sql);
+    
+    /*
     sql = "CREATE TABLE bests_store (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "rule_id INT,";
@@ -82,8 +99,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
-
     // sql = "DROP TABLE rule";
     // await connection.query(sql);
 
@@ -97,7 +112,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "fragment VARCHAR(128)";
@@ -213,6 +227,14 @@ async function createTables() {
 async function clearTables(connection) {
     let sql;
 
+    /*
+    sql = "DELETE FROM weighting_table";
+    await connection.query(sql);
+
+    sql = "DELETE FROM code_weight_item";
+    await connection.query(sql);
+    */
+   
     sql = "DELETE FROM bests_store";
     await connection.query(sql);
 

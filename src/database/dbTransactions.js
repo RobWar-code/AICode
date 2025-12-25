@@ -48,6 +48,12 @@ const dbTransactions = {
         console.log("Saved Seed Rules", resultOK);
 
         if (resultOK) {
+            // Save the weighting table
+            resultOK = await this.saveWeightingTable(program);
+        }
+        console.log("Saved weightingTable");
+
+        if (resultOK) {
             // Save sub-opt rules
             resultOK = await this.saveSubOptRules(sessionId, dbConnection);
         }
@@ -316,6 +322,68 @@ const dbTransactions = {
 
         return true;
 
+    },
+
+    async saveWeightingTable(program) {
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
+
+        // Clear the previous entries
+        let sql = "DELETE FROM code_weight_item";
+        await dbConnection.query(sql);
+
+        sql = "DELETE FROM weighting_table";
+        await dbConnection.query(sql);
+
+        // Loop re-create the table
+        let ok = false;
+        let index = 0;
+        for (let codePositionItem of program.weightingTable) {
+            let codePosition = index;
+
+            // totalCodeOccurrences
+            let totalCodeOccurrences = codePositionItem.totalCodeOccurrences;
+            let sql = "INSERT INTO weighting_table (code_position, total_occurrences) VALUES (?, ?)";
+            try {
+                [results] = await dbConnection.execute(sql, [codePosition, totalCodeOccurrences]);
+                ok = true;
+            }
+            catch(err) {
+                console.error("saveWeightingTable: Problem inserting into weighting_table");
+                throw err;
+                break;
+            }
+
+            // Code weights
+            let cw = codePositionItem.codeOccurrences;
+            let code = 0;
+            for (let codeOccurrence of cw) {
+                let sql = "INSERT INTO code_weight_item (code_position, code_item, occurrences) VALUES (?, ?, ?)";
+                ok = false;
+                try {
+                    [results] = await dbConnection.execute(sql, [codePosition, code, codeOccurrence]);
+                    ok = true;
+                }
+                catch (err) {
+                    console.error("saveWeightingTable: Problem inserting into code_weight_item");
+                    throw err;
+                    break;
+                }
+                ++code;
+            }
+            if (!ok) break;
+            ++index;
+        }
+
+
+        if (dbConnOpened) {
+            dbConnection.end();
+        }
+
+        return ok;
     },
 
     async saveSubOptRules(sessionId, dbConnection) {

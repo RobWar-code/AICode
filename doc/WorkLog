@@ -12,6 +12,14 @@ Jobs Due
     Use rule id on round rules file, to allow for additional rules
         to be loaded before a run.
 
+    Add weightingTable for breed methods
+        * Do create table sections
+        Do Session Load/Save
+        * Do makeWeightingTable in mainControlShared.js from doEndOfRoundOperations
+            Do call from MainControl
+        Do Weighted Random breed
+        Do Weighted Monoclonal Byte breed
+
     * Display a status message when the completion log has output.
 
     * Add completion loop to rule rounds data
@@ -43,6 +51,8 @@ Jobs Due
     Update the README with the latest tables
 
     Update the README with log and reduced ins set facility
+
+    Redo README Breed Methods section
 
     Export Seed Rules and Fragments
 

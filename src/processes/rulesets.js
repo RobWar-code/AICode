@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 116,
-    maxRuleId: 115,
+    numRules: 117,
+    maxRuleId: 116,
     maxRoundsPerRule: 2,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -316,6 +316,26 @@ const rulesets = {
         );
         this.ruleFunction.push(this.valuesOutDifferent);
         this.byteFunction.push(this.byteValuesOutDifferent);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule: "Load Mem at First Param from Inputs", ruleId: 116, skip:false, retain: false,
+                excludeHelperRules: [36,6,67,68,69],
+                score: 0, max: 5, startRoundNum: 800,
+                inBlockStart: 0, inBlockLen: 1,
+                outBlockStart: 0, outBlockLen: 16,
+                highIC: 20 * 16,
+                highIP: 70,
+                sampleIn: [],
+                sampleOut: [],
+                paramsIn: [
+                    [200,3,9,27,220,221,190,176,76,34,180,163,38,25,27,29], 
+                    [150,5,6,7,9,90,76,65,83,39,109,211,64,65,72,73]
+                ]
+            }
+        );
+        this.ruleFunction.push(this.loadMemToFirstParamFromInputs);
+        this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
@@ -3371,7 +3391,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 114;
+        this.outputScoresItem = 115;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3381,7 +3401,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 115;
+        this.diffScore = 116;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4171,6 +4191,22 @@ const rulesets = {
                 }
             }
         }
+        return score;
+    },
+
+    loadMemToFirstParamFromInputs(self, dataParams, ruleParams) {
+        let params = dataParams.initialParams;
+        let memSpace = dataParams.memSpace;
+        let p = params[0];
+        let count = 0;
+        for (let v of params) {
+            if (memSpace[p] === v) ++count;
+            ++p;
+        }
+        let opt = params.length;
+        let max = params.length;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
         return score;
     },
 

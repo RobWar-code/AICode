@@ -133,6 +133,24 @@ const mainControlShared = {
             }
         }
         return promotionDone;
+    },
+
+    makeWeightingTable(self) {
+        self.weightingTable = [];
+        for (let p = 0; p < 256; p++) {
+            let codeWeightItem = {};
+            let codeOccurrences = new Array(256).fill(0)
+            let totalCodeOccurrences = 0;
+            for (let seed of rulesets.seedRuleMemSpaces) {
+                let code = seed.memSpace[p];
+                if (code < 0 || code > 255) code = 255;
+                ++codeOccurrences[code];
+                ++totalCodeOccurrences;
+            }
+            codeWeightItem.codeOccurrences = codeOccurrences;
+            codeWeightItem.totalCodeOccurrences = totalCodeOccurrences;
+            self.weightingTable.push(codeWeightItem);
+        }     
     }
 
 }

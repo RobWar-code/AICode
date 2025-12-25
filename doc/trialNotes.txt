@@ -1,3 +1,10 @@
+22/12/2025
+Trail A08 run for 1600 rounds did slightly better than trial
+A07.
+
+New trial A09 start from scratch with fix to bestsStore
+and subOptRuleMemSpaces.
+
 20/12/2025
 Trial A07 completed rather fewer rules than with the use
 of carried-over subsolutions.

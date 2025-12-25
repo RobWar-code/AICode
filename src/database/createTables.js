@@ -64,7 +64,24 @@ async function createTables() {
     sql += "seed_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
+
+    */
+
+    sql = "CREATE TABLE weighting_table (";
+    sql += "code_position INT UNIQUE PRIMARY KEY,";
+    sql += "total_occurrences INT"
+    sql += ")";
+    await connection.query(sql);
+
+    sql = "CREATE TABLE code_weight_item (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "code_position INT,";
+    sql += "code_item INT,";
+    sql += "occurrences INT";
+    sql += ")";
+    await connection.query(sql);
     
+    /*
     sql = "CREATE TABLE bests_store (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "rule_id INT,";
@@ -209,7 +226,13 @@ async function createTables() {
 
 async function clearTables(connection) {
     let sql;
+/*
+    sql = "DELETE FROM weighting_table";
+    await connection.query(sql);
 
+    sql = "DELETE FROM code_weight_item";
+    await connection.query(sql);
+*/
     sql = "DELETE FROM bests_store";
     await connection.query(sql);
     

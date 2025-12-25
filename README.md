@@ -341,6 +341,8 @@ being operated once the previous is solved.
 The solution to each rule is saved as the system progresses.
 These solutions are used as random seed to each new rule.
 
+##### Breed Methods
+
 In addition to each solution being saved as it is completed,
 the new solution is parsed by a function that checks randomly 
 selected sections of the code against other seed programs
@@ -355,7 +357,27 @@ matched fragments. Then each of the rule seed programs is parsed
 as far as byte 200 for a match with the section. The search
 halts and the fragment is added if a match is found.
 
-##### Seedbed Rule and Template Specialisation
+###### Weighted Monoclonal Byte Breed Method
+
+At the end of each rule loop, the successful solutions are
+parsed to determine the frequency of occurrence of code values
+at each of the 256 possible byte positions. This constitutes
+the weightingTable. The total number of code occurrences is also
+recorded with the individual code occurrences:
+
+[
+    {
+        codeOccurrences[n, n, .... to 256 codes],
+        totalCodeOccurrences: n
+    },
+    ...256 code positions
+]
+
+The weighted table is then used to select codes for random 
+origination "Weighted Random Breeds" and to select instructions
+for monoclonal byte breeding inserts "Weighted Monoclonal Byte Breeds"
+
+###### Seedbed Rule and Template Specialisation
 
 A section of 12 or so sets (seedbed) at the end of the bestSets set 
 of 72 is reserved for seed rule and seed template entities, to

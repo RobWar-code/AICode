@@ -36,6 +36,7 @@ class MainControl {
         this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
         this.scoreHistoryCycle = 1;
         this.scoreHistoryMaxLen = 8;
+        this.weightingTable = []; // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
         this.crossSetRange = 7;
