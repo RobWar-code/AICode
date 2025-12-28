@@ -66,11 +66,16 @@ class Entity {
         if (memSpace != null) {
             this.qualityControlIns("External Breed", memSpace);
             this.initialMemSpace = memSpace.concat();
+            this.breedMethod = "Inserted";
         }
         else if (seeded) {
-            this.createSeededProgram()
+            this.createSeededProgram();
+            this.breedMethod = "Seeded";
         }
-        else if (asRandom) {
+        else if (asRandom === "weighted") {
+            this.createWeightedRandomProgram();
+        }
+        else if (asRandom === true) {
             this.createRandomProgram();
         }
         // Breeding Parameters
@@ -82,7 +87,6 @@ class Entity {
         this.birthDateTime = `${now.toDateString()} ${now.toTimeString()}`;
         this.birthCycle = currentCycle;
         this.roundNum = roundNum;
-        this.breedMethod = "Random";
         this.crossSetBreed = false;
 
         // Step Data
@@ -169,6 +173,35 @@ class Entity {
                 this.initialMemSpace[i] = n;
             }
         }
+        this.breedMethod = "Random";
+    }
+
+    createWeightedRandomProgram() {
+        this.initialMemSpace = [];
+        for (let i = 0; i < 256; i++) {
+            let code = this.selectWeightedCode(i);
+            this.initialMemSpace.push(code);
+        }
+        this.breedMethod = "WeightedRandom";
+    }
+
+    selectWeightedCode(codePosition) {
+        let codeWeightItem = rulesets.weightingTable[codePosition];
+        let maxWeight = codeWeightItem.totalCodeOccurrences;
+        let codeWeights = codeWeightItem.codeOccurrences;
+        let weight = 0;
+        let r = Math.floor(Math.random() * maxWeight);
+        let code = 0;
+        for (let i = 0; i < 256; i++) {
+            if (codeWeights[i] > 0) {
+                weight += codeWeights[i];
+                if (weight > r) {
+                    code = i;
+                    break;
+                }
+            }
+        }
+        return code;
     }
 
     createSeededProgram() {
@@ -329,8 +362,14 @@ class Entity {
                 newEntity.breedMethod = "MonoclonalIns";
             }
             else {
-                newEntity = this.monoclonalByteBreed(entityNumber, cycleCounter, roundNum);
-                newEntity.breedMethod = "MonoclonalByte";
+                if (rulesets.weightingTable.length > 0 && Math.random() < 0.3) {
+                    newEntity = this.weightedMonoclonalByteBreed(entityNumber, cycleCounter, roundNum);
+                    newEntity.breedMethod = "WeightedMonoclonalByte";
+                }
+                else {
+                    newEntity = this.monoclonalByteBreed(entityNumber, cycleCounter, roundNum);
+                    newEntity.breedMethod = "MonoclonalByte";
+                }
             }
         }
         else {
@@ -586,6 +625,66 @@ class Entity {
                 // No change
                 newCode.push(v);
             }
+        }
+        if (newCode.length > this.memLength) {
+            newCode = newCode.slice(0, this.memLength);
+        }
+        else if (newCode.length < this.memLength) {
+            newCode = newCode.concat(new Array(this.memLength - newCode.length).fill(0));
+        }
+        let asRandom = false;
+        let seeded = false;
+        let ruleSequenceNum = null;
+        let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, 
+            cycleCounter, ruleSequenceNum, roundNum, newCode);
+        return entity;
+    }
+
+    weightedMonoclonalByteBreed(entityNumber, cycleCounter, roundNum) {
+        let newCode = [];
+        let oldCode = this.initialMemSpace;
+        // Determine whether high or low probability of change
+        let changeChance = 0.1;
+        if (Math.random() < 0.2) changeChance = 0.3;
+        let index = 0;
+        for (let v of oldCode) {
+            // Determine whether change occurs
+            if (Math.random() < changeChance) {
+                let c = Math.random();
+                if (c < 0.1) {
+                    // Duplicate
+                    newCode.push(v);
+                    if (newCode.length < this.memLength) {
+                        newCode.push(v);
+                    }
+                }
+                else if (c < 0.15 && newCode.length > 0 && newCode.length + 2 <= this.memLength) {
+                    // Transpose
+                    let oldV = newCode.pop();
+                    newCode.push(v);
+                    newCode.push(oldV);
+                }
+                else if (c < 0.5) {
+                    // Replace
+                    let n = this.selectWeightedCode(index);
+                    newCode.push(n);
+                }
+                else if (c < 0.75) {
+                    // Insert
+                    let n = this.selectWeightedCode(index);
+                    newCode.push(n);
+                    newCode.push(v);
+                }
+                else {
+                    // Delete
+                    // Do nothing
+                }
+            }
+            else {
+                // No change
+                newCode.push(v);
+            }
+            ++index;
         }
         if (newCode.length > this.memLength) {
             newCode = newCode.slice(0, this.memLength);

@@ -27,6 +27,7 @@ const rulesets = {
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
     ruleRounds: [], // {completed:, start:, end:, ruleLoopEnd:, used:}
+    weightingTable: [], // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -6783,6 +6784,8 @@ const rulesets = {
             this.ruleRounds[ruleIndex].completed = true;
             this.seedRuleSet = true;
 
+            this.makeWeightingTable();
+
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 this.ruleSequenceNum = 0;
@@ -6817,6 +6820,25 @@ const rulesets = {
             this.seedRuleSet = false;
         }
         return roundThresholdReached;
+    },
+
+    makeWeightingTable() {
+        this.weightingTable = [];
+        for (let p = 0; p < 256; p++) {
+            let codeWeightItem = {};
+            let codeOccurrences = new Array(256).fill(0)
+            let totalCodeOccurrences = 0;
+            for (let seed of this.seedRuleMemSpaces) {
+                let code = seed.memSpace[p];
+                if (code < 0 || code > 255) code = 255;
+                ++codeOccurrences[code];
+                ++totalCodeOccurrences;
+            }
+            codeWeightItem.codeOccurrences = codeOccurrences;
+            codeWeightItem.totalCodeOccurrences = totalCodeOccurrences;
+            this.weightingTable.push(codeWeightItem);
+        }
+        console.log("Made weighting table");
     },
 
     recordSubOptRuleItem(ruleId, memSpace) {

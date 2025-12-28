@@ -67,18 +67,17 @@ async function createTables() {
 
     */
 
+    sql = "DROP TABLE weighting_table";
+    await connection.query(sql);
+
     sql = "CREATE TABLE weighting_table (";
     sql += "code_position INT UNIQUE PRIMARY KEY,";
-    sql += "total_occurrences INT"
+    sql += "total_occurrences INT,"
+    sql += "occurrences VARCHAR(256)"
     sql += ")";
     await connection.query(sql);
 
-    sql = "CREATE TABLE code_weight_item (";
-    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
-    sql += "code_position INT,";
-    sql += "code_item INT,";
-    sql += "occurrences INT";
-    sql += ")";
+    sql = "DROP TABLE code_weight_item";
     await connection.query(sql);
     
     /*
@@ -201,6 +200,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
     
+
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -212,6 +212,8 @@ async function createTables() {
     sql += "interbreed2_count INT,";
     sql += "interbreed_flagged_count INT,";
     sql += "interbreed_ins_merge_count INT,";
+    sql += "weighted_monoclonal_byte_count INT,";
+    sql += "weighted_random_breed_count INT, ";
     sql += "self_breed_count INT,";
     sql += "bests_store_breed_count INT,"
     sql += "seed_rule_breed_count INT,";
@@ -220,19 +222,18 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
+
     */
+
     connection.end();
 }
 
 async function clearTables(connection) {
     let sql;
-/*
+
     sql = "DELETE FROM weighting_table";
     await connection.query(sql);
 
-    sql = "DELETE FROM code_weight_item";
-    await connection.query(sql);
-*/
     sql = "DELETE FROM bests_store";
     await connection.query(sql);
     

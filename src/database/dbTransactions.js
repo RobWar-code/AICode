@@ -49,7 +49,7 @@ const dbTransactions = {
 
         if (resultOK) {
             // Save the weighting table
-            resultOK = await this.saveWeightingTable(program);
+            resultOK = await this.saveWeightingTable(dbConnection);
         }
         console.log("Saved weightingTable");
 
@@ -229,6 +229,9 @@ const dbTransactions = {
             console.error("Could not read from seed_rule table.", error.message);
         }
 
+        // weighting table
+        await this.loadWeightingTable(dbConnection);
+
         // Get seed rule memspace
         let subOptRules;
         try {
@@ -324,7 +327,7 @@ const dbTransactions = {
 
     },
 
-    async saveWeightingTable(program) {
+    async saveWeightingTable(dbConnection) {
         let dbConnOpened = false;
         if (dbConnection === null) {
             dbConnection = await dbConn.openConnection();
@@ -332,23 +335,21 @@ const dbTransactions = {
         }
 
         // Clear the previous entries
-        let sql = "DELETE FROM code_weight_item";
-        await dbConnection.query(sql);
-
         sql = "DELETE FROM weighting_table";
         await dbConnection.query(sql);
 
         // Loop re-create the table
         let ok = false;
         let index = 0;
-        for (let codePositionItem of program.weightingTable) {
+        for (let codePositionItem of rulesets.weightingTable) {
             let codePosition = index;
 
             // totalCodeOccurrences
             let totalCodeOccurrences = codePositionItem.totalCodeOccurrences;
-            let sql = "INSERT INTO weighting_table (code_position, total_occurrences) VALUES (?, ?)";
+            let occurrences = this.intArrayToString(codePositionItem.codeOccurrences, 256);
+            let sql = "INSERT INTO weighting_table (code_position, total_occurrences, occurrences) VALUES (?, ?, ?)";
             try {
-                [results] = await dbConnection.execute(sql, [codePosition, totalCodeOccurrences]);
+                [results] = await dbConnection.execute(sql, [codePosition, totalCodeOccurrences, occurrences]);
                 ok = true;
             }
             catch(err) {
@@ -357,27 +358,48 @@ const dbTransactions = {
                 break;
             }
 
-            // Code weights
-            let cw = codePositionItem.codeOccurrences;
-            let code = 0;
-            for (let codeOccurrence of cw) {
-                let sql = "INSERT INTO code_weight_item (code_position, code_item, occurrences) VALUES (?, ?, ?)";
-                ok = false;
-                try {
-                    [results] = await dbConnection.execute(sql, [codePosition, code, codeOccurrence]);
-                    ok = true;
-                }
-                catch (err) {
-                    console.error("saveWeightingTable: Problem inserting into code_weight_item");
-                    throw err;
-                    break;
-                }
-                ++code;
-            }
             if (!ok) break;
             ++index;
         }
 
+
+        if (dbConnOpened) {
+            dbConnection.end();
+        }
+
+        return ok;
+    },
+
+    async loadWeightingTable(dbConnection) {
+        let dbConnOpened = false;
+        if (dbConnection === null) {
+            dbConnection = await dbConn.openConnection();
+            dbConnOpened = true;
+        }
+
+        rulesets.weightingTable = [];
+        let ok = false;
+        // Fetch the totals 
+        let sql = "SELECT * FROM weighting_table ORDER BY code_position";
+        try {
+            [results] = await dbConnection.query(sql);
+            ok = true;
+        }
+        catch (err) {
+            console.error("loadWeightingTable: problem loading totals");
+            throw err;
+        }
+
+        if (ok && results.length > 0) {
+            for (let row of results) {
+                let weightRowItem = {};
+                weightRowItem.totalCodeOccurrences = row.total_occurrences;
+                // Do occurrences
+                let codeOccurrences = this.stringToIntArray(row.occurrences);
+                weightRowItem.codeOccurrences = codeOccurrences;
+                rulesets.weightingTable.push(weightRowItem);
+            }
+        }
 
         if (dbConnOpened) {
             dbConnection.end();
@@ -1274,12 +1296,14 @@ const dbTransactions = {
 
         try {
             sql = "INSERT INTO batch_data (batch_num, monoclonal_ins_count, monoclonal_byte_count, interbreed_count,";
-            sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, self_breed_count,";
+            sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, "
+            sql += "weighted_monoclonal_byte_count, weighted_random_breed_count, self_breed_count,";
             sql += "bests_store_breedCount, seed_rule_breed_count, seed_template_breed_count, random_count, cross_set_count) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [batchNum, batchData.monoclonalInsCount, 
                 batchData.monoclonalByteCount, batchData.interbreedCount, batchData.interbreed2Count,
                 batchData.interbreedFlaggedCount, batchData.interbreedInsMergeCount,
+                batchData.weightedMonoclonalByteCount, batchData.weightedRandomBreedCount,
                 batchData.selfBreedCount, batchData.seedRuleBreedCount, batchData.seedTemplateBreedCount,
                 batchData.randomCount, 
                 batchData.crossSetCount

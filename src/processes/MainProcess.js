@@ -41,7 +41,12 @@ class MainProcess {
                     if (!inSeedbed && bestEntitySet.length < self.bestEntitySetMax) {
                         breedMode = "random";
                         if (Math.random() < 0.9 || this.rulesets.bestsStore.length <= 0) {
-                            breedMode = "random";
+                            if (this.rulesets.weightingTable.length > 0 && Math.random() < 0.3) {
+                                breedMode = "weightedRandom";
+                            }
+                            else {
+                                breedMode = "random";
+                            }
                         }
                         else {
                             breedMode = "bestsStore";
@@ -132,6 +137,12 @@ class MainProcess {
                         entity = p1Entity.breed(self.entityNumber, p2Entity, gotCrossMate, 
                             self.cycleCounter, self.numRounds);
                     }
+                    else if (breedMode === "weightedRandom") {
+                        let seeded = false;
+                        asRandom = "weighted";
+                        entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
+                            self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
+                    }
                     else {
                         let seeded = false;
                         // Seeding on first pass.
@@ -146,6 +157,9 @@ class MainProcess {
                             break;
                         case "MonoclonalByte" :
                             ++self.monoclonalByteCount;
+                            break;
+                        case "WeightedMonoclonalByte" :
+                            ++self.weightedMonoclonalByteCount;
                             break;
                         case "Interbreed" :
                             ++self.interbreedCount;
@@ -174,6 +188,9 @@ class MainProcess {
                             break;
                         case "SeedTemplate" :
                             ++self.seedTemplateBreedCount;
+                            break;
+                        case "WeightedRandom" :
+                            ++self.weightedRandomBreedCount;
                             break;
                         default:
                             ++self.randomCount;

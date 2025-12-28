@@ -173,6 +173,31 @@ li {
     overflow: auto;
 }
 
+/* Weights View */
+#weightsBackground {
+    display: none;
+}
+
+#weightsMain {
+    overflow: auto;
+}
+
+#weightsTable {
+    border: 1px solid black;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#weightsTable th {
+    border: 1px solid black;
+}
+
+#weightsOccurrencesTable td {
+    width: 32px;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
 /* Restore Rule Seed */
 #restoreRuleSeedBackground {
     display: none;

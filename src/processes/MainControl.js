@@ -36,7 +36,6 @@ class MainControl {
         this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
         this.scoreHistoryCycle = 1;
         this.scoreHistoryMaxLen = 8;
-        this.weightingTable = []; // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
         this.crossSetRange = 7;
@@ -64,6 +63,8 @@ class MainControl {
         this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
+        this.weightedRandomBreedCount = 0;
+        this.weightedMonoclonalByteCount = 0;
         this.startTime = Date.now();
         this.elapsedTime = 0;
         this.previousElapsedTime = 0;
@@ -638,6 +639,8 @@ class MainControl {
         displayData.interbreed2Count = this.interbreed2Count;
         displayData.interbreedFlaggedCount = this.interbreedFlaggedCount;
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
+        displayData.weightedMonoclonalByteCount = this.weightedMonoclonalByteCount;
+        displayData.weightedRandomBreedCount = this.weightedRandomBreedCount;
         displayData.selfBreedCount = this.selfBreedCount;
         displayData.bestsStoreBreedCount = this.bestsStoreBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;

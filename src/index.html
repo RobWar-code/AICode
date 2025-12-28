@@ -32,6 +32,16 @@
       </div>
     </div>
 
+    <!-- View of Weighting Table -->
+    <div class="genModal" id="weightsBackground">
+      <div class="genModalForm" id="weightsMain">
+        <button class="textButton" id="weightsDismiss">Dismiss</button>
+        <h2 class="heading">Entity Score List</h2>
+        <table id="weightsTable">
+        </table>
+      </div>
+    </div>
+
     <!-- Restore Rule Seed Modal-->
     <div class="genModal" id="restoreRuleSeedBackground">
       <div class="genModalForm" id="restoreRuleSeedMain">
@@ -78,15 +88,16 @@
         <div class="col-sm-12 col-lg-6">
           <button class="textButton" id="scoreListButton">Score List</button>
           <button class="textButton" id="scoreHistoryButton">Score History</button>
+          <button class="textButton" id="viewWeightsButton">View Weights</button>
           <button class="textButton" id="logCompletionsButton">Log Completions</button>
           <button class="textButton" id="haltProcessButton">Start Process</button>
           <button class="textButton" id="insSetListButton">Ins. Set List</button>
           <button class="textButton" id="startAtRuleButton">Start At Rule</button>
           <button class="textButton" id="traceButton">Trace</button>
-          <button class="textButton" id="loadSeedButton" title="Load a crafted seed entity">Load Seed</button>
-          <button class="textButton" id="loadSeedRuleButton" title="Load seed rule from memory">Load Seed Rule</button>
         </div>
         <div class="col-sm-12 col-lg-6">
+          <button class="textButton" id="loadSeedButton" title="Load a crafted seed entity">Load Seed</button>
+          <button class="textButton" id="loadSeedRuleButton" title="Load seed rule from memory">Load Seed Rule</button>
           <button class="textButton" id="restoreRuleSeedButton" title="Restore a saved seed rule">Restore Rule Seed</button>
           <button class="textButton" id="loadSubOptRuleButton" title="Load a failed rule memspace">Load SubOpt Rule</button>
           <button class="textButton" id="ruleSelectionButton">Select Rule</button>
@@ -349,11 +360,26 @@
 
           <div class="row">
             <div class="col-sm-2">
+              <p class="entityPara">Weighted MonoclonalByte Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="weightedMonoclonalByteCount"></p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara">Weighted Random Breeds: </p>
+            </div>
+            <div class="col-sm-2">
+              <p class="entityPara" id="weightedRandomBreedCount"></p>
+            </div>
+            <div class="col-sm-2">
               <p class="entityPara">Self Breeds: </p>
             </div>
             <div class="col-sm-2">
               <p class="entityPara" id="selfBreedCount"></p>
             </div>
+          </div>
+
+          <div class="row">
             <div class="col-sm-2">
               <p class="entityPara">Bests Store Breeds: </p>
             </div>
@@ -366,15 +392,15 @@
             <div class="col-sm-2">
               <p class="entityPara" id="seedRuleBreedCount"></p>
             </div>
-          </div>
-
-          <div class="row">
             <div class="col-sm-2">
               <p class="entityPara">Seed Template Breeds: </p>
             </div>
             <div class="col-sm-2">
               <p class="entityPara" id="seedTemplateBreedCount"></p>
             </div>
+          </div>
+
+          <div class="row">
             <div class="col-sm-2">
               <p class="entityPara">Cross-set Breeds: </p>
             </div>

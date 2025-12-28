@@ -69,6 +69,8 @@ class BatchProcess {
         this.interbreed2Count = 0;
         this.interbreedFlaggedCount = 0;
         this.interbreedInsMergeCount = 0;
+        this.weightedRandomBreedCount = 0;
+        this.weightedMonoclonalByteCount = 0;
         this.selfBreedCount = 0;
         this.bestsStoreBreedCount = 0;
         this.seedRuleBreedCount = 0;
@@ -91,6 +93,15 @@ class BatchProcess {
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
         await dbTransactions.fetchBestsStore();
+        await dbTransactions.loadWeightingTable(null);
+        // Debug
+        console.error("loaded WeightingTable, length:", rulesets.weightingTable.length);
+        if (rulesets.weightingTable.length > 0) {
+            console.error("weightingTable occurrences length, total", 
+                rulesets.weightingTable[0].codeOccurrences.length, 
+                rulesets.weightingTable[0].totalCodeOccurrences);
+        }
+        
         // Load the seedbed data
         this.seedbedData = await dbTransactions.fetchSeedbedData();
         this.templateSeedbedLog = await dbTransactions.fetchTemplateSeedbedLog();
@@ -143,6 +154,8 @@ class BatchProcess {
                 interbreed2Count: this.interbreed2Count,
                 interbreedFlaggedCount: this.interbreedFlaggedCount,
                 interbreedInsMergeCount: this.interbreedInsMergeCount,
+                weightedMonoclonalByteCount: this.weightedMonoclonalByteCount,
+                weightedRandomBreedCount: this.weightedRandomBreedCount,
                 selfBreedCount: this.selfBreedCount,
                 bestsStoreBreedCount: this.bestsStoreBreedCount,
                 seedRuleBreedCount: this.seedRuleBreedCount,
@@ -286,6 +299,8 @@ class BatchProcess {
             interbreed2Count: this.interbreed2Count,
             interbreedFlaggedCount: this.interbreedFlaggedCount,
             interbreedInsMergeCount: this.interbreedInsMergeCount,
+            weightedMonoclonalByteCount: this.weightedMonoclonalByteCount,
+            weightedRandomBreedCount: this.weightedRandomBreedCount,
             selfBreedCount: this.selfBreedCount,
             bestsStoreBreedCount: this.bestsStoreBreedCount,
             seedRuleBreedCount: this.seedRuleBreedCount,
@@ -305,6 +320,8 @@ class BatchProcess {
             interbreed2Count: this.interbreed2Count,
             interbreedFlaggedCount: this.interbreedFlaggedCount,
             interbreedInsMergeCount: this.interbreedInsMergeCount,
+            weightedMonoclonalByteCount: this.weightedMonoclonalByteCount,
+            weightedRandomBreedCount: this.weightedRandomBreedCount,
             selfBreedCount: this.selfBreedCount,
             bestsStoreBreedCount: this.bestsStoreBreedCount,
             seedRuleBreedCount: this.seedRuleBreedCount,

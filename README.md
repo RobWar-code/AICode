@@ -359,7 +359,7 @@ halts and the fragment is added if a match is found.
 
 ###### Weighted Monoclonal Byte Breed Method
 
-At the end of each rule loop, the successful solutions are
+As successful solutions are found, the successful solutions are
 parsed to determine the frequency of occurrence of code values
 at each of the 256 possible byte positions. This constitutes
 the weightingTable. The total number of code occurrences is also
@@ -375,7 +375,7 @@ recorded with the individual code occurrences:
 
 The weighted table is then used to select codes for random 
 origination "Weighted Random Breeds" and to select instructions
-for monoclonal byte breeding inserts "Weighted Monoclonal Byte Breeds"
+for monoclonal byte breeding inserts.
 
 ###### Seedbed Rule and Template Specialisation
 

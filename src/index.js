@@ -217,6 +217,10 @@ ipcMain.on("fetchDisplayHistory", () => {
   mainWindow.webContents.send("displayHistory", program.scoreHistory);
 });
 
+ipcMain.on("fetchWeightingTable", () => {
+  mainWindow.webContents.send("displayWeights", rulesets.weightingTable);
+});
+
 ipcMain.on("logCompletions", () => {
   logResults.makeRuleCompletionLog();
   mainWindow.webContents.send("ruleCompletionLogDone", 0);

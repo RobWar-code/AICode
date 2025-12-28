@@ -4,6 +4,7 @@ const entityDisplay = require(path.join(__dirname, "/display/entityDisplay.js"))
 const insSetListDisplay = require(path.join(__dirname, "/display/insSetListDisplay.js"));
 const startRuleDisplay = require(path.join(__dirname, "/display/startRuleDisplay.js"));
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
+const weightsDisplay = require(path.join(__dirname, '/display/weightsDisplay.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
 const restoreRuleSeed = require(path.join(__dirname, '/display/restoreRuleSeed.js'));
@@ -81,6 +82,10 @@ ipcRenderer.on("displayHistory", (event, data) => {
     scoreHistory.displayHistory(data);
 });
 
+ipcRenderer.on("displayWeights", (event, data) => {
+    weightsDisplay.displayWeights(data);
+});
+
 ipcRenderer.on("displaySeedSelector", (event, nameList) => {
     seedDisplay.displaySelector(nameList);
 });
@@ -142,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreListButton = document.getElementById('scoreListButton');
     const scoreHistoryButton = document.getElementById('scoreHistoryButton');
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
+    const viewWeightsButton = document.getElementById('viewWeightsButton');
+    const weightsDismiss = document.getElementById('weightsDismiss');
     const logCompletionsButton = document.getElementById('logCompletionsButton');
     const haltProcessButton = document.getElementById('haltProcessButton');
     const insSetListButton = document.getElementById('insSetListButton');
@@ -198,6 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     scoreHistoryDismiss.addEventListener('click', (event) => {
         document.getElementById("scoreHistoryBackground").style.display = "none";
+    });
+
+    viewWeightsButton.addEventListener('click', (event) => {
+        ipcRenderer.send("fetchWeightingTable", 0);
+    });
+
+    weightsDismiss.addEventListener('click', (event) => {
+        document.getElementById('weightsBackground').style.display = "none";
     });
 
     logCompletionsButton.addEventListener('click', (event) => {

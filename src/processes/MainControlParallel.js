@@ -43,7 +43,6 @@ class MainControlParallel {
         this.scoreHistoryCounter = new Array(this.numBestSets).fill(0);
         this.scoreHistoryCycle = 1;
         this.scoreHistoryMaxLen = 8;
-        this.weightingTable = []; // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
         this.processEntitySetMax = 32;
         this.processEntitySet = [];
         this.crossSetRange = 7;
@@ -69,6 +68,8 @@ class MainControlParallel {
         this.seedTemplateBreedCount = 0;
         this.randomCount = 0;
         this.crossSetCount = 0;
+        this.weightedRandomBreedCount = 0;
+        this.weightedMonoclonalByteCount = 0;
         this.startTime = Date.now();
         this.elapsedTime = 0;
         this.previousElapsedTime = 0;
@@ -542,6 +543,8 @@ class MainControlParallel {
                 this.interbreed2Count += results[0].interbreed2_count;
                 this.interbreedFlaggedCount += results[0].interbreed_flagged_count;
                 this.interbreedInsMergeCount += results[0].interbreed_ins_merge_count;
+                this.weightedMonoclonalByteCount += results[0].weighted_monoclonal_byte_count;
+                this.weightedRandomBreedCount += results[0].weighted_random_breed_count;
                 this.selfBreedCount += results[0].self_breed_count;
                 this.seedRuleBreedCount += results[0].seed_rule_breed_count;
                 this.seedTemplateBreedCount += results[0].seed_template_breed_count;
@@ -564,6 +567,8 @@ class MainControlParallel {
             this.interbreed2Count += batchData.interbreed2Count;
             this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
             this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
+            this.weightedMonoclonalByteCount += batchData.weightedMonoclonalByteCount;
+            this.weightedRandomBreedCount += batchData.weightedRandomBreedCount;
             this.selfBreedCount += batchData.selfBreedCount;
             this.bestsStoreBreedCount += batchData.bestsStoreBreedCount;
             this.seedRuleBreedCount += batchData.seedRuleBreedCount;
@@ -580,6 +585,8 @@ class MainControlParallel {
         this.interbreed2Count += batchData.interbreed2Count;
         this.interbreedFlaggedCount += batchData.interbreedFlaggedCount;
         this.interbreedInsMergeCount += batchData.interbreedInsMergeCount;
+        this.weightedMonoclonalByteCount += batchData.weightedMonoclonalByteCount;
+        this.weightedRandomBreedCount += batchData.weightedRandomBreedCount; 
         this.selfBreedCount += batchData.selfBreedCount;
         this.bestsStoreBreedCount += batchData.bestsStoreBreedCount;
         this.seedRuleBreedCount += batchData.seedRuleBreedCount;
@@ -612,14 +619,6 @@ class MainControlParallel {
         }
         else {
             await dbTransactions.saveSeedRules(null);
-            // Check for makeWeightingTable
-            if (rulesets.ruleSequenceNum === 0 && this.numRounds > 1) {
-                // Get rounds this rule
-                let ruleStart = rulesets.ruleRounds[0].start;
-                if (this.numRounds - ruleStart === 0) {
-                    mainControlShared.makeWeightingTable(this);
-                }
-            }
         }
  
         if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
@@ -1165,6 +1164,8 @@ class MainControlParallel {
         displayData.interbreed2Count = this.interbreed2Count;
         displayData.interbreedFlaggedCount = this.interbreedFlaggedCount;
         displayData.interbreedInsMergeCount = this.interbreedInsMergeCount;
+        displayData.weightedMonoclonalByteCount = this.weightedMonoclonalByteCount;
+        displayData.weightedRandomBreedCount = this.weightedRandomBreedCount;
         displayData.selfBreedCount = this.selfBreedCount;
         displayData.bestsStoreBreedCount = this.bestsStoreBreedCount;
         displayData.seedRuleBreedCount = this.seedRuleBreedCount;
