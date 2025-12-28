@@ -651,25 +651,25 @@ class Entity {
             // Determine whether change occurs
             if (Math.random() < changeChance) {
                 let c = Math.random();
-                if (c < 0.1) {
+                if (c < 0.05) {
                     // Duplicate
                     newCode.push(v);
                     if (newCode.length < this.memLength) {
                         newCode.push(v);
                     }
                 }
-                else if (c < 0.15 && newCode.length > 0 && newCode.length + 2 <= this.memLength) {
+                else if (c < 0.1 && newCode.length > 0 && newCode.length + 2 <= this.memLength) {
                     // Transpose
                     let oldV = newCode.pop();
                     newCode.push(v);
                     newCode.push(oldV);
                 }
-                else if (c < 0.5) {
+                else if (c < 0.97) {
                     // Replace
                     let n = this.selectWeightedCode(index);
                     newCode.push(n);
                 }
-                else if (c < 0.75) {
+                else if (c < 0.98) {
                     // Insert
                     let n = this.selectWeightedCode(index);
                     newCode.push(n);
