@@ -67,8 +67,8 @@ async function createTables() {
 
     */
 
-    sql = "DROP TABLE weighting_table";
-    await connection.query(sql);
+    // sql = "DROP TABLE weighting_table";
+    // await connection.query(sql);
 
     sql = "CREATE TABLE weighting_table (";
     sql += "code_position INTEGER UNIQUE PRIMARY KEY,";
@@ -77,9 +77,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    sql = "DROP TABLE code_weight_item";
-    await connection.query(sql);
-    
     /*
     sql = "CREATE TABLE bests_store (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
@@ -200,7 +197,7 @@ async function createTables() {
     sql += "input_block VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+    */
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -221,7 +218,6 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-    */
 
     connection.close();
 }
@@ -229,8 +225,8 @@ async function createTables() {
 async function clearTables(connection) {
     let sql;
 
-    sql = "DELETE FROM weighting_table";
-    await connection.query(sql);
+    // sql = "DELETE FROM weighting_table";
+    // await connection.query(sql);
 
     sql = "DELETE FROM bests_store";
     await connection.query(sql);
