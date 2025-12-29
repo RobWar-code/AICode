@@ -12,42 +12,14 @@ Jobs Due
     Use rule id on round rules file, to allow for additional rules
         to be loaded before a run.
 
-    View Weights Table
-    
-    * Add weightingTable for breed methods
-        * Do create table sections
-        * Do Session Load/Save
-        * Do makeWeightingTable in rulesets.js call from seedRuleUpdate
-        * Do Weighted Random breed
-        * Do Weighted Monoclonal Byte breed
-
-    * Display a status message when the completion log has output.
-
-    * Add completion loop to rule rounds data
-
-    * Add completion round data to rule completion log
-
-    Study "Static Templates"
-
-    * Include the rule loop in the display
-        * Database
-        * Update
-        * Display
-        
-    Add rules
-        Sample in plus sample out
-        * Reinstate outputs different
-        * 16 bit add
-        * add 16 bit value to sixteen bit
-        * Outputs Different and Sum to First Param
-        * Adjust cube roots to 20 examples
+    Add Rules
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
         Do base 10 on 2 digit numbers
         Do base 10 on 3 digit numbers
 
-    Add Rounds this Rule info to the main display
+    Study "Static Templates"
 
     Update the README with the latest tables
 
@@ -66,8 +38,6 @@ Jobs Due
     
     Consider tables/charts for comparing historical trials
         Consider trial notes before a run.
-
-    Possibly include duplication in monoclonal breed mutations
 
     Check through code sequences to establish stepwise rules
 
@@ -124,6 +94,40 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+
+    28/12/2025
+    
+    * View Weights Table
+
+    * Add weightingTable for breed methods
+        * Do create table sections
+        * Do Session Load/Save
+        * Do makeWeightingTable in rulesets.js call from seedRuleUpdate
+        * Do Weighted Random breed
+        * Do Weighted Monoclonal Byte breed
+
+    * Display a status message when the completion log has output.
+
+    * Add completion loop to rule rounds data
+
+    * Add completion round data to rule completion log
+
+    * Include the rule loop in the display
+        * Database
+        * Update
+        * Display
+        
+    * Add rules
+        * Sample in plus sample out
+        * Reinstate outputs different
+        * 16 bit add
+        * add 16 bit value to sixteen bit
+        * Outputs Different and Sum to First Param
+        * Adjust cube roots to 20 examples
+
+    * Add Rounds this Rule info to the main display
+
+    * Possibly include duplication in monoclonal breed mutations
 
     20/11/2025
 
