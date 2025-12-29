@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 117,
-    maxRuleId: 116,
+    numRules: 119,
+    maxRuleId: 118,
     maxRoundsPerRule: 2,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -81,7 +81,7 @@ const rulesets = {
                     "5;7;9;8;2;2;3;0;4;6;5;7;9;8;1;4;"
                 ],
                 paramsIn: [],
-                outputs: []
+                outputs: [] // Leave out if not applicable
             }
 
         */
@@ -184,7 +184,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
-            {rule: "Outputs Different to Inputs", ruleId: 67, 
+            {rule: "Output Different to Input", ruleId: 67, 
                 skip: false,
                 retain: true, score: 0, max: 1, startRoundNum: 0,
                 outBlockStart: 0, outBlockLen: 128 
@@ -353,6 +353,46 @@ const rulesets = {
             }
         );
         this.ruleFunction.push(this.valuesOutDifferentSumToFirst);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Add First Sample In", ruleId: 117, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                excludeHelperRules: [36, 67, 68, 69],
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [
+                    [7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92],
+                    [25,5,9,18,19,36,220,190,75,18,19,35,65,72,184,92]
+                ],
+                sampleOut: [],
+                paramsIn: [[], []]
+            }
+        );
+        this.ruleFunction.push(this.addFirstSampleIn);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Subtract First Sample In", ruleId: 118, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                excludeHelperRules: [36, 67, 68, 69],
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [
+                    [7,15,14,18,19,36,220,190,5,18,19,35,65,72,84,92],
+                    [25,35,49,18,29,36,220,190,75,24,69,35,65,72,184,92]
+                ],
+                sampleOut: [],
+                paramsIn: [[], []]
+            }
+        );
+        this.ruleFunction.push(this.subtractFirstSampleIn);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
@@ -3392,7 +3432,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 115;
+        this.outputScoresItem = 117;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3402,7 +3442,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 116;
+        this.diffScore = 118;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4244,6 +4284,44 @@ const rulesets = {
         let score2 = 0.5 * self.doScore(opt, sum, max, min);
 
         let score = score1 + score2;
+        return score;
+    },
+
+    addFirstSampleIn(self, dataParams, ruleParams) {
+        let inBlockLen = ruleParams.inBlockLen;
+        let valuesOut = dataParams.valuesOut;
+        let valuesIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let count = 0;
+        let index = 0;
+        let a = valuesIn[0];
+        for (let v of valuesIn) {
+            let t = (v + a) & 255;
+            if (t === valuesOut[index]) ++count;
+            ++index;
+        }
+        let opt = inBlockLen;
+        let max = inBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
+    subtractFirstSampleIn(self, dataParams, ruleParams) {
+        let inBlockLen = ruleParams.inBlockLen;
+        let valuesOut = dataParams.valuesOut;
+        let valuesIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let count = 0;
+        let index = 0;
+        let a = valuesIn[0];
+        for (let v of valuesIn) {
+            let t = (v - a) & 255;
+            if (t === valuesOut[index]) ++count;
+            ++index;
+        }
+        let opt = inBlockLen;
+        let max = inBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
         return score;
     },
 
