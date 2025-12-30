@@ -4702,8 +4702,8 @@ const rulesets = {
 
     sampleOutGreaterThanSampleIn(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let sampleIn = ruleParams.sampleIn;
-        let sampleOut = ruleParams.sampleOut;
+        let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let sampleOut = ruleParams.sampleOut[dataParams.executionCycle];
         let count = 0;
         let index = 0;
         for (let v1 of sampleIn) {
