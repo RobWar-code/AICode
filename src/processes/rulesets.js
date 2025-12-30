@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 119,
-    maxRuleId: 118,
+    numRules: 121,
+    maxRuleId: 120,
     maxRoundsPerRule: 2,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -393,6 +393,46 @@ const rulesets = {
             }
         );
         this.ruleFunction.push(this.subtractFirstSampleIn);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Add First Sample Out", ruleId: 119, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                excludeHelperRules: [36, 67, 68, 69],
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [],
+                sampleOut: [
+                    [21,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92],
+                    [12,5,9,18,19,36,220,190,75,18,19,35,65,72,184,92]
+                ],
+                paramsIn: [[], []]
+            }
+        );
+        this.ruleFunction.push(this.addFirstSampleOut);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Subtract First Sample Out", ruleId: 120, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                excludeHelperRules: [36, 67, 68, 69],
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [],
+                sampleOut: [
+                    [11,15,14,18,19,36,220,190,5,18,19,35,65,72,84,92],
+                    [27,35,49,18,29,36,220,190,75,24,69,35,65,72,184,92]
+                ],
+                paramsIn: [[], []]
+            }
+        );
+        this.ruleFunction.push(this.subtractFirstSampleOut);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
@@ -3432,7 +3472,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 117;
+        this.outputScoresItem = 119;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3442,7 +3482,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 118;
+        this.diffScore = 120;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -3475,7 +3515,7 @@ const rulesets = {
         this.maxRuleSequenceNum = maxSequenceNum;
         this.getInterimMaxScore();
 
-        // End Function
+        // End Initialise
     },
 
     setSequenceNumbers() {
@@ -4325,6 +4365,44 @@ const rulesets = {
         return score;
     },
 
+    addFirstSampleOut(self, dataParams, ruleParams) {
+        let inBlockLen = ruleParams.inBlockLen;
+        let valuesOut = dataParams.valuesOut;
+        let valuesIn = ruleParams.sampleOut[dataParams.executionCycle];
+        let count = 0;
+        let index = 0;
+        let a = valuesIn[0];
+        for (let v of valuesIn) {
+            let t = (v + a) & 255;
+            if (t === valuesOut[index]) ++count;
+            ++index;
+        }
+        let opt = inBlockLen;
+        let max = inBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
+    subtractFirstSampleOut(self, dataParams, ruleParams) {
+        let inBlockLen = ruleParams.inBlockLen;
+        let valuesOut = dataParams.valuesOut;
+        let valuesIn = ruleParams.sampleOut[dataParams.executionCycle];
+        let count = 0;
+        let index = 0;
+        let a = valuesIn[0];
+        for (let v of valuesIn) {
+            let t = (v - a) & 255;
+            if (t === valuesOut[index]) ++count;
+            ++index;
+        }
+        let opt = inBlockLen;
+        let max = inBlockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
     outputSeries(self, dataParams, ruleParams) {
         let initialParams = dataParams.paramsIn
         let valuesOut = dataParams.valuesOut;
@@ -4644,8 +4722,8 @@ const rulesets = {
 
     sampleInPlusSampleOut(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let sampleIn = ruleParams.sampleIn;
-        let sampleOut = ruleParams.sampleOut;
+        let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let sampleOut = ruleParams.sampleOut[dataParams.executionCycle];
         let count = 0;
         let index = 0;
         for (let v1 of sampleIn) {
@@ -4664,8 +4742,8 @@ const rulesets = {
 
     sampleInMinusSampleOut(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let sampleIn = ruleParams.sampleIn;
-        let sampleOut = ruleParams.sampleOut;
+        let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let sampleOut = ruleParams.sampleOut[dataParams.executionCycle];
         let count = 0;
         let index = 0;
         for (let v1 of sampleIn) {
@@ -4684,8 +4762,8 @@ const rulesets = {
 
     compareSampleInSampleOut(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
-        let sampleIn = ruleParams.sampleIn;
-        let sampleOut = ruleParams.sampleOut;
+        let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
+        let sampleOut = ruleParams.sampleOut[dataParams.executionCycle];
         let count = 0;
         let index = 0;
         for (let v1 of sampleIn) {

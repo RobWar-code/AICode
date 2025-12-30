@@ -13,6 +13,10 @@ Jobs Due
         to be loaded before a run.
 
     Add Rules
+        * Add first sample in
+        * Subtract first sample in
+        Add first sample out
+        Subtract first sample out
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
