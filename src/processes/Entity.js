@@ -664,12 +664,12 @@ class Entity {
                     newCode.push(v);
                     newCode.push(oldV);
                 }
-                else if (c < 0.97) {
+                else if (c < 0.8) {
                     // Replace
                     let n = this.selectWeightedCode(index);
                     newCode.push(n);
                 }
-                else if (c < 0.98) {
+                else if (c < 0.9) {
                     // Insert
                     let n = this.selectWeightedCode(index);
                     newCode.push(n);

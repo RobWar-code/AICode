@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 121,
     maxRuleId: 120,
-    maxRoundsPerRule: 2,
+    maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -439,7 +439,7 @@ const rulesets = {
         this.scoreList.push(
             {rule:"Sample Out Greater than Sample In", ruleId: 70, 
                 skip: false,
-                excludeHelperRules: [67],
+                excludeHelperRules: [36, 67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
@@ -490,7 +490,7 @@ const rulesets = {
         this.scoreList.push(
             {rule:"Sample In Plus Sample Out", ruleId: 115, 
                 skip: false,
-                excludeHelperRules: [67],
+                excludeHelperRules: [36, 67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
@@ -541,7 +541,7 @@ const rulesets = {
         this.scoreList.push(
             {rule:"Sample In Minus Sample Out", ruleId: 71, 
                 skip: false,
-                excludeHelperRules: [67],
+                excludeHelperRules: [36, 67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
@@ -592,7 +592,7 @@ const rulesets = {
         this.scoreList.push(
             {rule:"Compare Sample In Sample Out", ruleId: 100, 
                 skip: false,
-                excludeHelperRules: [67],
+                excludeHelperRules: [36, 67],
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,

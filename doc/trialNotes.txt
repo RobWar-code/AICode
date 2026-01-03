@@ -1,3 +1,20 @@
+03/01/2026
+Ended Trial A11 after 2500 rounds, Power first Param 2 completed
+after 18 loops. Other rules completed as per A10.
+
+For Trial A12, the rounds per rule is increased from 2 to 4,
+the divide template is removed, the sampleIn sampleOut rules
+are fixed and weightedMonoclonalByteBreed is adjusted to allow
+for more insertions and deletions.
+
+30/12/2025
+Ended trial A10 after 1650 rounds. About three rules better
+than A09.
+
+Commence trial A11 - adjusted weightedMonoclonalByteBreed.
+Fixed sample-in sample-out rules. Added add/subtract first
+sample in/out rules.
+
 28/12/2025
 Trial A10 commenced including code weighted breeding, in the
 hope of structured template-like entities forming.
