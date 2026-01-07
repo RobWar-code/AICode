@@ -1,3 +1,13 @@
+07/01/2025
+Ended Trial A12 after 2600 rounds (9 loops), some rules
+gained some lost, slightly more losses (2).
+
+Commenced Trial A13 with 3 rounds per rule and adjustments
+to divide by first param and load mem (dual scoring).
+Added rule count odd/even in fives. The aim is to provide
+a probabilistically shallow network of code interrelated
+rules, so that they form a "probabilistically linked meshwork".
+
 03/01/2026
 Ended Trial A11 after 2500 rounds, Power first Param 2 completed
 after 18 loops. Other rules completed as per A10.

@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 123,
-    maxRuleId: 122,
+    numRules: 128,
+    maxRuleId: 127,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -806,6 +806,117 @@ const rulesets = {
         this.ruleFunction.push(this.outputSeriesOfSeries);
         this.byteFunction.push(this.byteOutputSeriesOfSeries);
         this.requiredOutputsFunction.push(this.getOutputSeriesOfSeriesRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Get Pairs", ruleId: 125,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [
+                    [
+                        2,2,4,7,9,9,90,78,101,101,65,72,74,76,79,78,78,105,105,
+                        4,5,6,9,9,11,19,98,112,112,106,107,107,1,1,2,2,0,9,0,8,7,
+                        66,66,87,69,89,17,107,107,96,94,95,95,90,93,93,19,18,17,16,
+                        4,4,7,8,9,10,10
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        4,4,4,7,12,12,90,78,78,101,65,72,74,76,76,79,78,78,104,104,
+                        4,5,6,9,9,9,9,11,19,98,111,112,106,108,108,1,11,2,22,0,9,0,8,8,
+                        66,64,87,69,89,17,109,109,96,94,95,95,90,93,93,19,18,17,16,
+                        4,4,7,8,9,10,10,1,3,7,7
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getGetPairsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Get Triplets", ruleId: 126,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [
+                    [
+                        2,2,2,4,7,7,7,9,9,9,90,78,65,72,74,76,79,78,78,78,105,105,
+                        4,5,6,9,9,9,11,19,98,112,112,112,106,131,131,131,131,131,131,
+                        1,1,2,2,0,9,0,8,7,66,66,66,66,66,66,87,69,89,17,107,107,107,
+                        96,94,95,95,90,93,93,93,19,18,17,16,4,4,4,7,8,9,10,10,10,9,8,
+                        112,112,112,161,161,161,3,1,5,32,32,32
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        5,5,5,4,6,7,7,7,9,9,9,90,78,65,72,74,73,73,73,73,73,105,105,
+                        4,5,6,9,9,9,11,19,98,112,112,112,106,131,131,131,131,131,131,
+                        1,1,2,2,0,9,0,8,7,66,66,66,66,66,66,87,69,89,17,111,111,111,
+                        96,94,95,95,90,93,93,93,19,18,17,16,4,4,4,7,8,9,10,10,10,9,8,
+                        112,112,112,161,161,161,3,1,5,32,32,32
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getGetTripletsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Count Pairs In First Param", ruleId: 126,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [
+                    [
+                        8,2,2,4,7,7,7,9, 9,9,90,78,65,72,74,76, 79,78,78,78,105,105,90,89,
+                        4,5,6,9,9,9,11,19, 98,112,112,112,106,131,131,131, 96,96,100,109,108,108,69,69,
+                        1,1,2,2,0,9,0,8, 7,66,66,66,66,66,66,87, 69,89,17,107,107,107,9,4,
+                        96,94,95,95,90,93,93,93, 19,18,17,16,4,4,4,7, 8,9,10,10,10,9,8,91,
+                        112,112,112,161,161,161,3,1, 5,32,32,32,32,46,76,76, 109,110,110,121,121,90,90,9,
+                        15,9,9,6,6,9,9,8
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        8,2,2,4,7,7,7,7, 9,0,90,78,65,72,74,76, 79,78,78,78,105,105,90,89,
+                        4,5,6,9,9,9,9,19, 98,112,112,112,106,131,131,131, 96,96,100,109,108,108,69,69,
+                        1,1,2,2,0,9,0,8, 7,66,66,66,66,66,66,87, 69,89,17,107,107,107,9,4,
+                        96,94,95,95,90,93,93,93, 19,18,17,4,4,4,4,7, 8,9,10,10,10,9,8,91,
+                        112,112,112,161,162,161,3,1, 5,32,32,32,32,46,76,76, 109,110,110,121,121,90,90,9,
+                        15,9,9,6,6,9,9,8
+                    ],
+                    [
+                        10,2,2,4,7,7,7,7,6,6, 9,0,90,78,65,72,74,76,89,91, 79,78,78,78,105,105,90,89,89,89,
+                        4,5,6,9,9,9,9,19,17,17, 98,112,112,112,112,106,131,131,131,132, 96,96,100,100,108,108,69,69,72,72,
+                        1,1,2,2,0,9,0,8,12,13, 7,66,66,66,66,66,66,87,87,45, 69,89,17,107,107,107,9,4,7,3,
+                        96,94,95,95,90,93,93,93,93,11, 19,19,18,18,17,4,4,4,4,7, 8,9,10,10,10,9,8,91,7,9,
+                        112,112,112,161,162,161,3,1,2,0, 5,32,32,32,32,46,76,76,81,81, 109,110,110,121,121,90,90,9,1,2,
+                        15,9,9,6,6,9,9,8,7,5
+                    ]
+
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountPairsInFirstParamRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Extract First Paramth Inputs 1", ruleId: 105,
@@ -1669,6 +1780,106 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getNotDivisibleByFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Count First Param From Second", ruleId: 123,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 80,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [
+                    [
+                        6,5,17,6,3, 7,6,6,36,6,
+                        19,17,11,72,13, 6,42,54,9,37,
+                        36,60,10,20,29, 126,6,6,7,9,
+                        144,6,12,15,19, 6,6,6,26,6,
+                        6,6,6,6,6, 31,6,121,6,147,
+                        6,26,58,19,6, 72,6,6,6,32,
+                        13,6,79,91,99, 32,43,62,97,99,
+                        6,6,6,29,6, 6,6,6,6,6
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,5,6,6,3, 6,6,6,36,6,
+                        19,17,11,72,6, 7,42,54,9,37,
+                        36,60,10,20,29, 126,6,6,7,9,
+                        144,6,12,6,19, 8,6,6,26,6,
+                        6,6,6,6,6, 31,6,6,6,6,
+                        6,26,6,19,6, 6,6,6,6,32,
+                        13,8,79,91,99, 32,6,6,97,99,
+                        6,6,6,29,6, 6,6,6,6,6
+                    ],
+                    [
+                        4,4,6,6, 6,4,6,36,
+                        19,17,11,72, 4,4,4,9,
+                        36,60,10,20, 4,6,4,4,
+                        4,6,12,6, 8,4,6,4,
+                        6,4,6,6, 4,4,4,4,
+                        4,26,4,19, 6,6,6,6,
+                        4,8,4,4, 32,6,4,97,
+                        6,4,4,29, 4,6,4,4
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountFirstParamFromSecondRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Count Not First Param From Second", ruleId: 124,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 80,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [
+                    [
+                        6,5,17,6,3, 7,6,6,36,6,
+                        19,17,11,72,13, 6,42,54,9,37,
+                        36,60,10,20,29, 126,6,6,7,9,
+                        144,6,12,15,19, 6,6,6,26,6,
+                        6,6,6,6,6, 31,6,121,6,147,
+                        6,26,58,19,6, 72,6,6,6,32,
+                        13,6,79,91,99, 32,43,62,97,99,
+                        6,6,6,29,6, 6,6,6,6,6
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,5,6,6,3, 6,6,6,36,6,
+                        19,17,11,72,6, 7,42,54,9,37,
+                        36,60,10,20,29, 126,6,6,7,9,
+                        144,6,12,6,19, 8,6,6,26,6,
+                        6,6,6,6,6, 31,6,6,6,6,
+                        6,26,6,19,6, 6,6,6,6,32,
+                        13,8,79,91,99, 32,6,6,97,99,
+                        6,6,6,29,6, 6,6,6,6,6
+                    ],
+                    [
+                        4,4,6,6, 6,4,6,36,
+                        19,17,11,72, 4,4,4,9,
+                        36,60,10,20, 4,6,4,4,
+                        4,6,12,6, 8,4,6,4,
+                        6,4,6,6, 4,4,4,4,
+                        4,26,4,19, 6,6,6,6,
+                        4,8,4,4, 32,6,4,97,
+                        6,4,4,29, 4,6,4,4
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountNotFirstParamFromSecondRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Count Evens From Fives", ruleId: 121,
@@ -3572,7 +3783,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 121;
+        this.outputScoresItem = 126;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3582,7 +3793,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 122;
+        this.diffScore = 127;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -5118,6 +5329,83 @@ const rulesets = {
         return score;
     },
 
+    getGetPairsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+
+            let lastV = null;
+            for (let v of inputs) {
+                if (v === lastV) {
+                    output.push(v);
+                    lastV = null;
+                }
+                else {
+                    lastV = v;
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getGetTripletsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+
+            let lastV = null;
+            let count = 0;
+            for (let v of inputs) {
+                if (v === lastV) {
+                    ++count;
+                    if (count > 1) {
+                        output.push(v);
+                        count = 0;
+                        lastV = null;
+                    }
+                }
+                else {
+                    count = 0;
+                    lastV = v;
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getCountPairsInFirstParamRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+
+            let a = inputs[0];
+            let p = 0;
+            let count = 0;
+            let lastV = null;
+            for (let v of inputs) {
+                if (v === lastV) {
+                    ++count;
+                    lastV = null;
+                }
+                else {
+                    lastV = v;
+                }
+                if ((p % a) === a - 1) {
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     getExtractFirstParamthInputsRequiredOutputs(self, inputList) {
         let outputList = [];
 
@@ -5644,6 +5932,54 @@ const rulesets = {
         let required = Math.floor(initialParams[rule.inblockStart + offset] / a) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getCountFirstParamFromSecondRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            let b = inputs[1];
+            let count = 0;
+            let p = 0;
+            for (let v of inputs) {
+                if (v === a) {
+                    ++count;
+                }
+                if ((p % b) === b - 1){
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getCountNotFirstParamFromSecondRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            let b = inputs[1];
+            let count = 0;
+            let p = 0;
+            for (let v of inputs) {
+                if (v != a) {
+                    ++count;
+                }
+                if ((p % b) === b - 1){
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getCountEvensFromFivesRequiredOutputs(self, inputList) {
