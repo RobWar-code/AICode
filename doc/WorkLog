@@ -12,11 +12,18 @@ Jobs Due
     Use rule id on round rules file, to allow for additional rules
         to be loaded before a run.
 
+    Display Sample In/Out in groups of 16
+
+    Where the outputs are known display them
+
     Add Rules
+        Check rule LoadMem - scoring may be wrong
+        * Count Even Numbers From Fives
+        * Count Odd Numbers From Fives
         * Add first sample in
         * Subtract first sample in
-        Add first sample out
-        Subtract first sample out
+        * Add first sample out
+        * Subtract first sample out
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's

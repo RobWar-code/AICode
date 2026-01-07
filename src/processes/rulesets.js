@@ -8,9 +8,9 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 121,
-    maxRuleId: 120,
-    maxRoundsPerRule: 4,
+    numRules: 123,
+    maxRuleId: 122,
+    maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -323,6 +323,26 @@ const rulesets = {
             {rule: "Load Mem at First Param from Inputs", ruleId: 116, skip:false, retain: false,
                 excludeHelperRules: [36,6,67,68,69],
                 score: 0, max: 5, startRoundNum: 800,
+                insDistribution: [
+                    {
+                        ins: "LDI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "ST (C), A",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "INC C",
+                        countOpt: 2,
+                        scanStart: 0,
+                        scanEnd: 24
+                    }
+                ],
                 inBlockStart: 0, inBlockLen: 1,
                 outBlockStart: 0, outBlockLen: 16,
                 highIC: 20 * 16,
@@ -1651,9 +1671,90 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getNotDivisibleByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 1", ruleId: 18,
+            {rule: "Count Evens From Fives", ruleId: 121,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 80,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [
+                    [
+                        6,24,17,18,3, 7,15,12,36,120,
+                        19,17,11,72,13, 30,42,54,9,37,
+                        36,60,10,20,29, 126,132,138,7,9,
+                        144,2,12,15,19, 12,18,24,26,28,
+                        33,11,15,2,4, 31,6,121,139,147,
+                        14,26,58,19,11, 72,71,74,63,32,
+                        13,15,79,91,99, 32,43,62,97,99,
+                        14,16,21,29,12, 12,14,76,84,7
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,24,22,18,3, 7,15,12,35,120,
+                        19,18,11,72,13, 30,42,53,9,37,
+                        36,61,10,20,29, 126,131,138,7,9,
+                        144,2,12,18,19, 12,18,24,26,28,
+                        33,11,15,2,7, 33,7,121,139,147,
+                        14,26,59,19,13, 72,78,74,63,32,
+                        13,16,79,91,100, 32,45,67,97,99,
+                        11,16,21,29,31, 11,14,73,84,7
+                    ],
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountEvensFromFivesRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Count Odds From Fives", ruleId: 122,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 80,
+                highIC: 33 * 9 * 16 + learnCodeAllowance,
+                highIP: 110,
+                sampleIn: [
+                    [
+                        6,24,17,18,5, 7,15,12,37,120,
+                        19,17,11,73,13, 30,42,54,9,37,
+                        36,60,10,20,29, 126,132,138,7,9,
+                        144,2,12,15,19, 12,18,24,26,28,
+                        33,11,15,2,4, 31,6,124,139,147,
+                        14,26,58,19,11, 72,71,74,63,32,
+                        13,15,79,91,99, 32,43,62,97,99,
+                        14,16,21,29,12, 12,14,75,84,7
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,24,22,20,3, 7,15,13,35,120,
+                        19,18,11,71,13, 30,41,53,9,37,
+                        36,61,10,20,29, 126,131,138,7,9,
+                        144,2,12,18,19, 12,18,24,26,28,
+                        33,11,15,2,7, 33,9,122,139,147,
+                        14,26,59,19,13, 72,78,74,64,32,
+                        13,16,79,91,100, 32,45,67,97,99,
+                        11,16,21,29,31, 11,14,73,84,7
+                    ],
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountOddsFromFivesRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Divide By First Param With Mod 1", ruleId: 18,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                excludeHelperRules: [67, 68, 69],
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 50 * 9 * 16 + learnCodeAllowance,
@@ -1667,20 +1768,20 @@ const rulesets = {
                     [
                         4,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
                     ]
-                ],
-                outputs: []
+                ]
             }
         );
         this.ruleFunction.push(this.divideByFirstParam);
         this.byteFunction.push(this.byteDivideByFirstParam);
-        this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
+        this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 2", ruleId: 39,
+            {rule: "Divide by First Param With Mod 2", ruleId: 39,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
+                excludeHelperRules: [67, 68, 69],
                 highIC: 30 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
                 insDistribution: [
@@ -1706,16 +1807,15 @@ const rulesets = {
                     [
                         3,22,43,67,69,81,72,186,215,4,9,15,22,38,104,126
                     ]
-                ],
-                outputs: []
+                ]
             }
         );
         this.ruleFunction.push(this.divideByFirstParam);
         this.byteFunction.push(this.byteDivideByFirstParam);
-        this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
+        this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 3", ruleId: 41,
+            {rule: "Divide by First Param 1", ruleId: 41,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -1754,7 +1854,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 4", ruleId: 42,
+            {rule: "Divide by First Param 2", ruleId: 42,
                 retain: false, skip: false, 
                 score: 0,
                 completionRound: -1, 
@@ -1802,7 +1902,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 5", ruleId: 40,
+            {rule: "Divide by First Param 3", ruleId: 40,
                 retain: false, skip: false, 
                 score: 0, 
                 completionRound: -1, 
@@ -1844,7 +1944,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 6", ruleId: 37,
+            {rule: "Divide by First Param 4", ruleId: 37,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -1883,7 +1983,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getDivideByFirstParamRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Divide by First Param 7", ruleId: 38,
+            {rule: "Divide by First Param 5", ruleId: 38,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -3472,7 +3572,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 119;
+        this.outputScoresItem = 121;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3482,7 +3582,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 120;
+        this.diffScore = 122;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -4278,17 +4378,31 @@ const rulesets = {
     loadMemToFirstParamFromInputs(self, dataParams, ruleParams) {
         let params = dataParams.initialParams;
         let memSpace = dataParams.memSpace;
-        let p = params[0];
+        let valuesOut = dataParams.valuesOut;
+
+        // Check the output block
         let count = 0;
-        for (let v of params) {
-            if (memSpace[p] === v) ++count;
-            ++p;
+        let index = 0;
+        for (let a of params) {
+            if (a === valuesOut[index]) ++count;
+            ++index;
         }
         let opt = params.length;
         let max = params.length;
         let min = 0;
-        let score = self.doScore(opt, count, max, min);
-        return score;
+        let score1 = 0.25 * self.doScore(opt, count, max, min);
+
+        let p = params[0];
+        count = 0;
+        for (let v of params) {
+            if (memSpace[p] === v) ++count;
+            ++p;
+        }
+        opt = params.length;
+        max = params.length;
+        min = 0;
+        let score2 = 0.75 * self.doScore(opt, count, max, min);
+        return score1 + score2;
     },
 
     valuesOutDifferentSumToFirst(self, dataParams, ruleParams) {
@@ -5484,18 +5598,27 @@ const rulesets = {
         let inBlockStart = ruleParams.inBlockStart;
 
         let a = initialParams[inBlockStart];
+        // Check for modulus in output
+        let index = 50;
         let count = 0;
+        for (let v of initialParams) {
+            if ((v % a) === valuesOut[index]) ++count;
+            ++index;
+        }
+        let opt = initialParams.length;
+        let max = opt;
+        let min = 0;
+        let score1 = 0.25 * self.doScore(opt, count, max, min);
+
+        count = 0;
         for (let i = 0; i < outBlockLen; i++) {
             let r = Math.floor(initialParams[inBlockStart + i] / a) & 255;
             let v = valuesOut[outBlockStart + i];
             if (v === r) ++count;
         }
 
-        let opt = outBlockLen;
-        let max = opt;
-        let min = 0;
-        let score = self.doScore(opt, count, max, min);
-        return score;
+        let score2 = 0.75 * self.doScore(opt, count, max, min);
+        return score1 + score2;
     },
 
     getDivideByFirstParamRequiredOutputs(self, inputList) {
@@ -5521,6 +5644,52 @@ const rulesets = {
         let required = Math.floor(initialParams[rule.inblockStart + offset] / a) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getCountEvensFromFivesRequiredOutputs(self, inputList) {
+        let outputList = [];
+        
+        for (let inputs of inputList) {
+            let output = [];
+            let p = 0;
+            let count = 0;
+            for (let v of inputs) {
+                let a = (v % 2);
+                if (a === 0) {
+                    ++count;
+                }
+                if (p % 5 === 4) {
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getCountOddsFromFivesRequiredOutputs(self, inputList) {
+        let outputList = [];
+        
+        for (let inputs of inputList) {
+            let output = [];
+            let p = 0;
+            let count = 0;
+            for (let v of inputs) {
+                let a = (v % 2);
+                if (a === 1) {
+                    ++count;
+                }
+                if (p % 5 === 4) {
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getIsPrimeRequiredOutputs(self, inputList) {

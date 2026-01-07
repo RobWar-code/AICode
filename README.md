@@ -330,6 +330,15 @@ hit.
 
 The scores for each rule are multiplied-up as a weighting factor. 
 
+Scores are calculated at the end of an entity execution cycle and
+include helper rule scores.
+
+##### Multi-stage Scoring
+
+Some rules, such as loadMemToFirstParamFromInputs and divideByFirstParam
+incorporate scoring for two or more measures, so that intermediate
+goals can be tested for.
+
 #### Rulesets
 
 ##### Operating Process
