@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 129,
-    maxRuleId: 128,
+    numRules: 131,
+    maxRuleId: 130,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -2664,6 +2664,77 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getReverseParamsRequiredOutputs);
 
         this.scoreList.push(
+            {rule: "Get First of Threes", ruleId: 129,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 48,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        87,64,54,12,67,43,109,85,205,173,86,94,17,19,18,57,
+                        88,64,54,120,67,43,109,85,205,175,86,94,17,19,18,57,
+                        87,64,54,12,68,43,109,85,222,173,86,94,170,193,18,57
+                    ]
+                ],
+                sampleOut:[],
+                paramsIn: [
+                    [
+                        89,64,54,12,69,43,109,85,207,173,86,98,17,19,185,57,
+                        8,64,5,120,67,43,19,85,205,177,86,94,17,192,18,57,
+                        89,64,56,12,68,45,109,85,222,176,86,96,170,193,18,58
+                    ]
+                ], 
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getGetFirstOfThreesRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Get First of Threes Greater Than First", ruleId: 130,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 48,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        87,64,54, 89,67,43, 109,85,205, 173,88,94, 17,19,18,
+                        88,64,54, 120,67,43, 109,85,205, 175,86,94, 67,19,18,
+                        87,64,54, 12,68,43, 109,85,222, 173,86,94, 170,193,18,
+                        176,6,5, 128,8,9, 10,11,12, 19,8,9, 120,78,90, 120,78,80,
+                        129,87,80, 12,11,90, 140,7,8
+                    ]
+                ],
+                sampleOut:[],
+                paramsIn: [
+                    [
+                        82,64,54, 9,67,43, 109,85,205, 173,88,94, 170,19,18,
+                        88,64,54, 12,67,43, 109,85,205, 175,86,94, 167,19,18,
+                        87,64,54, 12,68,43, 109,85,222, 173,86,94, 170,193,18,
+                        176,6,5, 128,8,9, 10,11,12, 19,8,9, 120,78,90, 120,78,80,
+                        129,87,80, 12,11,90, 14,7,8
+                    ],
+                    [
+                        96,64,54, 9,67,43, 109,85,205, 173,88,94, 170,19,18,
+                        88,64,54, 125,67,43, 109,85,205, 175,86,94, 167,19,18,
+                        87,64,54, 12,68,43, 109,85,222, 173,86,94, 170,193,18,
+                        176,6,5, 128,8,9, 10,11,12, 19,8,9, 120,78,90, 120,78,80,
+                        129,87,80, 12,11,90, 141,7,8
+                    ]
+                ], 
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getGetFirstOfThreesGreaterThanFirstRequiredOutputs);
+
+        this.scoreList.push(
             {rule: "Reverse Params Triplets", ruleId: 90,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
@@ -3834,7 +3905,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 127;
+        this.outputScoresItem = 129;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3844,7 +3915,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 128;
+        this.diffScore = 130;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -6580,6 +6651,36 @@ const rulesets = {
         let required = initialParams[inBlockStart + (offset + osc)];
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getGetFirstOfThreesRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 3) {
+                output.push(inputs[i]);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getGetFirstOfThreesGreaterThanFirstRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            for (let i = 0; i < inputs.length; i += 3) {
+                let b = inputs[i];
+                if (b > a) {
+                    output.push(b);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getReverseParamsRequiredOutputs(self, inputList) {
