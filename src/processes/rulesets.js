@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 128,
-    maxRuleId: 127,
+    numRules: 129,
+    maxRuleId: 128,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -874,7 +874,7 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getGetTripletsRequiredOutputs);
 
         this.scoreList.push(
-            {rule: "Count Pairs In First Param", ruleId: 126,
+            {rule: "Count Pairs In First Param", ruleId: 127,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16,
@@ -917,6 +917,57 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getCountPairsInFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Count Triplets In First Param", ruleId: 128,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [
+                    [
+                        12,2,2,4,7,7,7,9,10,10,10,12, 9,9,90,78,65,72,74,76,78,90,91,15, 
+                        79,78,78,78,105,105,90,89,88,88,88,4, 4,5,6,9,9,9,11,19,12,11,10,9,
+                        98,112,112,112,106,131,131,131,115,115,115,12, 96,96,96,100,100,100,5,109,108,108,108,69,
+                        1,1,1,2,2,2,2,2,2,0,0,0, 7,66,66,66,66,66,66,87,98,1,1,1, 
+                        69,89,17,107,107,107,9,4,17,6,105,90, 96,94,95,95,95,90,93,93,93,124,205,202, 
+                        19,18,17,16,4,4,4,7,6,3,9,8, 91,87,64,89,8,9,10,10,10,9,8,91,
+                        112,112,112,161,161,161,3,1,67,90,107,41, 5,32,32,32,32,46,76,76,76,1,1,1, 
+                        109,110,110,121,121,90,90,9,78,64,61,63, 15,9,9,9,6,6,9,9,9,8,8,8
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        12,2,2,2,7,7,7,9,10,10,10,12, 9,9,9,78,65,72,74,76,78,90,91,15, 
+                        79,78,78,78,105,105,105,89,88,88,88,4, 4,5,6,8,9,9,11,19,12,11,10,9,
+                        98,112,112,112,106,131,131,131,115,115,115,12, 96,96,96,100,100,100,5,109,108,108,108,69,
+                        1,1,1,2,2,2,2,2,2,0,0,0, 7,66,66,66,66,66,66,87,98,1,1,1, 
+                        69,89,17,107,107,107,9,4,17,6,105,90, 96,94,95,95,95,90,93,93,93,124,205,202, 
+                        19,18,17,16,4,4,4,7,6,3,9,8, 91,87,64,89,8,9,10,10,10,9,8,91,
+                        112,112,112,161,161,161,3,1,67,90,107,41, 5,32,32,32,32,46,76,76,76,1,1,1, 
+                        109,110,110,121,121,90,90,9,78,64,61,63, 15,9,9,9,6,6,9,9,9,8,8,8
+                    ],
+                    [
+                        15,2,2,2,7,7,7,9,10,10,10,12,12,12,3, 9,9,9,78,65,72,74,76,78,90,91,15,8,8,8, 
+                        79,78,78,78,105,105,105,89,88,88,88,4,4,4,1, 4,5,6,8,9,9,9,11,19,12,12,12,11,10,9,
+                        98,98,98,112,112,112,131,131,131,115,115,115,12,12,12, 1,1,1,96,96,96,100,100,100,5,109,108,108,108,69,
+                        1,1,1,2,2,2,2,2,2,0,0,0,17,9,11, 7,66,66,66,66,66,66,87,98,1,1,1,3,2,1, 
+                        69,89,17,107,107,107,9,4,17,6,105,90,9,8,7, 96,96,96,4,94,95,95,95,90,93,93,93,124,205,202, 
+                        19,18,17,16,4,4,4,7,6,3,9,8,2,1,2, 91,87,64,89,8,9,10,10,1,9,8,91,9,8,
+                        112,112,112,161,161,161,3,1,67,90,107,41,5,8,9, 5,32,32,32,32,46,76,76,76,1,1,1,4,7,8, 
+                        109,110,110,121,121,90,90,9,78,64,61,63,3,1,2, 15,9,9,9,6,6,9,9,9,8,8,8,9,0
+                    ],
+
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountTripletsInFirstParamRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Extract First Paramth Inputs 1", ruleId: 105,
@@ -3783,7 +3834,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 126;
+        this.outputScoresItem = 127;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3793,7 +3844,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 127;
+        this.diffScore = 128;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -5393,6 +5444,41 @@ const rulesets = {
                     lastV = null;
                 }
                 else {
+                    lastV = v;
+                }
+                if ((p % a) === a - 1) {
+                    output.push(count);
+                    count = 0;
+                }
+                ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getCountTripletsInFirstParamRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+
+            let a = inputs[0];
+            let p = 0;
+            let count = 0;
+            let tally = 0;
+            let lastV = null;
+            for (let v of inputs) {
+                if (v === lastV) {
+                    ++tally;
+                    if (tally === 2) {
+                        ++count;
+                        tally = 0;
+                        lastV = null;
+                    }
+                }
+                else {
+                    tally = 0;
                     lastV = v;
                 }
                 if ((p % a) === a - 1) {
