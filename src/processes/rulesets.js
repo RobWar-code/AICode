@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 131,
-    maxRuleId: 130,
+    numRules: 133,
+    maxRuleId: 132,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -1391,6 +1391,33 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getMultiplyParamsBy10RequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Check For Carry", ruleId: 132,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        8,3,250,20,240,27,150,190,170,6,4,5,180,80,17,230,19,243,
+                        150,150,175,5,200,67,200,25,140,100,50,60,19,19,240,17
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        8,250,200,20,240,31,150,195,170,206,4,5,180,85,17,230,19,243,
+                        150,110,175,5,100,67,200,25,140,100,50,65,19,242,240,17
+                    ]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCheckForCarryRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Sixteen Bit Add First Param 1", ruleId: 111,
@@ -3801,6 +3828,39 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getParamOperationsRequiredOutputs);
 
         this.scoreList.push(
+            {rule: "Multiply Alternate Numbers By Ten", ruleId: 131,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        1,3,5,8,9,6,2,4,5,0,1,3,7,8,6,8,
+                        1,5,7,9,5,3,6,6,7,2,1,4,6,3,8,7
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        3,3,7,8,4,8,2,4,5,6,1,3,7,0,6,8,
+                        1,5,4,9,6,3,2,6,7,8,1,4,7,3,1,7
+                    ],
+                    [
+                        2,3,7,8,3,8,2,4,5,0,2,3,7,8,6,8,
+                        9,5,7,9,5,3,9,6,7,2,5,0,6,3,8,7
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(this.convertASCIINumbers);
+        this.byteFunction.push(this.byteConvertASCIINumbers);
+        this.requiredOutputsFunction.push(this.getMultiplyAlternateNumbersByTenRequiredOutputs);
+
+        this.scoreList.push(
             {rule: "Convert ASCII Numbers 1", ruleId: 32,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
@@ -3905,7 +3965,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 129;
+        this.outputScoresItem = 131;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3915,7 +3975,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 130;
+        this.diffScore = 132;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -5864,6 +5924,27 @@ const rulesets = {
         return outputList;
     },
 
+    getCheckForCarryRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+
+            for (let i = 0; i < inputs.length; i += 2) {
+                let a = inputs[i];
+                let b = inputs[i + 1];
+                if (a + b > 255) {
+                    output.push(1);
+                }
+                else {
+                    output.push(0);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     getSixteenBitAddFirstParamRequiredOutputs(self, inputList) {
         let outputList = [];
         for (let inputs of inputList) {
@@ -7403,6 +7484,21 @@ const rulesets = {
         let score = self.doScore(opt, count, max, min);
         return score;
 
+    },
+
+    getMultiplyAlternateNumbersByTenRequiredOutputs(self, inputList){
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let r = inputs[i] * 10;
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+
+        return outputList;
     },
 
     getConvertASCIINumbersRequiredOutputs(self, inputList) {
