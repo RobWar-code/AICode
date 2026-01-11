@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 133,
     maxRuleId: 132,
-    maxRoundsPerRule: 3,
+    maxRoundsPerRule: 24,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -4119,7 +4119,7 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, executionCycle,
+        currentMemSpace, codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, executionCycle,
         IC, highestIP, sequenceNum, roundNum) {
 
         // Get the current maximum score
@@ -4133,6 +4133,7 @@ const rulesets = {
         let dataParams = {
             instructionSet: instructionSet,
             memSpace: memSpace,
+            currentMemSpace: currentMemSpace,
             codeFlags: codeFlags,
             initialParams: initialParams,
             paramsIn: paramsIn,
@@ -4770,7 +4771,7 @@ const rulesets = {
 
     loadMemToFirstParamFromInputs(self, dataParams, ruleParams) {
         let params = dataParams.initialParams;
-        let memSpace = dataParams.memSpace;
+        let memSpace = dataParams.currentMemSpace;
         let valuesOut = dataParams.valuesOut;
 
         // Check the output block
@@ -8120,7 +8121,7 @@ const rulesets = {
             }
         }
         if (!found) {
-            console.error("getRuleFromSequence: invalid sequence num - sequenceNum:", sequenceNum, this.scoreList[13]);
+            console.error("getRuleFromSequence: invalid sequence num - sequenceNum:", sequenceNum);
             throw "Invalid Rule Sequence Num";
         }
         return rule;

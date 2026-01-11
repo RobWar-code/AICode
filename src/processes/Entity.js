@@ -1117,7 +1117,7 @@ class Entity {
 
     doScore(bestSetHighScore, bestSetLowScore) {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
-            this.instructionSet, this.initialMemSpace, 
+            this.instructionSet, this.initialMemSpace, this.memSpace,
             this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.executionCount, this.registers.IC, 
             this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
@@ -1159,7 +1159,7 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
-                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
+                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
                 this.oldValuesOut, executionCount, memObj.IC, this.instructionSet.highestIP, 
                 this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
@@ -1212,7 +1212,7 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             this.scoreObj = rulesets.getScore(0, 0, this.instructionSet, 
-                this.initialMemSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
+                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
                 this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += this.scoreObj.score;
             ++this.executionCount;
