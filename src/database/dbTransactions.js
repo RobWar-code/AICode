@@ -507,9 +507,10 @@ const dbTransactions = {
 
         for (let i = 0; i < rulesets.ruleRounds.length; i++) {
             try {
-                sql = "INSERT INTO rule (rule_num, start_round, completion_round, rule_loop_end, completed) ";
-                sql += "VALUES (?, ?, ?, ?, ?)";
-                const [results] = await dbConnection.execute(sql, [i, rulesets.ruleRounds[i].start, 
+                sql = "INSERT INTO rule (rule_id, rule_num, start_round, completion_round, rule_loop_end, completed) ";
+                sql += "VALUES (?, ?, ?, ?, ?, ?)";
+                const [results] = await dbConnection.execute(sql, [rulesets.ruleRounds[i].ruleId, i, 
+                    rulesets.ruleRounds[i].start, 
                     rulesets.ruleRounds[i].end, rulesets.ruleRounds[i].ruleLoopEnd,
                     rulesets.ruleRounds[i].completed]);
             }
@@ -943,14 +944,34 @@ const dbTransactions = {
             return;
         }
 
-        let sql = "SELECT rule_num, start_round, completion_round, rule_loop_end, completed FROM rule";
+        let sql = "SELECT rule_id, rule_num, start_round, completion_round, rule_loop_end, completed FROM rule";
         try {
             [results] = await dbConnection.query(sql);
+            let ruleRounds = [];
             for (let item of results) {
-                rulesets.ruleRounds[item.rule_num].start = item.start_round;
-                rulesets.ruleRounds[item.rule_num].end = item.completion_round;
-                rulesets.ruleRounds[item.rule_num].ruleLoopEnd = item.rule_loop_end;
-                rulesets.ruleRounds[item.rule_num].completed = item.completed;
+                let rule = {};
+                rule.ruleId = item.rule_id;
+                rule.start = item.start_round;
+                rule.end = item.completion_round;
+                rule.ruleLoopEnd = item.rule_loop_end;
+                rule.completed = item.completed;
+                ruleRounds.push(rule);
+            }
+            // Merge the results with the existing ruleRounds list
+            for (let item of ruleRounds) {
+                let id = item.ruleId;
+                let found = false;
+                let index = 0;
+                for (let ruleItem of rulesets.ruleRounds) {
+                    if (ruleItem.ruleId === id) {
+                        found = true;
+                        break;
+                    }
+                    ++index;
+                }
+                if (found) {
+                    rulesets.ruleRounds[index] = item;
+                }
             }
         }
         catch (error) {

@@ -65,8 +65,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
-
     // sql = "DROP TABLE weighting_table";
     // await connection.query(sql);
 
@@ -77,7 +75,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    /*
     sql = "CREATE TABLE bests_store (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "rule_id INT,";
@@ -94,12 +91,13 @@ async function createTables() {
     sql += "sub_opt_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+*/
     sql = "DROP TABLE rule";
     await connection.query(sql);
 
     sql = "CREATE TABLE rule (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "rule_id INT,"
     sql += "rule_num INT,";
     sql += "start_round INT,";
     sql += "completion_round INT,";
@@ -107,7 +105,7 @@ async function createTables() {
     sql += "completed INT";
     sql += ")";
     await connection.query(sql);
-
+/*
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "fragment VARCHAR(128)";
@@ -196,7 +194,7 @@ async function createTables() {
     sql += "input_block VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-    */
+    
 
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
@@ -220,14 +218,15 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+    */
     connection.end();
 }
 
 async function clearTables(connection) {
     let sql;
 
-    // sql = "DELETE FROM weighting_table";
-    // await connection.query(sql);
+    sql = "DELETE FROM weighting_table";
+    await connection.query(sql);
 
     sql = "DELETE FROM bests_store";
     await connection.query(sql);

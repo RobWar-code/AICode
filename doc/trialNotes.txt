@@ -1,3 +1,12 @@
+11/01/2025
+Trail A13 run until 3000 rounds. Results the same as for
+A12, but with 2 new and 2 lost rules.
+
+Commenced Trial A14 with additional rules (counts etc).
+Will run to the trial to 3200 rounds to take account of
+additional rules. This follows the policy of extending
+the mesh of solutions.
+
 07/01/2025
 Ended Trial A12 after 2600 rounds (9 loops), some rules
 gained some lost, slightly more losses (2).

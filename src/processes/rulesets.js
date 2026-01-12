@@ -26,7 +26,7 @@ const rulesets = {
     numRuleLoops: 0,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
-    ruleRounds: [], // {completed:, start:, end:, ruleLoopEnd:, used:}
+    ruleRounds: [], // {ruleId:, completed:, start:, end:, ruleLoopEnd:, used:}
     weightingTable: [], // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
@@ -537,8 +537,8 @@ const rulesets = {
                     }
                 ],
                 sampleIn: [
-                    [32,5,7 ,18,26,36,225,190,20,22,19,35,63 ,79 ,105,99 ],
-                    [33,48,7 ,110,186,121,87 ,33,90 ,85 ,96 ,108,93 ,64 ,69 ,19]
+                    [32,5, 7 ,18,  26,36, 225,190,20,22,19,35 ,63,79 ,105,99 ],
+                    [33,48,7 ,110,186,121,87 ,33 ,90,85,96,108,93,64 ,69 ,19]
                 ],
                 sampleOut: [
                     [9 ,3,6, 18,24,37,32 ,60 ,4 ,19,18,33,64 ,71 ,87 ,96 ],
@@ -4001,7 +4001,7 @@ const rulesets = {
                 maxSequenceNum = scoreItem.sequenceNum;
             }
             scoreItem.completionRound = -1;
-            this.ruleRounds.push({completed: false, start: -1, end: 0, ruleLoopEnd: -1, used: 0});
+            this.ruleRounds.push({ruleId: scoreItem.ruleId, completed: false, start: -1, end: 0, ruleLoopEnd: -1, used: 0});
             ++index;
         }
         this.maxScore = maxScore * 2;
