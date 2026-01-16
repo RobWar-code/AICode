@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 133,
     maxRuleId: 132,
-    maxRoundsPerRule: 10,
+    maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
