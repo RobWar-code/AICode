@@ -9,7 +9,7 @@ Jobs Due
 
     Remove Max Score from display
 
-    Use rule id on round rules file, to allow for additional rules
+    * Use rule id on round rules file, to allow for additional rules
         to be loaded before a run.
 
     Display Sample In/Out in groups of 16

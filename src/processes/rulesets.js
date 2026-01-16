@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 133,
     maxRuleId: 132,
-    maxRoundsPerRule: 3,
+    maxRoundsPerRule: 10,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -55,6 +55,7 @@ const rulesets = {
                 retain: false, 
                 skip: false, 
                 excludeHelperRules: [67], // Optional ID's
+                sampleInOut: true, // Optional if sample in out rule with sample out provided
                 sequenceNum: 62, // Automatic
                 score: 0, 
                 passScore: 0.95, // Optional
@@ -460,6 +461,7 @@ const rulesets = {
             {rule:"Sample Out Greater than Sample In", ruleId: 70, 
                 skip: false,
                 excludeHelperRules: [36, 67],
+                sampleInOut: true,
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
@@ -505,12 +507,13 @@ const rulesets = {
         );
         this.ruleFunction.push(this.sampleOutGreaterThanSampleIn);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSampleOutGreaterThanSampleInRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Sample In Plus Sample Out", ruleId: 115, 
                 skip: false,
                 excludeHelperRules: [36, 67],
+                sampleInOut: true,
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
@@ -556,12 +559,13 @@ const rulesets = {
         );
         this.ruleFunction.push(this.sampleInPlusSampleOut);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.sampleInPlusSampleOutRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Sample In Minus Sample Out", ruleId: 71, 
                 skip: false,
                 excludeHelperRules: [36, 67],
+                sampleInOut: true,
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
@@ -607,12 +611,13 @@ const rulesets = {
         );
         this.ruleFunction.push(this.sampleInMinusSampleOut);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSampleInMinusSampleOutRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Compare Sample In Sample Out", ruleId: 100, 
                 skip: false,
                 excludeHelperRules: [36, 67],
+                sampleInOut: true,
                 retain: false, score: 0, max: 5,
                 startRoundNum: 800,
                 outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
@@ -658,7 +663,7 @@ const rulesets = {
         );
         this.ruleFunction.push(this.compareSampleInSampleOut);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCompareSampleInSampleOutRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Output Series", ruleId: 11, retain: false, skip: false,
@@ -4044,16 +4049,26 @@ const rulesets = {
             }
 
             if (this.requiredOutputsFunction[i] != null) {
-                // Get sample outputs
-                let sampleOut = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn);
-                this.scoreList[i].sampleOut = sampleOut;
+                if ("sampleInOut" in rule) {
+                    let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn, rule);
+                    this.scoreList[i].outputs = outputList;
+                    if (outputList.length > 1) {
+                        let diffOpt = this.getDiffOpt(outputList);
+                        this.scoreList[i].diffOpt = diffOpt;
+                    }
+                }
+                else {
+                    // Get sample outputs
+                    let sampleOut = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn);
+                    this.scoreList[i].sampleOut = sampleOut;
 
-                // Get actual outputs
-                let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].paramsIn);
-                this.scoreList[i].outputs = outputList;
-                if (outputList.length > 1) {
-                    let diffOpt = this.getDiffOpt(outputList);
-                    this.scoreList[i].diffOpt = diffOpt;
+                    // Get actual outputs
+                    let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].paramsIn);
+                    this.scoreList[i].outputs = outputList;
+                    if (outputList.length > 1) {
+                        let diffOpt = this.getDiffOpt(outputList);
+                        this.scoreList[i].diffOpt = diffOpt;
+                    }
                 }
             }
         }
@@ -5228,6 +5243,25 @@ const rulesets = {
         return score;
     },
 
+    getSampleOutGreaterThanSampleInRequiredOutputs(self, inputList, rule) {
+        let outputList = [];
+        let sampleOut = rule.sampleOut;
+        let index = 0;
+        for (let inputs of inputList) {
+            let output = [];
+            let sampleOutput = sampleOut[index];
+            for (let i = 0; i < inputs.length; i++) {
+                let a = inputs[i];
+                let b = sampleOutput[i];
+                if (b > a) output.push(1);
+                else output.push(0);
+            }
+            outputList.push(output);
+            ++index;
+        }
+        return outputList;
+    },
+
     sampleInPlusSampleOut(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
         let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
@@ -5248,6 +5282,24 @@ const rulesets = {
         return score;
     },
 
+    getSampleInPlusSampleOutRequiredOutputs(self, inputList, rule) {
+        let sampleOut = rule.sampleOut;
+        let outputList = [];
+        let index = 0;
+        for (let inputs of inputList) {
+            let output = [];
+            let sampleOutput = sampleOut[index];
+            for (let i = 0; i < inputs.length; i++) {
+                let a = inputs[i];
+                let b = sampleOutput[i];
+                output.push((a + b) & 255);
+            }
+            outputList.push(output);
+            ++index;
+        }
+        return outputList;
+    },
+
     sampleInMinusSampleOut(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
         let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
@@ -5266,6 +5318,24 @@ const rulesets = {
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
+    },
+
+    getSampleInMinusSampleOutRequiredOutputs(self, inputList, rule) {
+        let outputList = [];
+        let sampleOut = rule.sampleOut;
+        let index = 0;
+        for (let inputs of inputList) {
+            let output = [];
+            let sampleOutput = sampleOut[index];
+            for (let i = 0; i < inputs.length; i++) {
+                let a = inputs[i];
+                let b = sampleOutput[i];
+                output.push((a - b) & 255);
+            }
+            outputList.push(output);
+            ++index;
+        }
+        return outputList;
     },
 
     compareSampleInSampleOut(self, dataParams, ruleParams) {
@@ -5292,6 +5362,27 @@ const rulesets = {
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
+    },
+
+    getCompareSampleInSampleOutRequiredOutputs(self, inputList, rule) {
+        let outputList = [];
+        let sampleOut = rule.sampleOut;
+        let index = 0;
+        for (let inputs of inputList) {
+            let output = [];
+            let sampleOutput = sampleOut[index];
+            for (let i = 0; i < inputs.length; i++) {
+                let a = inputs[i];
+                let b = sampleOut[i];
+                let r = 0;
+                if (a < b) r = 255;
+                else if (a > b) r = 1;
+                output.push(r);
+            }
+            outputList.push(output);
+            ++index;
+        }
+        return outputList;
     },
 
     valuesOutFromInitialParams(self, dataParams, ruleParams) {
