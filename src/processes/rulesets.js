@@ -8,9 +8,9 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 133,
-    maxRuleId: 132,
-    maxRoundsPerRule: 3,
+    numRules: 136,
+    maxRuleId: 135,
+    maxRoundsPerRule: 10,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -263,6 +263,30 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getValuesOutMatchRequiredOutputs);
 
         this.scoreList.push(
+            {rule:"Select Second and Third Params Of Threes", ruleId: 134, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 24,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [[7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92,105,107,106,85,2,4,98,7]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        0,9,18,57,202,109,81,56,14,17,34,67,83,76,20,21,35,105,109,108,72,224,250,63
+                    ],
+                    [
+                        4,96,75,254,108,91,84,20,21,45,76,14,17,35,36,110,107,109,4,7,9,9,8,75
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSelectSecondAndThirdParamsOfThreesRequiredOutputs);
+
+        this.scoreList.push(
             {rule:"Values Out Match Sample Input", ruleId: 108, skip: false,
                 retain: false, score: 0, completionRound: -1, max: 5,
                 startRoundNum: 0,
@@ -456,6 +480,67 @@ const rulesets = {
         this.ruleFunction.push(this.subtractFirstSampleOut);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule:"Sample In Not Equal To Sample Out", ruleId: 133, 
+                skip: false,
+                excludeHelperRules: [36, 67],
+                sampleInOut: true,
+                retain: false, score: 0, max: 5,
+                startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 32, inBlockStart: 0, inBlockLen: 32,
+                highIC: 12 * 16 + 5,
+                highIP: 40,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "LDSO A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    }
+                ],
+                sampleIn: [
+                    [
+                        7,5,4,18,19,36,220,190,5,18,19,35,65,72,84,92,
+                        107,119,5,13,24,28,34,86,97,105,221,205,116,96,7,9
+                    ],
+                    [
+                        9,48,7,110,120,121,87,16,90,85,76,89,93,64,63,19,
+                        91,86,87,90,105,110,12,14,25,36,97,3,5,2,7,190
+                    ]
+                ],
+                sampleOut: [
+                    [
+                        9,5,6,18,24,36,220,190,4,19,18,33,65,71,84,92,
+                        108,120,5,11,24,29,33,87,98,105,221,205,115,96,7,9
+                    ],
+                    [
+                        30,46,7,110,120,119,87,16,88,85,77,89,93,63,65,17,
+                        91,86,85,89,104,110,13,14,26,36,97,3,5,2,7,189
+                    ]
+                ],
+                paramsIn: [
+                    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+                    [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSampleInNotEqualToSampleOutRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Sample Out Greater than Sample In", ruleId: 70, 
@@ -1113,6 +1198,31 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getAndFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Params Not Equal To First Param", ruleId: 135,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[12,12,19,24,12,12,65,221,12,12,12,38,72,86,12,112,96,95,12,89,91,99,12,12,84,87,6]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        5,20,15,5,96,3,8,5,5,255,27,5,5,5,16,21,9,7,5,8,5,9,0,12,1
+                    ],
+                    [
+                        15,22,43,67,69,15,15,15,15,4,9,15,15,38,104,15,9,11,17,19,15,87,205,201,1
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getParamsNotEqualToFirstParamRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Add First Param", ruleId: 12,
@@ -3970,7 +4080,7 @@ const rulesets = {
         this.byteFunction.push(this.byteConvertASCIINumbers);
         this.requiredOutputsFunction.push(this.getConvertASCIINumbersRequiredOutputs);
 
-        this.outputScoresItem = 131;
+        this.outputScoresItem = this.numRules - 2;
         this.scoreList.push(
             {rule: "Output Scores Equal", ruleId: 63, retain: true, skip: false, 
                 score: 0, max: 2, startRoundNum: 0
@@ -3980,7 +4090,7 @@ const rulesets = {
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
-        this.diffScore = 132;
+        this.diffScore = this.numRules - 1;
         this.scoreList.push(
             {rule: "Difference Between Outputs", ruleId: 36, retain: true, skip: false, 
                 score: 0, max: 1, startRoundNum: 0
@@ -5223,6 +5333,21 @@ const rulesets = {
         return outputList;
     },
 
+    getSelectSecondAndThirdParamsOfThreesRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 3) {
+                let a = inputs[i + 1];
+                let b = inputs[i + 2];
+                output.push(a);
+                output.push(b);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     sampleOutGreaterThanSampleIn(self, dataParams, ruleParams) {
         let valuesOut = dataParams.valuesOut;
         let sampleIn = ruleParams.sampleIn[dataParams.executionCycle];
@@ -5241,6 +5366,25 @@ const rulesets = {
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
+    },
+
+    getSampleInNotEqualToSampleOutRequiredOutputs(self, inputList, rule) {
+        let outputList = [];
+        let sampleOut = rule.sampleOut;
+        let index = 0;
+        for (let inputs of inputList) {
+            let output = [];
+            let sampleOutput = sampleOut[index];
+            for (let i = 0; i < inputs.length; i++) {
+                let a = inputs[i];
+                let b = sampleOutput[i];
+                if (a != b) output.push(1);
+                else output.push(0);
+            }
+            outputList.push(output);
+            ++index;
+        }
+        return outputList;
     },
 
     getSampleOutGreaterThanSampleInRequiredOutputs(self, inputList, rule) {
@@ -5779,6 +5923,21 @@ const rulesets = {
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
+    },
+
+    getParamsNotEqualToFirstParamRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            for (let v of inputs) {
+                if (v != a) {
+                    output.push(v);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getAddFirstParamRequiredOutputs(self, inputList) {

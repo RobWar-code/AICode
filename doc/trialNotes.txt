@@ -1,3 +1,9 @@
+18/01/2025
+Trial A15 run to round 1650, solved most of the fixed
+rules. Performance otherwise about the same.
+
+Trial A16 includes 3 new rules and a fix.
+
 16/01/2025
 Trial A14 ran to 3600 rounds and achieved about the same
 result trial A13.
