@@ -559,7 +559,7 @@ const rulesets = {
         );
         this.ruleFunction.push(this.sampleInPlusSampleOut);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(this.sampleInPlusSampleOutRequiredOutputs);
+        this.requiredOutputsFunction.push(this.getSampleInPlusSampleOutRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Sample In Minus Sample Out", ruleId: 71, 
