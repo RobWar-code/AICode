@@ -203,6 +203,25 @@ li {
     border: 1px solid black;
 }
 
+/* Breed Table */
+#breedTableBackground {
+    display: none;
+}
+
+#breedTableHeaderDiv {
+    background-color: #d0d060;
+}
+
+#breedTable {
+    border: 1px solid black;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#breedTable td,th {
+    border: 1px solid black;
+}
+
 /* Restore Rule Seed */
 #restoreRuleSeedBackground {
     display: none;

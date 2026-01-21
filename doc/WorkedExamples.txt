@@ -2,6 +2,7 @@ Worked Examples and Strategies
 
 Contents
     Status Reports
+        Status Jan 2026
         Status May 2025
     Problem Space Background
         Review of Methodology
@@ -35,6 +36,29 @@ Contents
     Performance Notes
 
 <h1>Status Reports
+
+<h2>Status Jan 2026
+    At trial A16 the same successful solutions are being achieved
+    with the addition of some more basic rules.
+
+    One of the issues that arises as a hindrance is that intermediate
+    "solutions" must match at least some of the outputs, but these
+    solutions may then block code which is nearer step-wise to the
+    algorithmic solution sought. For example, if we have a template
+    which does not produce a matching output, but is only one instruction
+    short of the algorithm, it is likely to be excluded on the basis
+    of competing entities that do produce a matching output.
+
+    The foregoing probably explains why there is so little developmental
+    solution finding. Basic solutions are found "raw".
+
+    The "seedbed" was intended to overcome this problem to some extent
+    by restricting development to seed entities rather than setting
+    them against random code. In practice this had little impact, as
+    variants simply create the same issue.
+
+    Is there such a thing as a "partial" algorithm, if so how can it be
+    scored?
 
 <h2>Status May 2025
     The system as it stands has completed all bar the final 3 of the rules, 

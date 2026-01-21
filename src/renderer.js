@@ -5,6 +5,7 @@ const insSetListDisplay = require(path.join(__dirname, "/display/insSetListDispl
 const startRuleDisplay = require(path.join(__dirname, "/display/startRuleDisplay.js"));
 const scoreHistory = require(path.join(__dirname, '/display/scoreHistory.js'));
 const weightsDisplay = require(path.join(__dirname, '/display/weightsDisplay.js'));
+const breedDisplay = require(path.join(__dirname, '/display/breedDisplay.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
 const restoreRuleSeed = require(path.join(__dirname, '/display/restoreRuleSeed.js'));
@@ -86,6 +87,10 @@ ipcRenderer.on("displayWeights", (event, data) => {
     weightsDisplay.displayWeights(data);
 });
 
+ipcRenderer.on("displayBreedTable", (event, data) => {
+    breedDisplay.displayBreedTable(data);
+})
+
 ipcRenderer.on("displaySeedSelector", (event, nameList) => {
     seedDisplay.displaySelector(nameList);
 });
@@ -148,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreHistoryButton = document.getElementById('scoreHistoryButton');
     const scoreHistoryDismiss = document.getElementById('scoreHistoryDismiss');
     const viewWeightsButton = document.getElementById('viewWeightsButton');
+    const breedTableButton = document.getElementById('breedTableButton');
+    const breedTableDismiss = document.getElementById('breedTableDismiss');
     const weightsDismiss = document.getElementById('weightsDismiss');
     const logCompletionsButton = document.getElementById('logCompletionsButton');
     const haltProcessButton = document.getElementById('haltProcessButton');
@@ -213,6 +220,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     weightsDismiss.addEventListener('click', (event) => {
         document.getElementById('weightsBackground').style.display = "none";
+    });
+
+    breedTableButton.addEventListener('click', (event) => {
+        ipcRenderer.send("fetchBreedTable", 0);
+    });
+
+    breedTableDismiss.addEventListener('click', (event) => {
+        document.getElementById("breedTableBackground").style.display = "none";
     });
 
     logCompletionsButton.addEventListener('click', (event) => {

@@ -362,7 +362,7 @@ class Entity {
                 newEntity.breedMethod = "MonoclonalIns";
             }
             else {
-                if (rulesets.weightingTable.length > 0 && Math.random() < 0.3) {
+                if (rulesets.weightingTable.length > 0 && Math.random() < 0.9) {
                     newEntity = this.weightedMonoclonalByteBreed(entityNumber, cycleCounter, roundNum);
                     newEntity.breedMethod = "WeightedMonoclonalByte";
                 }

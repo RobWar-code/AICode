@@ -1,3 +1,10 @@
+A17
+Change instruction IOC A to difference between
+output and required output
+
+Change chance of weightedMonoclonalByte to 0.9 from 0.3
+
+
 18/01/2025
 Trial A15 run to round 1650, solved most of the fixed
 rules. Performance otherwise about the same.

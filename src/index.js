@@ -3,6 +3,7 @@ const path = require('node:path');
 const miscDbFunctions = require(path.join(__dirname, './database/miscDbFunctions'));
 const MainControl = require(path.join(__dirname, './processes/MainControl.js'));
 const MainControlParallel = require(path.join(__dirname, './processes/MainControlParallel.js'));
+const mainControlShared = require(path.join(__dirname, "./processes/mainControlShared.js"));
 const trace = require(path.join(__dirname, './processes/trace.js'));
 const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js'));
 const rulesets = require(path.join(__dirname, "./processes/rulesets.js"));
@@ -219,6 +220,11 @@ ipcMain.on("fetchDisplayHistory", () => {
 
 ipcMain.on("fetchWeightingTable", () => {
   mainWindow.webContents.send("displayWeights", rulesets.weightingTable);
+});
+
+ipcMain.on("fetchBreedTable", () => {
+  const breedTableData = mainControlShared.fetchBreedTable(program);
+  mainWindow.webContents.send("displayBreedTable", breedTableData);
 });
 
 ipcMain.on("logCompletions", () => {

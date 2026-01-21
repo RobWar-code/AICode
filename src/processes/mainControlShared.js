@@ -133,6 +133,109 @@ const mainControlShared = {
             }
         }
         return promotionDone;
+    },
+
+    fetchBreedTable(program) {
+        const bestSets = program.bestSets;
+
+        // Breed Methods
+        let breedTableData = [
+            {
+                method: "BestsStore",
+                usedCount: program.bestsStoreBreedCount,
+                extantCount: 0
+            },
+            {
+                method: "Inserted",
+                usedCount: 0,
+                extantCount: 0,
+            },
+            {
+                method: "Interbreed",
+                usedCount: program.interbreedCount,
+                extantCount: 0
+            },
+            {
+                method: "Interbreed2",
+                usedCount: program.interbreed2Count,
+                extantCount: 0
+            },
+            {
+                method: "InterbreedFlagged",
+                usedCount: program.interbreedFlaggedCount,
+                extantCount: 0
+            },
+            {
+                method: "InterbreedInsMerge",
+                usedCount: program.interbreedInsMergeCount,
+                extantCount: 0
+            },
+            {
+                method: "MonoclonalIns",
+                usedCount: program.monoclonalInsCount,
+                extantCount: 0
+            },
+            {
+                method: "MonoclonalByte",
+                usedCount: program.monoclonalByteCount,
+                extantCount: 0
+            },
+            {
+                method: "Random",
+                usedCount: program.randomCount,
+                extantCount: 0,
+            },
+            {
+                method: "Seeded",
+                usedCount: 0,
+                extantCount: 0,
+            },
+            {
+                method: "SeedRule",
+                usedCount: program.seedRuleBreedCount,
+                extantCount: 0
+            },
+            {
+                method: "SeedTemplate",
+                usedCount: program.seedTemplateBreedCount,
+                extantCount: 0
+            },
+            {
+                method: "Self-breed",
+                usedCount: program.selfBreedCount,
+                extantCount: 0
+            },
+            {
+                method: "WeightedMonoclonalByte",
+                usedCount: program.weightedMonoclonalByteCount,
+                extantCount: 0
+            },
+            {
+                method: "WeightedRandom",
+                usedCount: program.weightedRandomBreedCount,
+                extantCount: 0,
+            }
+        ];
+
+        // Collect Data
+        for (let set of bestSets) {
+            for (let entity of set) {
+                let breedMethod = entity.breedMethod;
+                // Search List
+                let found = false;
+                let item = null;
+                for (item of breedTableData) {
+                    if (breedMethod === item.method) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    ++item.extantCount;
+                }
+            }
+        }
+        return breedTableData;
     }
 
 }

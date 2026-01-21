@@ -10,7 +10,7 @@ const rulesets = {
     outputZoneLen: 8,
     numRules: 136,
     maxRuleId: 135,
-    maxRoundsPerRule: 10,
+    maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
     ruleFunction: [],
@@ -8349,13 +8349,12 @@ const rulesets = {
         let rule = this.scoreList[ruleIndex];
         if ("outputs" in rule) {
             let output = rule.outputs[executionCycle];
-            if (p >= 3) return 0;
-            if (valuesOut[p] === output[p]) return 1;
-            else return 0;
-
+            if (p >= 3) return 255;
+            let r = Math.abs(output[p] - valuesOut[p]);
+            return r;
         }
         else {
-            return 0;
+            return 255;
         }
     },
 

@@ -7,6 +7,8 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
+    Add a table of number of extant entities by breed method allowing for frequency of use
+
     Remove Max Score from display
 
     * Use rule id on round rules file, to allow for additional rules
