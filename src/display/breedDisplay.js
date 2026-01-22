@@ -14,11 +14,9 @@ const breedDisplay = {
         html += "<tr>"
         html +=     "<th>Breed Method</th>";
         html +=     "<th>Tried</th>"
-        html +=     "<th>Tried Per 1/10000</th>";
+        html +=     "<th>Tried/Total Tried Percent</th>";
         html +=     "<th>Extant</th>";
-        html +=     "<th>Extant Per 1/10000</th>";
-        html +=     "<th>1/10000 of Tried</th>";
-        html +=     "<th>Proportion of Sampled percent</th>"
+        html +=     "<th>Extant/Total Extant Percent</th>";
         html += "</tr>";
 
         // Do table Body
@@ -30,26 +28,14 @@ const breedDisplay = {
                 html += `<td>n/a</td>`;
             }
             else {
-                html += `<td>${Math.round((item.usedCount/totalTried) * 10000)}</td>`;
+                html += `<td>${Math.round((item.usedCount/totalTried) * 100)}</td>`;
             }
             html +=     `<td>${item.extantCount}</td>`;
             if (item.extantCount === 0) {
                 html += `<td>n/a</td>`;
             }
             else {
-                html += `<td>${Math.round((item.extantCount/totalExtant) * 10000)}</td>`;
-            }
-            if (item.extantCount === 0 || item.usedCount === 0) {
-                html += `<td>n/a</td>`;
-            }
-            else {
-                html += `<td>${Math.round((item.extantCount/item.usedCount) * 10000)}</td>`;
-            }
-            if (item.extantCount === 0) {
-                html += `<td>n/a</td>`;
-            }
-            else {
-                html += `<td>${Math.round((item.extantCount/(72*40)) * 100)}</td>`;
+                html += `<td>${Math.round((item.extantCount/totalExtant) * 100)}</td>`;
             }
             html += "</tr>";
         }

@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 136,
-    maxRuleId: 135,
+    numRules: 137,
+    maxRuleId: 136,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
     scoreList: [],
@@ -261,6 +261,30 @@ const rulesets = {
         this.ruleFunction.push(this.valuesOutMatchInitialParams);
         this.byteFunction.push(this.byteValuesOutMatch);
         this.requiredOutputsFunction.push(this.getValuesOutMatchRequiredOutputs);
+
+        this.scoreList.push(
+            {rule:"Outputs From Alternate Inputs", ruleId: 136, skip: false,
+                retain: false, score: 0, completionRound: -1, max: 5,
+                startRoundNum: 0,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 16,
+                highIC: 7 * 16 + learnCodeAllowance,
+                highIP: 60,
+                sampleIn: [[7,5,6,18,19,36,221,190,5,180,19,35,165,72,184,92]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        1,10,180,57,201,109,81,57,13,17,34,167,83,176,201,21
+                    ],
+                    [
+                        14,196,175,54,108,91,84,30,23,45,76,14,18,35,37,111
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getOutputsFromAlternateInputsRequiredOutputs);
 
         this.scoreList.push(
             {rule:"Select Second and Third Params Of Threes", ruleId: 134, skip: false,
@@ -5330,6 +5354,21 @@ const rulesets = {
         for (let inputs of inputList) {
             outputList.push(inputs.concat())
         };
+        return outputList;
+    },
+
+    getOutputsFromAlternateInputsRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 2) {
+                if (i + 1 < inputs.length) {
+                    let r = inputs[i + 1];
+                    output.push(r);
+                }
+            }
+            outputList.push(output);
+        }
         return outputList;
     },
 
