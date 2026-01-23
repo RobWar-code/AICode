@@ -797,7 +797,8 @@ class InstructionSet {
         }
     }
 
-    execute(executionCycle, memSpace, codeFlags, initialParams, params, valuesOut, entityOutputs, ruleSequenceNum, roundNum) {
+    execute(executionCycle, memSpace, codeFlags, initialParams, params, valuesOut, entityOutputs, 
+        requiredOutputs, ruleSequenceNum, roundNum) {
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
         let IC = 0;
         let IP = 0;
@@ -815,7 +816,7 @@ class InstructionSet {
         let gotRet = false;
         while (IC <= this.maxIC && IP <= this.maxIP && !gotRet) {
             let regObj = this.executeIns(A, B, C, R, S, CF, ZF, SP, IP, IC, executionCycle, memSpace, codeFlags, 
-                initialParams, params, valuesOut, entityOutputs, ruleSequenceNum, rule, roundNum);
+                initialParams, params, valuesOut, entityOutputs, requiredOutputs, ruleSequenceNum, rule, roundNum);
             A = regObj.registers.A;
             B = regObj.registers.B;
             C = regObj.registers.C;
@@ -836,7 +837,7 @@ class InstructionSet {
     }
 
     executeIns(A, B, C, R, S, CF, ZF, SP, IP, IC, executionCycle, memSpace, codeFlags, initialParams, params, 
-        valuesOut, entityOutputs, ruleSequenceNum, rule, roundNum) {
+        valuesOut, entityOutputs, requiredOutputs, ruleSequenceNum, rule, roundNum) {
         let sampleIn = null;
         let sampleInLength = 0;
         let sampleOutLength = 0;
@@ -859,7 +860,10 @@ class InstructionSet {
         }
         let inputsLength = initialParams.length;
         let outputsLength = 0;
-        if ("outputs" in rule) {
+        if ("autoParams" in rule) {
+            outputsLength = requiredOutputs[executionCycle].length;
+        }
+        else if ("outputs" in rule) {
             outputsLength = rule.outputs[executionCycle].length;
         }
         if (typeof sampleIn === 'undefined') {
@@ -1065,7 +1069,7 @@ class InstructionSet {
                     break;
                 case 17:
                     // IOC A, (C) - Compare the current with required output
-                    A = rulesets.testOutputByte(C, valuesOut, executionCycle, ruleSequenceNum);
+                    A = rulesets.testOutputByte(C, valuesOut, requiredOutputs, executionCycle, ruleSequenceNum);
                     ++IP;
                     break;
                 case 18:

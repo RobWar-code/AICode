@@ -606,6 +606,7 @@ class MainControl {
             let currentCycle = e1.birthCycle;
             e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
                 ruleSequenceNum, this.roundNum, memSpace);
+            e2.copyFrom(e1);
             e2.breedMethod = e1.breedMethod;
         }
         else {

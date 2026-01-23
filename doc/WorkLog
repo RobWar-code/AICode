@@ -7,7 +7,32 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    Add a table of number of extant entities by breed method allowing for frequency of use
+    Add new type of rule in which parameters are supplied automatically to the entity
+        * Setup the function array in rulesets
+        * Flag the applicable rules (autoParams: true)
+        * Provide first applicable rule
+        * Make the change to entity.js (set-up of initial params and required outputs)
+        * Modify rulesets.getScore to account of entity based parameters and required outputs
+        * Modify IOC A to allow for required outputs in entity
+        * Modify the entity display functions
+        Consider impact on Trace - preserve params?
+        Consider impact on scoring issues
+        Consider clone entity or fetchInputsOutputs.
+        Database - save/load requiredOutputs/initialParamsList from entity
+        Database - entity set transfer considerations
+            dbTransactions.saveTransferEntitySet
+        Do initial testing
+        Test Parallel Mode
+            Test MySql
+            Test SqlLite
+            Test FileSystem
+            Test stdio
+        Test Serial Mode
+            Test MySql
+            Test Sqlite
+        Update README.md
+
+    * Add a table of number of extant entities by breed method allowing for frequency of use
 
     Remove Max Score from display
 

@@ -1041,7 +1041,7 @@ const dbTransactions = {
     },
 
     async saveTransferEntity(bestSetNum, index, entityNumber, breedMethod, birthTime, birthDateTime, birthCycle, 
-        roundNum, registers, memSpace, 
+        roundNum, registers, initialParamsList, memSpace, 
         finalMemSpace, oldValuesOut, oldParams, score) {
         const dbConnection = await dbConn.openConnection();
         if (dbConnection === null) {
@@ -1079,7 +1079,21 @@ const dbTransactions = {
             throw error;
         }
 
-        // Save the transfer Entity
+        // Save the transfer entity
+
+        // Prepare the initial params
+        let prepParams = [];
+        for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+            let codeStr;
+            if (i < initialParamsList.length) {
+                codeStr = this.intArrayToString(initialParamsList[i], initialParamsList[i].length);
+            }
+            else {
+                codeStr = "";
+            }
+            prepParams.push(codeStr);
+        }
+
         // Prepare the memspace string
         let memSpaceStr = this.intArrayToString(memSpace, memSpace.length);
         let finalMemSpaceStr = this.intArrayToString(finalMemSpace, finalMemSpace.length);
@@ -1089,11 +1103,14 @@ const dbTransactions = {
             let sql = "INSERT INTO transfer_entity (best_set_num, inx, entity_number, breed_method,";
             sql += "birth_time, birth_date_time, creation_cycle, round_num, score, reg_a, reg_b, reg_c, ";
             sql += "reg_cf, reg_zf, reg_sp, reg_ip, reg_ic,";
-            sql += "mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql += "initial_params_1, initial_params_2, initial_params_3, initial_params_4, ";
+            sql += "mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [bestSetNum, index, entityNumber, 
                 breedMethod, birthTime, birthDateTime, birthCycle, roundNum, score, registers.A, 
                 registers.B, registers.C, registers.CF,
-                registers.ZF, registers.SP, registers.IP, registers.IC, memSpaceStr, finalMemSpaceStr]);
+                registers.ZF, registers.SP, registers.IP, registers.IC,
+                prepParams[0], prepParams[1], prepParams[2], prepParams[3], 
+                memSpaceStr, finalMemSpaceStr]);
             transferEntityId = results.insertId;
         }
         catch (error) {
@@ -1272,6 +1289,15 @@ const dbTransactions = {
             let roundNum = entity.roundNum;
             let breedMethod = entity.breedMethod;
             let registers = entity.registers;
+            // Initial Params
+            let prepParams = [];
+            for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+                let codeStr = "";
+                if (i < entity.initialParamsList.length) {
+                    codeStr = this.intArrayToString(entity.initialParamsList[i], entity.initialParamsList[i].length);
+                }
+                prepParams.push(codeStr);
+            }
             let memSpace = entity.initialMemSpace;
             let memStr = this.intArrayToString(memSpace, memSpace.length);
             let finalMemSpace = entity.memSpace;
@@ -1281,11 +1307,15 @@ const dbTransactions = {
                 sql = "INSERT INTO transfer_entity (best_set_num, inx, score, entity_number,";
                 sql += "breed_method, birth_time, birth_date_time, creation_cycle, round_num, ";
                 sql += "reg_a, reg_b, reg_c, reg_cf, reg_zf, reg_sp, reg_ip, reg_ic, ";
-                sql += "mem_space, final_mem_space) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                sql += "initial_params_1, initial_params_2, initial_params_3, initial_params_4, "
+                sql += "mem_space, final_mem_space) VALUES ";
+                sql += "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 [results] = await dbConnection.execute(sql, [setNum, index, score, 
                     entityNumber, breedMethod, birthTime, birthDateTime, creationCycle, roundNum,
                     registers.A, registers.B, registers.C, registers.CF, registers.ZF, 
-                    registers.SP, registers.IP, registers.IC, memStr, finalMemStr]);
+                    registers.SP, registers.IP, registers.IC,
+                    prepParams[0], prepParams[1], prepParams[2], prepParams[3],
+                    memStr, finalMemStr]);
                 transferEntityId = results.insertId;
             }
             catch (error) {
@@ -1317,15 +1347,17 @@ const dbTransactions = {
 
         try {
             sql = "INSERT INTO batch_data (batch_num, monoclonal_ins_count, monoclonal_byte_count, interbreed_count,";
-            sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, "
+            sql += "interbreed2_count, interbreed_flagged_count, interbreed_ins_merge_count, ";
             sql += "weighted_monoclonal_byte_count, weighted_random_breed_count, self_breed_count,";
-            sql += "bests_store_breedCount, seed_rule_breed_count, seed_template_breed_count, random_count, cross_set_count) ";
+            sql += "bests_store_breed_count, seed_rule_breed_count, seed_template_breed_count, ";
+            sql += "random_count, cross_set_count) ";
             sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             [results] = await dbConnection.execute(sql, [batchNum, batchData.monoclonalInsCount, 
                 batchData.monoclonalByteCount, batchData.interbreedCount, batchData.interbreed2Count,
                 batchData.interbreedFlaggedCount, batchData.interbreedInsMergeCount,
                 batchData.weightedMonoclonalByteCount, batchData.weightedRandomBreedCount,
-                batchData.selfBreedCount, batchData.seedRuleBreedCount, batchData.seedTemplateBreedCount,
+                batchData.selfBreedCount, batchData.bestsStoreBreedCount, batchData.seedRuleBreedCount, 
+                batchData.seedTemplateBreedCount,
                 batchData.randomCount, 
                 batchData.crossSetCount
             ]);

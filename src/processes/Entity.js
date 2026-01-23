@@ -48,15 +48,32 @@ class Entity {
         else {
             this.ruleSequenceNum = ruleSequenceNum;
         }
-        this.ruleParams = rulesets.getParamsInFromRuleSequence(this.ruleSequenceNum);
-        if (this.ruleParams === null) {
+
+        // Initial Parameters
+        this.requiredOutputs = [];
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        if ("autoParams" in rule) {
+            let index = rulesets.getRuleIndexFromSequence(this.ruleSequenceNum);
+            // Generate the params and outputs
+            const {inputList, outputList} = rulesets.makeInputsFunction[index](rulesets);
+            this.initialParamsList = inputList;
             this.initialParams = this.initialParamsList[0];
+            this.ruleParams = null;
             this.numExecutions = this.initialParamsList.length;
+            this.requiredOutputs = outputList;
         }
         else {
-            this.initialParams = this.ruleParams[0];
-            this.numExecutions = this.ruleParams.length;
+            this.ruleParams = rulesets.getParamsInFromRuleSequence(this.ruleSequenceNum);
+            if (this.ruleParams === null) {
+                this.initialParams = this.initialParamsList[0];
+                this.numExecutions = this.initialParamsList.length;
+            }
+            else {
+                this.initialParams = this.ruleParams[0];
+                this.numExecutions = this.ruleParams.length;
+            }
         }
+
         this.initialMemSpace = new Array(this.memLength).fill(0);
         this.codeFlags = new Array(this.memLength).fill(0);
         this.executionCount = 0;
@@ -91,6 +108,30 @@ class Entity {
 
         // Step Data
         this.scoreObj = {score: 0, scoreList: null};
+    }
+
+    copyFrom(altEntity) {
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        if ("autoParams" in rule) {
+            this.initialParamsList = altEntity.initialParamsList;
+            this.initialParams = this.initialParamsList[0];
+            this.ruleParams = null;
+            this.requiredOutputs = altEntity.requiredOutputs;
+            this.numExecutions = this.initialParamsList.length;
+        }
+        this.breedMethod = altEntity.breedMethod;
+    }
+
+    insertParams(initialParamsList) {
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        this.initialParamsList = initialParamsList;
+        this.initialParams = this.initialParamsList[0];
+        this.ruleParams = null;
+        if ("autoParams" in rule) {
+            let ruleIndex = rulesets.getRuleIndexFromSequence(this.ruleSequenceNum);
+            this.requiredOutputs = rulesets.makeOutputsFunction[ruleIndex](rulesets, this.initialParamsList);
+        }
+        this.numExecutions = this.initialParamsList.length;
     }
 
     resetRegisters() {
@@ -1041,7 +1082,9 @@ class Entity {
         displayData.params = this.oldParams;
         displayData.valuesOut = this.oldValuesOut;
 
-        if (this.ruleParams === null) {
+        // Initial Params
+        let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
+        if (this.ruleParams === null || ("autoParams" in rule)) {
             displayData.initialParamsList = this.initialParamsList;
         }
         else {
@@ -1118,7 +1161,8 @@ class Entity {
     doScore(bestSetHighScore, bestSetLowScore) {
         let scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, 
             this.instructionSet, this.initialMemSpace, this.memSpace,
-            this.initialParams, this.params, this.valuesOut, this.oldValuesOut, this.executionCount, this.registers.IC, 
+            this.initialParamsList[this.executionCount], this.params, this.valuesOut, this.oldValuesOut, this.requiredOutputs,
+            this.executionCount, this.registers.IC, 
             this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
         this.score = scoreObj.score;
         this.transferRuleScores(scoreObj.scoreList);
@@ -1147,7 +1191,7 @@ class Entity {
         for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(executionCount, this.memSpace, this.codeFlags, this.initialParams, 
-                this.params, this.valuesOut, this.oldValuesOut, this.ruleSequenceNum,
+                this.params, this.valuesOut, this.oldValuesOut, this.requiredOutputs, this.ruleSequenceNum,
                 this.roundNum);
             // Fix invalid memspace codes
             for (let i = 0; i < this.memSpace.length; i++) {
@@ -1159,8 +1203,9 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             scoreObj = rulesets.getScore(bestSetHighScore, bestSetLowScore, this.instructionSet, 
-                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, 
-                this.oldValuesOut, executionCount, memObj.IC, this.instructionSet.highestIP, 
+                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParamsList[executionCount], this.params, this.valuesOut, 
+                this.oldValuesOut, this.requiredOutputs,
+                executionCount, memObj.IC, this.instructionSet.highestIP, 
                 this.ruleSequenceNum, this.roundNum);
             this.score += scoreObj.score;
         }
@@ -1204,7 +1249,7 @@ class Entity {
         let rule = rulesets.getRuleFromSequence(this.ruleSequenceNum);
         let execObj = this.instructionSet.executeIns(A, B, C, R, S, CF, ZF, SP, IP, IC, executionCount, this.memSpace, 
             this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
-            this.ruleSequenceNum, rule, this.roundNum);
+            this.requiredOutputs, this.ruleSequenceNum, rule, this.roundNum);
         this.registers = {...execObj.registers, IC: this.registers.IC};
         ++this.registers.IC;
         // Execution Cycle Completed
@@ -1212,7 +1257,8 @@ class Entity {
             this.oldValuesOut.push(this.valuesOut.concat());
             this.oldParams.push(this.params.concat());
             this.scoreObj = rulesets.getScore(0, 0, this.instructionSet, 
-                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParams, this.params, this.valuesOut, this.oldValuesOut,
+                this.initialMemSpace, this.memSpace, this.codeFlags, this.initialParamsList[executionCount], this.params, 
+                this.valuesOut, this.oldValuesOut, this.requiredOutputs, this.executionCount,
                 this.registers.IC, this.instructionSet.highestIP, this.ruleSequenceNum, this.roundNum);
             this.score += this.scoreObj.score;
             ++this.executionCount;

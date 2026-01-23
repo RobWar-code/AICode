@@ -12,10 +12,13 @@ const rulesets = {
     maxRuleId: 136,
     maxRoundsPerRule: 3,
     maxRuleSequenceNum: 0,
+    numAutoParamSets: 4,
     scoreList: [],
     ruleFunction: [],
     byteFunction: [],
     requiredOutputsFunction: [],
+    makeInputsFunction: new Array(this.numRules).fill(null),
+    makeOutputsFunction: new Array(this.numRules).fill(null),
     totalScore: 0,
     currentMaxScore: 0,
     maxScore: 0,
@@ -70,6 +73,7 @@ const rulesets = {
                 inBlockLen: 32,
                 highIC: 16 * 10,
                 highIP: 40, // Optional, Default 80
+                autoParams: true, // Optional to indicate that inputs and outputs generated per entity
                 ASCIISampleIn: // Optional, Default Ignore 
                 [
                     "1;7;9;3;2;5;7;0;9;8;3;2;4;6;7;8;"
@@ -1411,6 +1415,7 @@ const rulesets = {
                 inBlockStart: 0, inBlockLen: 32,
                 highIC: 9 * 16 + learnCodeAllowance,
                 highIP: 80,
+                autoParams: true,
                 sampleIn: [[
                     31,39,26,58,12,170,19,21,76,94,14,8,3,97,220,168,
                     2,1,91,96,145,76,74,3,5,4,225,230,2,196,30,27,
@@ -1432,6 +1437,8 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getSelectGreaterThanFirstParamRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeGreaterThanFirstParamInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeGreaterThanFirstParamOutputsList; 
 
         this.scoreList.push(
             {rule: "Multiply By First Param 1", ruleId: 15,
@@ -4182,7 +4189,7 @@ const rulesets = {
                 rule.paramsIn = this.convertASCIILists(rule.ASCIIParamsIn);
             }
 
-            if (this.requiredOutputsFunction[i] != null) {
+            if (this.requiredOutputsFunction[i] != null && !("autoParams" in rule)) {
                 if ("sampleInOut" in rule) {
                     let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn, rule);
                     this.scoreList[i].outputs = outputList;
@@ -4268,7 +4275,8 @@ const rulesets = {
     },
 
     getScore: function (bestSetHighScore, bestSetLowScore, instructionSet, memSpace, 
-        currentMemSpace, codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, executionCycle,
+        currentMemSpace, codeFlags, initialParams, paramsIn, valuesOut, entityOutputs, 
+        requiredOutputs, executionCycle,
         IC, highestIP, sequenceNum, roundNum) {
 
         // Get the current maximum score
@@ -4288,6 +4296,7 @@ const rulesets = {
             paramsIn: paramsIn,
             valuesOut: valuesOut,
             entityOutputs: entityOutputs,
+            requiredOutputs: requiredOutputs,
             executionCycle: executionCycle,
             IC: IC,
             highestIP: highestIP,
@@ -4315,7 +4324,10 @@ const rulesets = {
                 if (!excludeRule && (this.scoreList[i].retain || (this.scoreList[i].sequenceNum === sequenceNum))) {
                     if (this.ignoreRounds || this.scoreList[i].startRoundNum <= roundNum) {
                         let score;
-                        if ("outputs" in this.scoreList[i]) {
+                        if ("autoParams" in this.scoreList[i]) {
+                            score = this.getOutputComparisonScore(executionCycle, requiredOutputs, valuesOut);
+                        }
+                        else if ("outputs" in this.scoreList[i]) {
                             score = this.getOutputComparisonScore(executionCycle, this.scoreList[i].outputs, valuesOut);
                         }
                         else {
@@ -4428,14 +4440,15 @@ const rulesets = {
     getCurrentMaxScore(sequenceNum) {
         let mainRule = this.getRuleFromSequence(sequenceNum);
         let excludeRules = null;
+        let numInputParamBlocks = 2;
         if ("excludeHelperRules" in mainRule) {
             excludeRules = mainRule.excludeHelperRules;
         }
-        if ("paramsIn" in mainRule) {
-            numInputParamBlocks = mainRule.paramsIn.length;
+        if ("autoParams" in mainRule) {
+            numInputParamBlocks = this.numAutoParamSets;
         }
-        else {
-            numInputParamBlocks = 2;
+        else if ("paramsIn" in mainRule) {
+            numInputParamBlocks = mainRule.paramsIn.length;
         }
 
         let maxScore = 0;
@@ -4507,7 +4520,10 @@ const rulesets = {
         let score = 0;
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         let numParamBlocks = 2;
-        if ("paramsIn" in rule) {
+        if ("autoParams" in rule) {
+            numParamBlocks = dataParams.requiredOutputs.length;
+        }
+        else if ("paramsIn" in rule) {
             numParamBlocks = rule.paramsIn.length;
         }
         if (numParamBlocks === 1) {
@@ -4561,6 +4577,11 @@ const rulesets = {
         // Get the number of input parameter blocks
         let rule = self.getRuleFromSequence(dataParams.sequenceNum);
         let numOutputBlocks = 0;
+        let ruleOutputs;
+        if ("autoParams" in rule) {
+            numOutputBlocks = dataParams.requiredOutputs.length;
+            ruleOutputs = dataParams.requiredOutputs;
+        }
         if ("outputs" in rule) {
             numOutputBlocks = rule.outputs.length;
             ruleOutputs = rule.outputs;
@@ -4855,9 +4876,15 @@ const rulesets = {
         let outBlockStart = rule.outBlockStart;
         // Check whether required outputs present
         let opt = outBlockLen;
-        if ("outputs" in rule) {
-            // Get the current required and entity outputs
-            let output = rule.outputs[executionCycle];
+        if (("outputs" in rule) || ("autoParams" in rule)) {
+            let output;
+            if ("autoParams" in rule) {
+                output = dataParams.requiredOutputs[executionCycle];
+            }
+            else {
+                // Get the current required and entity outputs
+                output = rule.outputs[executionCycle];
+            }
             outBlockLen = output.length;
             // Count the number of non-zero values in the output
             opt = 0;
@@ -5204,8 +5231,16 @@ const rulesets = {
 
         // Determine the difference optimum
         let executionCycle = dataParams.executionCycle;
-        let inputs = rule.paramsIn[executionCycle];
-        let outputs = rule.outputs[executionCycle];
+        let inputs;
+        let outputs;
+        if ("autoParams" in rule) {
+            inputs = dataParams.initialParams;
+            outputs = dataParams.requiredOutputs[executionCycle];
+        }
+        else {
+            outputs = rule.outputs[executionCycle];
+            inputs = rule.paramsIn[executionCycle];
+        }
         let actualOutputs = dataParams.entityOutputs[executionCycle];
         let opt = 0;
         let count = 0;
@@ -5225,7 +5260,13 @@ const rulesets = {
         let ruleSequenceNum = dataParams.sequenceNum;
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
         let executionCycle = dataParams.executionCycle;
-        let outputs = rule.outputs[executionCycle];
+        let outputs;
+        if ("autoParams" in rule) {
+            outputs = dataParams.requiredOutputs[executionCycle];
+        }
+        else {
+            outputs = rule.outputs[executionCycle];
+        }
         let actualOutputs = dataParams.valuesOut;
 
         let opt = 0;
@@ -5245,7 +5286,13 @@ const rulesets = {
         let ruleSequenceNum = dataParams.sequenceNum;
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);
         let executionCycle = dataParams.executionCycle;
-        let outputs = rule.outputs[executionCycle];
+        let outputs;
+        if ("autoParams" in rule) {
+            outputs = dataParams.requiredOutputs[executionCycle];
+        }
+        else {
+            outputs = rule.outputs[executionCycle];
+        }
         let actualOutputs = dataParams.valuesOut;
 
         // Get the list of actual outputs
@@ -6105,6 +6152,41 @@ const rulesets = {
             outputList.push(output);
         }
         return outputList;
+    },
+
+    makeGreaterThanFirstParamInputs(self) {
+        let inputList = [];
+        let outputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            let p1 = Math.floor(Math.random() * 100) + 50;
+            inputs.push(p1);
+            for (let j = 0; j < 31; j++) {
+                let a = Math.floor(Math.random() * 256);
+                inputs.push(a);
+            }
+            inputList.push(inputs);
+        }
+        outputList = self.makeGreaterThanFirstParamOutputsList(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeGreaterThanFirstParamOutputsList(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = self.makeGreaterThanFirstParamOutputs(inputs);
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    makeGreaterThanFirstParamOutputs(inputs) {
+        let outputs = [];
+        let a = inputs[0];
+        for (let v of inputs) {
+            if (v > a) outputs.push(v);
+        }
+        return outputs;
     },
 
     oddAndEvenParams(self, dataParams, ruleParams) {
@@ -8383,11 +8465,17 @@ const rulesets = {
         return ruleList;
     },
 
-    testOutputByte(p, valuesOut, executionCycle, ruleSequenceNum) {
+    testOutputByte(p, valuesOut, requiredOutputs, executionCycle, ruleSequenceNum) {
         let ruleIndex = this.getRuleIndexFromSequence(ruleSequenceNum);
         let rule = this.scoreList[ruleIndex];
-        if ("outputs" in rule) {
-            let output = rule.outputs[executionCycle];
+        if (("outputs" in rule) || requiredOutputs.length > 0) {
+            let output;
+            if (requiredOutputs.length > 0) {
+                output = requiredOutputs[executionCycle];
+            }
+            else {
+                output = rule.outputs[executionCycle];
+            }
             if (p >= 3) return 255;
             let r = Math.abs(output[p] - valuesOut[p]);
             return r;

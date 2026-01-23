@@ -1,4 +1,10 @@
-A17
+22/01/2025
+Trial A16:
+Ran for 2500 rounds, 10 loops. Slightly more
+rules completed than trial A15, included
+Power First Param 2 for the first time.
+
+Trial A17:
 Change instruction IOC A to difference between
 output and required output
 

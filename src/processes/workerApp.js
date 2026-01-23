@@ -126,7 +126,9 @@ class BatchProcess {
 
         // Main Process
         let mainProcess = new MainProcess(rulesets);
+        console.error("startProcess: proceeding to mainLoop");
         mainProcess.mainLoop(this);
+        console.error("startProcess: mainLoop completed");
 
         // Save the transfer seed bed data
         await this.prepareAndSaveSeedbedData();
@@ -134,7 +136,9 @@ class BatchProcess {
 
         if (workerDataTransfer === 'database') {
             await this.transferBatchEntities();
+            console.error("startProcess: completed transferBatchEntities");
             await this.transferBatchData(this.batchNum);
+            console.error("startProcess: completed batch data transfer");
         }
         else if (workerDataTransfer === 'fileSystem') {
             await this.transferFSBatchEntities();
@@ -167,8 +171,12 @@ class BatchProcess {
             jsonStr = "{\"type\": \"batchData\", \"data\": " + jsonStr + "}\n";
             process.stdout.write(jsonStr);
         }
+        console.log("got to end of startProcess");
         if (databaseType === 'sqlite') {
             await dbConn.close();
+        }
+        if (workerDataTransfer === "database") {
+            process.exit(0);
         }
     }
 
@@ -211,6 +219,19 @@ class BatchProcess {
                 for (let item of results) {
                     let memStr = item.mem_space;
                     let memSpace = dbTransactions.stringToIntArray(memStr);
+
+                    // Get Initial Params
+                    let initialParamsList = [];
+                    for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+                        let field = "initial_params_" + (i + 1);
+                        let codeStr = item[field];
+                        if (codeStr === "") break;
+                        else {
+                            let params = dbTransactions.stringToIntArray(codeStr);
+                            initialParamsList.push(params)
+                        }
+                    }
+
                     let finalMemStr = item.final_mem_space;
                     let finalMemSpace = dbTransactions.stringToIntArray(finalMemStr);
                     let score = item.score;
@@ -220,6 +241,7 @@ class BatchProcess {
                     let seeded = false;
                     let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, birthCycle, 
                         this.ruleSequenceNum, this.roundNum, memSpace);
+                    entity.insertParams(initialParamsList);
                     entity.birthTime = item.birth_time;
                     entity.birthDateTime = item.birth_date_time;
                     entity.roundNum = item.round_num;

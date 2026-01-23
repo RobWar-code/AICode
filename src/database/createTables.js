@@ -50,6 +50,8 @@ async function createTables() {
     sql += "score FLOAT, ";
     sql += "initial_params_1 VARCHAR(256),";
     sql += "initial_params_2 VARCHAR(256),";
+    sql += "initial_params_3 VARCHAR(256),";
+    sql += "initial_params_4 VARCHAR(256),";
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
@@ -91,7 +93,7 @@ async function createTables() {
     sql += "sub_opt_rule_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-*/
+
     sql = "DROP TABLE rule";
     await connection.query(sql);
 
@@ -105,7 +107,7 @@ async function createTables() {
     sql += "completed INT";
     sql += ")";
     await connection.query(sql);
-/*
+
     sql = "CREATE TABLE seed_rule_fragment (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "fragment VARCHAR(128)";
@@ -141,7 +143,7 @@ async function createTables() {
     sql += "current INT"
     sql += ")";
     await connection.query(sql);
-    
+
     sql = "DROP TABLE transfer_entity";
     await connection.query(sql);
 
@@ -164,6 +166,10 @@ async function createTables() {
     sql += "reg_sp INT,";
     sql += "reg_ip INT,";
     sql += "reg_ic INT,";
+    sql += "initial_params_1 VARCHAR(256),";
+    sql += "initial_params_2 VARCHAR(256),";
+    sql += "initial_params_3 VARCHAR(256),";
+    sql += "initial_params_4 VARCHAR(256),";
     sql += "mem_space VARCHAR(256),";
     sql += "final_mem_space VARCHAR(256)";
     sql += ")";
@@ -195,7 +201,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
     
-
+*/
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -218,7 +224,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    */
     connection.end();
 }
 

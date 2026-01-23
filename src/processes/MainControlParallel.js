@@ -407,11 +407,24 @@ class MainControlParallel {
                 let set = [];
                 let entityNum = 0;
                 for (let entityData of entityDataSet) {
+                   // Get Initial Params
+                    let initialParamsList = [];
+                    for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+                        let field = "initial_params_" + (i + 1);
+                        let codeStr = entityData[field];
+                        if (codeStr === "") break;
+                        else {
+                            let params = dbTransactions.stringToIntArray(codeStr);
+                            initialParamsList.push(params);
+                        }
+                    }
+
                     let memSpace = this.stringToIntArray(entityData.mem_space);
                     let asRandom = false;
                     let seeded = false;
                     let entity = new Entity(entityData.entity_number, this.instructionSet, 
                         asRandom, seeded, entityData.creation_cycle, this.ruleSequenceNum, this.roundNum, memSpace);
+                    entity.insertParams(initialParamsList);
                     entity.score = entityData.score;
                     entity.birthTime = entityData.birth_time;
                     entity.birthDateTime = entityData.birth_date_time;
@@ -1130,6 +1143,7 @@ class MainControlParallel {
             let currentCycle = e1.birthCycle;
             e2 = new Entity(e1.entityNumber, this.instructionSet, asRandom, seeded, currentCycle, 
                 ruleSequenceNum, this.roundNum, memSpace);
+            e2.copyFrom(e1);
             breedMethod = e1.breedMethod;
         }
         else {
