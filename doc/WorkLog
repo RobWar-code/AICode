@@ -16,20 +16,26 @@ Jobs Due
         * Modify IOC A to allow for required outputs in entity
         * Modify the entity display functions
         Consider impact on Trace - preserve params?
-        Consider impact on scoring issues
-        Consider clone entity or fetchInputsOutputs.
-        Database - save/load requiredOutputs/initialParamsList from entity
-        Database - entity set transfer considerations
+        * Consider impact on scoring issues
+        * Consider clone entity or fetchInputsOutputs.
+        * Database - save/load requiredOutputs/initialParamsList from entity
+        * Database - entity set transfer considerations
             dbTransactions.saveTransferEntitySet
-        Do initial testing
+        * Do initial testing
         Test Parallel Mode
             Test MySql
+                * Transfers
+                * Database
             Test SqlLite
+                * Transfers
+                * Database
             Test FileSystem
+                * Transfers
             Test stdio
+                * Transfers
         Test Serial Mode
-            Test MySql
-            Test Sqlite
+            * Test MySql
+            * Test Sqlite
         Update README.md
 
     * Add a table of number of extant entities by breed method allowing for frequency of use

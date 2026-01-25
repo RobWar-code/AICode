@@ -4656,7 +4656,7 @@ const rulesets = {
         }
 
         let opt = countMax;
-        let max = 256;
+        let max = 255;
         let score = self.doScoreAtMost(opt, count, max);
         return score;
     },

@@ -33,6 +33,7 @@ const trace = {
         let roundNum = traceEntity.roundNum;
         this.entity = new Entity(entityNumber, instructionSet, asRandom, seeded, currentCycle, 
             ruleSequenceNum, roundNum, memSpace);
+        this.entity.copyFrom(traceEntity);
         // Save the fixed data
         this.fixedData = {};
         let rule = rulesets.getRuleFromSequence(ruleSequenceNum);

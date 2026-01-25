@@ -527,6 +527,7 @@ class MainControlParallel {
                 let seeded = false;
                 let newEntity = new Entity(entity.entityNumber, this.instructionSet, asRandom, seeded, 
                     entity.birthCycle, this.ruleSequenceNum, entity.roundNum, entity.initialMemSpace);
+                newEntity.insertParams(entity.initialParamsList);
                 newEntity.score = entity.score;
                 newEntity.memSpace = entity.memSpace;
                 newEntity.breedMethod = entity.breedMethod;
@@ -988,13 +989,42 @@ class MainControlParallel {
         for (let e of entities) {
             let bestSetNum = e.best_set_num;
             // Collect the entity array data
-            let initialParams1 = this.stringToIntArray(e.initial_params_1);
-            let initialParams2 = this.stringToIntArray(e.initial_params_2);
+            // Collect the initial params list
+            let initialParamsList = [];
+            for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+                let field = "initial_params_" + (i + 1);
+                if (e[field] === "") {
+                    break;
+                }
+                else {
+                    let initialParams = this.stringToIntArray(e[field]);
+                    initialParamsList.push(initialParams);
+                }
+            }
+            // Debug
+            let index = 0;
+            for (let a of initialParamsList) {
+                if (a.length === 0) console.log("bad initial param");
+                for (let v of a) {
+                    if (typeof v === 'undefined') {
+                        console.log("Undefined value in initial params", a.length);
+                    }
+                    else if (v < 0 || v > 255) {
+                        console.log("initial param out of range", v);
+                    }
+                }
+                if (typeof a === 'undefined') {
+                    console.log("Bad initialParams array", index);
+                }
+                ++index;
+            }
+
             let initialMemSpace = this.stringToIntArray(e.initial_mem_space);
             let asRandom = false;
             let seeded = false;
             let entity = new Entity(e.entity_number, insSet, asRandom, seeded, e.birth_cycle, 
                 rulesets.ruleSequenceNum, this.numRounds, initialMemSpace);
+            entity.insertParams(initialParamsList);
             let memObj = entity.execute(0, 0);
             entity.birthTime = e.birth_time;
             entity.birthDateTime = e.birth_date_time;

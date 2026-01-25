@@ -69,6 +69,7 @@ class Entity {
                 this.numExecutions = this.initialParamsList.length;
             }
             else {
+                this.initialParamsList = this.ruleParams;
                 this.initialParams = this.ruleParams[0];
                 this.numExecutions = this.ruleParams.length;
             }
@@ -1188,7 +1189,8 @@ class Entity {
         rulesets.zeroScores();
         let memObj = null;
         let scoreObj = null;
-        for (let executionCount = 0; executionCount < this.numExecutions; executionCount++) {
+        let numExecutions = this.initialParamsList.length;
+        for (let executionCount = 0; executionCount < numExecutions; executionCount++) {
             this.copyMem(executionCount);
             memObj = this.instructionSet.execute(executionCount, this.memSpace, this.codeFlags, this.initialParams, 
                 this.params, this.valuesOut, this.oldValuesOut, this.requiredOutputs, this.ruleSequenceNum,

@@ -55,6 +55,7 @@ const fsTransactions = {
                 destEntity.birthCycle = srcEntity.birthCycle;
                 destEntity.roundNum = srcEntity.roundNum;
                 destEntity.registers = srcEntity.registers;
+                destEntity.initialParamsList = srcEntity.initialParamsList;
                 destEntity.initialMemSpace = srcEntity.initialMemSpace;
                 destEntity.memSpace = srcEntity.memSpace;
                 entitySet.push(destEntity);
@@ -87,6 +88,7 @@ const fsTransactions = {
                     let seeded = false;
                     let newEntity = new Entity(entity.entityNumber, instructionSet, asRandom, seeded, 
                         entity.birthCycle, ruleSequenceNum, entity.roundNum, entity.initialMemSpace);
+                    newEntity.insertParams(entity.initialParamsList);
                     newEntity.score = entity.score;
                     newEntity.memSpace = entity.memSpace;
                     newEntity.breedMethod = entity.breedMethod;
@@ -177,9 +179,11 @@ const fsTransactions = {
                 destEntity.birthCycle = srcEntity.birthCycle;
                 destEntity.roundNum = srcEntity.roundNum;
                 destEntity.registers = srcEntity.registers;
+                destEntity.initialParamsList = srcEntity.initialParamsList;
                 destEntity.initialMemSpace = srcEntity.initialMemSpace;
                 destEntity.memSpace = srcEntity.memSpace;
                 entitySet.push(destEntity);
+                // console.error("initialParamsList", destEntity.initialParamsList);
             }
             jsonObj.push(entitySet);
         }

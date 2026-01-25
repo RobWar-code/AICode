@@ -33,7 +33,7 @@ async function createTables() {
     sql += "rule_sequence_num INT";
     sql += ")";
     await connection.query(sql);
-
+*/
     sql = "DROP TABLE entity";
     await connection.query(sql);
 
@@ -55,7 +55,7 @@ async function createTables() {
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+/*
     sql = "DROP TABLE seed_rule";
     await connection.query(sql);
 

@@ -171,11 +171,11 @@ class BatchProcess {
             jsonStr = "{\"type\": \"batchData\", \"data\": " + jsonStr + "}\n";
             process.stdout.write(jsonStr);
         }
-        console.log("got to end of startProcess");
+        console.error("got to end of startProcess");
         if (databaseType === 'sqlite') {
             await dbConn.close();
         }
-        if (workerDataTransfer === "database") {
+        if (workerDataTransfer === "database" || workerDataTransfer === "fileSystem") {
             process.exit(0);
         }
     }
@@ -287,10 +287,11 @@ class BatchProcess {
                 let asRandom = false;
                 let seeded = false;
                 let entity = new Entity(item.entityNumber, this.instructionSet, asRandom, seeded, item.birthCycle, 
-                    this.ruleSequenceNum, this.roundNum, item.initialMemSpace);
+                    this.ruleSequenceNum, item.roundNum, item.initialMemSpace);
+                entity.insertParams(item.initialParamsList);
                 entity.memSpace = item.memSpace;
-                entity.birthTime = item.birth_time;
-                entity.birthDateTime = item.birth_date_time;
+                entity.birthTime = item.birthTime;
+                entity.birthDateTime = item.birthDateTime;
                 entity.registers = item.registers;
                 entity.score = item.score;
                 set.push(entity);

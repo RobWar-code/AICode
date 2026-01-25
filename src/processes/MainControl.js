@@ -451,13 +451,25 @@ class MainControl {
         for (let e of entities) {
             let bestSetNum = e.best_set_num;
             // Collect the entity array data
-            let initialParams1 = this.stringToIntArray(e.initial_params_1);
-            let initialParams2 = this.stringToIntArray(e.initial_params_2);
+            // Get Initial Params List
+            let initialParamsList = [];
+            for (let i = 0; i < rulesets.numAutoParamSets; i++) {
+                let field = "initial_params_" + (i + 1);
+                if (e[field] === "") {
+                    break;
+                }
+                else {
+                    let initialParams = this.stringToIntArray(e[field]);
+                    initialParamsList.push(initialParams);
+                }
+            }
+
             let initialMemSpace = this.stringToIntArray(e.initial_mem_space);
             let asRandom = false;
             let seeded = false;
             let entity = new Entity(e.entity_number, insSet, asRandom, seeded, e.birth_cycle, 
                 rulesets.ruleSequenceNum, this.numRounds, initialMemSpace);
+            entity.insertParams(initialParamsList);
             let memObj = entity.execute(0, 0);
             entity.birthTime = e.birth_time;
             entity.birthDateTime = e.birth_date_time;

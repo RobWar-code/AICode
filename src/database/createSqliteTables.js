@@ -50,8 +50,8 @@ async function createTables() {
     sql += "score FLOAT, ";
     sql += "initial_params_1 VARCHAR(256),";
     sql += "initial_params_2 VARCHAR(256),";
-    // sql += "initial_params_3 VARCHAR(256),";
-    // sql += "initial_params_4 VARCHAR(256),";
+    sql += "initial_params_3 VARCHAR(256),";
+    sql += "initial_params_4 VARCHAR(256),";
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);

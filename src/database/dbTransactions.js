@@ -39,52 +39,60 @@ const dbTransactions = {
     
         // Save the entities
         let resultOK = await this.saveEntities(program, sessionId, dbConnection);
-        console.log("Saved Entities", resultOK);
+        if (resultOK) console.log("Saved Entities", resultOK);
 
         if (resultOK) {
             // Save the seed rules
             resultOK = await this.saveSeedRules(dbConnection);
         }
-        console.log("Saved Seed Rules", resultOK);
+        if (resultOK) console.log("Saved Seed Rules", resultOK);
 
         if (resultOK) {
             // Save the weighting table
             resultOK = await this.saveWeightingTable(dbConnection);
         }
-        console.log("Saved weightingTable");
+        if (resultOK) console.log("Saved weightingTable");
+        else console.log("Problem with save weighting table");
 
         if (resultOK) {
             // Save sub-opt rules
             resultOK = await this.saveSubOptRules(sessionId, dbConnection);
         }
-        console.log("Saved SubOptRules", resultOK);
+        if (resultOK) console.log("Saved SubOptRules", resultOK);
 
         if (resultOK) {
             resultOK = await this.saveBestsStore(sessionId, dbConnection);
         }
-
+        if (resultOK) console.log("saved BestsStore");
+    
         await this.deleteOtherRecords(dbConnection, sessionId);
 
         if (resultOK) {
             console.log("Saving rule rounds");
             resultOK = await this.saveRules(dbConnection);
         }
+        if (resultOK) console.log("Saved ruleRounds");
 
         if (resultOK) {
             resultOK = await this.saveFragments(dbConnection);
         }
+        if (resultOK) console.log("Saved Fragments");
 
         if (resultOK) {
             resultOK = await this.saveSeedbedData(program.seedbedData, dbConnection);
         }
+        if (resultOK) console.log("saved SeedBedData");
 
         if (resultOK) {
             resultOK = await this.saveTemplateSeedbedLog(program.templateSeedbedLog, dbConnection);
         }
+        if (resultOK) console.log("Saved TemplateSeedBedLog");
 
         if (resultOK) {
             resultOK = await this.saveSeedRuleSeedbedLog(program.seedRuleSeedbedLog, dbConnection);
         }
+        if (resultOK) console.log("Saved SeedRuleSeedbedLog");
+        else console.log("Problem saving SeedRuleSeedbedLog");
 
         await dbConnection.end();
 
@@ -108,8 +116,16 @@ const dbTransactions = {
                 let roundNum = entity.roundNum;
                 let breedMethod = entity.breedMethod;
                 let score = entity.score;
-                let initialParams1 = this.intArrayToString(entity.initialParamsList[0], 256);
-                let initialParams2 = this.intArrayToString(entity.initialParamsList[1], 256);
+                // Get Initial Params
+                let initialParamsList = [];
+                for (let i = 0; i <= rulesets.numAutoParamSets; i++) {
+                    let initialParams = "";
+                    if (i < entity.initialParamsList.length) {
+                        initialParams = this.intArrayToString(entity.initialParamsList[i], entity.initialParamsList[i].length);
+                    }
+                    initialParamsList.push(initialParams);
+                }
+
                 let initialMemSpace = this.intArrayToString(entity.initialMemSpace, 256);
 
                 // Save the entity data
@@ -117,12 +133,13 @@ const dbTransactions = {
                     let sql = "INSERT INTO entity (";
                     sql += "session_id, best_set_num, entity_number, birth_time, birth_date_time, birth_cycle, ";
                     sql += "round_num, breed_method, score, "
-                    sql += "initial_params_1, initial_params_2, initial_mem_space) ";
-                    sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    sql += "initial_params_1, initial_params_2, initial_params_3, initial_params_4, initial_mem_space) ";
+                    sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     const [results] = await dbConnection.execute(sql, [
                         sessionId, i, entityNum, birthTime, birthDateTime, birthCycle,
                         roundNum, breedMethod, score,
-                        initialParams1, initialParams2, initialMemSpace
+                        initialParamsList[0], initialParamsList[1], initialParamsList[2], initialParamsList[3],
+                        initialMemSpace
                     ]);
                     ++count;
                 }
@@ -338,6 +355,8 @@ const dbTransactions = {
         sql = "DELETE FROM weighting_table";
         await dbConnection.query(sql);
 
+        if (rulesets.weightingTable.length === 0) return true;
+        
         // Loop re-create the table
         let ok = false;
         let index = 0;
@@ -473,7 +492,6 @@ const dbTransactions = {
             let bestsStoreMemSpace = bestsStoreItem.memSpace;
             let result = await this.saveBestsStoreItem(dbConnection, sessionId, ruleId, 
                 ruleSequenceNum, bestsStoreMemSpace);
-            console.log("BestsStore result", result);
             if (!result) return false;
             ++ruleSequenceNum;
         }
@@ -651,10 +669,10 @@ const dbTransactions = {
             program.templateSeedbedLog = new Array(numItems).fill({});
             for (let row of results) {
                 let index = row.template_index;
-                program.templateSeedbedLog[index].numAttempts = results.num_attempts;
-                program.templateSeedbedLog[index].numFailedAttempts = results.failed_attempts;
-                program.templateSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
-                program.templateSeedbedLog[index].current = results.current;
+                program.templateSeedbedLog[index].numAttempts = row.num_attempts;
+                program.templateSeedbedLog[index].numFailedAttempts = row.failed_attempts;
+                program.templateSeedbedLog[index].numSuccessfulAttempts = row.successful_attempts;
+                program.templateSeedbedLog[index].current = row.current;
             }
         }
         catch (error) {
@@ -699,10 +717,10 @@ const dbTransactions = {
             program.seedRuleSeedbedLog = new Array(numItems).fill({});
             for (let row of results) {
                 let index = row.seed_rule_index;
-                program.seedRuleSeedbedLog[index].numAttempts = results.num_attempts;
-                program.seedRuleSeedbedLog[index].numFailedAttempts = results.failed_attempts;
-                program.seedRuleSeedbedLog[index].numSuccessfulAttempts = results.successful_attempts;
-                program.seedRuleSeedbedLog[index].current = results.current;
+                program.seedRuleSeedbedLog[index].numAttempts = row.num_attempts;
+                program.seedRuleSeedbedLog[index].numFailedAttempts = row.failed_attempts;
+                program.seedRuleSeedbedLog[index].numSuccessfulAttempts = row.successful_attempts;
+                program.seedRuleSeedbedLog[index].current = row.current;
             }
         }
         catch (error) {
@@ -738,6 +756,8 @@ const dbTransactions = {
     },
 
     async saveTemplateSeedbedLog(log, dbConnection) {
+        if (log.length === 0) return true;
+
         let dbConnOpened = false;
         if (dbConnection === null) {
             dbConnection = await dbConn.openConnection();
@@ -775,6 +795,8 @@ const dbTransactions = {
     },
 
     async saveSeedRuleSeedbedLog(log, dbConnection) {
+        if (log.length === 0) return true;
+
         let dbConnOpened = false;
         if (dbConnection === null) {
             dbConnection = await dbConn.openConnection();
