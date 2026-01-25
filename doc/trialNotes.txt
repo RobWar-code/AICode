@@ -1,3 +1,14 @@
+25/01/2025
+Halted Trial A17:
+    Performance much the same as on other occasions
+    reached rule loop 2.
+Restarted Trial A17:
+    Fix to SeedRule and Template seedbed logs.
+    Included facility to generate input params for the
+    entities at each invocation to help overcome
+    data lead score plateauing. Applied this to
+    one rule - Select Greater Than First Param.
+
 22/01/2025
 Trial A16:
 Ran for 2500 rounds, 10 loops. Slightly more

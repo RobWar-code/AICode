@@ -143,7 +143,7 @@ async function createTables() {
     sql += "current INT"
     sql += ")";
     await connection.query(sql);
-   
+*/   
     sql = "DROP TABLE transfer_entity";
     await connection.query(sql);
 
@@ -174,7 +174,7 @@ async function createTables() {
     sql += "final_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+/*
     // sql = "DROP TABLE transfer_entity_output";
     // await connection.query(sql);
 
@@ -200,7 +200,7 @@ async function createTables() {
     sql += "input_block VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+*/
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -222,7 +222,7 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-*/
+
     connection.close();
 }
 

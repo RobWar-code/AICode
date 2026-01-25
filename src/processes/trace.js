@@ -73,7 +73,7 @@ const trace = {
 
     nextStep() {
         let start = false;
-        this.stepExecute(this.traceWindow, this.entity, start)
+        this.stepExecute(this.traceWindow, this.entity, start);
     },
 
     stepExecute(traceWindow, entity, start) {

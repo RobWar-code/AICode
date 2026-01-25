@@ -143,7 +143,7 @@ async function createTables() {
     sql += "current INT"
     sql += ")";
     await connection.query(sql);
-
+*/
     sql = "DROP TABLE transfer_entity";
     await connection.query(sql);
 
@@ -175,6 +175,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
+/*
     // sql = "DROP TABLE transfer_entity_output";
     // await connection.query(sql);
 

@@ -22,7 +22,7 @@ Jobs Due
         * Database - entity set transfer considerations
             dbTransactions.saveTransferEntitySet
         * Do initial testing
-        Test Parallel Mode
+        * Test Parallel Mode
             Test MySql
                 * Transfers
                 * Database
@@ -33,10 +33,10 @@ Jobs Due
                 * Transfers
             Test stdio
                 * Transfers
-        Test Serial Mode
+        * Test Serial Mode
             * Test MySql
             * Test Sqlite
-        Update README.md
+        * Update README.md
 
     * Add a table of number of extant entities by breed method allowing for frequency of use
 

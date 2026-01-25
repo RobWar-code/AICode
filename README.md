@@ -350,6 +350,14 @@ being operated once the previous is solved.
 The solution to each rule is saved as the system progresses.
 These solutions are used as random seed to each new rule.
 
+##### Rule Inputs/Outputs
+
+Rules are supplied with input data, either included with
+the rule or added automatically as the entity is created.
+The advantage of the latter method is that it may
+overcome accidental plateauing of scores from spurious
+output matches.
+
 ##### Breed Methods
 
 In addition to each solution being saved as it is completed,
