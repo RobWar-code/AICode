@@ -1,3 +1,8 @@
+Trial A18:
+    Add rule: Multiply Params by 100
+    Deduplication of best sets re-introduced
+    Set rounds per rule to 4
+
 25/01/2025
 Halted Trial A17:
     Performance much the same as on other occasions

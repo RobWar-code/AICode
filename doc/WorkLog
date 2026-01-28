@@ -7,6 +7,10 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
+    Clear-out duplicated solutions in the bestsets.
+
+    Include byte/instruction linkage data in the weighting table
+
     Add new type of rule in which parameters are supplied automatically to the entity
         * Setup the function array in rulesets
         * Flag the applicable rules (autoParams: true)
@@ -50,6 +54,8 @@ Jobs Due
     Where the outputs are known display them
 
     Add Rules
+        Extract Params Separated By ;
+        Multiply Params By 100
         * Outputs From Alternate Inputs
         * Select Second and Third of Threes
         * Params Not Equal To First

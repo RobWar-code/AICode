@@ -637,8 +637,9 @@ class MainControlParallel {
  
         if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
             ++this.lapCounter;
-            if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0)) {
+            if (!thresholdReached && this.bestSetNum === 0 && this.numRounds > rulesets.ruleStartRound) {
                 // Clearance Pass
+                console.log("Clearance Pass - deduplication")
                 this.restartSets();
             }
             else if (thresholdReached && this.runningSingleRule) return;

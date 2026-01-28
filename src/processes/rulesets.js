@@ -8,9 +8,9 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 137,
-    maxRuleId: 136,
-    maxRoundsPerRule: 3,
+    numRules: 138,
+    maxRuleId: 137,
+    maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
     scoreList: [],
@@ -29,6 +29,7 @@ const rulesets = {
     numRuleLoops: 0,
     ruleSequenceNum: 0,
     maxRuleSequenceNum: 0,
+    ruleStartRound: 0,
     ruleRounds: [], // {ruleId:, completed:, start:, end:, ruleLoopEnd:, used:}
     weightingTable: [], // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
     seedRuleNum: 9,
@@ -1537,6 +1538,30 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getMultiplyParamsBy10RequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Multiply Params by 100", ruleId: 137,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[0,2,1,1,2,0,0,1,1,2,0,1,0,2,1,2]],
+                sampleOut: [],
+                paramsIn: [
+                    [0,1,2],
+                    [2,1,0]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getMultiplyParamsBy100RequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamsBy100Inputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamsBy100Outputs;
 
         this.scoreList.push(
             {rule: "Check For Carry", ruleId: 132,
@@ -6296,6 +6321,47 @@ const rulesets = {
         return outputList;
     },
 
+    getMultiplyParamsBy100RequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                let r = v * 100;
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    makeMultiplyParamsBy100Inputs(self) {
+        let inputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 16; j++) {
+                let v = Math.floor(Math.random() * 3);
+                inputs.push(v);
+            }
+            inputList.push(inputs);
+        }
+
+        let outputList = self.makeMultiplyParamsBy100Outputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeMultiplyParamsBy100Outputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                let r = (v * 100) & 255;
+                output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     getCheckForCarryRequiredOutputs(self, inputList) {
         let outputList = [];
 
@@ -8111,6 +8177,7 @@ const rulesets = {
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
             // Find the next non-completed rule
             this.ruleRounds[newRuleIndex].start = roundNum;
+            this.ruleStartRound = roundNum;
             this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
         }
         else if (roundNum >= this.ruleRounds[ruleIndex].start + this.maxRoundsPerRule) {
@@ -8130,6 +8197,7 @@ const rulesets = {
             this.ruleSequenceNum = this.findNextNonCompleteRule(this.ruleSequenceNum);
             let newRuleIndex = this.getRuleIndexFromSequence(this.ruleSequenceNum);
             this.ruleRounds[newRuleIndex].start = roundNum;
+            this.ruleStartRound = roundNum;
             roundThresholdReached = true;
         }
         else {

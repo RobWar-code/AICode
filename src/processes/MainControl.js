@@ -115,9 +115,8 @@ class MainControl {
                 return;           
             }
         }
-        if (!thresholdReached && this.numRounds > 0 && (this.numRounds % this.clearanceRound === 0 && 
-            this.bestSetNum === 0)) {
-            console.log("Clearance Round");
+        if (!thresholdReached && this.bestSetNum === 0 && this.numRounds > rulesets.ruleStartRound) {
+            console.log("Clearance Round - deduplication");
             // Clearance Pass
             this.restartSets();
         }
@@ -239,7 +238,7 @@ class MainControl {
     }
 
     eliminateDuplicateScores(scoreList) {
-        let maxSame = 3;
+        let maxSame = 5;
         let count = 0;
         let currentScore = 0;
         for (let item of scoreList) {
