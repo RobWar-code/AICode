@@ -352,6 +352,9 @@ const dbTransactions = {
         }
 
         // Clear the previous entries
+        let sql = "DELETE FROM weighting_link";
+        await dbConnection.query(sql);
+
         sql = "DELETE FROM weighting_table";
         await dbConnection.query(sql);
 
@@ -364,17 +367,26 @@ const dbTransactions = {
             let codePosition = index;
 
             // totalCodeOccurrences
-            let totalCodeOccurrences = codePositionItem.totalCodeOccurrences;
-            let occurrences = this.intArrayToString(codePositionItem.codeOccurrences, 256);
+            let totalOccurrences = codePositionItem.totalOccurrences;
+            let occurrencesArray = [];
+            for (let occurrenceItem of codePositionItem.codeOccurrences) {
+                occurrencesArray.push(occurrenceItem.occurrences);
+            }
+            let occurrences = this.intArrayToString(occurrencesArray, 256);
             let sql = "INSERT INTO weighting_table (code_position, total_occurrences, occurrences) VALUES (?, ?, ?)";
             try {
-                [results] = await dbConnection.execute(sql, [codePosition, totalCodeOccurrences, occurrences]);
+                [results] = await dbConnection.execute(sql, [codePosition, totalOccurrences, occurrences]);
                 ok = true;
             }
             catch(err) {
                 console.error("saveWeightingTable: Problem inserting into weighting_table");
                 throw err;
                 break;
+            }
+
+            // Save the weighting link data
+            if (ok) {
+                ok = await this.saveWeightingLinks(index, codePositionItem, dbConnection);
             }
 
             if (!ok) break;
@@ -385,6 +397,32 @@ const dbTransactions = {
         if (dbConnOpened) {
             dbConnection.end();
         }
+
+        return ok;
+    },
+
+    async saveWeightingLinks(codePosition, codePositionItem, dbConnection) {
+        let codeOccurrences = codePositionItem.codeOccurences;
+        let code = 0;
+        let ok = true;
+        for (let codeOccurrence of codeOccurrences) {
+            if (codeOccurrence.occurrences > 0) { 
+                for (let link of codeOccurrences.links) {
+                    try {
+                        let sql = "INSERT INTO weighting_link (code_position, code, link_code, occurrences) VALUES (?, ?, ?, ?)";
+                        [results] = dbConnection.execute(sql, [codePosition, code, link.code, link.occurrences]);
+                    }
+                    catch (error) {
+                        console.error("saveWeightingLinks: problem inserting code link");
+                        ok = false;
+                        throw error;
+                        break;
+                    }
+                }
+            }
+            if (!ok) break;
+            ++code;
+        } 
 
         return ok;
     },
@@ -410,13 +448,42 @@ const dbTransactions = {
         }
 
         if (ok && results.length > 0) {
+            let codePosition = 0;
             for (let row of results) {
                 let weightRowItem = {};
-                weightRowItem.totalCodeOccurrences = row.total_occurrences;
+                weightRowItem.totalOccurrences = row.total_occurrences;
+                weightRowItem.codeOccurrences = [];
                 // Do occurrences
                 let codeOccurrences = this.stringToIntArray(row.occurrences);
-                weightRowItem.codeOccurrences = codeOccurrences;
+                let code = 0;
+                for (let occurrences of codeOccurrences) {
+                    let occurrenceItem = {occurrences: occurrences, links: [], linksTotal: 0};
+                    // Get Links
+                    try {
+                        sql = `SELECT * FROM weighting_link WHERE code_position = ${codePosition} AND code = ${code} `;
+                        sql += `ORDER BY code_position, code`;
+                        let [linkResults] = dbConnection.execute(sql);
+                        let links = [];
+                        for (let item of linkResults) {
+                            let linkItem = {};
+                            occurrenceItem.linksTotal += item.link_occurrences;
+                            linkItem.code = linkResults.link_code;
+                            linkItem.occurrences = item.link_occurrences;
+                            links.push(linkItem);
+                        }
+                        occurrenceItem.links = links;
+                        weightRowItem.codeOccurrences.push(occurrenceItem);
+                    }
+                    catch(error) {
+                        console.error("loadWeightingTable: Problem fetching link - codePosition, code: ", codePosition, code);
+                        ok = false;
+                        throw error;
+                        break;
+                    }
+                    ++code;
+                }
                 rulesets.weightingTable.push(weightRowItem);
+                ++codePosition;
             }
         }
 

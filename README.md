@@ -378,13 +378,25 @@ halts and the fragment is added if a match is found.
 
 As successful solutions are found, the successful solutions are
 parsed to determine the frequency of occurrence of code values
-at each of the 256 possible byte positions. This constitutes
-the weightingTable. The total number of code occurrences is also
-recorded with the individual code occurrences:
+at each of the 256 possible byte positions. Further the following
+byte is recorded along with a count, to provide for a degree of code
+sequencing. 
+
+This constitutes the weightingTable. The total number of code occurrences 
+is also recorded with the individual code occurrences:
 
 [
     {
-        codeOccurrences[n, n, .... to 256 codes],
+        codeOccurrences: [ // to 256 codes,
+            {
+                occurrences: n,
+                links: [
+                    code: n,
+                    occurrences: n,
+                ]
+                linksTotal: n
+            }
+        ]
         totalCodeOccurrences: n
     },
     ...256 code positions

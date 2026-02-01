@@ -220,8 +220,37 @@ class Entity {
 
     createWeightedRandomProgram() {
         this.initialMemSpace = [];
+        let links = [];
+        let linksTotal = 0;
         for (let i = 0; i < 256; i++) {
-            let code = this.selectWeightedCode(i);
+            let code;
+            // Get Link Code
+            if (links.length > 0) {
+                code = this.selectWeightedLink(links, linksTotal);
+                // Get Next Link (if any)
+                if (i < 255) {
+                    let weightRow = rulesets.weightingTable[i + 1];
+                    links = weightRow.codeOccurrences[code].links;
+                    linksTotal = weightRow.codeOccurrences[code].linksTotal;
+                }
+                else {
+                    links = [];
+                    linksTotal = 0;
+                }
+            }
+            else {
+                code = this.selectWeightedCode(i);
+                // Get Links (if any)
+                if (i < 255) {
+                    let weightRow = rulesets.weightingTable[i];
+                    links = weightRow.codeOccurrences[code].links;
+                    linksTotal = weightRow.codeOccurrences[code].linksTotal;
+                }
+                else {
+                    links = [];
+                    linksTotal = 0;
+                }
+            }
             this.initialMemSpace.push(code);
         }
         this.breedMethod = "WeightedRandom";
@@ -229,18 +258,32 @@ class Entity {
 
     selectWeightedCode(codePosition) {
         let codeWeightItem = rulesets.weightingTable[codePosition];
-        let maxWeight = codeWeightItem.totalCodeOccurrences;
-        let codeWeights = codeWeightItem.codeOccurrences;
+        let maxWeight = codeWeightItem.totalOccurrences;
+        let codeOccurrences = codeWeightItem.codeOccurrences;
         let weight = 0;
         let r = Math.floor(Math.random() * maxWeight);
         let code = 0;
         for (let i = 0; i < 256; i++) {
-            if (codeWeights[i] > 0) {
-                weight += codeWeights[i];
-                if (weight > r) {
+            if (codeOccurrences[i].occurrences > 0) {
+                weight += codeOccurrences[i].occurrences;
+                if (weight >= r) {
                     code = i;
                     break;
                 }
+            }
+        }
+        return code;
+    }
+
+    selectWeightedLink(links, linksTotal) {
+        let r = Math.floor(Math.random() * linksTotal) + 1;
+        let total = 0;
+        let code;
+        for (let link of links) {
+            total += link.occurrences;
+            if (r <= total) {
+                code = link.code;
+                break;
             }
         }
         return code;
@@ -689,6 +732,8 @@ class Entity {
         let changeChance = 0.1;
         if (Math.random() < 0.2) changeChance = 0.3;
         let index = 0;
+        let lastCode = null;
+        let lastMod = null;
         for (let v of oldCode) {
             // Determine whether change occurs
             if (Math.random() < changeChance) {
@@ -699,32 +744,56 @@ class Entity {
                     if (newCode.length < this.memLength) {
                         newCode.push(v);
                     }
+                    lastMod = "duplicate";
+                    lastCode = v;
                 }
                 else if (c < 0.1 && newCode.length > 0 && newCode.length + 2 <= this.memLength) {
                     // Transpose
                     let oldV = newCode.pop();
                     newCode.push(v);
                     newCode.push(oldV);
+                    lastMod = "transpose";
+                    lastCode = oldV;
                 }
                 else if (c < 0.8) {
                     // Replace
-                    let n = this.selectWeightedCode(index);
+                    let n;
+                    if (lastCode != null) {
+                        // Use the link from the previous code
+                        n = this.selectWeightedLinkFromPrevious(index, lastCode);
+                    }
+                    else {
+                        n = this.selectWeightedCode(index);
+                    }
                     newCode.push(n);
+                    lastCode = n;
+                    lastMod = "replace";
                 }
                 else if (c < 0.9) {
                     // Insert
-                    let n = this.selectWeightedCode(index);
+                    let n;
+                    if (lastCode != null) {
+                        // Use the link from the previous code
+                        n = this.selectWeightedLinkFromPrevious(index, lastCode);
+                    }
+                    else {
+                        n = this.selectWeightedCode(index);
+                    }
                     newCode.push(n);
                     newCode.push(v);
+                    lastCode = v;
+                    lastMod = "insert";
                 }
                 else {
                     // Delete
-                    // Do nothing
+                    lastMod = "delete";
                 }
             }
             else {
                 // No change
                 newCode.push(v);
+                lastMod = "none";
+                lastCode = v;
             }
             ++index;
         }
@@ -740,6 +809,22 @@ class Entity {
         let entity = new Entity(entityNumber, this.instructionSet, asRandom, seeded, 
             cycleCounter, ruleSequenceNum, roundNum, newCode);
         return entity;
+    }
+
+    selectWeightedLinkFromPrevious(index, lastCode) {
+        let weightRow = rulesets.weightingTable[index - 1];
+        let codeOccurrences = weightRow.codeOccurrences;
+        let links = codeOccurrences[lastCode].links;
+        let linksTotal = codeOccurrences[lastCode].linksTotal;
+        let code;
+        if (links.length === 0) {
+            // Select the code occurences
+            code = this.selectWeightedCode(index);
+        }
+        else {
+            code = this.selectWeightedLink(links, linksTotal);
+        }
+        return code;
     }
 
     interbreed(mate, entityNumber, cycleCounter, roundNum) {

@@ -31,7 +31,22 @@ const rulesets = {
     maxRuleSequenceNum: 0,
     ruleStartRound: 0,
     ruleRounds: [], // {ruleId:, completed:, start:, end:, ruleLoopEnd:, used:}
-    weightingTable: [], // [{codeOccurrences: [n,n, ..to 256 terms], totalOccurrences: n}.. to 256 terms]
+    /* weightingTable: [
+        {
+            codeOccurrences: 
+            [
+                {
+                    occurrences: n, 
+                    links: [{code: n, occurrences: n]}], 
+                    linksTotal: n,
+                },
+                ... to 256 terms
+            ]
+            totalOccurrences: n
+        }.. to 256 terms
+    ]
+    */
+    weightingTable: [],
     seedRuleNum: 9,
     seedRuleMemSpaces: [],
     subOptRuleMemSpaces: [],
@@ -8210,16 +8225,37 @@ const rulesets = {
         this.weightingTable = [];
         for (let p = 0; p < 256; p++) {
             let codeWeightItem = {};
-            let codeOccurrences = new Array(256).fill(0)
-            let totalCodeOccurrences = 0;
+            let codeOccurrences = new Array(256).fill({occurrences: 0, links: [], linksTotal: 0})
+            let totalOccurrences = 0;
             for (let seed of this.seedRuleMemSpaces) {
                 let code = seed.memSpace[p];
                 if (code < 0 || code > 255) code = 255;
-                ++codeOccurrences[code];
-                ++totalCodeOccurrences;
+                ++codeOccurrences[code].occurrences;
+                // Get link data
+                if (p < 255) {
+                    let links = codeOccurrences[code].links;
+                    let nextCode = seed.memSpace[p + 1];
+                    // Search the existing links
+                    let found = false;
+                    let linkItem;
+                    for (linkItem of links) {
+                        if (linkItem.code === nextCode) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        ++linkItem.occurrences;
+                    }
+                    else {
+                        links.push({code: nextCode, occurrences: 1});
+                    }
+                    ++codeOccurrences[code].linksTotal;
+                }
+                ++totalOccurrences;
             }
-            codeWeightItem.codeOccurrences = codeOccurrences;
-            codeWeightItem.totalCodeOccurrences = totalCodeOccurrences;
+            codeWeightItem.codeOccurrences = codeOccurrences; 
+            codeWeightItem.totalOccurrences = totalOccurrences;
             this.weightingTable.push(codeWeightItem);
         }
         console.log("Made weighting table");

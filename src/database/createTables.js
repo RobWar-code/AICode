@@ -33,7 +33,7 @@ async function createTables() {
     sql += "rule_sequence_num INT";
     sql += ")";
     await connection.query(sql);
-*/
+
     sql = "DROP TABLE entity";
     await connection.query(sql);
 
@@ -55,7 +55,7 @@ async function createTables() {
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-/*
+
     sql = "DROP TABLE seed_rule";
     await connection.query(sql);
 
@@ -67,16 +67,30 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-    // sql = "DROP TABLE weighting_table";
-    // await connection.query(sql);
+*/
+    sql = "DROP TABLE weighting_table";
+    await connection.query(sql);
 
     sql = "CREATE TABLE weighting_table (";
     sql += "code_position INT UNIQUE PRIMARY KEY,";
     sql += "total_occurrences INT,"
-    sql += "occurrences VARCHAR(256)"
+    sql += "occurrences VARCHAR(256),"
     sql += ")";
     await connection.query(sql);
 
+    // sql = "DROP TABLE weighting_link";
+    // await connection.query(sql);
+
+    sql = "CREATE TABLE weighting_link (";
+    sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
+    sql += "code_position INT,";
+    sql += "code INT,";
+    sql += "link_code INT,";
+    sql += "link_occurrences INT";
+    sql += ")";
+    await connection.query(sql);
+
+/*
     sql = "CREATE TABLE bests_store (";
     sql += "id INT AUTO_INCREMENT PRIMARY KEY,";
     sql += "rule_id INT,";
@@ -143,7 +157,7 @@ async function createTables() {
     sql += "current INT"
     sql += ")";
     await connection.query(sql);
-*/
+
     sql = "DROP TABLE transfer_entity";
     await connection.query(sql);
 
@@ -175,7 +189,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-/*
     // sql = "DROP TABLE transfer_entity_output";
     // await connection.query(sql);
 
@@ -202,7 +215,7 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
     
-*/
+
     sql = "DROP TABLE batch_data";
     await connection.query(sql);
     
@@ -224,7 +237,7 @@ async function createTables() {
     sql += "cross_set_count INT";
     sql += ")";
     await connection.query(sql);
-
+*/
     connection.end();
 }
 
@@ -233,6 +246,9 @@ async function clearTables(connection) {
 
     sql = "DELETE FROM weighting_table";
     await connection.query(sql);
+
+    // sql = "DELETE FROM weighting_link";
+    // await connection.query(sql);
 
     sql = "DELETE FROM bests_store";
     await connection.query(sql);
