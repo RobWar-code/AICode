@@ -11,7 +11,7 @@ const weightsDisplay = {
         html +=    "</tr>";
         for (let codePosition = 0; codePosition < weightingTable.length; codePosition++) {
             let weightItem = weightingTable[codePosition];
-            let total = weightItem.totalCodeOccurrences;
+            let total = weightItem.totalOccurrences;
             let occurrences = weightItem.codeOccurrences;
             html += "<tr>";
             html +=     `<td>${codePosition}</td>`;
@@ -21,7 +21,7 @@ const weightsDisplay = {
                 html +=    "<tr>";
                 html +=       `<td>${i * 16})</td>`
                 for (let j = 0; j < 16; j++) {
-                    html +=   `<td>${occurrences[p]}</td>`;
+                    html +=   `<td class="weightsActionCell" data-codePosition="${codePosition}" data-code="${p}">${occurrences[p].occurrences}</td>`;
                     ++p;
                 }
                 html +=    "</tr>";

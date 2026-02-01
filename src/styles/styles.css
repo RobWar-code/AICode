@@ -183,7 +183,7 @@ li {
 }
 
 #weightsMain {
-    height: 500px;
+    height: 250px;
     overflow: auto;
 }
 
@@ -201,6 +201,10 @@ li {
     width: 32px;
     border-collapse: collapse;
     border: 1px solid black;
+}
+
+#weightsLinks {
+    display: none;
 }
 
 /* Breed Table */

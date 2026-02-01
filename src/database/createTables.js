@@ -74,7 +74,7 @@ async function createTables() {
     sql = "CREATE TABLE weighting_table (";
     sql += "code_position INT UNIQUE PRIMARY KEY,";
     sql += "total_occurrences INT,"
-    sql += "occurrences VARCHAR(256),"
+    sql += "occurrences VARCHAR(256)"
     sql += ")";
     await connection.query(sql);
 

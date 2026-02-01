@@ -13,8 +13,8 @@ Jobs Due
         Update README
         + Adjust table creation
         + Adjust weighting table save/load functions
-        Adjust weightedRandom code generation
-        Adjust weightedMonoclonalByte breed operation
+        + Adjust weightedRandom code generation
+        + Adjust weightedMonoclonalByte breed operation
         Adjust the weighting table display
 
     Add new type of rule in which parameters are supplied automatically to the entity

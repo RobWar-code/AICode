@@ -402,15 +402,16 @@ const dbTransactions = {
     },
 
     async saveWeightingLinks(codePosition, codePositionItem, dbConnection) {
-        let codeOccurrences = codePositionItem.codeOccurences;
+        let codeOccurrences = codePositionItem.codeOccurrences;
         let code = 0;
         let ok = true;
         for (let codeOccurrence of codeOccurrences) {
             if (codeOccurrence.occurrences > 0) { 
-                for (let link of codeOccurrences.links) {
+                let links = codeOccurrence.links;
+                for (let link of links) {
                     try {
-                        let sql = "INSERT INTO weighting_link (code_position, code, link_code, occurrences) VALUES (?, ?, ?, ?)";
-                        [results] = dbConnection.execute(sql, [codePosition, code, link.code, link.occurrences]);
+                        let sql = "INSERT INTO weighting_link (code_position, code, link_code, link_occurrences) VALUES (?, ?, ?, ?)";
+                        [results] = await dbConnection.execute(sql, [codePosition, code, link.code, link.occurrences]);
                     }
                     catch (error) {
                         console.error("saveWeightingLinks: problem inserting code link");
