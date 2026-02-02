@@ -7,15 +7,20 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    Clear-out duplicated solutions in the bestsets.
+    * Clear-out duplicated solutions in the bestsets.
+        Check condition for deduplication
 
     Include byte/instruction linkage data in the weighting table
         Update README
         + Adjust table creation
         + Adjust weighting table save/load functions
+            Set weighting table save to when rule completed
         + Adjust weightedRandom code generation
         + Adjust weightedMonoclonalByte breed operation
+        Test parallel
+        Test serial
         Adjust the weighting table display
+
 
     Add new type of rule in which parameters are supplied automatically to the entity
         * Setup the function array in rulesets

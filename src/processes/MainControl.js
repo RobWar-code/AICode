@@ -82,7 +82,7 @@ class MainControl {
         this.seedRuleSeedbedLog = [];
     }
 
-    doProcess() {
+    async doProcess() {
         let startBestSetNum = this.bestSetNum;
         this.absBestSetNum = this.bestSetNum;
         this.mainProcess.mainLoop(this);
@@ -107,7 +107,7 @@ class MainControl {
             ++this.numRounds;
             dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
             // Check for rule threshold reached
-            thresholdReached = this.checkRuleThreshold();
+            thresholdReached = await this.checkRuleThreshold();
             if (!thresholdReached) {
                 mainControlShared.checkSeedbedThresholds(this);
             }
@@ -147,7 +147,7 @@ class MainControl {
         rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
-    checkRuleThreshold() {
+    async checkRuleThreshold() {
         // Get the best set scores
         let index = 0;
         let highScore = 0;
@@ -183,7 +183,10 @@ class MainControl {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            let roundThresholdReached = rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            let roundThresholdReached = await rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            if (rulesets.seedRuleSet) {
+                await dbTransactions.saveWeightingTable(null);
+            }
             if (rulesets.seedRuleSet || roundThresholdReached) {
                 console.log("Clearing best sets");
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {
@@ -552,17 +555,17 @@ class MainControl {
         return a;
     }
 
-    startAtRule(ruleSequenceNum) {
+    async startAtRule(ruleSequenceNum) {
         console.log("ruleSequenceNum:", ruleSequenceNum);
         this.ruleSequenceNum = ruleSequenceNum;
         rulesets.ruleSequenceNum = ruleSequenceNum;
         this.bestSetNum = 0;
         this.bestSets = new Array(this.numBestSets).fill([]);
-        this.doProcess();
+        await this.doProcess();
         this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }
 
-    startSelectedRule(ruleNum) {
+    async startSelectedRule(ruleNum) {
         this.ruleSequenceNum = ruleNum;
         rulesets.ruleSequenceNum = ruleNum;
         this.runningSingleRule = true;
@@ -590,7 +593,7 @@ class MainControl {
         this.crossSetCount = 0;
         this.startTime = Date.now();
 
-        this.doProcess();
+        await this.doProcess();
         this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }
 

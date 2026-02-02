@@ -99,7 +99,7 @@ class BatchProcess {
         if (rulesets.weightingTable.length > 0) {
             console.error("weightingTable occurrences length, total", 
                 rulesets.weightingTable[0].codeOccurrences.length, 
-                rulesets.weightingTable[0].totalCodeOccurrences);
+                rulesets.weightingTable[0].totalOccurrences);
         }
         
         // Load the seedbed data

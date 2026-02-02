@@ -8158,7 +8158,7 @@ const rulesets = {
         return score;
     },
 
-    seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
+    async seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
         let roundThresholdReached = false;
         let passMark = 0.98
         this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
@@ -8181,7 +8181,7 @@ const rulesets = {
             this.ruleRounds[ruleIndex].completed = true;
             this.seedRuleSet = true;
 
-            this.makeWeightingTable();
+            await this.makeWeightingTable();
 
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
@@ -8214,6 +8214,7 @@ const rulesets = {
             this.ruleRounds[newRuleIndex].start = roundNum;
             this.ruleStartRound = roundNum;
             roundThresholdReached = true;
+            this.seedRuleSet = false;
         }
         else {
             this.seedRuleSet = false;
@@ -8221,13 +8222,17 @@ const rulesets = {
         return roundThresholdReached;
     },
 
-    makeWeightingTable() {
+    async makeWeightingTable() {
         this.weightingTable = [];
+        // Debug 
+        let seedCount = 0;
         for (let p = 0; p < 256; p++) {
             let codeWeightItem = {};
-            let codeOccurrences = new Array(256).fill({occurrences: 0, links: [], linksTotal: 0})
+            let codeOccurrences = Array.from({length:256}, () => ({occurrences: 0, links: [], linksTotal: 0}));
             let totalOccurrences = 0;
             for (let seed of this.seedRuleMemSpaces) {
+                // Debug
+                ++seedCount;
                 let code = seed.memSpace[p];
                 if (code < 0 || code > 255) code = 255;
                 ++codeOccurrences[code].occurrences;

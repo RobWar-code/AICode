@@ -627,7 +627,7 @@ class MainControlParallel {
         ++this.numRounds;
         await dbTransactions.saveSession(this.mainWindow, this, rulesets.ruleSequenceNum);
         // Check for rule threshold reached
-        let thresholdReached = this.checkRuleThreshold();
+        let thresholdReached = await this.checkRuleThreshold();
         if (!thresholdReached) {
             mainControlShared.checkSeedbedThresholds(this);
         }
@@ -689,7 +689,7 @@ class MainControlParallel {
         rulesets.bestEntity = this.bestSets[best][0]; 
     }
 
-    checkRuleThreshold() {
+    async checkRuleThreshold() {
         // Get the best set scores
         let index = 0;
         let highScore = 0;
@@ -727,7 +727,10 @@ class MainControlParallel {
         else {
             let memSpace = entity.initialMemSpace.concat();
             let score = entity.score;
-            let roundThresholdReached = rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            let roundThresholdReached = await rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            if (rulesets.seedRuleSet) {
+                await dbTransactions.saveWeightingTable(null);
+            }
             this.ruleSequenceNum = rulesets.ruleSequenceNum;
             if (rulesets.seedRuleSet || roundThresholdReached) {
                 if (rulesets.ruleSequenceNum <= rulesets.maxRuleSequenceNum) {

@@ -48,13 +48,6 @@ const dbTransactions = {
         if (resultOK) console.log("Saved Seed Rules", resultOK);
 
         if (resultOK) {
-            // Save the weighting table
-            resultOK = await this.saveWeightingTable(dbConnection);
-        }
-        if (resultOK) console.log("Saved weightingTable");
-        else console.log("Problem with save weighting table");
-
-        if (resultOK) {
             // Save sub-opt rules
             resultOK = await this.saveSubOptRules(sessionId, dbConnection);
         }
@@ -463,12 +456,12 @@ const dbTransactions = {
                     try {
                         sql = `SELECT * FROM weighting_link WHERE code_position = ${codePosition} AND code = ${code} `;
                         sql += `ORDER BY code_position, code`;
-                        let [linkResults] = dbConnection.execute(sql);
+                        let [linkResults] = await dbConnection.execute(sql);
                         let links = [];
                         for (let item of linkResults) {
                             let linkItem = {};
                             occurrenceItem.linksTotal += item.link_occurrences;
-                            linkItem.code = linkResults.link_code;
+                            linkItem.code = item.link_code;
                             linkItem.occurrences = item.link_occurrences;
                             links.push(linkItem);
                         }
@@ -486,6 +479,32 @@ const dbTransactions = {
                 rulesets.weightingTable.push(weightRowItem);
                 ++codePosition;
             }
+        }
+
+        // Debug
+        if (ok && rulesets.weightingTable.length > 0) {
+            let totalOccurrences = 0;
+            let linksCount = 0;
+            let linkTotals = 0;
+            for (let weightRow of rulesets.weightingTable) {
+                totalOccurrences += weightRow.totalOccurrences;
+                for (let occurrence of weightRow.codeOccurrences) {
+                    linksCount += occurrence.links.length;
+                    linkTotals += occurrence.linksTotal;
+                    let links = occurrence.links;
+                    for (let link of links) {
+                        if (typeof link.code === 'undefined') {
+                            console.error("loadWeightingTable: undefined code in link");
+                            throw "Code error";
+                        }
+                        if (typeof link.occurrences === 'undefined') {
+                            console.error("loadWeightingTable: undefined link occurrences");
+                            throw "code error";
+                        }
+                    }
+                }
+            }
+            console.error("loadWeightingTable: totalOccurrences:", totalOccurrences, "linksCount:", linksCount, "linkTotals:", linkTotals);
         }
 
         if (dbConnOpened) {

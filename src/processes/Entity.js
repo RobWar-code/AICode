@@ -261,7 +261,7 @@ class Entity {
         let maxWeight = codeWeightItem.totalOccurrences;
         let codeOccurrences = codeWeightItem.codeOccurrences;
         let weight = 0;
-        let r = Math.floor(Math.random() * maxWeight);
+        let r = Math.floor(Math.random() * maxWeight) + 1;
         let code = 0;
         for (let i = 0; i < 256; i++) {
             if (codeOccurrences[i].occurrences > 0) {
@@ -278,10 +278,10 @@ class Entity {
     selectWeightedLink(links, linksTotal) {
         let r = Math.floor(Math.random() * linksTotal) + 1;
         let total = 0;
-        let code;
+        let code = 0;
         for (let link of links) {
             total += link.occurrences;
-            if (r <= total) {
+            if (total >= r) {
                 code = link.code;
                 break;
             }
@@ -758,7 +758,7 @@ class Entity {
                 else if (c < 0.8) {
                     // Replace
                     let n;
-                    if (lastCode != null) {
+                    if (lastCode != null && index != 0) {
                         // Use the link from the previous code
                         n = this.selectWeightedLinkFromPrevious(index, lastCode);
                     }
@@ -772,7 +772,7 @@ class Entity {
                 else if (c < 0.9) {
                     // Insert
                     let n;
-                    if (lastCode != null) {
+                    if (lastCode != null && index != 0) {
                         // Use the link from the previous code
                         n = this.selectWeightedLinkFromPrevious(index, lastCode);
                     }
@@ -803,6 +803,7 @@ class Entity {
         else if (newCode.length < this.memLength) {
             newCode = newCode.concat(new Array(this.memLength - newCode.length).fill(0));
         }
+        this.qualityControlIns("weightedMonoclonalByte", newCode);
         let asRandom = false;
         let seeded = false;
         let ruleSequenceNum = null;
