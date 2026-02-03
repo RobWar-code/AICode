@@ -81,7 +81,7 @@ class BatchProcess {
         rulesets.initialise();
     }
 
-    async startProcess(entityData) {
+    async startProcess(stdioData) {
         await dbConn.openConnection();
         // Fetch the round data
         let session = await dbTransactions.fetchSession();
@@ -93,13 +93,15 @@ class BatchProcess {
         await dbTransactions.loadFragments();
         await dbTransactions.fetchRuleSeeds();
         await dbTransactions.fetchBestsStore();
-        await dbTransactions.loadWeightingTable(null);
-        // Debug
-        console.error("loaded WeightingTable, length:", rulesets.weightingTable.length);
-        if (rulesets.weightingTable.length > 0) {
-            console.error("weightingTable occurrences length, total", 
-                rulesets.weightingTable[0].codeOccurrences.length, 
-                rulesets.weightingTable[0].totalOccurrences);
+        if (workerDataTransfer != "stdio") {
+            await dbTransactions.loadWeightingTable(null);
+            // Debug
+            console.error("loaded WeightingTable, length:", rulesets.weightingTable.length);
+            if (rulesets.weightingTable.length > 0) {
+                console.error("weightingTable occurrences length, total", 
+                    rulesets.weightingTable[0].codeOccurrences.length, 
+                    rulesets.weightingTable[0].totalOccurrences);
+            }
         }
         
         // Load the seedbed data
@@ -120,8 +122,9 @@ class BatchProcess {
             await this.fetchFSBatchEntities();
         }
         else {
-            this.fetchStdioBatchEntities(entityData);
-            console.error("[LOG] workerApp:", this.batchNum, "Loaded batch entities", entityData.length);
+            this.fetchStdioBatchEntities(stdioData.data);
+            console.error("[LOG] workerApp:", this.batchNum, "Loaded batch entities", stdioData.data.length, stdioData.weightingTable.length);
+            rulesets.weightingTable = stdioData.weightingTable;
         }
 
         // Main Process
@@ -398,6 +401,7 @@ else {
     rl.on('line', (line) => {
         let message;
         try {
+            console.error("[LOG] Worker Collecting Data");
             message = JSON.parse(line);
             console.error(`[LOG] Worker Got Data ${process.pid}`);
         } catch (err) {
@@ -406,7 +410,7 @@ else {
         }
         if (message.type === "entityData") {
             (async () => { 
-                await batchProcess.startProcess(message.data);
+                await batchProcess.startProcess(message);
                 await sleep(200);
                 process.exit(0);
             })();

@@ -205,6 +205,19 @@ li {
 
 #weightsLinks {
     display: none;
+    overflow: auto;
+}
+
+#weightsLinksTable {
+    border: 1px solid black;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#weightsLinksTable td {
+    width: 58px;
+    border-collapse: collapse;
+    border: 1px solid black;
 }
 
 /* Breed Table */

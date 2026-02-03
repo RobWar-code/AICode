@@ -7,58 +7,7 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    * Clear-out duplicated solutions in the bestsets.
-        Check condition for deduplication
-
-    Include byte/instruction linkage data in the weighting table
-        Update README
-        + Adjust table creation
-        + Adjust weighting table save/load functions
-            Set weighting table save to when rule completed
-        + Adjust weightedRandom code generation
-        + Adjust weightedMonoclonalByte breed operation
-        Test parallel
-        Test serial
-        Adjust the weighting table display
-
-
-    Add new type of rule in which parameters are supplied automatically to the entity
-        * Setup the function array in rulesets
-        * Flag the applicable rules (autoParams: true)
-        * Provide first applicable rule
-        * Make the change to entity.js (set-up of initial params and required outputs)
-        * Modify rulesets.getScore to account of entity based parameters and required outputs
-        * Modify IOC A to allow for required outputs in entity
-        * Modify the entity display functions
-        Consider impact on Trace - preserve params?
-        * Consider impact on scoring issues
-        * Consider clone entity or fetchInputsOutputs.
-        * Database - save/load requiredOutputs/initialParamsList from entity
-        * Database - entity set transfer considerations
-            dbTransactions.saveTransferEntitySet
-        * Do initial testing
-        * Test Parallel Mode
-            Test MySql
-                * Transfers
-                * Database
-            Test SqlLite
-                * Transfers
-                * Database
-            Test FileSystem
-                * Transfers
-            Test stdio
-                * Transfers
-        * Test Serial Mode
-            * Test MySql
-            * Test Sqlite
-        * Update README.md
-
-    * Add a table of number of extant entities by breed method allowing for frequency of use
-
     Remove Max Score from display
-
-    * Use rule id on round rules file, to allow for additional rules
-        to be loaded before a run.
 
     Display Sample In/Out in groups of 16
 
@@ -67,27 +16,6 @@ Jobs Due
     Add Rules
         Extract Params Separated By ;
         Multiply Params By 100
-        * Outputs From Alternate Inputs
-        * Select Second and Third of Threes
-        * Params Not Equal To First
-        * Sample In Not Equal To Sample Out
-        * Check out Sample In Plus Sample Out
-        * Check for Carry
-        * Multiply First Of Pairs By 10
-        * Get First Threes Greater Than First
-        * Get First from Threes
-        * Count Pairs in First Param
-        * Count Triplets in First Param
-        * Get Pairs
-        * Get Triplets
-        * Check rule LoadMem - scoring may be wrong
-        * count first param from second
-        * Count Even Numbers From Fives
-        * Count Odd Numbers From Fives
-        * Add first sample in
-        * Subtract first sample in
-        * Add first sample out
-        * Subtract first sample out
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's
@@ -169,6 +97,83 @@ Jobs Due
     Continue the analysis
 
 Jobs Done
+
+    03/02/2025
+    
+    * Use rule id on round rules file, to allow for additional rules
+        to be loaded before a run.
+
+    * Clear-out duplicated solutions in the bestsets.
+        Check condition for deduplication
+
+    * Include byte/instruction linkage data in the weighting table
+        * Update README
+        * Adjust table creation
+        * Adjust weighting table save/load functions
+            * Set weighting table save to when rule completed
+        * Adjust weightedRandom code generation
+        * Adjust weightedMonoclonalByte breed operation
+        * Allow for stdio transfer to batch workers
+        * Test parallel
+        * Test serial
+        * Adjust the weighting table display
+
+
+    Add new type of rule in which parameters are supplied automatically to the entity
+        * Setup the function array in rulesets
+        * Flag the applicable rules (autoParams: true)
+        * Provide first applicable rule
+        * Make the change to entity.js (set-up of initial params and required outputs)
+        * Modify rulesets.getScore to account of entity based parameters and required outputs
+        * Modify IOC A to allow for required outputs in entity
+        * Modify the entity display functions
+        * Consider impact on Trace - preserve params?
+        * Consider impact on scoring issues
+        * Consider clone entity or fetchInputsOutputs.
+        * Database - save/load requiredOutputs/initialParamsList from entity
+        * Database - entity set transfer considerations
+            dbTransactions.saveTransferEntitySet
+        * Do initial testing
+        * Test Parallel Mode
+            Test MySql
+                * Transfers
+                * Database
+            Test SqlLite
+                * Transfers
+                * Database
+            Test FileSystem
+                * Transfers
+            Test stdio
+                * Transfers
+        * Test Serial Mode
+            * Test MySql
+            * Test Sqlite
+        * Update README.md
+
+    * Add a table of number of extant entities by breed method allowing for frequency of use
+
+    * Add Rules
+        * Outputs From Alternate Inputs
+        * Select Second and Third of Threes
+        * Params Not Equal To First
+        * Sample In Not Equal To Sample Out
+        * Check out Sample In Plus Sample Out
+        * Check for Carry
+        * Multiply First Of Pairs By 10
+        * Get First Threes Greater Than First
+        * Get First from Threes
+        * Count Pairs in First Param
+        * Count Triplets in First Param
+        * Get Pairs
+        * Get Triplets
+        * Check rule LoadMem - scoring may be wrong
+        * count first param from second
+        * Count Even Numbers From Fives
+        * Count Odd Numbers From Fives
+        * Add first sample in
+        * Subtract first sample in
+        * Add first sample out
+        * Subtract first sample out
 
     28/12/2025
     

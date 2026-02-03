@@ -186,9 +186,11 @@ class MainControlParallel {
                 if (this.spanNum === this.numSpans - 1 && processNum === this.numProcesses - 1 && this.finalBatchLength > 0) {
                     batchLength = this.finalBatchLength;
                 }
+                let weightingJSON = JSON.stringify(rulesets.weightingTable);
                 entityJSONData = 
                     "{\"type\":\"entityData\", \"data\":" + 
                     fsTransactions.parentPrepareBatchJSONSet(this.bestSets, batchStart, batchLength) +
+                    `, "weightingTable": ${weightingJSON}` +
                     "}\n";
             }
             // Spawn the processes
@@ -274,8 +276,9 @@ class MainControlParallel {
 
         // If using stdio, transfer the entity data
         if (workerDataTransfer === "stdio") {
-            await sleep(200);
+            await sleep(400);
             let dataSentOK = worker.stdin.write(batchEntityJSON);
+            console.log("sent stdio json");
             if (!dataSentOK) {
                 console.warn(`spawnProcess - data send issue worker ${processNum}`);
                 worker.stdin.once('drain', () => {

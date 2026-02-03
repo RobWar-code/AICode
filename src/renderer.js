@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const breedTableButton = document.getElementById('breedTableButton');
     const breedTableDismiss = document.getElementById('breedTableDismiss');
     const weightsDismiss = document.getElementById('weightsDismiss');
+    const weightsTable = document.getElementById("weightsTable");
     const logCompletionsButton = document.getElementById('logCompletionsButton');
     const haltProcessButton = document.getElementById('haltProcessButton');
     const insSetListButton = document.getElementById('insSetListButton');
@@ -216,6 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     viewWeightsButton.addEventListener('click', (event) => {
         ipcRenderer.send("fetchWeightingTable", 0);
+    });
+
+    weightsTable.addEventListener('click', (event) => {
+        if (event.target.classList.contains("weightsActionCell")) {
+            let codePosition = parseInt(event.target.dataset.codePosition);
+            let code = parseInt(event.target.dataset.code);
+            weightsDisplay.displayWeightLinks(codePosition, code);
+        }
     });
 
     weightsDismiss.addEventListener('click', (event) => {
