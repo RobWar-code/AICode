@@ -518,10 +518,10 @@ class Entity {
 
         const duplicateChance = 0.1;
         const transposeChance = 0.15;
-        const replaceChance = 0.6;
-        const insertChance = 0.75;
-        const deleteChance = 0.97;
-        const ruleSeedFragmentChance = 0.985;
+        const replaceChance = 0.45;
+        const insertChance = 0.8;
+        const deleteChance = 0.95;
+        const ruleSeedFragmentChance = 0.98;
         const codeFragmentChance = 1.0;
         const numIns = this.instructionSet.numIns;
         let newCodeSegment = [];
@@ -690,12 +690,12 @@ class Entity {
                     newCode.push(v);
                     newCode.push(oldV);
                 }
-                else if (c < 0.5) {
+                else if (c < 0.4) {
                     // Replace
                     let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
                     newCode.push(n);
                 }
-                else if (c < 0.75) {
+                else if (c < 0.85) {
                     // Insert
                     let n = Math.floor(Math.random() * (this.dataMaxValue + 1));
                     newCode.push(n);

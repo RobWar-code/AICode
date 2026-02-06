@@ -1,3 +1,8 @@
+Trial A20:
+    Increased frequency of insert in monoclonalIns and monoclonalByte
+    breed operations. To allow for increased chance of more 
+    sophistication.
+
 03/02/2026
 Halted Trial A18 at loop 12, 3750 rounds
 usual rules completed, 1 less and 9 more
