@@ -755,7 +755,7 @@ class Entity {
                     lastMod = "transpose";
                     lastCode = oldV;
                 }
-                else if (c < 0.8) {
+                else if (c < 0.6) {
                     // Replace
                     let n;
                     if (lastCode != null && index != 0) {
