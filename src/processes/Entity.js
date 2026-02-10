@@ -441,13 +441,13 @@ class Entity {
         let newEntity = null;
         this.crossSetBreed = false;
 
-        if (cycleCounter < this.interbreedCycle || Math.random() < 0.6 || mateEntity === null) {
+        if (cycleCounter < this.interbreedCycle || Math.random() < 0.4 || mateEntity === null) {
             if (Math.random() < 0.5) {
                 newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "MonoclonalIns";
             }
             else {
-                if (rulesets.weightingTable.length > 0 && Math.random() < 0.9) {
+                if (rulesets.weightingTable.length > 0 && Math.random() < 0.5) {
                     newEntity = this.weightedMonoclonalByteBreed(entityNumber, cycleCounter, roundNum);
                     newEntity.breedMethod = "WeightedMonoclonalByte";
                 }
@@ -459,7 +459,7 @@ class Entity {
         }
         else {
             let interbreedChance = Math.random();
-            if (interbreedChance < 0.3) {
+            if (interbreedChance < 0.4) {
                 newEntity = this.interbreed(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "Interbreed";
                 if (crossSet) this.crossSetBreed = true;

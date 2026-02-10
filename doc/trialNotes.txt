@@ -1,7 +1,17 @@
+Trial A21:
+    Add Rules:
+        Extract Semicolon Separated
+        Triplets of Param Increments
+        
+09/02/2026
+Halted trial A19 at round 4360 (14 loops)
+Rules gained: 12, lost: 8.
+
 Trial A20:
     Increased frequency of insert in monoclonalIns 
-    and monoclonalByte breed operations. To allow 
-    for increased chance of more sophistication.
+    and monoclonalByte and weightedMonoclonalByte breed 
+    operations. To allow for increased chance of more 
+    sophistication.
 
 03/02/2026
 Halted Trial A18 at loop 12, 3750 rounds

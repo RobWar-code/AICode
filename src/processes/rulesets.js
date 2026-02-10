@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 138,
-    maxRuleId: 137,
+    numRules: 140,
+    maxRuleId: 139,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -793,6 +793,29 @@ const rulesets = {
         this.ruleFunction.push(this.compareSampleInSampleOut);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getCompareSampleInSampleOutRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Triplets From Param Increments", ruleId: 138,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    31,139,26,158,12,170,19,25
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeTripletsFromParamIncrementsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeTripletsFromParamIncrementsOutputs; 
 
         this.scoreList.push(
             {rule: "Output Series", ruleId: 11, retain: false, skip: false,
@@ -2736,7 +2759,29 @@ const rulesets = {
         this.byteFunction.push(this.byteCompareFirstParam);
         this.requiredOutputsFunction.push(this.getCompareFirstParamRequiredOutputs);
 
-        // Rules with separate input and output pointers
+        this.scoreList.push(
+            {rule: "Extract Semicolon Separated", ruleId: 139,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    31,139,59,158,12,170,59,25,59,0,1,2,3,59,32,33,34
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(null);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedOutputs; 
+
         this.scoreList.push(
             {rule: "Duplicate Params", ruleId: 21,
                 retain: false, skip: false, 
@@ -5127,6 +5172,42 @@ const rulesets = {
         return score;
     },
 
+    makeTripletsFromParamIncrementsInputs(self) {
+        let inputList = [];
+        // Get rule
+        let ruleSequenceNum = self.ruleSequenceNum;
+        let rule = self.getRuleFromSequence(ruleSequenceNum);
+        let inBlockLen = rule.inBlockLen;
+
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < inBlockLen; j++) {
+                let r = Math.floor(Math.random() * 252);
+                inputs.push(r);
+            }
+            inputList.push(inputs);
+        }
+
+        let outputList = self.makeTripletsFromParamIncrementsOutputs(self, inputList);
+
+        return {inputList, outputList};
+    },
+
+    makeTripletsFromParamIncrementsOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                for (let i = 0; i < 3; i++) {
+                    ++v;
+                    output.push(v);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     outputSeries(self, dataParams, ruleParams) {
         let initialParams = dataParams.paramsIn
         let valuesOut = dataParams.valuesOut;
@@ -6996,6 +7077,47 @@ const rulesets = {
         let required = (a + initialParams[offset]) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    makeExtractSemicolonSeparatedInputs(self) {
+        let inputList = [];
+        let semiChar = ";".charCodeAt(0);
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 16; j++) {
+                let len = Math.floor(Math.random() * 4) + 1;
+                for (let k = 0; k < len; k++) {
+                    let r = -1;
+                    while(r < 0) {
+                        r = Math.floor(Math.random() * 256);
+                        if (r === semiChar) r = -1;
+                    }
+                    inputs.push(r);
+                }
+                inputs.push(semiChar);
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeExtractSemicolonSeparatedOutputs(self, inputList);
+
+        return {inputList, outputList};
+    },
+
+    makeExtractSemicolonSeparatedOutputs(self, inputList) {
+        let outputList = [];
+        let semiChar = ";".charCodeAt(0);
+        for (let inputs of inputList) {
+            output = [];
+            for (let p = 0; p < inputs.length; p++) {
+                let v = inputs[p];
+                if (v != semiChar) {
+                    output.push(v);
+                }
+            }
+            outputList.push(output);
+        }
+
+        return outputList;
     },
 
     duplicateParams(self, dataParams, ruleParams) {

@@ -134,6 +134,9 @@ class MainControlParallel {
         this.maxBreedActions = 32;
         this.entitiesPerProcess = this.maxCycles * this.maxBreedEntities * this.maxBreedActions * this.bestSetsPerBatch;
         this.finalEntitiesPerProcess = this.maxCycles * this.maxBreedEntities * this.maxBreedActions * this.finalBatchLength;
+
+        // Seedbed Data
+        mainControlShared.initialiseSeedbedLogs(this);
     }
 
     async batchProcessLoop() {

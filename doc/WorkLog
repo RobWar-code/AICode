@@ -13,8 +13,21 @@ Jobs Due
 
     Where the outputs are known display them
 
+    Consider using UInt buffer for weighting table transfer (see chatGPT notes)
+
+    Add solutions breed method to breed table
+        Add breed method to seedRuleMemSpaces object
+        Update seedRuleMemSpaces database with breed method
+
+    * Consider increase frequency of interbreed events and monoclonalByte
+
+    * Fix problem with mainControlShared.resetSeedbedData() following startAtRule
+    round completion. 
+        Fixed by test for seedRuleSeedbedLog.length === 0
+
     Add Rules
-        Extract Params Separated By ;
+        * Triplets of Param Increments
+        * Extract Params Separated By ;
         Multiply Params By 100
         16 bit subtract
         Replace the first parameter number by the second in the inputs

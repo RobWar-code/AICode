@@ -561,6 +561,7 @@ class MainControl {
         rulesets.ruleSequenceNum = ruleSequenceNum;
         this.bestSetNum = 0;
         this.bestSets = new Array(this.numBestSets).fill([]);
+        mainControlShared.initialiseSeedbedLogs(this);
         await this.doProcess();
         this.mainWindow.webContents.send("mainCycleCompleted", 0);
     }

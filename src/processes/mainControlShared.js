@@ -50,6 +50,7 @@ const mainControlShared = {
             item = self.templateSeedbedLog[seedIndex];
         }
         else {
+            if (self.seedRuleSeedbedLog.length === 0) return;
             item = self.seedRuleSeedbedLog[seedIndex];
         }
         item.current -= 1;
