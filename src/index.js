@@ -224,7 +224,8 @@ ipcMain.on("fetchWeightingTable", () => {
 
 ipcMain.on("fetchBreedTable", () => {
   const breedTableData = mainControlShared.fetchBreedTable(program);
-  mainWindow.webContents.send("displayBreedTable", breedTableData);
+  const seedRuleBreeds = rulesets.fetchSeedRuleBreeds();
+  mainWindow.webContents.send("displayBreedTable", {breedTableData: breedTableData, seedRuleBreeds: seedRuleBreeds});
 });
 
 ipcMain.on("logCompletions", () => {

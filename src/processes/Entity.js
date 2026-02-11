@@ -81,6 +81,7 @@ class Entity {
         this.memSpace = new Array(this.memLength).fill(0);
         // Other Constants
         this.dataMaxValue = 255;
+        this.breedMethod = "";
         if (memSpace != null) {
             this.qualityControlIns("External Breed", memSpace);
             this.initialMemSpace = memSpace.concat();

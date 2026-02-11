@@ -239,6 +239,16 @@ li {
     border: 1px solid black;
 }
 
+#seedRuleBreedsTable {
+    border: 1px solid black;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#seedRuleBreedsTable td,th {
+    border: 1px solid black;
+}
+
 /* Restore Rule Seed */
 #restoreRuleSeedBackground {
     display: none;

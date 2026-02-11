@@ -732,8 +732,10 @@ class MainControlParallel {
         }
         else {
             let memSpace = entity.initialMemSpace.concat();
+            let breedMethod = entity.breedMethod;
             let score = entity.score;
-            let roundThresholdReached = await rulesets.seedRuleUpdate(this.instructionSet, memSpace, score, this.numRounds);
+            let roundThresholdReached = await rulesets.seedRuleUpdate(this.instructionSet, memSpace, breedMethod, 
+                score, this.numRounds);
             if (rulesets.seedRuleSet) {
                 await dbTransactions.saveWeightingTable(null);
             }
@@ -1049,19 +1051,22 @@ class MainControlParallel {
             let memStr = item.seed_rule_mem_space;
             let memArray = this.stringToIntArray(memStr);
             let ruleId = item.rule_id;
+            let breedMethod = item.breed_method;
             // Search the existing seed rules
             let found = false;
-            for (let item of rulesets.seedRuleMemSpaces) {
-                if (item.ruleId === ruleId) {
+            for (let existingItem of rulesets.seedRuleMemSpaces) {
+                if (existingItem.ruleId === ruleId) {
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                let item = {};
-                item.ruleId = ruleId;
-                item.memSpace = memArray;
-                rulesets.seedRuleMemSpaces.push(item);
+                let entry = {};
+                entry.ruleId = ruleId;
+                entry.memSpace = memArray;
+                entry.breedMethod = breedMethod;
+                console.log("entry:", entry);
+                rulesets.seedRuleMemSpaces.push(entry);
             }
         }
 

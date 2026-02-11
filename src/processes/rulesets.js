@@ -48,7 +48,7 @@ const rulesets = {
     */
     weightingTable: [],
     seedRuleNum: 9,
-    seedRuleMemSpaces: [],
+    seedRuleMemSpaces: [], // [{ruleId: n, memSpace: [], breedMethod: ""}...]
     subOptRuleMemSpaces: [],
     bestsStore: [],
     seedRuleFragments: [],
@@ -8280,7 +8280,7 @@ const rulesets = {
         return score;
     },
 
-    async seedRuleUpdate(instructionSet, memSpace, score, roundNum) {
+    async seedRuleUpdate(instructionSet, memSpace, breedMethod, score, roundNum) {
         let roundThresholdReached = false;
         let passMark = 0.98
         this.currentMaxScore = this.getCurrentMaxScore(this.ruleSequenceNum);
@@ -8297,7 +8297,7 @@ const rulesets = {
                 console.error("Fragment list updated:", this.seedRuleFragments.length);
             }
 
-            this.insertSeedRule(memSpace);
+            this.insertSeedRule(memSpace, breedMethod);
             this.ruleRounds[ruleIndex].end = roundNum;
             this.ruleRounds[ruleIndex].ruleLoopEnd = this.numRuleLoops;
             this.ruleRounds[ruleIndex].completed = true;
@@ -8460,12 +8460,13 @@ const rulesets = {
         return ruleSequenceNum;
     },
 
-    insertSeedRule(memSpace) {
+    insertSeedRule(memSpace, breedMethod) {
         let seedRuleItem = {};
         let item = this.getRuleFromSequence(this.ruleSequenceNum);
         let ruleId = item.ruleId;
         seedRuleItem.ruleId = ruleId;
         seedRuleItem.memSpace = memSpace;
+        seedRuleItem.breedMethod = breedMethod;
         // Check whether this rule is already listed
         let found = false;
         let index = 0;
@@ -8652,6 +8653,30 @@ const rulesets = {
         }
         if (!sectionFound) return {abandonned: true, section: []};
         return {abandonned: false, section: section};
+    },
+
+    fetchSeedRuleBreeds() {
+        let seedRuleBreeds = [];
+        for (let item of this.seedRuleMemSpaces) {
+            let breedMethod = item.breedMethod;
+            // Search
+            let entry;
+            let found = false;
+            for (entry of seedRuleBreeds) {
+                if (entry.breedMethod === breedMethod) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                entry = {breedMethod: breedMethod, count: 1};
+                seedRuleBreeds.push(entry);
+            }
+            else {
+                ++entry.count;
+            }
+        }
+        return seedRuleBreeds;
     },
 
     getDescriptionFromSequence(sequenceNum) {

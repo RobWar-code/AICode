@@ -1,5 +1,6 @@
 const breedDisplay = {
-    displayBreedTable(data) {
+    displayBreedTable(tablesData) {
+        let data = tablesData.breedTableData;
         document.getElementById("breedTableBackground").style.display = "block";
         let tableDiv = document.getElementById("breedTableDiv");
         // Get total counts
@@ -42,6 +43,26 @@ const breedDisplay = {
         html += "</table>";
 
         tableDiv.innerHTML = html;
+
+        this.displaySeedRuleBreeds(tablesData.seedRuleBreeds);
+    },
+
+    displaySeedRuleBreeds(seedRuleBreeds) {
+
+        let table = document.getElementById('seedRuleBreedsTable');
+        let html = "<tr>";
+        html +=     "<th>Breed Method</th>";
+        html +=     "<th>Count</th>";
+        html +=    "</tr>";
+
+        for (let item of seedRuleBreeds) {
+            html += "<tr>";
+            html +=     `<td>${item.breedMethod}</td>`;
+            html +=     `<td>${item.count}</td>`;
+            html += "</tr>";
+        }
+
+        table.innerHTML = html;
     }
 }
 

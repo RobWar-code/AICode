@@ -318,13 +318,13 @@ const dbTransactions = {
         let seedRules = rulesets.seedRuleMemSpaces;
         if (seedRules.length === 0) return true;
 
-        let ruleSequenceNum = 0;
         for (let seedRuleItem of seedRules) {
             let ruleId = seedRuleItem.ruleId;
+            let ruleSequenceNum = rulesets.getRuleFromRuleId(ruleId).sequenceNum;
             let seedRuleMemSpace = seedRuleItem.memSpace;
-            let result = await this.saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace);
+            let breedMethod = seedRuleItem.breedMethod;
+            let result = await this.saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace, breedMethod);
             if (!result) return false;
-            ++ruleSequenceNum;
         }
 
         console.error("saved seed rules");
@@ -534,15 +534,15 @@ const dbTransactions = {
 
     },
 
-    async saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace) {
+    async saveSeedRule(dbConnection, ruleId, ruleSequenceNum, seedRuleMemSpace, breedMethod) {
         // Delete any existing record for this rule sequence number
         sql = `DELETE FROM seed_rule WHERE rule_id = ${ruleId}`;
         await dbConnection.query(sql);
 
         let memSpaceStr = this.intArrayToString(seedRuleMemSpace, seedRuleMemSpace.length);
         try {
-            sql = "INSERT INTO seed_rule (rule_id, rule_sequence_num, seed_rule_mem_space) VALUES (?, ?, ?)";
-            const [results] = await dbConnection.execute(sql, [ruleId, ruleSequenceNum, memSpaceStr]);
+            sql = "INSERT INTO seed_rule (rule_id, rule_sequence_num, seed_rule_mem_space, breed_method) VALUES (?, ?, ?, ?)";
+            const [results] = await dbConnection.execute(sql, [ruleId, ruleSequenceNum, memSpaceStr, breedMethod]);
             return true;
         }
         catch (error) {
@@ -971,12 +971,14 @@ const dbTransactions = {
             if (!found) {
                 // Get the seed rule from the database
                 try {
-                    let sql = `SELECT seed_rule_mem_space FROM seed_rule WHERE rule_id = ${ruleId}`;
+                    let sql = `SELECT seed_rule_mem_space, breed_method FROM seed_rule WHERE rule_id = ${ruleId}`;
                     let [results] = await dbConnection.query(sql);
                     let item = {};
                     item.ruleId = ruleId;
                     let memSpace = this.stringToIntArray(results[0].seed_rule_mem_space);
                     item.memSpace = memSpace;
+                    let breedMethod = results[0].breed_method;
+                    item.breedMethod = breedMethod;
                     seedList.push(item);
 
                 }
@@ -1000,7 +1002,7 @@ const dbTransactions = {
         }
 
         try {
-            sql = "SELECT rule_id, seed_rule_mem_space FROM seed_rule";
+            sql = "SELECT rule_id, seed_rule_mem_space, breed_method FROM seed_rule";
             [results] = await dbConnection.query(sql);
         }
         catch (error) {
@@ -1015,6 +1017,7 @@ const dbTransactions = {
             let entry = {};
             entry.ruleId = item.rule_id;
             entry.memSpace = this.stringToIntArray(item.seed_rule_mem_space);
+            entry.breedMethod = item.breed_method;
             rulesets.seedRuleMemSpaces.push(entry);
         }
     },

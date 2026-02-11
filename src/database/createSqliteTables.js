@@ -55,7 +55,7 @@ async function createTables() {
     sql += "initial_mem_space VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-
+*/
     sql = "DROP TABLE seed_rule";
     await connection.query(sql);
 
@@ -63,10 +63,11 @@ async function createTables() {
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "rule_id INT,";
     sql += "rule_sequence_num INT,";
-    sql += "seed_rule_mem_space VARCHAR(256)";
+    sql += "seed_rule_mem_space VARCHAR(256),";
+    sql += "breed_method VARCHAR(256)";
     sql += ")";
     await connection.query(sql);
-*/
+/*
     sql = "DROP TABLE weighting_table";
     await connection.query(sql);
 
@@ -89,7 +90,6 @@ async function createTables() {
     sql += ")";
     await connection.query(sql);
 
-/*
     sql = "CREATE TABLE bests_store (";
     sql += "id INTEGER PRIMARY KEY AUTOINCREMENT,";
     sql += "rule_id INT,";
