@@ -5182,7 +5182,7 @@ const rulesets = {
         for (let i = 0; i < self.numAutoParamSets; i++) {
             let inputs = [];
             for (let j = 0; j < inBlockLen; j++) {
-                let r = Math.floor(Math.random() * 252);
+                let r = Math.floor(Math.random() * 252) & 255;
                 inputs.push(r);
             }
             inputList.push(inputs);

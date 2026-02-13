@@ -293,6 +293,7 @@ class BatchProcess {
                     this.ruleSequenceNum, item.roundNum, item.initialMemSpace);
                 entity.insertParams(item.initialParamsList);
                 entity.memSpace = item.memSpace;
+                entity.breedMethod = item.breedMethod;
                 entity.birthTime = item.birthTime;
                 entity.birthDateTime = item.birthDateTime;
                 entity.registers = item.registers;

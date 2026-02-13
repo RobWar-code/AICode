@@ -15,9 +15,13 @@ Jobs Due
 
     Consider using UInt buffer for weighting table transfer (see chatGPT notes)
 
-    Add solutions breed method to breed table
-        Add breed method to seedRuleMemSpaces object
-        Update seedRuleMemSpaces database with breed method
+    Check-out Seeded breed methods in entities and lists
+
+    * Add solutions breed method to breed table
+        * Add breed method to seedRuleMemSpaces object
+        * Update seedRuleMemSpaces database with breed method
+
+    Clear the seedRuleMemSpaces table on first load.
 
     * Consider increase frequency of interbreed events and monoclonalByte
 

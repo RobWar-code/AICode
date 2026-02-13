@@ -2,7 +2,9 @@ Trial A21:
     Add Rules:
         Extract Semicolon Separated
         Triplets of Param Increments
-        
+    Modified monoclonalIns to favour replacement data bytes
+    Introduced successful breed methods table
+    
 09/02/2026
 Halted trial A19 at round 4360 (14 loops)
 Rules gained: 12, lost: 8.

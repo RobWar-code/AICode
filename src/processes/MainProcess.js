@@ -145,11 +145,10 @@ class MainProcess {
                     }
                     else {
                         let seeded = false;
-                        // Seeding on first pass.
-                        // if (cycle === 0 && i === 0 && j === 0) seeded = true;
                         entity = new Entity(self.entityNumber, self.instructionSet, asRandom, seeded, 
                             self.cycleCounter, this.rulesets.ruleSequenceNum, self.numRounds, memSpace);
                     }
+
                     // Update breed method tallies
                     switch (entity.breedMethod) {
                         case "MonoclonalIns" :

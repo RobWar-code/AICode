@@ -506,11 +506,13 @@ class Entity {
     }
 
     monoclonalInsBreed(entityNumber, cycleCounter, roundNum) {
+        // cycleCounter Ignored
+        let r = Math.floor(Math.random() * 3)
         let codeHitChance;
-        if (cycleCounter % 3 === 0) {
+        if (r === 0) {
             codeHitChance = 0.05;
         }
-        else if (cycleCounter % 3 === 1) {
+        else if (r === 1) {
             codeHitChance = 0.1;
         }
         else {
@@ -519,7 +521,7 @@ class Entity {
 
         const duplicateChance = 0.1;
         const transposeChance = 0.15;
-        const replaceChance = 0.45;
+        const replaceChance = 0.65;
         const insertChance = 0.8;
         const deleteChance = 0.95;
         const ruleSeedFragmentChance = 0.98;
@@ -588,10 +590,37 @@ class Entity {
                     newCodeSegment = newCodeSegment.concat(oldCodeItem);
                 }
                 else if (hitType < replaceChance) {
-                    for (let j = 0; j < codeItem2.length; j++) {
-                        newCodeSegment.push(codeItem2[j]);
-                        if (newCodeSegment.length >= this.memLength) {
-                            break;
+                    if (Math.random() < 0.3 || codeItem.length === 1) {
+                        // Replace the whole instruction
+                        for (let j = 0; j < codeItem2.length; j++) {
+                            newCodeSegment.push(codeItem2[j]);
+                            if (newCodeSegment.length >= this.memLength) {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        // Just replace the data of the existing instruction
+                        let codeItem3 = [];
+                        codeItem3.push(codeItem[0]);
+                        for (let j = 1; j < codeItem.length; j++) {
+                            let a = codeItem[j];
+                            let b = Math.floor(Math.random() * 4);
+                            // Adjust the data
+                            let r = Math.random();
+                            if (r < 0.25) a = (a - 1) & 255;
+                            else if (r < 0.5) a = (a + 1) & 255;
+                            else if (r < 0.7) a = (a - b) & 255;
+                            else if (r < 0.9) a = (a + b) & 255;
+                            else a = Math.floor(Math.random() * (this.dataMaxValue + 1));
+                            codeItem3.push(a);
+                        }
+                        // Insert the new instruction
+                        for (let j = 0; j < codeItem3.length; j++) {
+                            newCodeSegment.push(codeItem3[j]);
+                            if (newCodeSegment.length >= this.memLength) {
+                                break;
+                            }
                         }
                     }
                 }
