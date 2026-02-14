@@ -352,7 +352,7 @@ const seedTemplates = {
                 }
             ]
         },
-        /*
+        
         {
             name: "divideByFirstParam",
             description: "divide the inputs by the first parameter and output each result",
@@ -468,7 +468,7 @@ const seedTemplates = {
                 }
             ]
         },
-        */
+
         {
             // 2
             name: "firstParamExtractLoop",

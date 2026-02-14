@@ -1,10 +1,15 @@
+14/02/2026
+Halted Trial A20 after 3360 rounds (10 Loops)
+8 rules gained, 10 lost (comparing 3360 to 4360 rounds)
+
 Trial A21:
     Add Rules:
         Extract Semicolon Separated
         Triplets of Param Increments
     Modified monoclonalIns to favour replacement data bytes
     Introduced successful breed methods table
-    
+    Added back the seed template for divide by first param
+
 09/02/2026
 Halted trial A19 at round 4360 (14 loops)
 Rules gained: 12, lost: 8.
