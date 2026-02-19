@@ -30,9 +30,12 @@ Jobs Due
         Fixed by test for seedRuleSeedbedLog.length === 0
 
     Add Rules
+        Sum params demarcated by first and second
+        Extract params demarcated by first and second
+        Sum params separated by ;
         * Triplets of Param Increments
         * Extract Params Separated By ;
-        Multiply Params By 100
+        * Multiply Params By 100
         16 bit subtract
         Replace the first parameter number by the second in the inputs
         Reverse the sequences separated by 0's

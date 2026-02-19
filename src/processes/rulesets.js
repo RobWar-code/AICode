@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 140,
-    maxRuleId: 139,
+    numRules: 141,
+    maxRuleId: 140,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -813,7 +813,7 @@ const rulesets = {
         );
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.getTripletsFromParamIncrementsRequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeTripletsFromParamIncrementsInputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeTripletsFromParamIncrementsOutputs; 
 
@@ -2778,7 +2778,7 @@ const rulesets = {
         );
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
-        this.requiredOutputsFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractSemicolonSeparatedRequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedInputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedOutputs; 
 
@@ -3454,6 +3454,32 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getSortParamsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Sum Semicolon Separated Params", ruleId: 140,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, passScore: 0.8, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 16 * 15 * 8 + learnCodeAllowance,
+                highIP: 120,
+                sampleIn: [
+                    [
+                        45,46,59,12,19,14,84,59,17,96,98,59,12,10,59,11,13,14,59
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSumSemicolonSeparatedParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSumSemicolonSeparatedParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSumSemicolonSeparatedParamsOutputs; 
+
 
         this.scoreList.push(
             {rule: "And Adjacent Params", ruleId: 87,
@@ -4274,8 +4300,16 @@ const rulesets = {
                 rule.paramsIn = this.convertASCIILists(rule.ASCIIParamsIn);
             }
 
-            if (this.requiredOutputsFunction[i] != null && !("autoParams" in rule)) {
-                if ("sampleInOut" in rule) {
+            if (this.requiredOutputsFunction[i] != null) {
+                if ("autoParams" in rule && !("sampleInOut" in rule)) {
+                    let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn);
+                    this.scoreList[i].sampleOut = outputList;
+                    if (outputList.length > 1) {
+                        let diffOpt = this.getDiffOpt(outputList);
+                        this.scoreList[i].diffOpt = diffOpt;
+                    }
+                }
+                else if ("sampleInOut" in rule) {
                     let outputList = this.requiredOutputsFunction[i](this, this.scoreList[i].sampleIn, rule);
                     this.scoreList[i].outputs = outputList;
                     if (outputList.length > 1) {
@@ -5170,6 +5204,11 @@ const rulesets = {
         let min = 0;
         let score = self.doScore(opt, count, max, min);
         return score;
+    },
+
+    getTripletsFromParamIncrementsRequiredOutputs(self, inputList) {
+        let outputList = self.makeTripletsFromParamIncrementsOutputs(self, inputList);
+        return outputList;
     },
 
     makeTripletsFromParamIncrementsInputs(self) {
@@ -7079,6 +7118,11 @@ const rulesets = {
         return score;
     },
 
+    getExtractSemicolonSeparatedRequiredOutputs(self, inputList) {
+        let outputList = self.makeExtractSemicolonSeparatedOutputs(self, inputList);
+        return outputList;
+    },
+
     makeExtractSemicolonSeparatedInputs(self) {
         let inputList = [];
         let semiChar = ";".charCodeAt(0);
@@ -7606,6 +7650,55 @@ const rulesets = {
             outputList.push(a);
         }
 
+        return outputList;
+    },
+
+    getSumSemicolonSeparatedParamsRequiredOutputs(self, inputList) {
+        let outputList = self.makeSumSemicolonSeparatedParamsOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeSumSemicolonSeparatedParamsInputs(self) {
+        let inputList = [];
+        let semi = ";".charCodeAt(0);
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 16; j++) {
+                let n = Math.floor(Math.random() * 4) + 2;
+                for (let k = 0; k < n; k++) {
+                    let v = semi;
+                    while (v === semi) {
+                        v = Math.floor(Math.random() * 256);
+                    }
+                    inputs.push(v);
+                }
+                inputs.push(semi);
+            }
+            inputList.push(inputs);
+        }
+
+        let outputList = self.makeSumSemicolonSeparatedParamsOutputs(self, inputList);
+
+        return {inputList, outputList};
+    },
+
+    makeSumSemicolonSeparatedParamsOutputs(self, inputList) {
+        let outputList = [];
+        let semi = ";".charCodeAt(0);
+        for (let inputs of inputList) {
+            let output = [];
+            let sum = 0;
+            for (let v of inputs) {
+                if (v != semi) {
+                    sum = (sum + v) & 255;
+                }
+                else {
+                    output.push(sum);
+                    sum = 0;
+                }
+            }
+            outputList.push(output);
+        }
         return outputList;
     },
 
