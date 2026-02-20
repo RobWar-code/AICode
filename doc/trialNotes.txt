@@ -1,3 +1,16 @@
+20/02/2026
+Trial A21 Paused at round 3350 (loop 13)
+    13 rules completed added (including 5 division - from template)
+    1 rule less completed
+    
+Trial A21A:
+    Continuing on from trial A21 with the following additional
+    rules:
+        * Output Mem at First Param Address
+        * Sum params delimited by first and second
+        * Extract params delimited by first and second
+        * Sum params separated by ;
+
 14/02/2026
 Halted Trial A20 after 3360 rounds (10 Loops)
 8 rules gained, 10 lost (comparing 3360 to 4360 rounds)

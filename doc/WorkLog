@@ -30,9 +30,10 @@ Jobs Due
         Fixed by test for seedRuleSeedbedLog.length === 0
 
     Add Rules
-        Sum params demarcated by first and second
-        Extract params demarcated by first and second
-        Sum params separated by ;
+        * Output Mem at First Param Address
+        * Sum params delimited by first and second
+        * Extract params delimited by first and second
+        * Sum params separated by ;
         * Triplets of Param Increments
         * Extract Params Separated By ;
         * Multiply Params By 100

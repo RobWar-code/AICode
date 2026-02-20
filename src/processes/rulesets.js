@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 141,
-    maxRuleId: 140,
+    numRules: 144,
+    maxRuleId: 143,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -386,6 +386,47 @@ const rulesets = {
         );
         this.ruleFunction.push(this.valuesOutDifferent);
         this.byteFunction.push(this.byteValuesOutDifferent);
+        this.requiredOutputsFunction.push(null);
+
+        this.scoreList.push(
+            {rule: "Output Mem From First Param", ruleId: 143, skip:false, retain: false,
+                excludeHelperRules: [36,6,67,68,69],
+                score: 0, max: 5, startRoundNum: 800,
+                insDistribution: [
+                    {
+                        ins: "LD A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "STO (C), A",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "INC C",
+                        countOpt: 2,
+                        scanStart: 0,
+                        scanEnd: 24
+                    }
+                ],
+                inBlockStart: 0, inBlockLen: 1,
+                outBlockStart: 0, outBlockLen: 16,
+                highIC: 20 * 16,
+                highIP: 70,
+                sampleIn: [],
+                sampleOut: [],
+                paramsIn: [
+                    [0, 16], 
+                    [64, 24],
+                    [128, 32]
+                ]
+            }
+        );
+        this.ruleFunction.push(this.OutputMemFromFirstParam);
+        this.byteFunction.push(null);
         this.requiredOutputsFunction.push(null);
 
         this.scoreList.push(
@@ -2783,6 +2824,54 @@ const rulesets = {
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedOutputs; 
 
         this.scoreList.push(
+            {rule: "Extract First Params Delimited Params", ruleId: 141,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                // Ascii Codes 40, 41 are ()
+                sampleIn: [[
+                    40,41,27,28,40,31,139,59,41,19,27,40,158,12,170,41,40,59,25,41,59,0,1,2,3,40,59,32,33,34,41
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractFirstParamsDelimitedParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractFirstParamsDelimitedParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractFirstParamsDelimitedParamsOutputs; 
+
+        this.scoreList.push(
+            {rule: "Sum First Params Delimited Params", ruleId: 142,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                // Ascii Codes 40, 41 are ()
+                sampleIn: [[
+                    40,41,27,28,40,31,139,59,41,19,27,40,158,12,170,41,40,59,25,41,59,0,1,2,3,40,59,32,33,34,41
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSumFirstParamsDelimitedParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSumFirstParamsDelimitedParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSumFirstParamsDelimitedParamsOutputs; 
+
+        this.scoreList.push(
             {rule: "Duplicate Params", ruleId: 21,
                 retain: false, skip: false, 
                 excludeHelperRules: [67],
@@ -5064,6 +5153,28 @@ const rulesets = {
         return score;
     },
 
+    OutputMemFromFirstParam(self, dataParams, ruleParams) {
+        let params = dataParams.initialParams;
+        let memSpace = dataParams.currentMemSpace;
+        let valuesOut = dataParams.valuesOut;
+
+        let startIndex = params[0];
+        let blockLen = params[1];
+
+        let count = 0;
+        let outIndex = 0;
+        for (let p = startIndex; p < startIndex + blockLen; p++) {
+            if (valuesOut[outIndex] === memSpace[p]) ++count;
+            ++outIndex;
+        }
+
+        let opt = blockLen;
+        let max = blockLen;
+        let min = 0;
+        let score = self.doScore(opt, count, max, min);
+        return score;
+    },
+
     loadMemToFirstParamFromInputs(self, dataParams, ruleParams) {
         let params = dataParams.initialParams;
         let memSpace = dataParams.currentMemSpace;
@@ -7161,6 +7272,165 @@ const rulesets = {
             outputList.push(output);
         }
 
+        return outputList;
+    },
+
+    getExtractFirstParamsDelimitedParamsRequiredOutputs(self, inputList) {
+        let outputList = self.makeExtractFirstParamsDelimitedParamsOutputs(self, inputList);
+        return outputList; 
+    },
+
+    makeExtractFirstParamsDelimitedParamsInputs(self) {
+        let inputList = [];
+        let brackets = [
+            ["(", ")"],
+            ["[", "]"],
+            ["{", "}"],
+        ]
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            // Select the bracket type
+            let brackType = brackets[Math.floor(Math.random() * brackets.length)];
+            inputs.push(brackType[0].charCodeAt(0));
+            inputs.push(brackType[1].charCodeAt(0));
+            for (let j = 0; j < 8; j++) {
+                // Insert 0 to 3 non-bracketed terms
+                let n = Math.floor(Math.random() * 4);
+                for (let k = 0; k < n; k++) {
+                    // Select a random, non-bracket number
+                    let b = brackType[0];
+                    while (b === brackType[0] || b === brackType[1]) {
+                        b = Math.floor(Math.random() * 255);
+                    }
+                    inputs.push(b);
+                }
+                // Open the brackets
+                inputs.push(brackType[0].charCodeAt(0));
+                // Add the bracketed terms
+                n = Math.floor(Math.random() * 4) + 2;
+                for (let k = 0; k < n; k++) {
+                    // Select a random, non-bracket number
+                    let b = brackType[0];
+                    while (b === brackType[0] || b === brackType[1]) {
+                        b = Math.floor(Math.random() * 255);
+                    }
+                    inputs.push(b);
+                }
+                // Close the bracket
+                inputs.push(brackType[1].charCodeAt(0));
+            }
+            inputList.push(inputs);
+        }
+
+        let outputList = self.makeExtractFirstParamsDelimitedParamsOutputs(self, inputList);
+
+        return {inputList, outputList};
+    },
+
+    makeExtractFirstParamsDelimitedParamsOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let openBrack = inputs[0];
+            let closeBrack = inputs[1];
+            let open = false;
+            for (let v of inputs) {
+                if (v === openBrack) {
+                    open = true;
+                }
+                else {
+                    if (open) {
+                        if (v === closeBrack) {
+                            open = false;
+                        }
+                        else {
+                            output.push(v);
+                        }
+                    }
+                }
+            }
+            outputList.push(output);
+        }
+
+        return outputList;
+
+    },
+
+    getSumFirstParamsDelimitedParamsRequiredOutputs(self, inputList) {
+        let outputList = self.makeSumFirstParamsDelimitedParamsOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeSumFirstParamsDelimitedParamsInputs(self) {
+        let inputList = [];
+        let brackets = [
+            ["(", ")"],
+            ["[", "]"],
+            ["{", "}"],
+        ]
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            // Select the bracket type
+            let brackType = brackets[Math.floor(Math.random() * brackets.length)];
+            inputs.push(brackType[0].charCodeAt(0));
+            inputs.push(brackType[1].charCodeAt(0));
+            for (let j = 0; j < 8; j++) {
+                // Insert 0 to 3 non-bracketed terms
+                let n = Math.floor(Math.random() * 4);
+                for (let k = 0; k < n; k++) {
+                    // Select a random, non-bracket number
+                    let b = brackType[0];
+                    while (b === brackType[0] || b === brackType[1]) {
+                        b = Math.floor(Math.random() * 255);
+                    }
+                    inputs.push(b);
+                }
+                // Open the brackets
+                inputs.push(brackType[0].charCodeAt(0));
+                // Add the bracketed terms
+                n = Math.floor(Math.random() * 4) + 2;
+                for (let k = 0; k < n; k++) {
+                    // Select a random, non-bracket number
+                    let b = brackType[0];
+                    while (b === brackType[0] || b === brackType[1]) {
+                        b = Math.floor(Math.random() * 255);
+                    }
+                    inputs.push(b);
+                }
+                // Close the bracket
+                inputs.push(brackType[1].charCodeAt(0));
+            }
+            inputList.push(inputs);
+        }
+
+        let outputList = self.makeSumFirstParamsDelimitedParamsOutputs(self, inputList);
+
+        return {inputList, outputList};
+    },
+
+    makeSumFirstParamsDelimitedParamsOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let brackOpen = inputs[0];
+            let brackClose = inputs[1];
+            let open = false;
+            let sum = 0;
+            for (let v of inputs) {
+                if (v === brackOpen) {
+                    sum = 0;
+                    open = true;
+                }
+                else if (v === brackClose) {
+                    open = false;
+                    output.push(sum);
+                }
+                else if (open) {
+                    sum = (sum + v) & 255;
+                }
+            }
+            outputList.push(output);
+        }
         return outputList;
     },
 
