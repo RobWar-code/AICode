@@ -442,7 +442,7 @@ class Entity {
         let newEntity = null;
         this.crossSetBreed = false;
 
-        if (cycleCounter < this.interbreedCycle || Math.random() < 0.4 || mateEntity === null) {
+        if (Math.random() < 0.4 || mateEntity === null) {
             if (Math.random() < 0.5) {
                 newEntity = this.monoclonalInsBreed(entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "MonoclonalIns";
@@ -470,7 +470,7 @@ class Entity {
                 newEntity.breedMethod = "Interbreed2";
                 if (crossSet) this.crossSetBreed = true;
             }
-            else if (interbreedChance < 0.65) {
+            else if (interbreedChance < 0.7) {
                 newEntity = this.interbreedFlagged(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "InterbreedFlagged";
                 if (crossSet) this.crossSetBreed = true;
