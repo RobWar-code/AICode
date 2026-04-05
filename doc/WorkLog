@@ -7,6 +7,9 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
+    Switching from serial to parallel mode with a load restart causes problems
+        (no batch loading performed)
+
     Check-out rule Load Mem From First Param Of Inputs
     
     Remove Max Score from display

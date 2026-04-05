@@ -724,7 +724,12 @@ Consider repeat input params
 <h1>Two Layer Processing
     Consider using another 256 byte memory/execution block. This might
     allow for more algorithmic type solution finding.
-    
+
+    Or we might allow more processing time to enable the development
+    of analytical code alongside actual solutions. 
+
+    The cost of this would be longer overall processing times.
+
 <h1>Performance Notes
 
     25/01/2025
