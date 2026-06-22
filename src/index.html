@@ -71,6 +71,24 @@
       <button class="textButton" id="breedTableDismiss">Dismiss</button>
     </div>
 
+    <!-- Fragment Inspector Modal -->
+    <div class="genModal" id="fragInspectorBackground">
+      <div class="genModalForm" id="fragInspectorDetails">
+        <h2>Fragment Inspector</h2>
+        <button class="textButton" id="fragSetSelector">Ruleset Frags</button>
+        <p>Num Fragments: <span id="numFragments"></span></p>
+        <div id="fragSelectionDiv">
+          <input type="number" id="fragSelectNum" />
+          <button class="textButton" id="fragSelectSubmit">Submit</button>
+        </div>
+      </div>
+      <div class="genModalForm" id="fragInspectorDiv">
+          <table id="fragCodeList">
+          </table>
+      </div>
+      <button class="textButton" id="fragInspectorDismiss">Dismiss</button>
+    </div>
+
     <!-- Restore Rule Seed Modal-->
     <div class="genModal" id="restoreRuleSeedBackground">
       <div class="genModalForm" id="restoreRuleSeedMain">
@@ -115,17 +133,18 @@
       </div>
       <div class="row">
         <div class="col-sm-12 col-lg-6">
+          <button class="textButton" id="haltProcessButton">Start Process</button>
+          <button class="textButton" id="startAtRuleButton">Start At Rule</button>
           <button class="textButton" id="scoreListButton">Score List</button>
           <button class="textButton" id="scoreHistoryButton">Score History</button>
           <button class="textButton" id="viewWeightsButton">View Weights</button>
           <button class="textButton" id="breedTableButton">Breed Table</button>
           <button class="textButton" id="logCompletionsButton">Log Completions</button>
-          <button class="textButton" id="haltProcessButton">Start Process</button>
           <button class="textButton" id="insSetListButton">Ins. Set List</button>
-          <button class="textButton" id="startAtRuleButton">Start At Rule</button>
-          <button class="textButton" id="traceButton">Trace</button>
+          <button class="textButton" id="fragInspectorButton">Inspect Frags</button>
         </div>
         <div class="col-sm-12 col-lg-6">
+          <button class="textButton" id="traceButton">Trace</button>
           <button class="textButton" id="loadSeedButton" title="Load a crafted seed entity">Load Seed</button>
           <button class="textButton" id="loadSeedRuleButton" title="Load seed rule from memory">Load Seed Rule</button>
           <button class="textButton" id="restoreRuleSeedButton" title="Restore a saved seed rule">Restore Rule Seed</button>

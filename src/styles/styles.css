@@ -220,6 +220,15 @@ li {
     border: 1px solid black;
 }
 
+/* Fragment Inspector */
+#fragInspectorBackground {
+    display: none;
+}
+
+#fragInspectorDiv {
+    overflow: auto;
+}
+
 /* Breed Table */
 #breedTableBackground {
     display: none;

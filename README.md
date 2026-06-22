@@ -756,6 +756,23 @@ The entity display contains:
 The data is assembled as an object by the process side entity 
 and transmitted to the renderer as an event.
 
+##### Displaying Fragments
+There are two repositories of code fragments:
+    rulesets.seedRuleFragments - collected from entities
+    seedFragments.js - hand supplied fragments
+
+The fragment inspector has an option to select from either set.
+
+The inspector is implemented on a modal of the main window, 
+like the scorelist.
+
+The inspector displays the number of fragments available in
+the set. It has an input for entering the fragment number to 
+be displayed.
+
+The code is displayed in a scrollable div panel, whose table columns
+are offset, code, instruction/data.
+
 ##### Reports
 The system provides for the current rule scores and rules 
 completed report from the Score List option.

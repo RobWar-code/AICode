@@ -9,6 +9,7 @@ const breedDisplay = require(path.join(__dirname, '/display/breedDisplay.js'));
 const seedDisplay = require(path.join(__dirname, '/display/seedDisplay.js'));
 const ruleDisplay = require(path.join(__dirname, '/display/ruleDisplay.js'));
 const restoreRuleSeed = require(path.join(__dirname, '/display/restoreRuleSeed.js'));
+const fragsDisplay = require(path.join(__dirname, "/display/fragsDisplay.js"));
 const testObj = require(path.join(__dirname, '/processes/testObj.js'));
 
 let processingCancelled = true;
@@ -116,6 +117,10 @@ ipcRenderer.on("displayRuleSelectionList", (event, ruleList) => {
     ruleDisplay.displayRuleSelector(ruleList);
 });
 
+ipcRenderer.on("displayFragInspector", (event, data) => {
+    fragsDisplay.start(data);
+});
+
 ipcRenderer.on("tablesCleared", (event, data) => {
     document.getElementById("statusDiv").style.display = "block";
     document.getElementById("statusPara").innerText = "TABLES CLEARED";
@@ -164,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelInsSetListButton = document.getElementById('cancelInsSetListButton');
     const startAtRuleButton = document.getElementById('startAtRuleButton');
     const startRuleSelectorForm = document.getElementById('startRuleSelectorForm');
+    const fragInspectorButton = document.getElementById('fragInspectorButton');
     const traceButton = document.getElementById('traceButton');
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
@@ -178,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const restoreRuleSeedButton = document.getElementById('restoreRuleSeedButton');
     const restoreRuleSeedSelector = document.getElementById('restoreRuleSeedSelector');
     const restoreRuleSeedSubmit = document.getElementById('restoreRuleSeedSubmit');
-    const restoreRuleSeedDismiss = document.getElementById('restoreRuleSeedDismiss')
+    const restoreRuleSeedDismiss = document.getElementById('restoreRuleSeedDismiss');
     const ruleSelectionButton = document.getElementById('ruleSelectionButton');
     const ruleSelectorForm = document.getElementById('ruleSelectorForm');
     const cancelRuleSelectionButton = document.getElementById('cancelRuleSelectionButton');
@@ -290,6 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("statusDiv").style.display = "block";
         document.getElementById("statusPara").innerText = "Processing...";
         ipcRenderer.send("startAtRule", sequenceNum); 
+    });
+
+    fragInspectorButton.addEventListener('click', (event) => {
+        ipcRenderer.send("fetchFragmentData", {source: "auto", fragNum: 0});
     });
 
     traceButton.addEventListener('click', (event) => {

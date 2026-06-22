@@ -9,6 +9,7 @@ const seedPrograms = require(path.join(__dirname, './processes/seedPrograms.js')
 const rulesets = require(path.join(__dirname, "./processes/rulesets.js"));
 const instructionSetLists = require(path.join(__dirname, "./processes/instructionSetLists.js"));
 const logResults = require(path.join(__dirname, "./processes/logResults.js"));
+const fragInspector = require(path.join(__dirname, "./processes/fragInspector.js"));
 const testMonoclonal = require(path.join(__dirname, "./tests/testMonoclonal.js"));
 const {databaseType, processMode} = require(path.join(__dirname, 'AICodeConfig.js'));
 let dbConn;
@@ -199,6 +200,11 @@ ipcMain.on("fetchStartRuleList", (data) => {
 
 ipcMain.on("startAtRule", (event, ruleSequenceNum) => {
   program.startAtRule(ruleSequenceNum);
+});
+
+ipcMain.on("fetchFragmentData", (event, fragRequest) => {
+  let fragData = fragInspector.fetch(fragRequest);
+  mainWindow.webContents.send("displayFragInspector", fragData);
 });
 
 ipcMain.on("traceStep", (data) => {
