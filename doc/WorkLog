@@ -7,6 +7,8 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
+    Provide an inspect fragments option.
+
     Switching from serial to parallel mode with a load restart causes problems
         (no batch loading performed)
 
@@ -87,7 +89,7 @@ Jobs Due
 
     Write rules for Forth-like arithmetic operations
     
-    Get ASCII number rule working
+    * Get ASCII number rule working
 
     Add further simple rules that might help the performance for 
     more sophisticated rules

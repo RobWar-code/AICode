@@ -14,7 +14,8 @@ Contents
         Selecting Rules
             Combining Rules
         Analytical Code
-        Code Fragment Candidates
+        Developing On Fragments
+            Code Fragment Candidates
         General Approaches
         Possible Future Approaches
             Staged Introduction of Rules
@@ -286,7 +287,9 @@ Contents
     The code from these rules might then merge successfully
     with later rules.
 
-<h2>Code Fragment Candidates
+<h2>Developing On Code Fragments
+
+<h3>Code Fragment Candidates
 
     General purpose double loops are likely to be useful, consider:
 

@@ -1,6 +1,7 @@
 Contents
     Current System Status
     Minimum Useful Mutator
+    Problem Space Lead in Code
 
 <h1>Current System Status
 
@@ -14,7 +15,7 @@ Contents
     variants of the approach to establish the general validity of the
     evolutionary code approach to machine learning.
 
-    As the system stands it is the system as whole which "learns" by
+    As the system stands it is the system as a whole which "learns" by
     the accumulation of solutions and solution fragments that may be useful 
     in solving other problems. The learning at the entity program level
     is all by selective scoring, and sometimes this may fail because
@@ -56,3 +57,18 @@ Contents
     with raw probability this would be 6 items of 8 possibilities.
     What could usefully be constructed from such an arrangement?
     
+<h1>Problem Space Lead in Code
+
+    One of the problems with AICode as it currently stands is that it
+    explores the code combination probability space with nothing but
+    random variation and no emergent coding/problem solving logic other
+    randomly acquired sequences.
+
+    I wonder if an intermediate layer could be introduced that 
+    specifically deals with code arrangements?
+
+    This could arise by providing types of rule that deal with
+    arrangements of code in memory.
+
+    Suppose we have two memory areas - memory manipulation code
+    and math problem solver.

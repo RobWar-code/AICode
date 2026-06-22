@@ -523,7 +523,7 @@ class Entity {
         const transposeChance = 0.15;
         const replaceChance = 0.65;
         const insertChance = 0.8;
-        const deleteChance = 0.95;
+        const deleteChance = 0.92;
         const ruleSeedFragmentChance = 0.98;
         const codeFragmentChance = 1.0;
         const numIns = this.instructionSet.numIns;
