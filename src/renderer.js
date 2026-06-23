@@ -169,7 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelInsSetListButton = document.getElementById('cancelInsSetListButton');
     const startAtRuleButton = document.getElementById('startAtRuleButton');
     const startRuleSelectorForm = document.getElementById('startRuleSelectorForm');
+
     const fragInspectorButton = document.getElementById('fragInspectorButton');
+    const fragInspectorDismiss = document.getElementById('fragInspectorDismiss');
+    const fragSelectSubmit = document.getElementById('fragSelectSubmit');
+
     const traceButton = document.getElementById('traceButton');
     const loadSeedButton = document.getElementById('loadSeedButton');
     const seedSelectorForm = document.getElementById('seedSelectorForm');
@@ -300,6 +304,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fragInspectorButton.addEventListener('click', (event) => {
         ipcRenderer.send("fetchFragmentData", {source: "auto", fragNum: 0});
+    });
+
+    fragInspectorDismiss.addEventListener('click', (event) => {
+        document.getElementById("fragInspectorBackground").style.display = "none";
+    });
+
+    fragSelectSubmit.addEventListener('click', (event) => {
+        // Get the input value
+        let elem = document.getElementById('fragSelectNum');
+        let fragNum = parseInt(elem.value);
+        if (isNaN(fragNum)) return;
+        ipcRenderer.send("fetchFragmentData", {source: "auto", fragNum: fragNum});
     });
 
     traceButton.addEventListener('click', (event) => {

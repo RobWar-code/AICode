@@ -226,6 +226,7 @@ li {
 }
 
 #fragInspectorDiv {
+    height: 350px;
     overflow: auto;
 }
 

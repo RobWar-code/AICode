@@ -203,7 +203,7 @@ ipcMain.on("startAtRule", (event, ruleSequenceNum) => {
 });
 
 ipcMain.on("fetchFragmentData", (event, fragRequest) => {
-  let fragData = fragInspector.fetch(fragRequest);
+  let fragData = fragInspector.fetch(fragRequest, program.instructionSet);
   mainWindow.webContents.send("displayFragInspector", fragData);
 });
 
