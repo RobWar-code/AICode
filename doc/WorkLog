@@ -7,12 +7,14 @@ Jobs Due
     * = completed and tested
     + = completed not tested
 
-    Provide an inspect fragments option.
+    * Include seed rule fragments in random breed
+
+    * Provide an inspect fragments option.
 
     Switching from serial to parallel mode with a load restart causes problems
         (no batch loading performed)
 
-    Check-out rule Load Mem From First Param Of Inputs
+    * Check-out rule Load Mem From First Param Of Inputs
     
     Remove Max Score from display
 
@@ -67,7 +69,7 @@ Jobs Due
     
     Try for a generic template(s)
     
-    Consider tables/charts for comparing historical trials
+    * Consider tables/charts for comparing historical trials
         Consider trial notes before a run.
 
     Check through code sequences to establish stepwise rules

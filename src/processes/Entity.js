@@ -154,19 +154,30 @@ class Entity {
     }
 
     createRandomProgram() {
-        const fragmentChance = 0.01;
+        const codeFragmentChance = 0.005
+        const fragmentChance = 0.03;
         this.breedMethod = "Random";
         let numIns = this.instructionSet.numIns;
         let lastIns = -1;
         let checkArray = [];
         for (let i = 0; i < this.memLength; i++) {
-            if (Math.random() < fragmentChance) {
+            let r = Math.random();
+            if (r < codeFragmentChance) {
                 let codeBlock = seedFragments.getCodeFragment(this.instructionSet);
                 let j = 0;
                 while (i < this.memLength && j < codeBlock.length) {
                     this.initialMemSpace[i] = codeBlock[j];
                     ++i;
                     ++j;
+                }
+            }
+            else if (r < fragmentChance && rulesets.seedRuleFragments.length > 0) {
+                let p = Math.floor(Math.random() * rulesets.seedRuleFragments.length);
+                let frag = rulesets.seedRuleFragments[p];
+                for (let c of frag) {
+                    this.initialMemSpace[i] = c;
+                    ++i;
+                    if (i >= this.memLength) break;
                 }
             }
             else if (i < 100) {
