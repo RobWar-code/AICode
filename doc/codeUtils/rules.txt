@@ -1,0 +1,131 @@
+Add Adjacent Params
+Add First Param
+Add Sum of First and Second Params
+And Adjacent Params
+And First Param
+Average of Three Params
+Check For Carry
+Compare First Param
+Convert ASCII Numbers 1
+Convert ASCII Numbers 1
+Convert ASCII Numbers 2
+Convert ASCII Numbers 3
+Convert ASCII Numbers 4
+Count Evens From Fives
+Count First Param From Second
+Count Not First Param From Second
+Count Odds From Fives
+Count Pairs In First Param
+Count Triplets In First Param
+Cube Roots
+Difference Between Outputs
+Divide Adjacent Params
+Divide by First Param 1
+Divide by First Param 2
+Divide by First Param 3
+Divide by First Param 4
+Divide by First Param 5
+Divide By First Param With Mod 1
+Divide by First Param With Mod 2
+Divisible By First Param
+Duplicate Params
+Extract Even Numbers
+Extract First Params Delimited Params
+Extract First Paramth Inputs 1
+Extract First Paramth Inputs 2
+Extract First Paramth Inputs 3
+Extract Odd Numbers
+Extract Semicolon Separated
+Find Numbers
+Find Number Triplets
+General Instruction Distribution
+Get First of Threes
+Get First of Threes Greater Than First
+Get Numbers Between First Two
+Get Numbers Greater than First
+Get Numbers Less than First
+Get Pairs
+Get Triplets
+Greater of Adjacent Params
+Greater of Three
+Greater than First Param
+Highest IP
+Instruction Counter
+Instruction Distribution
+Is Prime
+Load Mem at First Param from Inputs
+Matching CASM Instruction
+Modulo First Param 1
+Modulo First Param 2
+Modulo First Param 3
+Modulo First Param 4
+Modulo First Param 5
+Modulo First Param 6
+Modulo First Param 7
+Multiply Adjacent Params
+Multiply Alternate Numbers By Ten
+Multiply By First Param 1
+Multiply By First Param 2
+Multiply By First Param 3
+Multiply By First Param Add Adjacent
+Multiply By First Param Minus Adjacent
+Multiply Params by 10
+Multiply Params by 100
+Not Divisible By First Param
+Number of Input Reads
+Number of reverse JR ins
+Odd And Even Params
+Or Adjacent Params
+Or First Param
+Output Different to Input
+Output Mem From First Param
+Output Scores Equal
+Output Series
+Output Series Of Series 1
+Output Series Of Series 2
+Output Series Of Series 3
+Output Standard Deviation
+Params Not Equal To First Param
+Params Preserved
+Paramth Prime
+Power First Param 1
+Power First Param 2
+Power First Param 3
+Reverse Params
+Reverse Params Triplets
+Select Greater Than First Param
+Select Less Than First Param
+Sixteen Bit Add First Param 1
+Sixteen Bit Add First Param 2
+Sixteen Bit Add First Two Params
+Skip Adjacent Params 1
+Skip Adjacent Params 2
+Sort Adjacent Params
+Sort Params
+Sort Triplets
+Square Roots
+Sub Sum of First and Second Params
+Subtract Adjacent Params
+Subtract First Param
+Subtract First Param Second Times
+Sum First Params Delimited Params
+Sum of Outputs
+Sum of Three Params
+Sum Semicolon Separated Params
+Swap Adjacent Params
+Triplets From Param Increments
+Use op to Convert Adjacent Params 1 (=)
+Use op to Convert Adjacent Params 10
+Use op to Convert Adjacent Params 2 (+)
+Use op to Convert Adjacent Params 3 (-)
+Use op to Convert Adjacent Params 4 (*)
+Use op to Convert Adjacent Params 5 (%)
+Use op to Convert Adjacent Params 6 (/)
+Use op to Convert Adjacent Params 7
+Use op to Convert Adjacent Params 8
+Use op to Convert Adjacent Params 9
+Values Out Different
+Values Out Different Sum to First
+Values Out From Initial Params
+Values Out From Params
+Values Out Set
