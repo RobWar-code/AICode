@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 144,
-    maxRuleId: 143,
+    numRules: 146,
+    maxRuleId: 145,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -834,6 +834,110 @@ const rulesets = {
         this.ruleFunction.push(this.compareSampleInSampleOut);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getCompareSampleInSampleOutRequiredOutputs);
+
+        this.scoreList.push(
+            {rule:"Extract Semicolon Separated From Sample In", ruleId: 143, 
+                skip: false,
+                excludeHelperRules: [36, 67],
+                sampleInOut: true,
+                retain: false, score: 0, max: 5,
+                startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
+                highIC: 18 * 16 + 5,
+                highIP: 80,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd:40
+                    }
+                ],
+                sampleIn: [
+                    [48,50,59,52,59,57,54,51,56,59,49,48,59,56,59,52,53,50,59,
+                     54,59,55,52,59,57,50,59,56,59,51,48,59,53,50,59,55,59,57,52,49,59,
+                     56,59,55,52,59,57,50,59,56,59
+                    ],
+                    [48,59,53,52,56,59,54,51,56,48,59,48,59,59,52,52,53,50,59,
+                     54,59,55,59,57,50,59,56,59,51,48,59,53,50,59,55,59,57,52,49,59,
+                     56,59,55,52,57,59,57,50,59,56,59
+                    ],
+                ],
+                sampleOut: [
+                    [9,3,6,18,24,37,225,193,4,25,18,35,64,71,107,99],
+                    [30,49,6,111,186,122,87,17,88,85,77,91,95,63,65,19]
+                ],
+                paramsIn: [
+                    [15,85,93,24,201,176,184,98,32,21,76,186,130,110,82,65],
+                    [16,87,94,24,170,176,183,96,32,22,75,185,135,110,82,67]
+                ],
+                outputs: [
+                    [23,2,1,0,2,255,4,70,16,3,1,2,255,8,18,3],
+                    [3,2,1,255,63,2,254,16,2,2,19,17,3,1,4,1]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractSemicolonSeparatedFromSampleInRequiredOutputs);
+
+        this.scoreList.push(
+            {rule:"Add Semicolon Separated From Sample In", ruleId: 144, 
+                skip: false,
+                excludeHelperRules: [36, 67],
+                sampleInOut: true,
+                retain: false, score: 0, max: 5,
+                startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16, inBlockStart: 0, inBlockLen: 32,
+                highIC: 18 * 16 + 5,
+                highIP: 80,
+                insDistribution: [
+                    {
+                        ins: "LDSI A, (C)",
+                        countOpt: 1,
+                        scanStart: 0,
+                        scanEnd: 20
+                    },
+                    {
+                        ins: "CMP A, B",
+                        countOpt: 1,
+                        scanStart: 5,
+                        scanEnd:40
+                    }
+                ],
+                sampleIn: [
+                    [48,50,59,52,59,57,54,51,56,59,49,48,59,56,59,52,53,50,59,
+                     54,59,55,52,59,57,50,59,56,59,51,48,59,53,50,59,55,59,57,52,49,59,
+                     56,59,55,52,59,57,50,59,56,59
+                    ],
+                    [48,59,53,52,56,59,54,51,56,48,59,48,59,59,52,52,53,50,59,
+                     54,59,55,59,57,50,59,56,59,51,48,59,53,50,59,55,59,57,52,49,59,
+                     56,59,55,52,57,59,57,50,59,56,59
+                    ],
+                ],
+                sampleOut: [
+                    [9,3,6,18,24,37,225,193,4,25,18,35,64,71,107,99],
+                    [30,49,6,111,186,122,87,17,88,85,77,91,95,63,65,19]
+                ],
+                paramsIn: [
+                    [15,85,93,24,201,176,184,98,32,21,76,186,130,110,82,65],
+                    [16,87,94,24,170,176,183,96,32,22,75,185,135,110,82,67]
+                ],
+                outputs: [
+                    [23,2,1,0,2,255,4,70,16,3,1,2,255,8,18,3],
+                    [3,2,1,255,63,2,254,16,2,2,19,17,3,1,4,1]
+                ]
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getAddSemicolonSeparatedFromSampleInRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Triplets From Param Increments", ruleId: 138,
@@ -5882,6 +5986,42 @@ const rulesets = {
             }
             outputList.push(output);
             ++index;
+        }
+        return outputList;
+    },
+
+    getExtractSemicolonSeparatedFromSampleInRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let v of inputs) {
+                if (v != 59) {
+                    output.push(v);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getAddSemicolonSeparatedFromSampleInRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let t = 0;
+            for (let v of inputs) {
+                if (v != 59) {
+                    t += v;
+                    if (t > 255) {
+                        t = t - 256;
+                    }
+                }
+                else {
+                    output.push(t);
+                    t = 0;
+                }
+            }
+            outputList.push(output);
         }
         return outputList;
     },

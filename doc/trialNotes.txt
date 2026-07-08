@@ -2,8 +2,8 @@ Trial A26:
 
     Increase MaxIC from 12000 to 15000, possibly to allow for more
     preprocessing
+    Reduce chance of fragment in random breed.
 
-    
 Trial A25:
 Started 01/07/2026
 Completed 08/07/2026
