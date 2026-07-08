@@ -3829,7 +3829,7 @@ const rulesets = {
             }
         );
         this.ruleFunction.push(null);
-        this.byteFunction.push(this.null);
+        this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getAveOfThreeRequiredOutputs);
 
         this.scoreList.push(
@@ -4202,8 +4202,8 @@ const rulesets = {
                 outputs: []
             }
         );
-        this.ruleFunction.push(this.convertASCIINumbers);
-        this.byteFunction.push(this.byteConvertASCIINumbers);
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getMultiplyAlternateNumbersByTenRequiredOutputs);
 
         this.scoreList.push(

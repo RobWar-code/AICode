@@ -1,3 +1,22 @@
+Trial A26:
+
+    Increase MaxIC from 12000 to 15000, possibly to allow for more
+    preprocessing
+
+    
+Trial A25:
+Started 01/07/2026
+Completed 08/07/2026
+    Include rule seed fragments in random program breeding
+
+    Run for 12 loops 4 gains, 8 losses
+
+01/07/2026
+Trial A24:
+    Run for 11 loops
+    6 losses 4 gains since prior run
+    ie: no significant gains/losses
+
 Trial A24 (start 22/06/2026):
     Adjusted the chance of ruleSeedFragment to 0.06 from 0.02
     in monoclonalInsBreed.

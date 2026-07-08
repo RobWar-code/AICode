@@ -154,8 +154,8 @@ class Entity {
     }
 
     createRandomProgram() {
-        const codeFragmentChance = 0.005
-        const fragmentChance = 0.03;
+        const codeFragmentChance = 0.001;
+        const fragmentChance = 0.01;
         this.breedMethod = "Random";
         let numIns = this.instructionSet.numIns;
         let lastIns = -1;
