@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 146,
-    maxRuleId: 145,
+    numRules: 147,
+    maxRuleId: 146,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -1745,6 +1745,30 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getMultiplyParamsBy100RequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamsBy100Inputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamsBy100Outputs;
+
+        this.scoreList.push(
+            {rule: "Multiply Param by 10 Add Adjacent", ruleId: 146,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 10 * 16 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [[9,6, 6,7, 5,4, 3,2, 1,0, 0,1, 2,3, 4,5,]],
+                sampleOut: [[96, 67, 54, 32, 10, 1, 23, 45]],
+                paramsIn: [ 
+                    [0,1,2],
+                    [2,1,0]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getMultiplyParamBy10AddAdjacentRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamBy10AddAdjacentInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeMultiplyParamBy10AddAdjacentOutputs;
 
         this.scoreList.push(
             {rule: "Check For Carry", ruleId: 132,
@@ -6742,6 +6766,47 @@ const rulesets = {
             for (let v of inputs) {
                 let r = (v * 100) & 255;
                 output.push(r);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getMultiplyParamBy10AddAdjacentRequiredOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let v = inputs[i] * 10 + inputs[i + 1];
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    makeMultiplyParamBy10AddAdjacentInputs(self) {
+        let inputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 16; j++) {
+                let v = Math.floor(Math.random() * 10);
+                let v1 = Math.floor(Math.random() * 10);
+                inputs.push(v, v1);
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeMultiplyParamBy10AddAdjacentOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeMultiplyParamBy10AddAdjacentOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < inputs.length; i += 2) {
+                let v = inputs[i] * 10 + inputs[i + 1];
+                output.push(v);
             }
             outputList.push(output);
         }
