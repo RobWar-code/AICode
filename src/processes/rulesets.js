@@ -8873,6 +8873,7 @@ const rulesets = {
 
             await this.makeWeightingTable();
 
+            // Update the rule sequence number to the next non-completed rule
             ++this.ruleSequenceNum;
             if (this.ruleSequenceNum > this.maxRuleSequenceNum) {
                 this.ruleSequenceNum = 0;
