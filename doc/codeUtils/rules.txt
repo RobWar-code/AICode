@@ -29,6 +29,7 @@ Divide By First Param With Mod 1
 Divide by First Param With Mod 2
 Divisible By First Param
 Duplicate Params
+Extract Alternate Params
 Extract Even Numbers
 Extract First Params Delimited Params
 Extract First Paramth Inputs 1
@@ -69,6 +70,7 @@ Multiply By First Param 2
 Multiply By First Param 3
 Multiply By First Param Add Adjacent
 Multiply By First Param Minus Adjacent
+Multiply Param by 10 Add Adjacent
 Multiply Params by 10
 Multiply Params by 100
 Not Divisible By First Param
