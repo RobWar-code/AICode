@@ -1,5 +1,13 @@
+Trial A28:
+
+    Add Rules:
+        Extract Alternate Params
+
 Trial A27:
 Started: 16/07/26
+Ended: 25/07/2026
+12 Loops
+    Gained 5 rules (including square root) lost 3. Usual rules solved.
 
     Added three new rules. Increased random breed fragment chance to 0.02.
     

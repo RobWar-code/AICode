@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 147,
-    maxRuleId: 146,
+    numRules: 149,
+    maxRuleId: 148,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -1272,6 +1272,36 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getCountTripletsInFirstParamRequiredOutputs);
 
         this.scoreList.push(
+            {rule: "Extract Alternate Params", ruleId: 147,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[
+                    2,6, 21,27, 195,89, 64,228, 125,195, 89,138, 73,89, 252,111,
+                    78,116, 127,212, 63,4, 69,7, 90,110, 81,165, 100,127, 110,12
+                ]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        6,13, 4,18, 91,77, 101,205, 225,248, 120,129, 145,165, 164,173,
+                        27,58, 55,49, 87,73, 35,39, 67,198, 11,96, 13,40, 176,82
+                    ],
+                    [
+                        90,13, 31,14, 15,16, 19,11, 22,23, 57,69, 79,99, 177,63,
+                        230,49, 59,67, 43,210, 167,12, 191,10, 10,1, 12,13, 77,35
+                    ]
+                ],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractAlternateParamsRequiredOutputs);
+
+        this.scoreList.push(
             {rule: "Extract First Paramth Inputs 1", ruleId: 105,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
@@ -1485,6 +1515,31 @@ const rulesets = {
         this.ruleFunction.push(this.subtractFirstParam);
         this.byteFunction.push(this.byteSubtractFirstParam);
         this.requiredOutputsFunction.push(this.getSubtractFirstParamRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Subtract 48 from Params", ruleId: 148,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 16,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                sampleIn: [[60,85,54,165,53,98,87,110,105,86,93,63,76,81,124,132]],
+                sampleOut: [],
+                paramsIn: [
+                    [
+                        96,60,75,91,96,203,108,200,128,255,77,69,131,114,66,71
+                    ],
+                    [
+                        53,122,63,67,69,81,72,186,215,104,89,65,52,48,104,126
+                    ]
+                ],
+                outputs: [],
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSubtract48FromParamsRequiredOutputs);
 
         this.scoreList.push(
             {rule: "Add Sum of First and Second Params", ruleId: 101,
@@ -6380,6 +6435,19 @@ const rulesets = {
         return outputList;
     },
 
+    getExtractAlternateParamsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            for (let p = 1; p < inputs.length; p += 2) {
+                output.push(inputs[p]);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     getExtractFirstParamthInputsRequiredOutputs(self, inputList) {
         let outputList = [];
 
@@ -6527,6 +6595,21 @@ const rulesets = {
         let required = (initialParams[offset] - a) & 255;
         let score = self.doByteScore(required, value);
         return score;
+    },
+
+    getSubtract48FromParamsRequiredOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            for (let n of inputs) {
+                let v = n - 48;
+                if (v < 0) v = v & 255;
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
     },
 
     getAddSumOfFirstAndSecondParamsRequiredOutputs(self, inputList) {
