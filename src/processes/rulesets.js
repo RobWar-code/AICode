@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 149,
-    maxRuleId: 148,
+    numRules: 151,
+    maxRuleId: 150,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -1590,6 +1590,48 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getSubSumOfFirstAndSecondParamsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "AND, Plus First and Second Params", ruleId: 149,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 10 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[7,9, 20,31,18,23,25,27,96,108,209,104,98,86,19,38,90,3]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getANDPlusFirstAndSecondParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeANDPlusFirstAndSecondParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeANDPlusFirstAndSecondParamsOutputs; 
+
+        this.scoreList.push(
+            {rule: "AND, OR First and Second Params", ruleId: 150,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 10 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[7,9, 20,31,18,23,25,27,96,108,209,104,98,86,19,38,90,3]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getANDORFirstAndSecondParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeANDORFirstAndSecondParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeANDORFirstAndSecondParamsOutputs; 
 
         this.scoreList.push(
             {rule: "Odd And Even Params", ruleId: 14,
@@ -6755,6 +6797,75 @@ const rulesets = {
         return score;
     },
 
+    getANDPlusFirstAndSecondParamsRequiredOutputs(self, inputList) {
+        let outputList = self.makeANDPlusFirstAndSecondParamsOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeANDPlusFirstAndSecondParamsInputs(self) {
+        let inputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 18; j++) {
+                let r = Math.floor(Math.random() * 256);
+                inputs.push(r);
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeANDPlusFirstAndSecondParamsOutputs(self, inputList);
+        return { inputList, outputList };
+    },
+
+    makeANDPlusFirstAndSecondParamsOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            let b = inputs[1];
+            for (let i = 2; i < inputs.length; i++) {
+                let v = (inputs[i] & a + b) & 255;
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getANDORFirstAndSecondParamsRequiredOutputs(self, inputList) {
+        let outputList = self.makeANDORFirstAndSecondParamsOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeANDORFirstAndSecondParamsInputs(self) {
+        let inputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            for (let j = 0; j < 18; j++) {
+                let r = Math.floor(Math.random() * 256);
+                inputs.push(r);
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeANDORFirstAndSecondParamsOutputs(self, inputList);
+        return { inputList, outputList };
+    },
+
+    makeANDORFirstAndSecondParamsOutputs(self, inputList) {
+        let outputList = [];
+
+        for (let inputs of inputList) {
+            let output = [];
+            let a = inputs[0];
+            let b = inputs[1];
+            for (let i = 2; i < inputs.length; i++) {
+                let v = inputs[i] & a | b;
+                output.push(v);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
 
     multiplyByFirstParam(self, dataParams, ruleParams) {
         let initialParams = dataParams.initialParams;

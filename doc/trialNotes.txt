@@ -1,7 +1,24 @@
+Trial A29:
+
+    Add rules:
+        AND Plus First and Second Params
+        AND OR First and Second Params
+
 Trial A28:
+Started: 12/09/26
 
     Add Rules:
         Extract Alternate Params
+        Subtract 48 From Params
+
+A28A - 12 loops (22/09/26)
+    +3 and -3 rules
+
+Trial left to run for at least 20 loops to explore lower probability events.
+We note that it is generally the same rules that are being solved with a small
+margin (1/20) of variation. This is worthy of investigation. Finger in the wind 
+suggests single operation with output operation. It might be worth investigating
+dual simple operations like AND OR or + -, using the first two parameters.
 
 Trial A27:
 Started: 16/07/26
