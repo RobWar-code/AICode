@@ -455,6 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadButton.addEventListener('click', (event) => {
+        document.getElementById("statusDiv").style.display = "block";
+        document.getElementById("statusPara").innerText = "Loading Data - Please Wait ...";
         ipcRenderer.send("loadSession", 0);
     });
 });

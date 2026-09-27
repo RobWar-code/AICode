@@ -11,10 +11,14 @@ Jobs Due
 
     * Provide an inspect fragments option.
 
+    * Check-out rule Load Mem From First Param Of Inputs
+
+    Exclude repeating instructions from fragments
+
+    Add a loading messing when Load is used
+
     Switching from serial to parallel mode with a load restart causes problems
         (no batch loading performed)
-
-    * Check-out rule Load Mem From First Param Of Inputs
     
     Remove Max Score from display
 

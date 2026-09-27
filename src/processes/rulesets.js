@@ -9360,12 +9360,25 @@ const rulesets = {
                 }
                 let sectionValid = true;
                 // Get the code Section
+                let codeCount = 0;
+                let lastCode = -1;
                 while (insNum < sectionStart + sectionLen && p < memSpace.length) {
                     let code = memSpace[p];
                     let insItem = instructionSet.getInsDetails(code);
                     if (insItem.name === "RETF") {
                         sectionValid = false;
                         break;
+                    }
+                    // If repeating code, exclude
+                    if (code === lastCode) {
+                        ++codeCount;
+                        if (codeCount > 3) {
+                            sectionValid = false;
+                            break;
+                        }
+                    }
+                    else {
+                        codeCount = 0;
                     }
                     // Insert the instruction
                     section.push(code);
@@ -9380,6 +9393,7 @@ const rulesets = {
                         }
                         break;
                     }
+                    lastCode = code;
                     ++insNum;
                 }
                 // Validate the section
