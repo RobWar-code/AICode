@@ -3,6 +3,9 @@ Trial A29:
     Add rules:
         AND Plus First and Second Params
         AND OR First and Second Params
+        Adjusted rules count odd and even params from fives
+
+    Remove repeating sequences from fragments
 
 Trial A28:
 Started: 12/09/26
@@ -19,6 +22,11 @@ We note that it is generally the same rules that are being solved with a small
 margin (1/20) of variation. This is worthy of investigation. Finger in the wind 
 suggests single operation with output operation. It might be worth investigating
 dual simple operations like AND OR or + -, using the first two parameters.
+
+A28B - 30 loops
+
+Rule solutions continued to accumulate at the rate of an average one or two
+rules per loop.
 
 Trial A27:
 Started: 16/07/26

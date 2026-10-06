@@ -2438,6 +2438,7 @@ const rulesets = {
             {rule: "Count Evens From Fives", ruleId: 121,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 80,
                 highIC: 33 * 9 * 16 + learnCodeAllowance,
@@ -2455,29 +2456,21 @@ const rulesets = {
                     ]
                 ],
                 sampleOut: [],
-                paramsIn: [
-                    [
-                        6,24,22,18,3, 7,15,12,35,120,
-                        19,18,11,72,13, 30,42,53,9,37,
-                        36,61,10,20,29, 126,131,138,7,9,
-                        144,2,12,18,19, 12,18,24,26,28,
-                        33,11,15,2,7, 33,7,121,139,147,
-                        14,26,59,19,13, 72,78,74,63,32,
-                        13,16,79,91,100, 32,45,67,97,99,
-                        11,16,21,29,31, 11,14,73,84,7
-                    ],
-                ],
+                paramsIn: [],
                 outputs: []
             }
         );
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getCountEvensFromFivesRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeCountEvensFromFivesInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeCountEvensFromFivesOutputs; 
 
         this.scoreList.push(
             {rule: "Count Odds From Fives", ruleId: 122,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 80,
                 highIC: 33 * 9 * 16 + learnCodeAllowance,
@@ -2495,24 +2488,15 @@ const rulesets = {
                     ]
                 ],
                 sampleOut: [],
-                paramsIn: [
-                    [
-                        6,24,22,20,3, 7,15,13,35,120,
-                        19,18,11,71,13, 30,41,53,9,37,
-                        36,61,10,20,29, 126,131,138,7,9,
-                        144,2,12,18,19, 12,18,24,26,28,
-                        33,11,15,2,7, 33,9,122,139,147,
-                        14,26,59,19,13, 72,78,74,64,32,
-                        13,16,79,91,100, 32,45,67,97,99,
-                        11,16,21,29,31, 11,14,73,84,7
-                    ],
-                ],
+                paramsIn: [],
                 outputs: []
             }
         );
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getCountOddsFromFivesRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeCountOddsFromFivesInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeCountOddsFromFivesOutputs; 
 
         this.scoreList.push(
             {rule: "Divide By First Param With Mod 1", ruleId: 18,
@@ -7326,6 +7310,39 @@ const rulesets = {
         return outputList;
     },
 
+    makeCountEvensFromFivesInputs(self) {
+        let inputList = [];
+        for (let sets = 0; sets < self.numAutoParamSets; sets++) {
+            let inputs = [];
+            for (let i = 0; i < 16; i++) {
+                for (let j = 0; j < 5; j++) {
+                    let v = Math.floor(Math.random() * 256);
+                    inputs.push(v);
+                }
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeCountEvensFromFivesOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeCountEvensFromFivesOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < 16; i++) {
+                let count = 0;
+                for (let j = 0; j < 5; j++) {
+                    let v = inputs[i * 5 + j];
+                    if (v % 2 === 0) ++count;
+                }
+                output.push(count);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     getCountOddsFromFivesRequiredOutputs(self, inputList) {
         let outputList = [];
         
@@ -7343,6 +7360,39 @@ const rulesets = {
                     count = 0;
                 }
                 ++p;
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    makeCountOddsFromFivesInputs(self) {
+        let inputList = [];
+        for (let sets = 0; sets < self.numAutoParamSets; sets++) {
+            let inputs = [];
+            for (let i = 0; i < 16; i++) {
+                for (let j = 0; j < 5; j++) {
+                    let v = Math.floor(Math.random() * 256);
+                    inputs.push(v);
+                }
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeCountOddsFromFivesOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeCountOddsFromFivesOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let i = 0; i < 16; i++) {
+                let count = 0;
+                for (let j = 0; j < 5; j++) {
+                    let v = inputs[i * 5 + j];
+                    if (v % 2 === 1) ++count;
+                }
+                output.push(count);
             }
             outputList.push(output);
         }
