@@ -4,6 +4,9 @@ Trial A29:
         AND Plus First and Second Params
         AND OR First and Second Params
         Adjusted rules count odd and even params from fives
+        Extract ASCII numbers
+        Extract ASCII lower case
+        Extract ASCII upper case
 
     Remove repeating sequences from fragments
 

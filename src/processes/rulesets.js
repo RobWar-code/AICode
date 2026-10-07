@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 151,
-    maxRuleId: 150,
+    numRules: 152,
+    maxRuleId: 151,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -4381,6 +4381,33 @@ const rulesets = {
         this.ruleFunction.push(this.paramOperations);
         this.byteFunction.push(this.byteParamOperations);
         this.requiredOutputsFunction.push(this.getParamOperationsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Extract ASCII numbers", ruleId: 151,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        100,3,49,8,54,60,57,56,4,0,51,48,67,52,6,8,
+                        52,57,7,9,55,56,6,106,51,50,1,49,6,3,8,57
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractASCIINumbersRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIINumbersInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIINumbersOutputs; 
 
         this.scoreList.push(
             {rule: "Multiply Alternate Numbers By Ten", ruleId: 131,
@@ -8871,6 +8898,66 @@ const rulesets = {
         let score = self.doScore(opt, count, max, min);
         return score;
 
+    },
+
+    getExtractASCIINumbersRequiredOutputs(self, inputList) {
+        outputList = self.makeExtractASCIINumbersOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeExtractASCIINumbersInputs(self) {
+        let zero = "0".charCodeAt(0);
+        let nine = zero + 9;
+        let inputList = [];
+        let numSet = [];
+        for (let i = 0; i < 10; i++) {
+            numSet.push(i + zero);
+        }
+        let nonNums = [];
+        for (let i = 0; i < 30; i++) {
+            let r;
+            if (Math.random() < 0.5) {
+                r = Math.floor(Math.random() * zero);
+            }
+            else {
+                r = Math.floor(Math.random() * (255 - nine)) + nine + 1;
+            }
+            nonNums.push(r);
+        }
+        let inList = numSet.concat(nonNums);
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = self.shuffle(inList);
+            inputList.push(inputs);
+        }
+        let outputList = self.makeExtractASCIINumbersOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeExtractASCIINumbersOutputs(self, inputList) {
+        let zero = "0".charCodeAt(0);
+        let nine = zero + 9;
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let c of inputs) {
+                if (c >= zero && c <= nine) {
+                    output.push(c);
+                }
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    shuffle(a) {
+        for (let i = 0; i < a.length; i++) {
+            let r1 = Math.floor(Math.random() * a.length);
+            let r2 = Math.floor(Math.random() * a.length);
+            let b = a[r1];
+            a[r1] = a[r2];
+            a[r2] = b;
+        }
+        return a;
     },
 
     getMultiplyAlternateNumbersByTenRequiredOutputs(self, inputList){
