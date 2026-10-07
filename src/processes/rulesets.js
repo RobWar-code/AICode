@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 152,
-    maxRuleId: 151,
+    numRules: 155,
+    maxRuleId: 154,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -4408,6 +4408,90 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getExtractASCIINumbersRequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIINumbersInputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIINumbersOutputs; 
+
+        this.scoreList.push(
+            {rule: "Extract ASCII Lower Case", ruleId: 152,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        97,7,9,99,8,5,98,7,100,9,11,13,103,102,9,101,2,1,
+                        104,109,107,6,7,9,106,5,108,4,3,110,1,115,113,2,4,7,
+                        1,5,0,112,11,13,114,9,111,120,7,6,4,116,8,9,119,117,
+                        118,1,122,124,3,6,121,7,123,8,9,126,125
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractASCIILowerCaseRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIILowerCaseInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIILowerCaseOutputs; 
+
+        this.scoreList.push(
+            {rule: "Extract ASCII Upper Case", ruleId: 153,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        1,65,2,3,69,67,9,8,6,68,75,0,73,7,71,6,3,70,7,5,74,76,0,
+                        9,79,77,78,0,2,4,80,8,82,9,0,81,83,5,6,84,7,8,86,85,0,8,4,
+                        7,88,1,89,9,87,8,6,90,92,8,91
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractASCIIUpperCaseRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIIUpperCaseInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIIUpperCaseOutputs; 
+
+        this.scoreList.push(
+            {rule: "Extract ASCII Operators", ruleId: 154,
+                retain: false, skip: false, 
+                excludeHelperRules: [67],
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                autoParams: true,
+                outBlockStart: 0, outBlockLen: 16,
+                inBlockStart: 0, inBlockLen: 32,
+                highIC: 16 * 10 + learnCodeAllowance,
+                highIP: 90,
+                sampleIn: [
+                    [
+                        1,2,43,4,5,45,3,2,47,6,42,7,45,47,9,8,42,43,
+                        3,42,5,7,42,9,8,45,3,1,43,2,47,47,8,9,45,4,43
+                    ]
+                ],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getExtractASCIIOperatorsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIIOperatorsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractASCIIOperatorsOutputs; 
 
         this.scoreList.push(
             {rule: "Multiply Alternate Numbers By Ten", ruleId: 131,
@@ -8949,6 +9033,171 @@ const rulesets = {
         return outputList;
     },
 
+    getExtractASCIILowerCaseRequiredOutputs(self, inputList) {
+        outputList = self.makeExtractASCIILowerCaseOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeExtractASCIILowerCaseInputs(self){
+        let a = "a".charCodeAt(0);
+        let z = "z".charCodeAt(0);
+        let inputList = [];
+        let letters = [];
+        for (let i = a; i < z; i++) {
+            letters.push(i);
+        }
+        let nonLetters = [];
+        for (let i = 0; i < 52; i++) {
+            let r;
+            if (Math.random() < 0.5) {
+                r = Math.floor(Math.random() * a);
+            }
+            else {
+                r = Math.floor(Math.random() * 255 - z) + z + 1;
+            }
+            nonLetters.push(r);
+        }
+        let inList = letters.concat(nonLetters);
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = self.shuffle(inList);
+            inputList.push(inputs);
+        }
+        let outputList = self.makeExtractASCIILowerCaseOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeExtractASCIILowerCaseOutputs(self, inputList) {
+        let a = "a".charCodeAt(0);
+        let z = "z".charCodeAt(0);
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let c of inputs) {
+                if (c >= a && z >= c) output.push(c);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getExtractASCIIUpperCaseRequiredOutputs(self, inputList) {
+        outputList = self.makeExtractASCIIUpperCaseOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeExtractASCIIUpperCaseInputs(self){
+        let a = "A".charCodeAt(0);
+        let z = "Z".charCodeAt(0);
+        let inputList = [];
+        let letters = [];
+        for (let i = a; i < z; i++) {
+            letters.push(i);
+        }
+        let nonLetters = [];
+        for (let i = 0; i < 52; i++) {
+            let r;
+            if (Math.random() < 0.5) {
+                r = Math.floor(Math.random() * a);
+            }
+            else {
+                r = Math.floor(Math.random() * 255 - z) + z + 1;
+            }
+            nonLetters.push(r);
+        }
+        let inList = letters.concat(nonLetters);
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = self.shuffle(inList);
+            inputList.push(inputs);
+        }
+        let outputList = self.makeExtractASCIIUpperCaseOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeExtractASCIIUpperCaseOutputs(self, inputList) {
+        let a = "A".charCodeAt(0);
+        let z = "Z".charCodeAt(0);
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let c of inputs) {
+                if (c >= a && z >= c) output.push(c);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getExtractASCIIOperatorsRequiredOutputs(self, inputList) {
+        outputList = self.makeExtractASCIIOperatorsOutputs(self, inputList);
+        return outputList;
+    },
+
+    makeExtractASCIIOperatorsInputs(self) {
+        let op$ = "+-*/";
+        let ops = [];
+        for (let i = 0; i < op$.length; i++){
+            ops.push(op$.charCodeAt(i));
+        }
+        let inputList = [];
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            let c = 0;
+            while (c < 16) {
+                let r;
+                if (Math.random() < 0.3) {
+                    let r1 = Math.floor(Math.random() * ops.length);
+                    r = ops[r1];
+                    ++c;
+                }
+                else {
+                    let found = false;
+                    while (!found) {
+                        r = Math.floor(Math.random() * 256);
+                        let f = false;
+                        for (let n of ops) {
+                            if (n === r) {
+                                f = true;
+                                break;
+                            }
+                        }
+                        if (!f) found = true;
+                    }
+                }
+                inputs.push(r)
+            }
+            for (c of ops) {
+                inputs.unshift(c)
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeExtractASCIIOperatorsOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeExtractASCIIOperatorsOutputs(self, inputList) {
+        let op$ = "+-*/";
+        let ops = [];
+        for (let i = 0; i < op$.length; i++){
+            ops.push(op$.charCodeAt(i));
+        }
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            for (let c of inputs) {
+                let f = false;
+                for (let v of ops) {
+                    if (c === v) {
+                        f = true;
+                        break;
+                    }
+                }
+                if (f) output.push(c);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
     shuffle(a) {
         for (let i = 0; i < a.length; i++) {
             let r1 = Math.floor(Math.random() * a.length);
@@ -8957,7 +9206,11 @@ const rulesets = {
             a[r1] = a[r2];
             a[r2] = b;
         }
-        return a;
+        let v = [];
+        for (let c of a) {
+            v.push(c);
+        }
+        return v;
     },
 
     getMultiplyAlternateNumbersByTenRequiredOutputs(self, inputList){

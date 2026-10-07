@@ -7,6 +7,7 @@ Trial A29:
         Extract ASCII numbers
         Extract ASCII lower case
         Extract ASCII upper case
+        Extract ASCII operators
 
     Remove repeating sequences from fragments
 
