@@ -1,5 +1,14 @@
-Trial A29:
+Trial A30:
 
+    Add Rules:
+        Ranges and samples:
+            Select Samples of First Two Params 
+            Select Samples of First Three Params 
+            Select Samples of First Four Params 
+            Select from Range in First Two Params
+        
+Trial A29:
+Started 07/10/26
     Add rules:
         AND Plus First and Second Params
         AND OR First and Second Params
@@ -13,6 +22,7 @@ Trial A29:
 
 Trial A28:
 Started: 12/09/26
+Completed: 07/10/26
 
     Add Rules:
         Extract Alternate Params
@@ -21,16 +31,15 @@ Started: 12/09/26
 A28A - 12 loops (22/09/26)
     +3 and -3 rules
 
-Trial left to run for at least 20 loops to explore lower probability events.
-We note that it is generally the same rules that are being solved with a small
-margin (1/20) of variation. This is worthy of investigation. Finger in the wind 
-suggests single operation with output operation. It might be worth investigating
-dual simple operations like AND OR or + -, using the first two parameters.
+    Trial left to run for at least 20 loops to explore lower probability events.
+    We note that it is generally the same rules that are being solved with a small
+    margin (1/20) of variation. This is worthy of investigation. Finger in the wind 
+    suggests single operation with output operation. It might be worth investigating
+    dual simple operations like AND OR or + -, using the first two parameters.
 
 A28B - 30 loops
 
-Rule solutions continued to accumulate at the rate of an average one or two
-rules per loop.
+    Eight further solutions were found upto rule loop 30.
 
 Trial A27:
 Started: 16/07/26

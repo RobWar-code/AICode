@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 155,
-    maxRuleId: 154,
+    numRules: 158,
+    maxRuleId: 157,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -329,6 +329,8 @@ const rulesets = {
         this.ruleFunction.push(null);
         this.byteFunction.push(null);
         this.requiredOutputsFunction.push(this.getSelectSecondAndThirdParamsOfThreesRequiredOutputs);
+
+
 
         this.scoreList.push(
             {rule:"Values Out Match Sample Input", ruleId: 108, skip: false,
@@ -1657,6 +1659,78 @@ const rulesets = {
         this.ruleFunction.push(this.oddAndEvenParams);
         this.byteFunction.push(this.byteOddAndEvenParams);
         this.requiredOutputsFunction.push(this.getOddAndEvenParamsRequiredOutputs);
+
+        this.scoreList.push(
+            {rule: "Select Samples of First Two Params", ruleId: 155,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    5,9,100,101,5,105,5,107,108,109,9,9,100,101,9,102,5,103,
+                    108,9,5,5,104,106,107,5,5,106,101,9,100,5,105,9,5
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSelectSamplesOfFirstTwoParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstTwoParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstTwoParamsOutputs; 
+
+        this.scoreList.push(
+            {rule: "Select Samples of First Three Params", ruleId: 156,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    5,9,7,100,7,101,102,103,7,104,105,5,100,9,101,9,7,102,103,5,105,
+                    101,108,109,102,5,9,7,108,9,107,7,5,5,102,5,104,9
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSelectSamplesOfFirstThreeParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstThreeParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstThreeParamsOutputs; 
+
+        this.scoreList.push(
+            {rule: "Select Samples of First Four Params", ruleId: 157,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    5,9,7,8, 8,101,102,8,7,103,105,106,5,107,9,109,8,105,104,
+                    7,5,7,102,7,108,109,110,9,5,104,102,9,101,7,109,7,8,110
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSelectSamplesOfFirstFourParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstFourParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstFourParamsOutputs; 
 
         this.scoreList.push(
             {rule: "Select Less Than First Param", ruleId: 94,
@@ -6775,6 +6849,119 @@ const rulesets = {
             for (let v of inputs) {
                 let r = (v - a) & 255;
                 output.push(r); 
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSelectSamplesOfFirstTwoParamsRequiredOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 2);
+    },
+
+    makeSelectSamplesOfFirstTwoParamsInputs(self) {
+        return self.makeSelectSamplesOfFirstParamsInputs(self, 2);
+    },
+
+    makeSelectSamplesOfFirstTwoParamsOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 2);
+    },
+
+    getSelectSamplesOfFirstThreeParamsRequiredOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 3);
+    },
+
+    makeSelectSamplesOfFirstThreeParamsInputs(self) {
+        return self.makeSelectSamplesOfFirstParamsInputs(self, 3);
+    },
+
+    makeSelectSamplesOfFirstThreeParamsOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 3);
+    },
+
+    getSelectSamplesOfFirstFourParamsRequiredOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 4);
+    },
+
+    makeSelectSamplesOfFirstFourParamsInputs(self) {
+        return self.makeSelectSamplesOfFirstParamsInputs(self, 4);
+    },
+
+    makeSelectSamplesOfFirstFourParamsOutputs(self, inputList) {
+        return self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, 4);
+    },
+
+    makeSelectSamplesOfFirstParamsInputs(self, numParams) {
+        let inputList = [];
+        for (let a = 0; a < self.numAutoParamSets; a++) {
+            // Make Sample params
+            let sample = [];
+            for (let i = 0; i < numParams; i++) {
+                let found = true;
+                let s2;
+                while (found) {
+                    s2 = Math.floor(Math.random() * 256);
+                    if (i === 0){
+                        found = false;
+                        break;
+                    }
+                    let f = false;
+                    for (let j = 0; j < sample.length; j++) {
+                        if (s2 === sample[j]) {
+                            f = true;
+                            break;
+                        }
+                    }
+                    if (!f) found = false;
+                }
+                sample.push(s2);
+            }
+            let set1 = [];
+            for (let i = 0; i < 16; i++) {
+                let r = Math.floor(Math.random() * numParams);
+                set1.push(sample[r]);
+            }
+            let set2 = [];
+            for (let i = 0; i < 48; i++) {
+                let found = true;
+                let n;
+                while (found) {
+                    n = Math.floor(Math.random() * 256);
+                    let f = false;
+                    for (let j = 0; j < sample.length; j++) {
+                        if (n === sample[j]) {
+                            f = true;
+                            break;
+                        }
+                    }
+                    if (!f) found = false;
+                }
+                set2.push(n);
+            }
+            let set = set1.concat(set2);
+            let pset = self.shuffle(set);
+            let inputs = sample.concat(pset);
+            inputList.push(inputs);
+        }
+        let outputList = self.makeSelectSamplesOfFirstParamsOutputs(self, inputList, numParams);
+
+        return {inputList, outputList};
+    },
+
+    makeSelectSamplesOfFirstParamsOutputs(self, inputList, numParams) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let sample = inputs.slice(0, numParams);
+            for (let c of inputs) {
+                let found = false;
+                for (let s of sample) {
+                    if (s === c) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) output.push(c);
             }
             outputList.push(output);
         }
