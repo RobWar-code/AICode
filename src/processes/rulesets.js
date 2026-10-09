@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 158,
-    maxRuleId: 157,
+    numRules: 159,
+    maxRuleId: 158,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -1731,6 +1731,30 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getSelectSamplesOfFirstFourParamsRequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstFourParamsInputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfFirstFourParamsOutputs; 
+
+        this.scoreList.push(
+            {rule: "Select Samples of Range from First Two Params", ruleId: 158,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    3,10, 100,101,5,105,107,4,108,3,7,109,110,9,100,8,10,3,6,105,104,
+                    5,100,4,102,7,104,107,8,109,106,9,4,107,108,5,109,10,102
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getSelectSamplesOfRangeFromFirstTwoParamsRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfRangeFromFirstTwoParamsInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeSelectSamplesOfRangeFromFirstTwoParamsOutputs; 
 
         this.scoreList.push(
             {rule: "Select Less Than First Param", ruleId: 94,
@@ -6962,6 +6986,89 @@ const rulesets = {
                     }
                 }
                 if (found) output.push(c);
+            }
+            outputList.push(output);
+        }
+        return outputList;
+    },
+
+    getSelectSamplesOfRangeFromFirstTwoParamsRequiredOutputs(self, inputList) {
+        return self.makeSelectSamplesOfRangeFromFirstTwoParamsOutputs(self, inputList);
+    },
+
+    makeSelectSamplesOfRangeFromFirstTwoParamsInputs(self) {
+        let inputList = [];
+        // Determine Range
+        const minRange = 8;
+        const maxRange = 12;
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let range = Math.floor(Math.random() * (maxRange - minRange)) + minRange;
+            let r1 = Math.floor(Math.random() * (256 - range));
+            let r2 = r1 + range - 1;
+            let rangeParams = [r1, r2];
+
+            // Get the set from the range
+            let set1 = [];
+            for (let j = 0; j < 16; j++) {
+                let v = Math.floor(Math.random() * range) + rangeParams[0];
+                set1.push(v);
+            }
+
+            // Get the lower and higher non-set ranges
+            let set2 = [];
+            let set3 = [];
+            let range1Min = 0
+            let range1Max = rangeParams[0];
+            let range2Min = 0;
+            let range2Max = 256;
+            let numItems1 = 0;
+            let numItems2 = 0;
+            if (range1Max - range1Min > 0) {
+                numItems1 = Math.floor(48 * range1Max / 256);
+                if (numItems1 === 0) numItems1 = 1;
+                numItems2 = 48 - numItems1;
+                if (255 - rangeParams[1] === 0) {
+                    numItems2 = 0;
+                }
+                else {
+                    range2Min = rangeParams[1] + 1;
+                }
+            }
+            if (numItems1 > 0) {
+                for (let j = 0; j < numItems1; j++) {
+                    let r = Math.floor(Math.random() * range1Max);
+                    set2.push(r);
+                }
+            }
+            if (numItems2 > 0) {
+                for (let j = 0; j < numItems2; j++) {
+                    let r = Math.floor(Math.random() * (256 - range2Min)) + range2Min;
+                    if (r < 0 || r > 255) {
+                        console.error(`Bad sample high: r: ${r}, range2Min: ${range2Min}, ${rangeParams[0]} - ${rangeParams[1]}`);
+                    }
+                    set3.push(r);
+                }
+            }
+            let set = set1.concat(set2).concat(set3);
+            set = self.shuffle(set);
+            set = rangeParams.concat(set);
+            inputList.push(set);
+        }
+
+        let outputList = self.makeSelectSamplesOfRangeFromFirstTwoParamsOutputs(self, inputList);
+
+        return {inputList, outputList};
+
+    },
+
+    makeSelectSamplesOfRangeFromFirstTwoParamsOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let output = [];
+            let rangeMin = inputs[0];
+            let rangeMax = inputs[1];
+            for (let c of inputs) {
+                if (c >= rangeMin && rangeMax >= c) output.push(c);
             }
             outputList.push(output);
         }
