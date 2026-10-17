@@ -1,14 +1,13 @@
 Trial A30:
+    Add rules:
+        count first param items separated by second
+        count first param items grouped by second
+    Fix rule:
+        is prime - use auto generated params
+    Extend MaxIC to 22,000 - more preprocessing opportunity
 
-    Add Rules:
-        Ranges and samples:
-            Select Samples of First Two Params 
-            Select Samples of First Three Params 
-            Select Samples of First Four Params 
-            Select from Range in First Two Params
-        
 Trial A29:
-Started 07/10/26
+Started 09/10/26
     Add rules:
         AND Plus First and Second Params
         AND OR First and Second Params
@@ -17,6 +16,11 @@ Started 07/10/26
         Extract ASCII lower case
         Extract ASCII upper case
         Extract ASCII operators
+        Ranges and samples:
+            Select Samples of First Two Params 
+            Select Samples of First Three Params 
+            Select Samples of First Four Params 
+            Select from Range in First Two Params
 
     Remove repeating sequences from fragments
 

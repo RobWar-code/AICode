@@ -8,8 +8,8 @@ const rulesets = {
     meanInsCount: 240 / 1.5,
     numOutputZones: 8,
     outputZoneLen: 8,
-    numRules: 159,
-    maxRuleId: 158,
+    numRules: 160,
+    maxRuleId: 159,
     maxRoundsPerRule: 4,
     maxRuleSequenceNum: 0,
     numAutoParamSets: 4,
@@ -2871,10 +2871,23 @@ const rulesets = {
             {rule: "Is Prime", ruleId: 92,
                 retain: false, skip: false, 
                 score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                insDistribution: [
+                    {
+                        ins: "SUB A, B",
+                        countOpt: 1,
+                        scanStart: 10,
+                        scanEnd: 35
+                    },
+                ],
                 outBlockStart: 0, outBlockLen: 16,
                 inBlockStart: 0, inBlockLen: 16,
                 highIC: 10 * 9 * 16 + learnCodeAllowance,
                 highIP: 110,
+                // Primes:
+                // 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 
+                // 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 
+                // 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251
+
                 sampleIn: [[7,49,87,90,14,17,21,34,57,86,98,87,119,212,81,43]],
                 sampleOut: [],
                 paramsIn: [
@@ -2886,6 +2899,9 @@ const rulesets = {
                     ],
                     [
                         11,29,43,67,69,81,72,31,211,4,9,23,29,37,104,123
+                    ],
+                    [
+                        2,8,7,211,9,10,14,239,12,14,83,43,61,90,108,139
                     ]
                 ],
                 outputs: []
@@ -3129,6 +3145,30 @@ const rulesets = {
         this.requiredOutputsFunction.push(this.getExtractSemicolonSeparatedRequiredOutputs);
         this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedInputs;
         this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeExtractSemicolonSeparatedOutputs; 
+
+        this.scoreList.push(
+            {rule: "Count First From Second Param Separated", ruleId: 159,
+                retain: false, skip: false, 
+                score: 0, completionRound: -1, max: 5, startRoundNum: 800,
+                outBlockStart: 0, outBlockLen: 24,
+                inBlockStart: 0, inBlockLen: 8,
+                highIC: 9 * 16 + learnCodeAllowance,
+                highIP: 80,
+                autoParams: true,
+                sampleIn: [[
+                    43,59,43,5,7,59,6,43,7,43,43,59,2,1,43,5,7,43,59,43,5,43,43,43,59,
+                    2,1,43,59,43,43,58,59,43,1,2,3,4,43,59,1,3,5,43,59
+                ]],
+                sampleOut: [],
+                paramsIn: [],
+                outputs: []
+            }
+        );
+        this.ruleFunction.push(null);
+        this.byteFunction.push(null);
+        this.requiredOutputsFunction.push(this.getCountFirstFromSecondParamSeparatedRequiredOutputs);
+        this.makeInputsFunction[this.ruleFunction.length - 1] = this.makeCountFirstFromSecondParamSeparatedInputs;
+        this.makeOutputsFunction[this.ruleFunction.length - 1] = this.makeCountFirstFromSecondParamSeparatedOutputs; 
 
         this.scoreList.push(
             {rule: "Extract First Params Delimited Params", ruleId: 141,
@@ -8126,6 +8166,63 @@ const rulesets = {
             outputList.push(output);
         }
 
+        return outputList;
+    },
+
+    getCountFirstFromSecondParamSeparatedRequiredOutputs(self, inputList) {
+        return self.makeCountFirstFromSecondParamSeparatedOutputs(self, inputList);
+    },
+
+    makeCountFirstFromSecondParamSeparatedInputs(self) {
+        let inputList = [];
+        let maxLen = 8;
+        let minLen = 3;
+        for (let i = 0; i < self.numAutoParamSets; i++) {
+            let inputs = [];
+            let num = Math.floor(Math.random() * 256);
+            let sep = num;
+            while (sep === num) {
+                sep = Math.floor(Math.random() * 256);
+            }
+            inputs.push(num, sep);
+            for (let j = 0; j <= 15; j++) {
+                let n = Math.floor(Math.random() * (maxLen - minLen)) + minLen;
+                for (let k = 0; k < n; k++) {
+                    if (Math.random() < 1/n) {
+                        inputs.push(num);
+                    }
+                    else {
+                        let r = null;
+                        while (r === null || r === sep) {
+                            r = Math.floor(Math.random() * 256);
+                        }
+                        inputs.push(r);
+                    }
+                }
+                inputs.push(sep);
+            }
+            inputList.push(inputs);
+        }
+        let outputList = self.makeCountFirstFromSecondParamSeparatedOutputs(self, inputList);
+        return {inputList, outputList};
+    },
+
+    makeCountFirstFromSecondParamSeparatedOutputs(self, inputList) {
+        let outputList = [];
+        for (let inputs of inputList) {
+            let num = inputs[0];
+            let sep = inputs[1];
+            let output = [];
+            let count = 0;
+            for (let c of inputs) {
+                if (c === sep) {
+                    output.push(count);
+                    count = 0;
+                }
+                else if (c === num) ++count;
+            }
+            outputList.push(output);
+        }
         return outputList;
     },
 
