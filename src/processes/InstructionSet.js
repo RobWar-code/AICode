@@ -5,7 +5,7 @@ const rulesets = require(path.join(__dirname, 'rulesets.js'));
 class InstructionSet {
     constructor() {
         this.stackStart = 255;
-        this.maxIC = 15000;
+        this.maxIC = 20000;
         this.maxIP = 255;
         this.highestIP = 0;
         this.registers = {

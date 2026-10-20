@@ -486,7 +486,7 @@ class Entity {
                 newEntity.breedMethod = "InterbreedFlagged";
                 if (crossSet) this.crossSetBreed = true;
             }
-            else if (interbreedChance < 0.9) {
+            else if (interbreedChance < 0.85) {
                 newEntity = this.interbreedInsMerge(mateEntity, entityNumber, cycleCounter, roundNum);
                 newEntity.breedMethod = "InterbreedInsMerge";
                 if (crossSet) this.crossSetBreed = true;

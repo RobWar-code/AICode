@@ -4,7 +4,10 @@ Trial A30:
         count first param items grouped by second
     Fix rule:
         is prime - use auto generated params
-    Extend MaxIC to 22,000 - more preprocessing opportunity
+    Fix Template Rule multiplyAdjacentParams
+    Make selfBreed and bestStore breeds more frequent.
+    Extend MaxIC to 20000 - more preprocessing opportunity
+
 
 Trial A29:
 Started 09/10/26
