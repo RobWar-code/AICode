@@ -970,7 +970,7 @@ const seedTemplates = {
         {// 7
             name: "multiplyAdjacentParams",
             description: "multiply adjacent params by each other",
-            program: [
+            template: [
                 {
                     ins: "LD A, IMM",
                     data: [16]

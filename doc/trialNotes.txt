@@ -1,4 +1,6 @@
 Trial A30:
+Started 21/10/2026
+
     Add rules:
         count first param items separated by second
         count first param items grouped by second
@@ -11,6 +13,8 @@ Trial A30:
 
 Trial A29:
 Started 09/10/26
+Ended 21/10/26
+
     Add rules:
         AND Plus First and Second Params
         AND OR First and Second Params
@@ -26,6 +30,9 @@ Started 09/10/26
             Select from Range in First Two Params
 
     Remove repeating sequences from fragments
+
+    Results:
+        Little variance from A28B (30 loops)
 
 Trial A28:
 Started: 12/09/26
